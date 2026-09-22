@@ -4,7 +4,7 @@
   "scenarios": [
     {
       "id": "lost-mine",
-      "version": 1,
+      "version": 2,
       "name": "Az elveszett járat",
       "description": "Hat pályás Scenario/Theme próbakampány.",
       "manifest": "lost-mine/scenario.json"
