@@ -3,6 +3,11 @@ let state,initial,optimal=[],freezeArmed=false,freezeId=null,currentCode='',busy
 const board=document.querySelector('#board'),status=document.querySelector('#status'),meta=document.querySelector('#meta'),codeEl=document.querySelector('#code'),toast=document.querySelector('#toast');
 const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
 const codeInput=document.querySelector('#codeInput');
+/* Browsers suspend Web Audio until a genuine user gesture. Capture the first
+   pointer/key gesture and let AudioManager start the selected theme ambient. */
+const unlockAudio=()=>AudioManager?.userGesture?.();
+addEventListener('pointerdown',unlockAudio,{capture:true,passive:true});
+addEventListener('keydown',unlockAudio,{capture:true});
 const angleValue=document.querySelector('#angleValue'),tempoValue=document.querySelector('#tempoValue');
 function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=v);}
 function freezeLimit(){const v=freezeLimitEl.value;return v==='inf'?Infinity:Math.max(0,parseInt(v,10)||0);}
@@ -398,7 +403,7 @@ freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!f
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
-soundBtn.addEventListener('click',()=>{AudioManager.toggle();render({preservePieces:true});});
+soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();render({preservePieces:true});});
 function changeLevelProfile(){
  resetLevelBuffer();
  toast.textContent='Új pályák előkészítése…';
