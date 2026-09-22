@@ -20,7 +20,8 @@ function scheduleFreezeAnalysis(){
  const snapshot=cloneState(state),snapshotKey=stateKey(snapshot),requestId='freeze-'+(++freezeAnalysisSeq);
  ensureGeneratorWorker().postMessage({type:'analyzeFreeze',requestId,state:snapshot,stateKey:snapshotKey,maxDepth:30});
 }
-function pctPos(x,y,n){const inset=1.8,cell=100/n;return{left:`calc(${x*cell}% + ${inset}px)`,top:`calc(${y*cell}% + ${inset}px)`,size:`calc(${cell}% - ${inset*2}px)`};}
+function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [w,h]=v.split('x').map(Number);return{w,h}}const n=+v;return{w:n,h:n}}
+function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
 function gluedNeighbors(o,ci){
  const c=o.cells[ci],set=new Set();
  for(const [a,b] of (o.glueEdges||[])){
@@ -37,7 +38,7 @@ function outerEdgeClasses(o,ci){
  return cl.join(' ');
 }
 function render(opts={}){
- board.style.setProperty('--n',state.width);
+ board.style.setProperty('--cols',state.width);board.style.setProperty('--rows',state.height);board.style.aspectRatio=`${state.width}/${state.height}`;
  if(!opts.preservePieces){board.innerHTML='';for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++){const c=document.createElement('div');c.className='cell';c.style.gridColumn=x+1;c.style.gridRow=y+1;board.append(c);}
   const e=document.createElement('div');e.className=`exit exit-${state.exit.dir}`;e.style.gridColumn=state.exit.x+1;e.style.gridRow=state.exit.y+1;board.append(e);
  }
@@ -49,8 +50,8 @@ function render(opts={}){
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
    if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
     el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;freezeArmed=false;AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();render({preservePieces:true});}});board.append(el);}
-   const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width);
-   el.style.left=p.left;el.style.top=p.top;el.style.width=p.size;el.style.height=p.size;
+   const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width,state.height);
+   el.style.left=p.left;el.style.top=p.top;el.style.width=p.width;el.style.height=p.height;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
   }
  }
@@ -101,7 +102,7 @@ function fillLevelBuffer(){
  const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration;
  for(let k=0;k<need;k++){
   prefetchPending++;
-  w.postMessage({type:'generate',n:+sizeEl.value,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq}});
+  const d=selectedDims();w.postMessage({type:'generate',w:d.w,h:d.h,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq}});
  }
 }
 function resetLevelBuffer(){
@@ -117,7 +118,7 @@ function applyGeneratedLevel(g){
 function newLevel(seed=null,prefix='W'){
  /* Pályakód betöltése determinisztikus marad; normál Új pálya a pufferből jön. */
  if(seed||prefix!=='W'){
-  const g=generateLevel(+sizeEl.value,difficultyEl.value,seed||seedText(),prefix);
+  const d=selectedDims(),g=generateLevel(d.w,difficultyEl.value,seed||seedText(),prefix,d.h);
   applyGeneratedLevel(g);return;
  }
  const g=levelBuffer.shift();
@@ -417,7 +418,7 @@ function changeLevelProfile(){
 }
 difficultyEl.addEventListener('change',changeLevelProfile);sizeEl.addEventListener('change',changeLevelProfile);
 freezeLimitEl.addEventListener('change',()=>{freezeUsed=0;freezeArmed=false;freezeId=null;render({preservePieces:true});scheduleFreezeAnalysis();});
-document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: W4H-01ABC23';return}sizeEl.value=String(p.n);difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
+document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: W4H-01ABC23';return}sizeEl.value=p.w===p.h?String(p.w):`${p.w}x${p.h}`;difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
 /* Billentyűzet: a kurzornyíl lenyomásakor ugyanaz a térbeli billenés látszik.
    Az operációs rendszer key-repeatje továbbra is ismételt egycellás move()-okat ad. */
 const keyboardDirs=new Set();
