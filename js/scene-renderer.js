@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.27
+/* GGrid Scene Renderer 2 – v0.12.28
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -29,7 +29,7 @@ const SceneRenderer=(()=>{
      cached nodes before rendering the restarted state. */
   clearComponentOverlays();boardRef=null;
   theme=t||null;ensure();const type=t?.scene?.type||'';
-  document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');
+  document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');const st=wrap.querySelector('.skin-scene-title');if(st){st.querySelector('strong').textContent=(t?.name||'GGrid').split('//')[0].trim();st.querySelector('span').textContent=document.body.classList.contains('scenario-mode')?'Forgatókönyv':'Szabad játék'}
   const m=markup(type);back.innerHTML=m.back;front.innerHTML=m.front;frame.innerHTML='';
   wrap.classList.toggle('scene-showcase',t?.scene?.tier==='showcase');
  }
