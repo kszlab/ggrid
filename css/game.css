@@ -399,3 +399,34 @@ body.full-ui-skin[data-scene="moonlit-zen"] #freeze.freeze-action{color:#9beaff}
 body.full-ui-skin[data-scene="moonlit-zen"] .score-box{background:linear-gradient(#091923,#07141c);border-color:#78949f55;box-shadow:inset 0 0 16px #0008}
 body.full-ui-skin[data-scene="moonlit-zen"] .score-box span{color:#c9d7da;opacity:.65}
 @media(max-height:760px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding:46px 44px}}
+
+
+/* v0.12.28 – HOLDKERT full-screen skin composition pass */
+.skin-scene-title{display:none}
+body.full-ui-skin[data-scene="moonlit-zen"] #game{padding-top:4px}
+body.full-ui-skin[data-scene="moonlit-zen"] .game-head{position:relative;z-index:30;margin-bottom:0}
+body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{margin-top:0;padding-top:86px;overflow:visible;background:
+ radial-gradient(circle at 84% 4%,#f6dfb8 0 25px,#f6dfb82b 26px 44px,transparent 46px),
+ radial-gradient(ellipse at 10% 7%,#c96d8b45,transparent 19%),
+ linear-gradient(#0a1a27 0 18%,#12313b 48%,#0a222b)}
+body.full-ui-skin[data-scene="moonlit-zen"] .skin-scene-title{display:flex;position:absolute;z-index:18;left:17px;top:14px;flex-direction:column;pointer-events:none;text-shadow:0 2px 8px #000}
+body.full-ui-skin[data-scene="moonlit-zen"] .skin-scene-title strong{font-size:22px;line-height:1;letter-spacing:.12em;font-weight:500;color:#f3e5d7}
+body.full-ui-skin[data-scene="moonlit-zen"] .skin-scene-title span{margin-top:6px;font-size:12px;color:#d8d7d1;opacity:.85}
+body.full-ui-skin[data-scene="moonlit-zen"] .scene-back{border-radius:24px;background:
+ radial-gradient(circle at 8% 26%,#ffb0bd22 0 3px,transparent 4px),
+ radial-gradient(circle at 94% 34%,#ff9eb522 0 2px,transparent 3px)}
+body.full-ui-skin[data-scene="moonlit-zen"] .sr-moon{top:18px;right:30px;width:54px;height:54px;opacity:.9}
+body.full-ui-skin[data-scene="moonlit-zen"] .sr-mountain{opacity:.28}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-control{z-index:20;background:linear-gradient(145deg,#506674,#2e4350 55%,#1b303b);border-color:#b7c7cb73}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:79px;left:14%;width:72%;height:46px;border-radius:18px 18px 5px 5px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-down{bottom:7px;left:14%;width:72%;height:46px;border-radius:5px 5px 18px 18px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-left{top:130px;bottom:58px;height:auto;left:7px;width:43px;border-radius:18px 5px 5px 18px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{top:130px;bottom:58px;height:auto;right:7px;width:43px;border-radius:5px 18px 18px 5px}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow{width:24px;height:24px}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow::before{left:8px;top:8px;width:8px;height:14px}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow::after{left:1px;border-left-width:11px;border-right-width:11px;border-bottom-width:11px}
+body.full-ui-skin[data-scene="moonlit-zen"] .hud-row{margin-top:8px;padding:8px;border-radius:16px;background:linear-gradient(90deg,#101f29,#0b1922);box-shadow:0 5px 16px #0007}
+body.full-ui-skin[data-scene="moonlit-zen"] .play-action,body.full-ui-skin[data-scene="moonlit-zen"] #freeze.play-action{height:50px;min-height:50px}
+body.full-ui-skin[data-scene="moonlit-zen"] .score-box{height:50px}
+@media(max-width:430px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding-left:50px;padding-right:50px}}
+@media(max-height:760px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding-top:76px}body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:70px}body.full-ui-skin[data-scene="moonlit-zen"] .edge-left,body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{top:118px}}
