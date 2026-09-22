@@ -50,6 +50,38 @@
       "name": "Kalózhajó",
       "description": "Ágyúgolyók, faládák és egy öreg hajó raktere.",
       "src": "pirate-ship/theme.json"
+    },
+    {
+      "id": "ghost-manor",
+      "version": 1,
+      "name": "Éjféli kastély",
+      "description": "Kísértetjárta kastély szellemmel, bútorokkal, köddel és túlvilági kapuval.",
+      "src": "ghost-manor/theme.json",
+      "experimental": true
+    },
+    {
+      "id": "traffic-rescue",
+      "version": 1,
+      "name": "Városi mentőakció",
+      "description": "Forgalmi puzzle: mentőautó, autók, buszok és városi úthálózat.",
+      "src": "traffic-rescue/theme.json",
+      "experimental": true
+    },
+    {
+      "id": "orbital-breach",
+      "version": 1,
+      "name": "ORBITAL // BREACH",
+      "description": "Filmszerű sci-fi vészhelyzet sérült űrállomáson.",
+      "src": "orbital-breach/theme.json",
+      "experimental": true
+    },
+    {
+      "id": "abyssal-lab",
+      "version": 1,
+      "name": "ABYSS // Mélytengeri labor",
+      "description": "Biolumineszcens mélytengeri kutatóállomás az óceánfenéken.",
+      "src": "abyssal-lab/theme.json",
+      "experimental": true
     }
   ]
 }
