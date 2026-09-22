@@ -1,0 +1,72 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "lost-mine-06",
+  "version": 1,
+  "name": "Ragasztott test",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 3,
+    "y": 1,
+    "direction": "right"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 0,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "brick1",
+      "type": "brick",
+      "x": 1,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        }
+      ],
+      "glueEdges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "wall1",
+      "type": "wall",
+      "x": 0,
+      "y": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}
