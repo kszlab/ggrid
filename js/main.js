@@ -33,6 +33,7 @@ function outerEdgeClasses(o,ci){
  return cl.join(' ');
 }
 function render(opts={}){
+ if(!state)return;
  board.style.setProperty('--cols',state.width);board.style.setProperty('--rows',state.height);board.style.aspectRatio=`${state.width}/${state.height}`;
  if(!opts.preservePieces){board.innerHTML='';for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++){const c=document.createElement('div');c.className='cell';c.style.gridColumn=x+1;c.style.gridRow=y+1;board.append(c);}
   const e=document.createElement('div');e.className=`exit exit-${state.exit.dir}`;e.style.gridColumn=state.exit.x+1;e.style.gridRow=state.exit.y+1;board.append(e);
@@ -59,7 +60,7 @@ function render(opts={}){
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
  const fc=document.querySelector('#freezeCount');if(fc)fc.textContent=left===Infinity?'∞':String(left);
  freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}`);
- soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
+ soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
  SceneRenderer?.afterBoardRender?.(board);
 }
 /* ===== BACKGROUND LEVEL PREFETCH =====
@@ -79,7 +80,7 @@ function generationFailed(message){
 }
 function ensureGeneratorWorker(){
  if(generatorWorker)return generatorWorker;
- generatorWorker=new Worker('js/generator-worker.js?v=0.12.30');
+ generatorWorker=new Worker('js/generator-worker.js?v=0.12.31');
  generatorWorker.onmessage=e=>{
   const m=e.data||{};
   if(m.type==='freezeAnalysis'){if(state&&m.stateKey===stateKey(state))freezeAnalysis=m.analysis;return}
@@ -402,7 +403,7 @@ freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!f
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
-soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();render({preservePieces:true});});
+soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));if(state)render({preservePieces:true});});
 function changeLevelProfile(){
  resetLevelBuffer();
  newLevel();
