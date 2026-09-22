@@ -1,0 +1,56 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "lost-mine-03",
+  "version": 1,
+  "name": "Freeze próba",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 3,
+    "y": 0,
+    "direction": "right"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 0,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "brick1",
+      "type": "brick",
+      "x": 1,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "brick2",
+      "type": "brick",
+      "x": 2,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    }
+  ]
+}
