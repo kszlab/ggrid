@@ -1,0 +1,13 @@
+{
+  "format": "ggrid-scenario-index",
+  "formatVersion": 1,
+  "scenarios": [
+    {
+      "id": "lost-mine",
+      "version": 1,
+      "name": "Az elveszett járat",
+      "description": "Hat pályás Scenario/Theme próbakampány.",
+      "manifest": "lost-mine/scenario.json"
+    }
+  ]
+}
