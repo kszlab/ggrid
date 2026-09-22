@@ -1,4 +1,4 @@
-/* ===== v0.12.1 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.5 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
@@ -92,10 +92,14 @@ const ScenarioMode=(()=>{
   panel.hidden=false;MotionControl.pause();list.innerHTML='<div>Forgatókönyvek betöltése…</div>';playBtn.disabled=true;
   try{
    const idx=await fetchJson(ROOT+'scenarios/index.json');checkDoc(idx,'ggrid-scenario-index');list.innerHTML='';
-   for(const s of idx.scenarios||[])addChoice(s,async()=>{const url=refUrl(ROOT+'scenarios/index.json',s.manifest),d=await fetchJson(url);checkDoc(d,'ggrid-scenario');d.__url=url;return d});
+   const publicScenarios=idx.scenarios||[],publicById=new Map(publicScenarios.map(s=>[s.id,s]));
+   for(const s of publicScenarios)addChoice(s,async()=>{const url=refUrl(ROOT+'scenarios/index.json',s.manifest),d=await fetchJson(url);checkDoc(d,'ggrid-scenario');d.__url=url;return d});
    for(const p of localPackages()){
     const s=p?.scenario;if(!s)continue;
-    addChoice(s,async()=>{const d=structuredClone(s);d.__url='local:'+d.id;d.__package=p;return d},'saját');
+    const pub=publicById.get(s.id);
+    if(pub&&Number(pub.version)>=Number(s.version||0))continue;
+    const tag=pub?'saját teszt · v'+s.version:'saját';
+    addChoice(s,async()=>{const d=structuredClone(s);d.__url='local:'+d.id;d.__package=p;return d},tag);
    }
    const importBtn=document.createElement('button');importBtn.type='button';importBtn.textContent='＋ Scenario fájl importálása';importBtn.className='scenario-choice';
    importBtn.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='.json,.ggrid-scenario';inp.onchange=async()=>{try{const p=JSON.parse(await inp.files[0].text());saveLocalPackage(p);await open();toast.textContent='Scenario importálva.'}catch(e){showError(e)}};inp.click()};list.append(importBtn);
