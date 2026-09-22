@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.6 tilt próba 4</title>
+<title>GGrid – v0.7 fix blokk próba 1</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#10283d;color:#fff}
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;background:linear-gradient(#173a58,#0d2031)}
@@ -31,6 +31,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 .brick.glued.edge-t.edge-r{border-top-right-radius:10px}
 .brick.glued.edge-b.edge-l{border-bottom-left-radius:10px}
 .brick.glued.edge-b.edge-r{border-bottom-right-radius:10px}
+.wall{border-radius:8px;background:repeating-linear-gradient(135deg,#58636b 0 6px,#3b444b 6px 12px);box-shadow:inset 0 0 0 3px #8e9aa3,inset 0 0 0 5px #252c31,3px 5px 7px #0008;cursor:default}
 .selected{outline:4px solid #9ee9ff;filter:brightness(1.25)}
 .blocked{animation:bump .18s ease}.winner{animation:winpulse .55s ease}
 @keyframes bump{0%,100%{transform:translate(0)}35%{transform:translate(-3px)}70%{transform:translate(3px)}}
@@ -72,8 +73,8 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 
 </style></head>
 <body><main id="game">
-<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba 4</small></h1>
-<div class="sub">Ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.7 fix blokk próba 1</small></h1>
+<div class="sub">Fix akadályok · ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
 <label>Méret: <select id="size"><option value="3">3×3</option><option value="4" selected>4×4</option><option value="5">5×5</option></select></label>
@@ -110,7 +111,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
  <div class="tune-box"><span>Tempó</span><button type="button" id="tempoMinus">−</button><span id="tempoValue" class="tune-value">100%</span><button type="button" id="tempoPlus">+</button></div>
 </div>
 <div id="motionNote" class="motion-note"></div>
-<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli mezők és az alsó nyilak is vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti telefon-döntésvezérlést; bekapcsoláskor az aktuális tartás lesz a középhelyzet. A Döntési szög és Tempó ± gombjaival játék közben hangolható az érzékenység és a sebesség. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak.</div>
+<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli mezők és az alsó nyilak is vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti telefon-döntésvezérlést; bekapcsoláskor az aktuális tartás lesz a középhelyzet. A Döntési szög és Tempó ± gombjaival játék közben hangolható az érzékenység és a sebesség. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak. A szürke fix blokkok nem mozdulnak és nem Freeze-elhetők.</div>
 </main>
 <script>
 /* ===== GAME CORE ===== */
@@ -124,7 +125,7 @@ function step(state,dir,freezeId=null){
  for(const o of objs)for(const c of bodyCells(o))byCell.set(key(c.x,c.y),o.id);
  const memo=new Map(),visiting=new Set(),objMap=new Map(objs.map(o=>[o.id,o]));
  function canMove(o){
-  if(memo.has(o.id))return memo.get(o.id);if(o.id===freezeId){memo.set(o.id,false);return false;}if(visiting.has(o.id))return true;visiting.add(o.id);
+  if(memo.has(o.id))return memo.get(o.id);if(o.type==='wall'){memo.set(o.id,false);return false;}if(o.id===freezeId){memo.set(o.id,false);return false;}if(visiting.has(o.id))return true;visiting.add(o.id);
   for(const c of bodyCells(o)){const nx=c.x+d.dx,ny=c.y+d.dy;
    if(nx<0||ny<0||nx>=s.width||ny>=s.height){if(o.type==='ball'&&o.cells.length===1&&isExitStep(s,c,dir))continue;visiting.delete(o.id);memo.set(o.id,false);return false;}
    const hit=byCell.get(key(nx,ny));if(hit&&hit!==o.id&&!canMove(objMap.get(hit))){visiting.delete(o.id);memo.set(o.id,false);return false;}
@@ -154,7 +155,7 @@ function solve(initial,maxDepth=30){
 /* ===== FREEZE ANALYZER =====
    v0.4: egy összeragasztott téglatest egyetlen többcellás objektum/komponens. */
 function movableComponents(s){
- return s.objects.filter(o=>!o.exited).map(o=>({componentId:o.id,objectIds:[o.id],cellCount:o.cells.length}));
+ return s.objects.filter(o=>!o.exited&&o.type!=='wall').map(o=>({componentId:o.id,objectIds:[o.id],cellCount:o.cells.length}));
 }
 function stepWithFrozenComponent(state,dir,component){
  if(!component||component.objectIds.length!==1)return null;
@@ -226,9 +227,17 @@ function placeShape(n,shape,occupied,rng){
  for(const c of shape)occupied.add(key(a.x+c.x,a.y+c.y));
  return a;
 }
-function gluedCandidate(n,seed,attempt){
+function wallCandidate(n,seed,attempt){
  const rng=rngFor(seed,attempt),brickCount=3,glueCount=Math.floor(rng()*brickCount);
  const occupied=new Set(),objects=[];
+ /* Fix blokkok: 3×3 max 1, 4×4 max 2, 5×5 max 3. A darabszám
+    0..max között egyenletesen véletlen; nem a nehézséghez kötött. */
+ const wallMax=Math.max(1,n-2),wallCount=Math.floor(rng()*(wallMax+1));
+ for(let i=0;i<wallCount;i++){
+  const free=[];for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(!occupied.has(key(x,y)))free.push({x,y});
+  if(!free.length)return null;const w=free[Math.floor(rng()*free.length)];occupied.add(key(w.x,w.y));
+  objects.push({id:'w'+(i+1),type:'wall',x:w.x,y:w.y,cells:[{x:0,y:0}]});
+ }
  const sizes=componentSizes(brickCount,glueCount,rng);
  for(let i=0;i<sizes.length;i++){
   const built=randomShape(sizes[i],rng),shape=built.cells,a=placeShape(n,shape,occupied,rng);if(!a)return null;
@@ -237,7 +246,7 @@ function gluedCandidate(n,seed,attempt){
  const free=[];for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(!occupied.has(key(x,y)))free.push({x,y});
  if(!free.length)return null;const ball=free[Math.floor(rng()*free.length)];
  objects.unshift({id:'ball1',type:'ball',x:ball.x,y:ball.y,cells:[{x:0,y:0}]});
- return{width:n,height:n,exit:randomExit(n,rng),moves:0,won:false,glueCount,brickCount,objects};
+ return{width:n,height:n,exit:randomExit(n,rng),moves:0,won:false,glueCount,brickCount,wallCount,objects};
 }
 /* Régi B-kódok kompatibilitása: v0.3 szórt 3 téglás generátor. */
 function legacyCandidate(n,seed,attempt){
@@ -246,9 +255,9 @@ function legacyCandidate(n,seed,attempt){
  return{width:n,height:n,exit:randomExit(n,rng),moves:0,won:false,glueCount:0,brickCount:3,objects};
 }
 function makeCode(n,difficulty,seed,prefix='G'){return `${prefix}${n}${DIFFCODE[difficulty]}-${seed}`;}
-function parseCode(raw){const m=String(raw).trim().toUpperCase().match(/^([BG])([345])([EMH])-([0-9A-Z]{1,7})$/);if(!m)return null;return{prefix:m[1],n:+m[2],difficulty:CODEDIFF[m[3]],seed:m[4].padStart(7,'0')};}
-function generateLevel(n,difficulty,seed=seedText(),prefix='G'){
- const [lo,hi]=ranges[difficulty];let fallback=null,cand=prefix==='B'?legacyCandidate:gluedCandidate;
+function parseCode(raw){const m=String(raw).trim().toUpperCase().match(/^([BGW])([345])([EMH])-([0-9A-Z]{1,7})$/);if(!m)return null;return{prefix:m[1],n:+m[2],difficulty:CODEDIFF[m[3]],seed:m[4].padStart(7,'0')};}
+function generateLevel(n,difficulty,seed=seedText(),prefix='W'){
+ const [lo,hi]=ranges[difficulty];let fallback=null,cand=prefix==='B'?legacyCandidate:prefix==='G'?gluedCandidate:wallCandidate;
  for(let tries=0;tries<5000;tries++){const s=cand(n,seed,tries);if(!s)continue;const sol=solve(s,24);if(!sol)continue;
   if(!fallback||Math.abs(sol.length-(lo+hi)/2)<Math.abs(fallback.solution.length-(lo+hi)/2))fallback={state:s,solution:sol,attempt:tries};
   if(sol.length>=lo&&sol.length<=hi)return{state:s,solution:sol,attempt:tries,seed,code:makeCode(n,difficulty,seed,prefix)};
@@ -315,8 +324,8 @@ function render(opts={}){
   for(let ci=0;ci<o.cells.length;ci++){
    const ck=`${o.id}:${ci}`;wanted.add(ck);let el=existing.get(ck);
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
-   if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.ariaLabel=o.type==='ball'?'Golyó':(o.cells.length>1?'Ragasztott tégla':'Tégla');
-    el.addEventListener('click',()=>{if(freezeArmed&&!busy){freezeId=o.id;AudioManager.freeze();render({preservePieces:true});}});board.append(el);}
+   if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
+    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;AudioManager.freeze();render({preservePieces:true});}});board.append(el);}
    const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width);
    el.style.left=p.left;el.style.top=p.top;el.style.width=p.size;el.style.height=p.size;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
@@ -324,15 +333,15 @@ function render(opts={}){
  }
  for(const [ck,el] of existing)if(!wanted.has(ck))el.remove();
  status.textContent=state.won?`Siker! ${state.moves} lépésből.`:`Lépések: ${state.moves} · ${state.width}×${state.height}`;
- const diff={easy:'Könnyű',medium:'Közepes',hard:'Nehéz'}[difficultyEl.value],glues=state.glueCount||0;
- meta.textContent=`${diff} · kezdő optimum: ${optimal.length} lépés · ragasztás: ${glues}`;
+ const diff={easy:'Könnyű',medium:'Közepes',hard:'Nehéz'}[difficultyEl.value],glues=state.glueCount||0,walls=state.wallCount||0;
+ meta.textContent=`${diff} · kezdő optimum: ${optimal.length} lépés · ragasztás: ${glues} · fix: ${walls}`;
  codeEl.textContent=`Pályakód: ${currentCode}`;
  const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze()||busy;
  freezeBtn.textContent=freezeArmed?(freezeId?`❄ Lefogva${suffix}`:`❄ Válassz elemet${suffix}`):`❄ Freeze${suffix}`;
  soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
 }
-function newLevel(seed=null,prefix='G'){
+function newLevel(seed=null,prefix='W'){
  const g=generateLevel(+sizeEl.value,difficultyEl.value,seed||seedText(),prefix);state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution;currentCode=g.code;freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();
 }
 function playEvents(events){
@@ -465,7 +474,7 @@ document.querySelector('#hint').addEventListener('click',hint);
 soundBtn.addEventListener('click',()=>{AudioManager.toggle();render({preservePieces:true});});
 difficultyEl.addEventListener('change',()=>newLevel());sizeEl.addEventListener('change',()=>newLevel());
 freezeLimitEl.addEventListener('change',()=>{freezeUsed=0;freezeArmed=false;freezeId=null;render({preservePieces:true});scheduleFreezeAnalysis();});
-document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: G4H-01ABC23';return}sizeEl.value=String(p.n);difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
+document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: W4H-01ABC23';return}sizeEl.value=String(p.n);difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
 /* Billentyűzet: a kurzornyíl lenyomásakor ugyanaz a térbeli billenés látszik.
    Az operációs rendszer key-repeatje továbbra is ismételt egycellás move()-okat ad. */
 const keyboardDirs=new Set();
