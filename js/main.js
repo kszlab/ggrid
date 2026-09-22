@@ -167,118 +167,126 @@ document.querySelectorAll('[data-hold-dir]').forEach(b=>{
  b.addEventListener('lostpointercapture',stopHold);b.addEventListener('contextmenu',e=>e.preventDefault());
 });
 
-/* ===== v0.10 MOBILE TILT INPUT – progressive / adaptive =====
-   Orientation is the broad compatibility baseline. DeviceMotion gravity is sampled
-   when available for smoothing/diagnostics, but control never depends on it.
-   The game core remains discrete: tilt only schedules ordinary step() commands. */
+/* ===== v0.10.2 MOBILE TILT INPUT – gravity-vector first =====
+   DeviceMotion accelerationIncludingGravity is preferred because it remains meaningful
+   when the phone is held far from horizontal. DeviceOrientation is retained as fallback.
+   All user tuning is persisted in localStorage. */
 const MotionControl=(()=>{
+ const SETTINGS_KEY='ggrid.motion.v1';
  let enabled=false,orientationListener=false,motionListener=false;
- let baseBeta=0,baseGamma=0,haveBase=false,activeDir=null,lastStep=0;
- let lastBeta=0,lastGamma=0,filteredBeta=null,filteredGamma=null;
- let gravityX=null,gravityY=null,gravityZ=null;
- let enterAngle=6,tempoPct=100,armingUntil=0,armedNeedsNeutral=false,stableSince=0;
- const EXIT=3,ARM_MS=700,STABLE_MS=250,FILTER=.22;
+ let baseBeta=0,baseGamma=0,haveOrientationBase=false,filteredBeta=null,filteredGamma=null;
+ let gravity=null,baseGravity=null,haveGravityBase=false,lastGravityAt=0;
+ let activeDir=null,lastStep=0,armingUntil=0,armedNeedsNeutral=false,stableSince=0;
+ let enterAngle=6,tempoPct=100;
+ const EXIT_DEG=3,ARM_MS=700,STABLE_MS=250,FILTER=.22,GRAVITY_FILTER=.18,GRAVITY_FRESH_MS=350;
+ function loadSettings(){
+  try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');
+   if(Number.isFinite(s.enterAngle))enterAngle=Math.max(3,Math.min(14,s.enterAngle));
+   if(Number.isFinite(s.tempoPct))tempoPct=Math.max(50,Math.min(200,s.tempoPct));
+  }catch(_){}
+  angleValue.textContent=enterAngle+'°';tempoValue.textContent=tempoPct+'%';
+ }
+ function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({enterAngle,tempoPct}))}catch(_){}}
  function norm180(a){while(a>180)a-=360;while(a<-180)a+=360;return a}
- function supported(){return 'DeviceOrientationEvent' in window}
+ function supported(){return 'DeviceOrientationEvent' in window||'DeviceMotionEvent' in window}
  function label(){motionBtn.classList.toggle('active',enabled);motionBtn.textContent=enabled?'📱 Mozgás be':'📱 Mozgás ki'}
  function note(t=''){motionNote.textContent=t}
  function stop(){activeDir=null;setBoardTilt(null,false)}
- function setZero(beta,gamma,msg='Új középhelyzet rögzítve'){
-  baseBeta=beta;baseGamma=gamma;haveBase=true;activeDir=null;lastStep=0;
-  armedNeedsNeutral=false;stableSince=0;setBoardTilt(null,false);note(msg);
- }
  function beginArming(msg='Stabilizálás…'){
-  if(!enabled)return;
-  stop();haveBase=false;armingUntil=performance.now()+ARM_MS;armedNeedsNeutral=true;stableSince=0;
-  filteredBeta=null;filteredGamma=null;note(msg);
+  if(!enabled)return;stop();armingUntil=performance.now()+ARM_MS;armedNeedsNeutral=true;stableSince=0;
+  haveOrientationBase=false;haveGravityBase=false;baseGravity=null;filteredBeta=null;filteredGamma=null;note(msg);
  }
- function screenAxes(db,dg){
+ function screenVector(x,y){
   const a=(screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0;
-  if(a===90)return{x:db,y:-dg}; if(a===270||a===-90)return{x:-db,y:dg}; if(a===180)return{x:-dg,y:-db};
-  return{x:dg,y:db};
+  if(a===90)return{x:y,y:-x}; if(a===270||a===-90)return{x:-y,y:x}; if(a===180)return{x:-x,y:-y}; return{x,y};
  }
- function choose(x,y){
-  const ax=Math.abs(x),ay=Math.abs(y),mag=Math.max(ax,ay);
-  if(activeDir){
-   const v=activeDir==='left'||activeDir==='right'?ax:ay;
-   if(v<EXIT)return null;
-   /* Direction lock: avoid diagonal sensor noise flipping axes until the old axis is released. */
-   return activeDir;
-  }
-  if(mag<enterAngle)return null;
-  if(ax>ay)return x>0?'right':'left';
-  return y>0?'down':'up';
+ function orientationVector(){
+  if(filteredBeta==null||filteredGamma==null)return null;
+  if(!haveOrientationBase){baseBeta=filteredBeta;baseGamma=filteredGamma;haveOrientationBase=true;return{x:0,y:0,mag:0,source:'orientation'}}
+  const p=screenVector(norm180(filteredGamma-baseGamma),norm180(filteredBeta-baseBeta));
+  return{x:p.x,y:p.y,mag:Math.hypot(p.x,p.y),source:'orientation'};
  }
- function repeatDelay(mag){
-  /* Progressive roll: gentle tilt is slow, stronger tilt accelerates smoothly.
-     Tempo remains a global multiplier; + means slower as before. */
-  const excess=Math.max(0,mag-enterAngle),t=Math.min(1,excess/14);
-  const ms=420-(300*t);
-  return Math.round(ms*tempoPct/100);
+ function gravityVector(){
+  if(!gravity||performance.now()-lastGravityAt>GRAVITY_FRESH_MS)return null;
+  if(!haveGravityBase){baseGravity={...gravity};haveGravityBase=true;return{x:0,y:0,mag:0,source:'gravity'}}
+  /* Difference of normalized gravity vectors: robust to a naturally tilted holding pose.
+     Scale to approximate degrees so the existing sensitivity control remains intuitive. */
+  const len=Math.hypot(gravity.x,gravity.y,gravity.z)||1,bLen=Math.hypot(baseGravity.x,baseGravity.y,baseGravity.z)||1;
+  const gx=gravity.x/len,gy=gravity.y/len,bx=baseGravity.x/bLen,by=baseGravity.y/bLen;
+  const p=screenVector((gx-bx)*57.2958,(gy-by)*57.2958);
+  return{x:p.x,y:p.y,mag:Math.hypot(p.x,p.y),source:'gravity'};
  }
- function tryTiltStep(dir,beta,gamma){
+ function controlVector(){return gravityVector()||orientationVector()}
+ function choose(v){
+  const ax=Math.abs(v.x),ay=Math.abs(v.y);
+  if(activeDir){const q=activeDir==='left'||activeDir==='right'?ax:ay;if(q<EXIT_DEG)return null;return activeDir}
+  if(v.mag<enterAngle)return null;
+  if(ax>ay)return v.x>0?'right':'left';
+  return v.y>0?'down':'up';
+ }
+ function repeatDelay(mag){const excess=Math.max(0,mag-enterAngle),t=Math.min(1,excess/14);return Math.round((420-300*t)*tempoPct/100)}
+ function setDynamicZero(msg){
+  if(gravity)baseGravity={...gravity},haveGravityBase=true;
+  if(filteredBeta!=null&&filteredGamma!=null){baseBeta=filteredBeta;baseGamma=filteredGamma;haveOrientationBase=true}
+  activeDir=null;lastStep=0;armedNeedsNeutral=false;stableSince=0;setBoardTilt(null,false);note(msg);
+ }
+ function tryTiltStep(dir){
   if(busy||!state||state.won)return;
-  const probe=step(state,dir,freezeId);
-  const meaningful=probe.events.some(e=>e.type==='move'||e.type==='exit');
-  if(!meaningful){setZero(beta,gamma,'Véghelyzet · új középhelyzet rögzítve');return}
+  const probe=step(state,dir,freezeId),meaningful=probe.events.some(e=>e.type==='move'||e.type==='exit');
+  if(!meaningful){setDynamicZero('Véghelyzet · új középhelyzet rögzítve');return}
   move(dir);
  }
+ function process(){
+  if(!enabled)return;const now=performance.now(),v=controlVector();if(!v)return;
+  if(now<armingUntil){if(v.source==='gravity'&&gravity)baseGravity={...gravity},haveGravityBase=true;
+   if(filteredBeta!=null){baseBeta=filteredBeta;baseGamma=filteredGamma;haveOrientationBase=true}return}
+  if(armedNeedsNeutral){
+   if(v.mag<EXIT_DEG){if(!stableSince)stableSince=now;if(now-stableSince>=STABLE_MS){armedNeedsNeutral=false;note('Mozgás aktív · '+(v.source==='gravity'?'gravitációs':'orientációs')+' szenzor')}}
+   else{stableSince=0;if(gravity)baseGravity={...gravity};if(filteredBeta!=null){baseBeta=filteredBeta;baseGamma=filteredGamma}}
+   return;
+  }
+  const dir=choose(v);if(!dir){if(activeDir)stop();return}
+  if(dir!==activeDir){activeDir=dir;lastStep=now;setBoardTilt(dir,true);tryTiltStep(dir);return}
+  if(now-lastStep>=repeatDelay(v.mag)){lastStep=now;tryTiltStep(dir)}
+ }
  function onMotion(e){
-  if(!enabled)return;
-  const g=e.accelerationIncludingGravity;
-  if(!g||![g.x,g.y,g.z].every(v=>typeof v==='number'))return;
-  const a=.16;
-  gravityX=gravityX==null?g.x:gravityX+(g.x-gravityX)*a;
-  gravityY=gravityY==null?g.y:gravityY+(g.y-gravityY)*a;
-  gravityZ=gravityZ==null?g.z:gravityZ+(g.z-gravityZ)*a;
+  if(!enabled)return;const g=e.accelerationIncludingGravity;
+  if(!g||![g.x,g.y,g.z].every(Number.isFinite))return;
+  if(!gravity)gravity={x:g.x,y:g.y,z:g.z};
+  else{gravity.x+=(g.x-gravity.x)*GRAVITY_FILTER;gravity.y+=(g.y-gravity.y)*GRAVITY_FILTER;gravity.z+=(g.z-gravity.z)*GRAVITY_FILTER}
+  lastGravityAt=performance.now();process();
  }
  function onOrientation(e){
   if(!enabled||typeof e.beta!=='number'||typeof e.gamma!=='number')return;
-  lastBeta=e.beta;lastGamma=e.gamma;
   filteredBeta=filteredBeta==null?e.beta:filteredBeta+norm180(e.beta-filteredBeta)*FILTER;
   filteredGamma=filteredGamma==null?e.gamma:filteredGamma+norm180(e.gamma-filteredGamma)*FILTER;
-  const now=performance.now();
-  if(now<armingUntil){baseBeta=filteredBeta;baseGamma=filteredGamma;haveBase=true;return}
-  if(!haveBase){setZero(filteredBeta,filteredGamma,'Mozgás aktív');armedNeedsNeutral=true;return}
-  const rawDb=norm180(filteredBeta-baseBeta),rawDg=norm180(filteredGamma-baseGamma);
-  const p=screenAxes(rawDb,rawDg),mag=Math.max(Math.abs(p.x),Math.abs(p.y));
-  if(armedNeedsNeutral){
-   /* After a new/restarted level require a short genuinely quiet neutral interval.
-      This prevents the button press / hand motion becoming the first game move. */
-   if(mag<EXIT){if(!stableSince)stableSince=now;if(now-stableSince>=STABLE_MS){armedNeedsNeutral=false;note('Mozgás aktív');}}
-   else{stableSince=0;baseBeta=filteredBeta;baseGamma=filteredGamma;}
-   return;
-  }
-  const dir=choose(p.x,p.y);
-  if(!dir){if(activeDir)stop();return}
-  if(dir!==activeDir){activeDir=dir;lastStep=now;setBoardTilt(dir,true);tryTiltStep(dir,filteredBeta,filteredGamma);return}
-  if(now-lastStep>=repeatDelay(mag)){lastStep=now;tryTiltStep(dir,filteredBeta,filteredGamma)}
+  /* Orientation drives only when gravity data is absent/stale. */
+  if(!gravity||performance.now()-lastGravityAt>GRAVITY_FRESH_MS)process();
  }
  async function enable(){
   if(!supported()){note('Ezen a böngészőn nem érhető el a mozgásérzékelő.');return}
   try{
-   if(typeof DeviceOrientationEvent.requestPermission==='function'){
+   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
     const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){note('A mozgásérzékelő engedélye nem lett megadva.');return}
    }
-   /* iOS may expose motion under a separate permission. Failure is harmless:
-      DeviceOrientation remains the fallback/control source. */
    if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
     try{await DeviceMotionEvent.requestPermission()}catch(_){}
    }
    enabled=true;stop();
-   if(!orientationListener){addEventListener('deviceorientation',onOrientation,true);orientationListener=true}
+   if('DeviceOrientationEvent' in window&&!orientationListener){addEventListener('deviceorientation',onOrientation,true);orientationListener=true}
    if('DeviceMotionEvent' in window&&!motionListener){addEventListener('devicemotion',onMotion,true);motionListener=true}
    label();beginArming('Stabilizálás… tartsd kényelmesen a telefont');
   }catch(err){enabled=false;label();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}
  }
- function disable(){enabled=false;haveBase=false;armedNeedsNeutral=false;stop();label();note('')}
+ function disable(){enabled=false;armedNeedsNeutral=false;stop();label();note('')}
  async function toggle(){if(enabled)disable();else await enable()}
  function recalibrate(){if(enabled)beginArming('Stabilizálás… új középhelyzet')}
  function onNewLevel(){if(enabled)beginArming('Stabilizálás… új pálya')}
  function pause(){if(enabled){stop();note('Freeze kiválasztás · mozgás szünetel')}}
  function resume(){if(enabled)beginArming('Stabilizálás… Freeze után')}
- function adjustAngle(delta){enterAngle=Math.max(3,Math.min(14,enterAngle+delta));angleValue.textContent=enterAngle+'°';if(enabled)beginArming('Érzékenység: '+enterAngle+'° · stabilizálás…')}
- function adjustTempo(delta){tempoPct=Math.max(50,Math.min(200,tempoPct+delta));tempoValue.textContent=tempoPct+'%';note('Gurulási tempó: '+tempoPct+'%')}
+ function adjustAngle(delta){enterAngle=Math.max(3,Math.min(14,enterAngle+delta));angleValue.textContent=enterAngle+'°';saveSettings();if(enabled)beginArming('Érzékenység: '+enterAngle+'° · stabilizálás…')}
+ function adjustTempo(delta){tempoPct=Math.max(50,Math.min(200,tempoPct+delta));tempoValue.textContent=tempoPct+'%';saveSettings();note('Gurulási tempó: '+tempoPct+'%')}
+ loadSettings();
  return{toggle,recalibrate,onNewLevel,pause,resume,adjustAngle,adjustTempo,get enabled(){return enabled}};
 })();
 motionBtn.addEventListener('click',()=>MotionControl.toggle());
