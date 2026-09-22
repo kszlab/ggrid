@@ -323,6 +323,15 @@ addEventListener('keyup',e=>{
 });
 addEventListener('blur',()=>{keyboardDirs.clear();refreshKeyboardTilt();stopHold();});
 addEventListener('orientationchange',()=>setTimeout(()=>MotionControl.recalibrate(),250));
+const startupEl=document.querySelector('#startup'),STARTUP_MIN_MS=700,startupStarted=performance.now();
+function finishStartup(){
+ const wait=Math.max(0,STARTUP_MIN_MS-(performance.now()-startupStarted));
+ setTimeout(()=>startupEl?.classList.add('done'),wait);
+}
 resetLevelBuffer();
-const startWhenReady=()=>{const g=levelBuffer.shift();if(g){applyGeneratedLevel(g);fillLevelBuffer();}else setTimeout(startWhenReady,25)};
+const startWhenReady=()=>{
+ const g=levelBuffer.shift();
+ if(g){applyGeneratedLevel(g);fillLevelBuffer();finishStartup();}
+ else setTimeout(startWhenReady,25);
+};
 startWhenReady();
