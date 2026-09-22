@@ -303,6 +303,97 @@ document.querySelector('#anglePlus').addEventListener('click',()=>MotionControl.
 document.querySelector('#tempoMinus').addEventListener('click',()=>MotionControl.adjustTempo(-10));
 document.querySelector('#tempoPlus').addEventListener('click',()=>MotionControl.adjustTempo(10));
 
+/* ===== v0.10.4 MOTION CALIBRATION LAB ===== */
+const CalibrationLab=(()=>{
+ const panel=document.querySelector('#calibration'),phaseEl=document.querySelector('#calPhase'),arrowEl=document.querySelector('#calArrow'),
+ instructionEl=document.querySelector('#calInstruction'),progressEl=document.querySelector('#calProgress'),statsEl=document.querySelector('#calStats'),
+ startBtn=document.querySelector('#calStart'),exportBtn=document.querySelector('#calExport');
+ const arrows={up:'↑',down:'↓',left:'←',right:'→'},names={up:'FEL',down:'LE',left:'BALRA',right:'JOBBRA'};
+ /* Euler trail over the complete directed graph of four directions:
+    every ordered direction→different direction transition occurs exactly once. */
+ const sequence=['right','down','up','left','down','right','up','down','left','up','right','left','right'];
+ const SETTLE_MS=650,HOLD_MS=850,COUNTDOWN_MS=1800;
+ let running=false,samples=[],segments=[],currentTarget=null,currentFrom='neutral',phase='idle',phaseStarted=0,timer=null;
+ let lastO={alpha:null,beta:null,gamma:null,absolute:null},lastM={gx:null,gy:null,gz:null,ax:null,ay:null,az:null,rrAlpha:null,rrBeta:null,rrGamma:null};
+ function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}
+ function sample(source){
+  if(!running)return;
+  samples.push({t:Math.round(performance.now()*10)/10,phase,from:currentFrom,to:currentTarget,source,screenAngle:screenAngle(),
+   alpha:lastO.alpha,beta:lastO.beta,gamma:lastO.gamma,absolute:lastO.absolute,
+   gx:lastM.gx,gy:lastM.gy,gz:lastM.gz,ax:lastM.ax,ay:lastM.ay,az:lastM.az,rrAlpha:lastM.rrAlpha,rrBeta:lastM.rrBeta,rrGamma:lastM.rrGamma});
+ }
+ function onO(e){lastO={alpha:e.alpha,beta:e.beta,gamma:e.gamma,absolute:e.absolute};sample('orientation')}
+ function onM(e){const g=e.accelerationIncludingGravity||{},a=e.acceleration||{},r=e.rotationRate||{};
+  lastM={gx:g.x,gy:g.y,gz:g.z,ax:a.x,ay:a.y,az:a.z,rrAlpha:r.alpha,rrBeta:r.beta,rrGamma:r.gamma};sample('motion')}
+ function ensureListeners(){addEventListener('deviceorientation',onO,true);addEventListener('devicemotion',onM,true)}
+ function removeListeners(){removeEventListener('deviceorientation',onO,true);removeEventListener('devicemotion',onM,true)}
+ async function permissions(){
+  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+   if(await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('DeviceOrientation engedély megtagadva');
+  }
+  if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
+   if(await DeviceMotionEvent.requestPermission()!=='granted')throw Error('DeviceMotion engedély megtagadva');
+  }
+ }
+ function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 különböző irány→irány átmenetet fogunk megmérni.'}
+ function close(){if(running)finish(false);panel.hidden=true;MotionControl.resume()}
+ function setProgress(i,f=0){progressEl.style.width=Math.min(100,Math.max(0,((i+f)/sequence.length)*100))+'%'}
+ function countdown(i){
+  phase='countdown';currentTarget=sequence[i];currentFrom=i?sequence[i-1]:'neutral';phaseStarted=performance.now();
+  arrowEl.textContent=arrows[currentTarget];instructionEl.textContent=(i?'A jelenlegi helyzetből ':'Kezdő helyzetből ')+names[currentTarget]+' döntés következik…';
+  phaseEl.textContent='Mozdulat '+(i+1)+' / '+sequence.length;setProgress(i);
+  let left=3;statsEl.textContent='Indulás: '+left;
+  const tick=()=>{left--;if(left>0){statsEl.textContent='Indulás: '+left;timer=setTimeout(tick,COUNTDOWN_MS/3)}else beginMove(i)};
+  timer=setTimeout(tick,COUNTDOWN_MS/3);
+ }
+ function beginMove(i){
+  phase='transition';phaseStarted=performance.now();instructionEl.textContent=names[currentTarget]+' – döntsd át most';statsEl.textContent='Mozgás rögzítése…';
+  timer=setTimeout(()=>beginHold(i),SETTLE_MS);
+ }
+ function beginHold(i){
+  phase='hold';phaseStarted=performance.now();instructionEl.textContent=names[currentTarget]+' – tartsd ebben a helyzetben';statsEl.textContent='Véghelyzet mintavétele…';setProgress(i,.55);
+  timer=setTimeout(()=>{segments.push({from:currentFrom,to:currentTarget,endSample:samples.length});if(i+1<sequence.length)countdown(i+1);else finish(true)},HOLD_MS);
+ }
+ function summarize(){
+  const motion=samples.filter(s=>s.source==='motion'&&[s.gx,s.gy,s.gz].every(Number.isFinite)).length;
+  const orient=samples.filter(s=>s.source==='orientation'&&Number.isFinite(s.beta)&&Number.isFinite(s.gamma)).length;
+  const transitions=new Set(segments.filter(s=>s.from!=='neutral').map(s=>s.from+'>'+s.to)).size;
+  return{samples:samples.length,motionSamples:motion,orientationSamples:orient,transitionTypes:transitions,screenAngles:[...new Set(samples.map(s=>s.screenAngle))]};
+ }
+ function profilePreview(){
+  /* Compact descriptive profile only. The raw export remains authoritative for
+     offline analysis before this profile is allowed to drive gameplay. */
+  const holds={};
+  for(const d of ['up','down','left','right']){
+   const a=samples.filter(s=>s.phase==='hold'&&s.to===d&&[s.gx,s.gy,s.gz].every(Number.isFinite));
+   if(a.length)holds[d]={n:a.length,gravityMean:['gx','gy','gz'].map(k=>a.reduce((q,s)=>q+s[k],0)/a.length)};
+  }
+  return{version:1,created:new Date().toISOString(),holds,summary:summarize()};
+ }
+ function finish(ok){
+  clearTimeout(timer);running=false;removeListeners();phase=ok?'done':'cancelled';currentTarget=null;
+  if(ok){setProgress(sequence.length);arrowEl.textContent='✓';instructionEl.textContent='Mérés elkészült';const s=summarize();
+   statsEl.textContent='Nyers minták: '+s.samples+'\nDeviceMotion: '+s.motionSamples+' · DeviceOrientation: '+s.orientationSamples+'\nMért irányátmenetek: '+s.transitionTypes+'/12';
+   exportBtn.disabled=false;startBtn.textContent='Új mérés';try{localStorage.setItem('ggrid.calibration.preview.v1',JSON.stringify(profilePreview()))}catch(_){}
+  }else{arrowEl.textContent='•';instructionEl.textContent='A mérés megszakítva.'}
+ }
+ async function start(){
+  if(running)return;try{await permissions()}catch(e){statsEl.textContent='Nem indítható: '+e.message;return}
+  MotionControl.pause();samples=[];segments=[];running=true;exportBtn.disabled=true;startBtn.textContent='Mérés folyamatban…';ensureListeners();
+  phase='prepare';arrowEl.textContent='•';instructionEl.textContent='Tartsd a telefont a játék közbeni természetes kezdőhelyzetben.';statsEl.textContent='2 másodperc múlva indul.';progressEl.style.width='0%';
+  timer=setTimeout(()=>countdown(0),2000);
+ }
+ function exportData(){
+  if(!samples.length)return;const payload={format:'GGrid Motion Calibration Raw',version:1,created:new Date().toISOString(),
+   userAgent:navigator.userAgent,sequence,parameters:{settleMs:SETTLE_MS,holdMs:HOLD_MS,countdownMs:COUNTDOWN_MS},summary:summarize(),profilePreview:profilePreview(),segments,samples};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='GGrid-calibration-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }
+ document.querySelector('#calibrate').addEventListener('click',open);document.querySelector('#calClose').addEventListener('click',close);
+ startBtn.addEventListener('click',start);exportBtn.addEventListener('click',exportData);
+ return{open};
+})();
+
 freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
