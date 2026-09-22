@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 1,
   "id": "moonlit-zen",
-  "version": 1,
+  "version": 2,
   "name": "HOLDKERT // Koi szentély",
   "description": "SHOWCASE: holdfényes japán vízikert, koi szellem, lámpások, sziklák és torii-kapu.",
   "semantic": {
@@ -54,5 +54,12 @@
       "exit": "gate-wind",
       "win": "temple-chime"
     }
+  },
+  "ui": {
+    "skin": "full",
+    "frame": "zen-slate",
+    "controls": "embossed-integrated",
+    "hud": "zen-slate",
+    "sceneChrome": true
   }
 }
