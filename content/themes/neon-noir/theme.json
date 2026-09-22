@@ -1,0 +1,74 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "neon-noir",
+  "version": 1,
+  "name": "NEON RAIN // Sector 9",
+  "description": "Esőáztatta jövőváros egy tetőn: futárdrón, lebegő cargók, holografikus útburkolat és pulzáló evakuációs kapu.",
+  "colors": {
+    "background": "#050612",
+    "wrap": "#090b18",
+    "board": "#0b1220",
+    "cell1": "#101c2b",
+    "cell2": "#080e18",
+    "accent": "#ff2bd6",
+    "ball1": "#ffffff",
+    "ball2": "#00f7ff",
+    "ball3": "#006b8b",
+    "brick1": "#562c76",
+    "brick2": "#251638",
+    "brickEdge": "#ff3adf",
+    "wall1": "#263d4d",
+    "wall2": "#101b25"
+  },
+  "pieces": {
+    "ball": {
+      "name": "K-7 futárdrón"
+    },
+    "brick": {
+      "name": "Cargó pod"
+    },
+    "wall": {
+      "name": "Klímatorony"
+    },
+    "exit": {
+      "name": "Evakuációs lift"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "EMP-lock"
+    }
+  },
+  "scene": {
+    "type": "neon-noir",
+    "tier": "showcase",
+    "tagline": "SECTOR 9 // ACID RAIN",
+    "layers": [
+      "megacity",
+      "rain",
+      "holograms",
+      "rooftop",
+      "puddles",
+      "steam",
+      "foreground-signage"
+    ],
+    "exitStyle": "holo-elevator"
+  },
+  "audio": {
+    "profile": "neon",
+    "ambient": {
+      "type": "procedural",
+      "name": "Eső + városi basszus + távoli szirénák",
+      "enabled": true,
+      "volume": 0.024
+    },
+    "events": {
+      "move": "maglev",
+      "blocked": "metal-impact",
+      "freeze": "emp-drop",
+      "exit": "elevator-charge",
+      "win": "neon-resolve"
+    }
+  }
+}
