@@ -1,5 +1,5 @@
-/* GGrid v0.12.24 – rectangular background generator + Freeze Analyzer */
-importScripts('game-core.js','solver.js','generator.js');
+/* GGrid v0.12.25 – rectangular background generator + Freeze Analyzer */
+importScripts('game-core.js?v=0.12.25','solver.js?v=0.12.25','generator.js?v=0.12.25');
 self.onmessage=e=>{
  const m=e.data||{};
  try{
