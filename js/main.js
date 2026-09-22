@@ -68,71 +68,34 @@ function render(opts={}){
    A generálás Web Workerben fut, így nem blokkolja a játék/UI főszálát. */
 const levelBuffer=[];
 function prefetchTarget(){const d=selectedDims();return d.w===d.h?2:1}
-let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0,pendingNewLevel=false,generationTimer=null;
+/* ===== v0.12.36 FREE-PLAY LEVEL CREATION =====
+   A normál W-pálya szándékosan a főszálon készül: a v0.12.36 konstruktív
+   generátor nem végez BFS-t, ezért azonnali. Ezzel a Worker/cache/request
+   állapotlánc teljesen kiesik a normál Szabad játékból. */
+const levelBuffer=[];
+let prefetchGeneration=0,prefetchPending=0,pendingNewLevel=false;
 function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
-function stopGenerator(){
- if(generationTimer){clearTimeout(generationTimer);generationTimer=null}
- if(generatorWorker){generatorWorker.terminate();generatorWorker=null}
- prefetchPending=0;
-}
-function generationFailed(message){
- pendingNewLevel=false;stopGenerator();toast.textContent=message||'A pálya generálása nem sikerült. Próbáld újra.';
-}
-function ensureGeneratorWorker(){
- if(generatorWorker)return generatorWorker;
- generatorWorker=new Worker('js/generator-worker.js?v=0.12.32');
- generatorWorker.onmessage=e=>{
-  const m=e.data||{};
-  if(m.type==='freezeAnalysis'){if(state&&m.stateKey===stateKey(state))freezeAnalysis=m.analysis;return}
-  if(m.type==='error'){console.error('Generator',m.message);generationFailed('A pálya generálása nem sikerült. Próbáld újra.');return}
-  if(m.type==='level'){
-   if(generationTimer){clearTimeout(generationTimer);generationTimer=null}
-   prefetchPending=Math.max(0,prefetchPending-1);
-   const current=selectedDims(),rid=m.requestId||{},gs=m.g?.state;
-   const requestMatches=rid.generation===prefetchGeneration&&rid.key===currentPrefetchKey()&&rid.w===current.w&&rid.h===current.h;
-   const levelMatches=gs?.width===current.w&&gs?.height===current.h;
-   if(requestMatches&&levelMatches){
-    if(pendingNewLevel){pendingNewLevel=false;applyGeneratedLevel(m.g)}
-    else levelBuffer.push(m.g);
-   }else if(pendingNewLevel){
-    /* A méret közben megváltozott: a régi Worker-választ soha ne rajzoljuk ki. */
-    requestGeneratedLevel();
-   }
-  }
- };
- generatorWorker.onerror=e=>{console.error('Generator Worker',e);generationFailed('Generátorhiba. Próbáld újra.')};
- return generatorWorker;
-}
-function requestGeneratedLevel(){
- if(prefetchPending>0)return;
- const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration,d=selectedDims();
- prefetchPending=1;
- generationTimer=setTimeout(()=>generationFailed('A pálya készítése túl sokáig tartott. Próbáld újra vagy válassz kisebb méretet.'),30000);
- w.postMessage({type:'generate',w:d.w,h:d.h,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq,w:d.w,h:d.h}});
-}
-function fillLevelBuffer(){/* v0.12.30: nincs automatikus háttér-prefetch; csak felhasználói kérésre generálunk. */}
-function resetLevelBuffer(){
- prefetchGeneration++;levelBuffer.length=0;pendingNewLevel=false;stopGenerator();
-}
+function stopGenerator(){prefetchPending=0;pendingNewLevel=false}
+function fillLevelBuffer(){}
+function resetLevelBuffer(){prefetchGeneration++;levelBuffer.length=0;stopGenerator()}
 function applyGeneratedLevel(g){
- state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution;currentCode=g.code;
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentCode=g.code;
  freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';
  render();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
 }
-function newLevel(seed=null,prefix='W'){
- /* Pályakód betöltése determinisztikus marad; normál Új pálya a pufferből jön. */
- if(seed||prefix!=='W'){
-  const d=selectedDims(),g=generateLevel(d.w,difficultyEl.value,seed||seedText(),prefix,d.h);
-  applyGeneratedLevel(g);return;
+function requestGeneratedLevel(seed=null,prefix='W'){
+ const d=selectedDims();
+ try{
+  const g=generateLevel(d.w,difficultyEl.value,seed||seedText(),prefix,d.h);
+  if(g?.state?.width!==d.w||g?.state?.height!==d.h)throw Error('GENERATOR_SIZE_MISMATCH');
+  applyGeneratedLevel(g);return true;
+ }catch(e){
+  console.error('Level generation',e);
+  toast.textContent='A pálya generálása nem sikerült: '+(e?.message||e);
+  return false;
  }
- const g=levelBuffer.shift();
- if(g){applyGeneratedLevel(g);fillLevelBuffer();return;}
- /* Csak induláskor / extrém gyors kattintásnál lehet üres. A Worker elkészíti
-    a következőt; nem fagyasztjuk le a főszálat szinkron generálással. */
- pendingNewLevel=true;
- toast.textContent='Pálya készítése…';
- requestGeneratedLevel();
 }
+function newLevel(seed=null,prefix='W'){return requestGeneratedLevel(seed,prefix)}
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
  if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
