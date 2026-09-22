@@ -14,12 +14,7 @@ function freezeLimit(){const v=freezeLimitEl.value;return v==='inf'?Infinity:Mat
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
 let freezeAnalysisSeq=0;
-function scheduleFreezeAnalysis(){
- freezeAnalysis=null;
- if(!state)return;
- const snapshot=cloneState(state),snapshotKey=stateKey(snapshot),requestId='freeze-'+(++freezeAnalysisSeq);
- ensureGeneratorWorker().postMessage({type:'analyzeFreeze',requestId,state:snapshot,stateKey:snapshotKey,maxDepth:30});
-}
+function scheduleFreezeAnalysis(){/* v0.12.29: analyzer result was not consumed by UI; avoid expensive BFS after every move. */freezeAnalysis=null;}
 function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [w,h]=v.split('x').map(Number);return{w,h}}const n=+v;return{w:n,h:n}}
 function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
 function gluedNeighbors(o,ci){
@@ -70,12 +65,13 @@ function render(opts={}){
 /* ===== BACKGROUND LEVEL PREFETCH =====
    Három kész W-pályát tartunk az aktuális méret+nehézség kombinációhoz.
    A generálás Web Workerben fut, így nem blokkolja a játék/UI főszálát. */
-const PREFETCH_TARGET=3,levelBuffer=[];
+const levelBuffer=[];
+function prefetchTarget(){const d=selectedDims();return d.w===d.h?2:1}
 let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0,pendingNewLevel=false;
 function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
 function ensureGeneratorWorker(){
  if(generatorWorker)return generatorWorker;
- generatorWorker=new Worker('js/generator-worker.js?v=0.12.25');
+ generatorWorker=new Worker('js/generator-worker.js?v=0.12.29');
  generatorWorker.onmessage=e=>{
   const m=e.data||{};
   if(m.type==='freezeAnalysis'){
@@ -97,7 +93,7 @@ function ensureGeneratorWorker(){
  return generatorWorker;
 }
 function fillLevelBuffer(){
- const need=PREFETCH_TARGET-levelBuffer.length-prefetchPending;
+ const need=prefetchTarget()-levelBuffer.length-prefetchPending;
  if(need<=0)return;
  const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration;
  for(let k=0;k<need;k++){
