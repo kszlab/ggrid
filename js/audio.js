@@ -1,15 +1,13 @@
-/* ===== AUDIO MANAGER v0.12.19: synthesized, user-unlocked Web Audio ===== */
+/* ===== AUDIO MANAGER v0.12.31: reliable user-gesture Web Audio ===== */
 const AudioManager=(()=>{
  let ctx=null,muted=false,themeAudio=null,ambientTimer=null,unlocked=false,unlockPromise=null;
  try{muted=localStorage.getItem('billenoSound')==='off'}catch(e){}
  function context(){if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)ctx=new AC()}return ctx}
- async function unlock(){
-  if(muted)return false;
+ async function unlock(force=false){
+  if(muted&&!force)return false;
   const c=context();if(!c)return false;
-  if(c.state==='running'){unlocked=true;return true}
-  if(unlockPromise)return unlockPromise;
-  unlockPromise=c.resume().then(()=>{unlocked=c.state==='running';return unlocked}).catch(()=>false).finally(()=>{unlockPromise=null});
-  return unlockPromise;
+  try{if(c.state!=='running')await c.resume()}catch(_){}
+  unlocked=c.state==='running';return unlocked;
  }
  function tone(freq,dur,type='sine',gain=.05,when=0,endFreq=null){
   if(muted)return;const c=context();if(!c||c.state!=='running')return;
@@ -32,14 +30,20 @@ const AudioManager=(()=>{
   ambientPulse();ambientTimer=setInterval(ambientPulse,3600)
  }
  async function userGesture(){
-  const ok=await unlock();if(ok&&themeAudio?.ambient?.enabled&&!ambientTimer)startAmbient();return ok
+  const ok=await unlock(false);if(ok&&themeAudio?.ambient?.enabled&&!ambientTimer)startAmbient();return ok
  }
  function themed(kind,fallback){if(!themeAudio)return fallback();const p=themeAudio.profile;const m={haunted:{move:[150,.13,'triangle'],blocked:[82,.16,'square'],freeze:[880,.32,'sine'],exit:[330,.5,'sine'],win:[660,.7,'sine']},city:{move:[105,.12,'sawtooth'],blocked:[240,.16,'square'],freeze:[520,.15,'square'],exit:[740,.3,'sine'],win:[880,.45,'triangle']},orbital:{move:[180,.1,'square'],blocked:[70,.2,'sawtooth'],freeze:[1200,.3,'sine'],exit:[540,.45,'sine'],win:[1080,.55,'sine']},abyss:{move:[75,.2,'sine'],blocked:[52,.28,'sine'],freeze:[760,.4,'sine'],exit:[310,.5,'sine'],win:[620,.7,'sine']},clockwork:{move:[165,.11,'triangle'],blocked:[92,.18,'square'],freeze:[1040,.45,'sine'],exit:[370,.6,'sine'],win:[1110,.85,'sine']},microchip:{move:[330,.08,'square'],blocked:[110,.12,'square'],freeze:[740,.35,'triangle'],exit:[660,.42,'square'],win:[988,.65,'triangle']},zen:{move:[220,.13,'sine'],blocked:[130,.2,'sine'],freeze:[880,.6,'sine'],exit:[440,.7,'sine'],win:[660,.9,'sine']},neon:{move:[125,.1,'sawtooth'],blocked:[62,.2,'square'],freeze:[820,.32,'square'],exit:[520,.55,'sine'],win:[880,.7,'triangle']}}[p]?.[kind];if(!m)return fallback();tone(m[0],m[1],m[2],.045,0,m[0]*.72)}
  function noise(dur=.12,gain=.025,when=0){if(muted)return;const c=context();if(!c||c.state!=='running')return;const len=Math.ceil(c.sampleRate*dur),buf=c.createBuffer(1,len,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();f.type='bandpass';f.frequency.value=650;f.Q.value=.7;g.gain.value=gain;s.buffer=buf;s.connect(f).connect(g).connect(c.destination);s.start(c.currentTime+when)}
  return{
-  get muted(){return muted},get unlocked(){return unlocked},
+  get muted(){return muted},get unlocked(){return unlocked},get state(){return ctx?.state||'not-created'},
   userGesture,
-  async toggle(){muted=!muted;try{localStorage.setItem('billenoSound',muted?'off':'on')}catch(e){}if(!muted){await userGesture();tone(620,.08,'sine',.045);startAmbient()}else stopAmbient();return muted},
+  async toggle(){
+   if(muted){
+    muted=false;try{localStorage.setItem('billenoSound','on')}catch(e){}
+    const ok=await unlock(true);if(ok){tone(620,.16,'sine',.08);startAmbient()}return muted;
+   }
+   muted=true;try{localStorage.setItem('billenoSound','off')}catch(e){}stopAmbient();return muted;
+  },
   setThemeAudio(a){themeAudio=a||null;if(unlocked)startAmbient();else stopAmbient()},stopAmbient,
   move(count=1){themed('move',()=>{noise(.14,Math.min(.018+.004*count,.035));tone(125,.11,'triangle',.022,0,92)})},
   blocked(){themed('blocked',()=>{tone(105,.07,'square',.045);tone(82,.08,'square',.032,.065)})},
