@@ -22,6 +22,13 @@
       "name": "Scene Renderer 2 Showcase",
       "description": "Aetherium Óramű és NEON RAIN – két játszható, teljes Scene Theme referencia.",
       "manifest": "renderer-showcase/scenario.json"
+    },
+    {
+      "id": "renderer-showcase-2",
+      "version": 1,
+      "name": "Scene Renderer 2 // Extra Worlds",
+      "description": "MICROCORE elektronikai dioráma és holdfényes Koi szentély.",
+      "manifest": "renderer-showcase-2/scenario.json"
     }
   ]
 }
