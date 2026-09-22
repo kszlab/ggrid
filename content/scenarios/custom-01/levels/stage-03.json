@@ -1,0 +1,56 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "custom-01-03",
+  "version": 1,
+  "name": "Freeze próba",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 0,
+    "y": 1,
+    "direction": "left"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 3,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "type": "brick",
+      "x": 0,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "b2",
+      "type": "brick",
+      "x": 2,
+      "y": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    }
+  ]
+}
