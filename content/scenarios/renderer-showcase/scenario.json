@@ -1,0 +1,63 @@
+{
+  "format": "ggrid-scenario",
+  "formatVersion": 1,
+  "id": "renderer-showcase",
+  "version": 1,
+  "name": "Scene Renderer 2 Showcase",
+  "description": "Két játszható referencia-pálya a GGrid új, réteges Scene Rendererével.",
+  "rules": [
+    "A fizika változatlan: juttasd ki a célobjektumot.",
+    "A díszlet, figurák, kijárat, effektek és hangvilág a témához igazodnak."
+  ],
+  "defaults": {
+    "abilities": [
+      {
+        "type": "freeze",
+        "count": 1
+      }
+    ],
+    "timer": null,
+    "completion": {
+      "type": "allBallsExited"
+    }
+  },
+  "chapters": [
+    {
+      "id": "aetherium",
+      "name": "I. Aetherium Óramű",
+      "theme": {
+        "src": "../../themes/clockwork-sanctum/theme.json",
+        "version": 1
+      },
+      "stages": [
+        {
+          "id": "aetherium-01",
+          "name": "Az asztrolábium terme",
+          "level": {
+            "src": "../../levels/showcase-aetherium-01.json",
+            "version": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sector-9",
+      "name": "II. NEON RAIN // Sector 9",
+      "theme": {
+        "src": "../../themes/neon-noir/theme.json",
+        "version": 1
+      },
+      "stages": [
+        {
+          "id": "neon-01",
+          "name": "Rooftop 09",
+          "level": {
+            "src": "../../levels/showcase-neon-01.json",
+            "version": 1
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": null
+}
