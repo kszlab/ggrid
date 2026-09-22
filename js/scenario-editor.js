@@ -1,7 +1,7 @@
-/* GGrid Scenario Editor v0.6 – GGrid v0.12.8 */
+/* GGrid Scenario Editor v0.7 – GGrid v0.12.9 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
-const STORE='ggrid.local.scenarios.v1';
+const STORE='ggrid.local.scenarios.v1',THEME_SELECTION='ggrid.theme-lab.enabled.v1';
 const THEMES={
  classic:{format:'ggrid-theme',formatVersion:1,id:'classic',version:1,name:'GGrid Classic',colors:{background:'#10283d',board:'#2b3034'}},
  mine:{format:'ggrid-theme',formatVersion:1,id:'mine',version:1,name:'Elhagyott bánya',colors:{background:'#241b14',board:'#3a3026'},pieces:{ball:{name:'Csille'},brick:{name:'Láda'},wall:{name:'Szikla'},exit:{name:'Tárnakijárat'}},abilities:{freeze:{name:'Fék'}}}
@@ -48,7 +48,7 @@ const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
 let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
 function ensureWorker(){
  if(genWorker)return genWorker;
- genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.8');
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.9');
  return genWorker;
 }
 function setBusy(v){
@@ -95,7 +95,7 @@ async function generateOne(i){
  }else log.textContent='✕ Stage '+(i+1)+': '+result.error;
  renderRows();return false
 }
-function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.8',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
+function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.9',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
 function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
 function buildPackage(){
  if(generated.length!==specs.length||generated.some(x=>!x)){lastPackage=null;return null}
@@ -107,7 +107,7 @@ function buildPackage(){
  });
  const scenario={format:'ggrid-scenario',formatVersion:1,id:p.meta.id,version:p.meta.version,name:p.meta.name,description:p.meta.description,rules:['Juttasd ki az összes golyót.','A téglák nem hagyhatják el a pályát.'],defaults:{theme:{key:'theme:classic',version:1},abilities:[],timer:null,completion:{type:'allBallsExited'}},chapters,scoring:null};
  const resources={};for(const s of specs){const t=themeDocs.get(s.theme)||THEMES[s.theme];if(t)resources['theme:'+s.theme]=structuredClone(t)}generated.forEach(g=>resources['level:'+g.level.id]=g.level);
- lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.8',scenario,resources,editorProject:p};
+ lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.9',scenario,resources,editorProject:p};
  $('#downloadScenario').disabled=false;$('#installScenario').disabled=false;$('#publishBundle').disabled=false;
  summary.textContent=specs.length+' stage · minden pálya legenerálva és solverrel ellenőrizve.';
  return lastPackage
@@ -128,7 +128,7 @@ function publicationBundle(){
  generated.forEach((g,i)=>files[base+'levels/stage-'+String(i+1).padStart(2,'0')+'.json']=g.level);
  files[base+'editor-project.json']=project();
  const indexEntry={id,version,name:pub.name,description:pub.description,manifest:id+'/scenario.json'};
- return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.8',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
+ return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.9',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
 }
 function exportPublication(){
  try{
@@ -165,7 +165,7 @@ async function install(){
 }
 async function loadThemes(){
  try{
-  const r=await fetch('content/themes/index.json',{cache:'no-cache'});if(!r.ok)throw Error('theme index');const idx=await r.json();themeCatalog=idx.themes||[];
+  const r=await fetch('content/themes/index.json',{cache:'no-cache'});if(!r.ok)throw Error('theme index');const idx=await r.json();themeCatalog=idx.themes||[];try{const chosen=JSON.parse(localStorage.getItem(THEME_SELECTION)||'null');if(Array.isArray(chosen))themeCatalog=themeCatalog.filter(t=>chosen.includes(t.id))}catch(_){}
   await Promise.all(themeCatalog.map(async t=>{const rr=await fetch('content/themes/'+t.src,{cache:'no-cache'});if(rr.ok)themeDocs.set(t.id,await rr.json())}));
  }catch(_){themeCatalog=[{id:'classic',name:'GGrid Classic'},{id:'mine',name:'Elhagyott bánya'}];for(const [id,t] of Object.entries(THEMES))themeDocs.set(id,t)}
  renderRows();
