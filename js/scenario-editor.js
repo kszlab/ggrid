@@ -105,7 +105,7 @@ function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
 function buildPackage(){
  if(generated.length!==specs.length||generated.some(x=>!x)){lastPackage=null;return null}
  const p=project(),chapters=[],by=new Map();
- specs.forEach((s,i)=>{if(!by.has(s.chapter)){const ch={id:'chapter-'+s.chapter,name:roman(+s.chapter)+'. fejezet',stages:[]};by.set(s.chapter,ch);chapters.push(ch)}
+ specs.forEach((s,i)=>{if(!by.has(s.chapter)){const ch={id:'chapter-'+s.chapter,name:roman(+s.chapter)+'. fejezet – '+(s.theme==='mine'?'A bánya':s.theme==='classic'?'A raktár':'Kaland'),stages:[]};by.set(s.chapter,ch);chapters.push(ch)}
   const abilities=+s.freeze>0?[{type:'freeze',count:+s.freeze}]:[];
   const st={id:'stage-'+String(i+1).padStart(2,'0'),name:s.name,level:{key:'level:'+generated[i].level.id,version:1},theme:{key:'theme:'+s.theme,version:1},abilities,timer:+s.timer?{mode:'countdown',seconds:+s.timer,onExpire:'fail'}:null};
   by.get(s.chapter).stages.push(st);
@@ -145,7 +145,7 @@ function example(){
  specs=[
  {chapter:'1',name:'Alapok',size:'4',difficulty:'2',bricks:'1',walls:'0',glue:'none',freeze:'1',freezeRole:'optional',timer:'0',theme:'classic'},
  {chapter:'1',name:'Kerülőút',size:'4',difficulty:'3',bricks:'1',walls:'1',glue:'none',freeze:'1',freezeRole:'optional',timer:'0',theme:'classic'},
- {chapter:'1',name:'Freeze próba',size:'4',difficulty:'4',bricks:'2',walls:'0',glue:'none',freeze:'1',freezeRole:'required',timer:'0',theme:'classic'},
+ {chapter:'1',name:'Freeze próba',size:'4',difficulty:'4',bricks:'2',walls:'0',glue:'none',freeze:'1',freezeRole:'optional',timer:'0',theme:'classic'},
  {chapter:'2',name:'Mélyebbre',size:'4',difficulty:'4',bricks:'1',walls:'1',glue:'none',freeze:'1',freezeRole:'optional',timer:'0',theme:'mine'},
  {chapter:'2',name:'Időpróba',size:'4',difficulty:'5',bricks:'2',walls:'1',glue:'required',freeze:'1',freezeRole:'optional',timer:'90',theme:'mine'},
  {chapter:'2',name:'Ragasztott test',size:'4',difficulty:'6',bricks:'3',walls:'1',glue:'required',freeze:'1',freezeRole:'optional',timer:'0',theme:'mine'}
