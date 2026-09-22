@@ -1,0 +1,43 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "custom-01-01",
+  "version": 1,
+  "name": "Alapok",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 2,
+    "y": 0,
+    "direction": "up"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 3,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "type": "brick",
+      "x": 3,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    }
+  ]
+}
