@@ -8,9 +8,12 @@ function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.
 function freezeLimit(){const v=freezeLimitEl.value;return v==='inf'?Infinity:Math.max(0,parseInt(v,10)||0);}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
+let freezeAnalysisSeq=0;
 function scheduleFreezeAnalysis(){
- freezeAnalysis=null;const snapshot=cloneState(state);
- setTimeout(()=>{const a=analyzeOneFreeze(snapshot,30);if(stateKey(snapshot)===stateKey(state))freezeAnalysis=a;},0);
+ freezeAnalysis=null;
+ if(!state)return;
+ const snapshot=cloneState(state),snapshotKey=stateKey(snapshot),requestId='freeze-'+(++freezeAnalysisSeq);
+ ensureGeneratorWorker().postMessage({type:'analyzeFreeze',requestId,state:snapshot,stateKey:snapshotKey,maxDepth:30});
 }
 function pctPos(x,y,n){const inset=1.8,cell=100/n;return{left:`calc(${x*cell}% + ${inset}px)`,top:`calc(${y*cell}% + ${inset}px)`,size:`calc(${cell}% - ${inset*2}px)`};}
 function gluedNeighbors(o,ci){
@@ -60,17 +63,27 @@ function render(opts={}){
    Három kész W-pályát tartunk az aktuális méret+nehézség kombinációhoz.
    A generálás Web Workerben fut, így nem blokkolja a játék/UI főszálát. */
 const PREFETCH_TARGET=3,levelBuffer=[];
-let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0;
+let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0,pendingNewLevel=false;
 function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
 function ensureGeneratorWorker(){
  if(generatorWorker)return generatorWorker;
  generatorWorker=new Worker('js/generator-worker.js');
  generatorWorker.onmessage=e=>{
-  const m=e.data||{};prefetchPending=Math.max(0,prefetchPending-1);
-  if(m.type==='level'&&m.requestId?.generation===prefetchGeneration&&m.requestId?.key===currentPrefetchKey()){
-   levelBuffer.push(m.g);
+  const m=e.data||{};
+  if(m.type==='freezeAnalysis'){
+   if(state&&m.stateKey===stateKey(state))freezeAnalysis=m.analysis;
+   return;
   }
-  fillLevelBuffer();
+  if(m.type==='level'){
+   prefetchPending=Math.max(0,prefetchPending-1);
+   if(m.requestId?.generation===prefetchGeneration&&m.requestId?.key===currentPrefetchKey()){
+    if(pendingNewLevel){
+     pendingNewLevel=false;
+     applyGeneratedLevel(m.g);
+    }else levelBuffer.push(m.g);
+   }
+   fillLevelBuffer();
+  }
  };
  generatorWorker.onerror=()=>{prefetchPending=Math.max(0,prefetchPending-1);};
  return generatorWorker;
@@ -85,7 +98,7 @@ function fillLevelBuffer(){
  }
 }
 function resetLevelBuffer(){
- prefetchGeneration++;levelBuffer.length=0;prefetchPending=0;
+ prefetchGeneration++;levelBuffer.length=0;prefetchPending=0;pendingNewLevel=false;
  if(generatorWorker){generatorWorker.terminate();generatorWorker=null;}
  fillLevelBuffer();
 }
@@ -104,6 +117,7 @@ function newLevel(seed=null,prefix='W'){
  if(g){applyGeneratedLevel(g);fillLevelBuffer();return;}
  /* Csak induláskor / extrém gyors kattintásnál lehet üres. A Worker elkészíti
     a következőt; nem fagyasztjuk le a főszálat szinkron generálással. */
+ pendingNewLevel=true;
  toast.textContent='A következő pálya készül…';
  fillLevelBuffer();
 }
