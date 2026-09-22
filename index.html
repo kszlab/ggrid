@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.12.23 letisztult UI</title>
-<link rel="stylesheet" href="css/game.css?v=0.12.23"></head>
+<title>GGrid – v0.12.24 letisztult UI</title>
+<link rel="stylesheet" href="css/game.css?v=0.12.24"></head>
 <body>
 <div id="startup" class="startup" aria-live="polite"><div class="startup-card"><div class="startup-title">GGrid</div><div class="startup-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="startup-ball"></i><i></i><i></i><i class="startup-brick"></i><i></i></div><div class="startup-text">A játék töltődik…</div></div></div>
 
 <div id="homeScreen" class="home-screen">
  <div class="home-card">
   <div class="home-logo">GGrid</div>
-  <div class="home-version">v0.12.23</div>
+  <div class="home-version">v0.12.24</div>
   <button type="button" id="scenarioOpen" class="primary-home">▶ Játék indítása</button>
   <button type="button" id="homeFreePlay">Szabad játék</button>
   <button type="button" id="homeSettings">⚙ Beállítások</button>
@@ -41,7 +41,7 @@
  <div class="topbar settings-only">
   <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
   <select id="freeTheme" hidden><option value="classic">GGrid Classic</option></select>
-  <label>Méret: <select id="size"><option value="3">3×3</option><option value="4" selected>4×4</option><option value="5">5×5</option></select></label>
+  <label>Méret: <select id="size"><option value="3">3×3</option><option value="4" selected>4×4</option><option value="5">5×5</option><option value="5x6">5×6</option><option value="5x7">5×7</option><option value="5x8">5×8</option></select></label>
   <label>Freeze: <select id="freezeLimit"><option value="inf" selected>∞</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>
  </div>
  <div class="tools legacy-tools">
@@ -72,12 +72,12 @@
   </div>
   <div id="themeDots" class="theme-dots"></div>
   <div class="free-quick">
-   <div class="quick-row"><span>Méret</span><div id="quickSize" class="segmented"><button data-value="3">3×3</button><button data-value="4">4×4</button><button data-value="5">5×5</button></div></div>
+   <div class="quick-row"><span>Méret</span><div id="quickSize" class="size-picker"><button data-value="3">3×3</button><button data-value="4">4×4</button><button data-value="5">5×5</button><button data-value="5x6">5×6</button><button data-value="5x7">5×7</button><button data-value="5x8">5×8</button></div></div>
    <div class="quick-row"><span>Nehézség</span><div id="quickDifficulty" class="segmented"><button data-value="easy">Könnyű</button><button data-value="medium">Közepes</button><button data-value="hard">Nehéz</button></div></div>
    <div class="quick-row"><span>Freeze</span><div id="quickFreeze" class="segmented compact"><button data-value="inf">∞</button><button data-value="0">0</button><button data-value="1">1</button><button data-value="2">2</button><button data-value="3">3</button></div></div>
   </div>
   <button type="button" id="freeSetupPlay" class="free-play-launch">▶ JÁTÉK INDÍTÁSA</button>
-  <div class="panel-version">GGrid v0.12.23</div>
+  <div class="panel-version">GGrid v0.12.24</div>
  </div>
 </div>
 
@@ -89,7 +89,7 @@
  <button type="button" id="menuHint">💡 Súgó</button>
  <button type="button" id="menuSettings">⚙ Beállítások</button>
  <button type="button" id="menuHome">⌂ Kilépés a főmenübe</button>
- <div class="panel-version">GGrid v0.12.23</div>
+ <div class="panel-version">GGrid v0.12.24</div>
 </div></div>
 
 <div id="settingsPanel" class="ui-panel" hidden><div class="ui-card">
@@ -97,7 +97,7 @@
  <section><h3>Vezérlés és hang</h3><div id="settingsControls"></div></section>
  <section id="freeSettings"><h3>Szabad játék</h3><div id="settingsFree"></div></section>
  <section id="codeSettings"><h3>Pályakód</h3><div id="settingsCode"></div></section>
- <div class="panel-version">GGrid v0.12.23</div>
+ <div class="panel-version">GGrid v0.12.24</div>
 </div></div>
 
 <div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>
@@ -108,8 +108,8 @@
 <script src="js/solver.js"></script>
 <script src="js/generator.js"></script>
 <script src="js/audio.js"></script>
-<script src="js/scene-renderer.js?v=0.12.23"></script>
-<script src="js/main.js?v=0.12.23"></script>
-<script src="js/scenario-loader.js?v=0.12.23"></script>
-<script src="js/ui-shell.js?v=0.12.23"></script>
+<script src="js/scene-renderer.js?v=0.12.24"></script>
+<script src="js/main.js?v=0.12.24"></script>
+<script src="js/scenario-loader.js?v=0.12.24"></script>
+<script src="js/ui-shell.js?v=0.12.24"></script>
 </body></html>
