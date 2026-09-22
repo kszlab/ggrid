@@ -1,4 +1,4 @@
-/* GGrid Scenario Editor v0.5 – GGrid v0.12.6 */
+/* GGrid Scenario Editor v0.6 – GGrid v0.12.8 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
 const STORE='ggrid.local.scenarios.v1';
@@ -48,7 +48,7 @@ const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
 let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
 function ensureWorker(){
  if(genWorker)return genWorker;
- genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.6');
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.8');
  return genWorker;
 }
 function setBusy(v){
@@ -95,7 +95,7 @@ async function generateOne(i){
  }else log.textContent='✕ Stage '+(i+1)+': '+result.error;
  renderRows();return false
 }
-function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.6',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
+function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.8',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
 function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
 function buildPackage(){
  if(generated.length!==specs.length||generated.some(x=>!x)){lastPackage=null;return null}
@@ -107,7 +107,7 @@ function buildPackage(){
  });
  const scenario={format:'ggrid-scenario',formatVersion:1,id:p.meta.id,version:p.meta.version,name:p.meta.name,description:p.meta.description,rules:['Juttasd ki az összes golyót.','A téglák nem hagyhatják el a pályát.'],defaults:{theme:{key:'theme:classic',version:1},abilities:[],timer:null,completion:{type:'allBallsExited'}},chapters,scoring:null};
  const resources={};for(const s of specs){const t=themeDocs.get(s.theme)||THEMES[s.theme];if(t)resources['theme:'+s.theme]=structuredClone(t)}generated.forEach(g=>resources['level:'+g.level.id]=g.level);
- lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.6',scenario,resources,editorProject:p};
+ lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.8',scenario,resources,editorProject:p};
  $('#downloadScenario').disabled=false;$('#installScenario').disabled=false;$('#publishBundle').disabled=false;
  summary.textContent=specs.length+' stage · minden pálya legenerálva és solverrel ellenőrizve.';
  return lastPackage
@@ -128,7 +128,7 @@ function publicationBundle(){
  generated.forEach((g,i)=>files[base+'levels/stage-'+String(i+1).padStart(2,'0')+'.json']=g.level);
  files[base+'editor-project.json']=project();
  const indexEntry={id,version,name:pub.name,description:pub.description,manifest:id+'/scenario.json'};
- return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.6',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
+ return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.8',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
 }
 function exportPublication(){
  try{
@@ -154,8 +154,13 @@ function validate(show=true){
  return !errs.length
 }
 function download(obj,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function install(){
- if(!lastPackage)return;let arr=[];try{arr=JSON.parse(localStorage.getItem(STORE)||'[]')}catch(_){}
+async function install(){
+ if(!lastPackage)return;
+ const id=lastPackage.scenario.id;
+ if(!/^[a-z0-9][a-z0-9-]{1,47}$/.test(id)){log.textContent='✕ Érvénytelen scenario azonosító. Használj kisbetűt, számot és kötőjelet.';return}
+ let publicItem=null;try{const r=await fetch('content/scenarios/index.json',{cache:'no-cache'});if(r.ok){const x=await r.json();publicItem=(x.scenarios||[]).find(s=>s.id===id)}}catch(_){}
+ if(publicItem&&Number(publicItem.version)>=Number(lastPackage.scenario.version||0)){log.textContent='✕ Ez az azonosító már publikus: '+id+' v'+publicItem.version+'. A helyi példány a játékban rejtve lenne. Adj a forgatókönyvnek új, egyedi azonosítót (pl. '+id+'-teszt), majd generáld újra.';return}
+ let arr=[];try{arr=JSON.parse(localStorage.getItem(STORE)||'[]')}catch(_){}
  arr=arr.filter(x=>x?.scenario?.id!==lastPackage.scenario.id);arr.push(lastPackage);localStorage.setItem(STORE,JSON.stringify(arr));log.textContent='✓ A forgatókönyv hozzáadva ehhez a böngészőhöz. A GGrid „Játék indítása” listájában megjelenik.'
 }
 async function loadThemes(){
@@ -192,9 +197,9 @@ function renderLocalScenarios(){
 function toggleLocalScenarios(){const box=$('#localScenarios');box.hidden=!box.hidden;if(!box.hidden)renderLocalScenarios()}
 function loadProject(p){
  const pr=p.format==='ggrid-scenario-package'?p.editorProject:p;if(!pr||pr.format!=='ggrid-scenario-project')throw Error('Nem támogatott projektfájl.');
- $('#scenarioId').value=[...$('#scenarioId').options].some(o=>o.value===pr.meta.id)?pr.meta.id:'custom-01';
- $('#scenarioName').value=[...$('#scenarioName').options].some(o=>o.value===pr.meta.name)?pr.meta.name:'Saját forgatókönyv 1';
- $('#scenarioDesc').value=[...$('#scenarioDesc').options].some(o=>o.value===pr.meta.description)?pr.meta.description:'GGrid egyedi próbakampány.';
+ $('#scenarioId').value=pr.meta.id||'custom-01';
+ $('#scenarioName').value=pr.meta.name||'Saját forgatókönyv 1';
+ $('#scenarioDesc').value=pr.meta.description||'GGrid egyedi próbakampány.';
  $('#scenarioVersion').value=String(pr.meta.version||1);specs=pr.stages.map(s=>({...s,status:'empty'}));generated=Array(specs.length).fill(null);lastPackage=null;renderRows();summary.textContent='Projekt betöltve; a pályákat újra kell generálni.'
 }
 function example(){
@@ -218,5 +223,6 @@ $('#installScenario').onclick=install;
 $('#manageLocal').onclick=toggleLocalScenarios;
 $('#themePreviewClose').onclick=closeThemePreview;$('#themePrev').onclick=()=>stepTheme(-1);$('#themeNext').onclick=()=>stepTheme(1);$('#themeUse').onclick=usePreviewTheme;
 $('#importFile').onchange=async e=>{try{loadProject(JSON.parse(await e.target.files[0].text()));log.textContent='✓ Import sikeres.'}catch(err){log.textContent='Import hiba: '+err.message}e.target.value=''};
+$('#scenarioId').addEventListener('input',()=>{const clean=$('#scenarioId').value.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');if(clean!==$('#scenarioId').value)$('#scenarioId').value=clean});
 example();loadThemes();
 })();
