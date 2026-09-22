@@ -66,3 +66,15 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 .edge-up{top:8px}.edge-down{bottom:8px}.edge-left{left:8px}.edge-right{right:8px}
 @media(max-height:760px){.board-wrap{padding:50px}.edge-up,.edge-down{height:38px}.edge-left,.edge-right{width:38px}}
 
+
+/* v0.10.1 startup loading overlay */
+.startup{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:linear-gradient(#173a58,#0d2031);transition:opacity .28s ease,visibility .28s ease}
+.startup.done{opacity:0;visibility:hidden;pointer-events:none}
+.startup-card{text-align:center}.startup-title{font-size:2rem;font-weight:900;letter-spacing:.04em;margin-bottom:14px}.startup-text{margin-top:13px;font-weight:700;opacity:.82}
+.startup-grid{width:94px;height:94px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;padding:5px;border:3px solid #b17b45;border-radius:12px;background:#2b3034;animation:startupTilt 1.4s ease-in-out infinite}
+.startup-grid i{display:block;border-radius:5px;background:linear-gradient(145deg,#60676b,#383e42)}
+.startup-grid .startup-ball{border-radius:50%;background:radial-gradient(circle at 32% 27%,#fff,#aab3ba 25%,#4c555d 68%,#1b2228);animation:startupBall 1.4s ease-in-out infinite}
+.startup-grid .startup-brick{background:repeating-linear-gradient(90deg,#b9783e 0 4px,#c98a49 4px 8px);box-shadow:inset 0 0 0 2px #e0a866}
+@keyframes startupTilt{0%,100%{transform:rotate(0)}35%{transform:rotate(3deg)}70%{transform:rotate(-2deg)}}
+@keyframes startupBall{0%,100%{transform:translate(0,0)}35%{transform:translate(8px,0)}70%{transform:translate(0,8px)}}
+@media(prefers-reduced-motion:reduce){.startup-grid,.startup-grid .startup-ball{animation:none!important}}
