@@ -1,4 +1,4 @@
-/* GGrid Scenario Editor v0.4 – GGrid v0.12.5 */
+/* GGrid Scenario Editor v0.5 – GGrid v0.12.6 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
 const STORE='ggrid.local.scenarios.v1';
@@ -9,6 +9,7 @@ const THEMES={
 const TITLES=['Alapok','Kerülőút','Freeze próba','Mélyebbre','Időpróba','Ragasztott test','Új kihívás','Szűk járat','Akadálypálya','Finálé'];
 const opt=(vals,val)=>vals.map(v=>'<option value="'+v+'" '+(String(v)===String(val)?'selected':'')+'>'+v+'</option>').join('');
 let specs=[],generated=[],lastPackage=null;
+let themeCatalog=[],themeDocs=new Map(),previewRow=null,previewIndex=0;
 
 function defaultSpec(i=0){return{chapter:i<3?'1':'2',name:TITLES[i]||'Új kihívás',size:'4',difficulty:String(Math.min(10,2+i)),bricks:'auto',walls:'auto',glue:'allowed',freeze:'1',freezeRole:'optional',timer:'0',theme:i<3?'classic':'mine',status:'empty'}}
 
@@ -27,10 +28,10 @@ function renderRows(){
    '<td><select data-k="freeze">'+opt(['0','1','2','3'],s.freeze)+'</select></td>'+
    '<td><select data-k="freezeRole">'+opt(['none','optional','required'],s.freezeRole)+'</select></td>'+
    '<td><select data-k="timer">'+opt(['0','30','60','90','120','180'],s.timer)+'</select></td>'+
-   '<td><select data-k="theme">'+opt(['classic','mine'],s.theme)+'</select></td>'+
+   '<td><select data-k="theme">'+opt((themeCatalog.length?themeCatalog.map(t=>t.id):['classic','mine']),s.theme)+'</select></td>'+
    '<td class="status '+(s.status==='ok'?'ok':s.status==='bad'?'bad':'wait')+'">'+({ok:'✓ kész',bad:'✕ nincs találat',working:'⟳ keresés',dirty:'○ újra',empty:'○ nincs'}[s.status]||'○ nincs')+'</td>'+
    '<td><div class="row-actions"><button data-act="dup">⧉</button><button data-act="up">↑</button><button data-act="down">↓</button><button data-act="regen">↻</button><button data-act="del">✕</button></div></td>';
-  tr.querySelectorAll('select').forEach(el=>el.onchange=()=>{s[el.dataset.k]=el.value;s.status='dirty';generated[i]=null;lastPackage=null;$('#publishBundle').disabled=true;renderRows()});
+  tr.querySelectorAll('select').forEach(el=>el.onchange=()=>{s[el.dataset.k]=el.value;s.status='dirty';generated[i]=null;lastPackage=null;$('#publishBundle').disabled=true;if(el.dataset.k==='theme')openThemePreview(i,el.value);renderRows()});
   tr.querySelectorAll('button').forEach(b=>b.onclick=()=>rowAction(i,b.dataset.act));
   rowsEl.append(tr);
  });
@@ -47,7 +48,7 @@ const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
 let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
 function ensureWorker(){
  if(genWorker)return genWorker;
- genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.5');
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.6');
  return genWorker;
 }
 function setBusy(v){
@@ -94,7 +95,7 @@ async function generateOne(i){
  }else log.textContent='✕ Stage '+(i+1)+': '+result.error;
  renderRows();return false
 }
-function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.5',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
+function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.6',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
 function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
 function buildPackage(){
  if(generated.length!==specs.length||generated.some(x=>!x)){lastPackage=null;return null}
@@ -105,8 +106,8 @@ function buildPackage(){
   by.get(s.chapter).stages.push(st);
  });
  const scenario={format:'ggrid-scenario',formatVersion:1,id:p.meta.id,version:p.meta.version,name:p.meta.name,description:p.meta.description,rules:['Juttasd ki az összes golyót.','A téglák nem hagyhatják el a pályát.'],defaults:{theme:{key:'theme:classic',version:1},abilities:[],timer:null,completion:{type:'allBallsExited'}},chapters,scoring:null};
- const resources={'theme:classic':THEMES.classic,'theme:mine':THEMES.mine};generated.forEach(g=>resources['level:'+g.level.id]=g.level);
- lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.5',scenario,resources,editorProject:p};
+ const resources={};for(const s of specs){const t=themeDocs.get(s.theme)||THEMES[s.theme];if(t)resources['theme:'+s.theme]=structuredClone(t)}generated.forEach(g=>resources['level:'+g.level.id]=g.level);
+ lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.6',scenario,resources,editorProject:p};
  $('#downloadScenario').disabled=false;$('#installScenario').disabled=false;$('#publishBundle').disabled=false;
  summary.textContent=specs.length+' stage · minden pálya legenerálva és solverrel ellenőrizve.';
  return lastPackage
@@ -127,7 +128,7 @@ function publicationBundle(){
  generated.forEach((g,i)=>files[base+'levels/stage-'+String(i+1).padStart(2,'0')+'.json']=g.level);
  files[base+'editor-project.json']=project();
  const indexEntry={id,version,name:pub.name,description:pub.description,manifest:id+'/scenario.json'};
- return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.5',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
+ return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.6',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
 }
 function exportPublication(){
  try{
@@ -157,6 +158,24 @@ function install(){
  if(!lastPackage)return;let arr=[];try{arr=JSON.parse(localStorage.getItem(STORE)||'[]')}catch(_){}
  arr=arr.filter(x=>x?.scenario?.id!==lastPackage.scenario.id);arr.push(lastPackage);localStorage.setItem(STORE,JSON.stringify(arr));log.textContent='✓ A forgatókönyv hozzáadva ehhez a böngészőhöz. A GGrid „Játék indítása” listájában megjelenik.'
 }
+async function loadThemes(){
+ try{
+  const r=await fetch('content/themes/index.json',{cache:'no-cache'});if(!r.ok)throw Error('theme index');const idx=await r.json();themeCatalog=idx.themes||[];
+  await Promise.all(themeCatalog.map(async t=>{const rr=await fetch('content/themes/'+t.src,{cache:'no-cache'});if(rr.ok)themeDocs.set(t.id,await rr.json())}));
+ }catch(_){themeCatalog=[{id:'classic',name:'GGrid Classic'},{id:'mine',name:'Elhagyott bánya'}];for(const [id,t] of Object.entries(THEMES))themeDocs.set(id,t)}
+ renderRows();
+}
+function demoMarkup(){return Array.from({length:16},()=>'<i class="dcell"></i>').join('')+'<i class="demo-piece demo-ball"></i><i class="demo-piece demo-brick"></i><i class="demo-piece demo-glue-a"></i><i class="demo-piece demo-glue-b"></i><i class="demo-piece demo-wall"></i><i class="demo-exit"></i>'}
+function paintThemePreview(id){
+ const meta=themeCatalog.find(t=>t.id===id)||themeCatalog[0],t=themeDocs.get(meta?.id)||THEMES[meta?.id];if(!meta||!t)return;
+ previewIndex=Math.max(0,themeCatalog.findIndex(x=>x.id===meta.id));$('#themePreviewName').textContent=t.name||meta.name;$('#themePreviewDesc').textContent=meta.description||'';
+ const d=$('#themeDemo'),c=t.colors||{};for(const [k,v] of Object.entries({wrap:c.wrap||c.background,board:c.board,c1:c.cell1||c.board,c2:c.cell2||c.background,accent:c.accent||'#e3b05b',ball1:c.ball1,ball2:c.ball2,ball3:c.ball3,b1:c.brick1,b2:c.brick2,be:c.brickEdge,w1:c.wall1,w2:c.wall2}))if(v)d.style.setProperty('--'+k,v);
+ d.innerHTML=demoMarkup();const p=t.pieces||{};$('#themeLegend').textContent=(p.ball?.name||'Golyó')+' · '+(p.brick?.name||'Tégla')+' · '+(p.wall?.name||'Fal')+' · '+(p.exit?.name||'Kijárat')+' · '+(t.abilities?.freeze?.name||'Freeze');
+}
+function openThemePreview(row,id){previewRow=row;$('#themePreview').hidden=false;paintThemePreview(id)}
+function closeThemePreview(){$('#themePreview').hidden=true}
+function stepTheme(n){if(!themeCatalog.length)return;previewIndex=(previewIndex+n+themeCatalog.length)%themeCatalog.length;paintThemePreview(themeCatalog[previewIndex].id)}
+function usePreviewTheme(){if(previewRow!=null&&specs[previewRow]){specs[previewRow].theme=themeCatalog[previewIndex].id;specs[previewRow].status='dirty';generated[previewRow]=null;lastPackage=null;renderRows()}closeThemePreview()}
 function localPackages(){try{const a=JSON.parse(localStorage.getItem(STORE)||'[]');return Array.isArray(a)?a:[]}catch(_){return[]}}
 function renderLocalScenarios(){
  const box=$('#localScenarios'),arr=localPackages();box.innerHTML='';
@@ -197,6 +216,7 @@ $('#downloadScenario').onclick=()=>lastPackage&&download(lastPackage,($('#scenar
 $('#publishBundle').onclick=exportPublication;
 $('#installScenario').onclick=install;
 $('#manageLocal').onclick=toggleLocalScenarios;
+$('#themePreviewClose').onclick=closeThemePreview;$('#themePrev').onclick=()=>stepTheme(-1);$('#themeNext').onclick=()=>stepTheme(1);$('#themeUse').onclick=usePreviewTheme;
 $('#importFile').onchange=async e=>{try{loadProject(JSON.parse(await e.target.files[0].text()));log.textContent='✓ Import sikeres.'}catch(err){log.textContent='Import hiba: '+err.message}e.target.value=''};
-example();
+example();loadThemes();
 })();
