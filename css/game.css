@@ -246,3 +246,8 @@ body[data-scene="clockwork-sanctum"] .sr-caption:before{content:"◉ ";color:#79
 body[data-scene="neon-noir"] .sr-caption:before{content:"● ";color:#ff2bd6;animation:srPulse 1s steps(2,end) infinite}
 @keyframes srBreathe{to{opacity:.45;transform:scale(1.03)}}@keyframes srPulse{50%{opacity:.2}}@keyframes srHolo{0%,91%,100%{opacity:1;transform:skewY(-4deg)}92%{opacity:.35;transform:skewY(-4deg) translateX(2px)}94%{opacity:.8;transform:skewY(-4deg) translateX(-1px)}}
 @media(prefers-reduced-motion:reduce){.co-gear,.sr-holo,body[data-scene="clockwork-sanctum"] .scene-back:after,.sr-caption:before{animation:none!important}}
+
+/* v0.12.15 – rigid composite synchronization
+   Same 140 ms positional interpolation as the underlying logical cells. */
+.sr-composite{transition:left .14s ease,top .14s ease!important;will-change:left,top}
+.scene-showcase .piece{will-change:left,top}
