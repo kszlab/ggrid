@@ -1,0 +1,43 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "lost-mine-01",
+  "version": 1,
+  "name": "Alapok",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 3,
+    "y": 1,
+    "direction": "right"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 0,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "brick1",
+      "type": "brick",
+      "x": 1,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    }
+  ]
+}
