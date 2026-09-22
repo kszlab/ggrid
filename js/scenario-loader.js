@@ -1,7 +1,8 @@
-/* ===== v0.12.12 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.18 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
+ const freeThemeEl=document.querySelector('#freeTheme');let freeThemeIndex=null;
  const panel=document.querySelector('#scenarioPanel'),list=document.querySelector('#scenarioList'),title=document.querySelector('#scenarioTitle'),desc=document.querySelector('#scenarioDesc'),info=document.querySelector('#scenarioInfo');
  const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
  const fetchJson=async src=>{const r=await fetch(src,{cache:'no-cache'});if(!r.ok)throw Error('CONTENT_FETCH_FAILED '+src);return r.json()};
@@ -42,6 +43,28 @@ const ScenarioMode=(()=>{
   for(const [k,v] of Object.entries({wrap:c.wrap,board:c.board,cell1:c.cell1,cell2:c.cell2,accent:c.accent,ball1:c.ball1,ball2:c.ball2,ball3:c.ball3,brick1:c.brick1,brick2:c.brick2,'brick-edge':c.brickEdge,wall1:c.wall1,wall2:c.wall2}))root.setProperty('--theme-'+k,v||'');
   AudioManager?.setThemeAudio?.(t.audio||null);
   SceneRenderer?.apply?.(t);
+ }
+ async function loadFreeTheme(id=freeThemeEl?.value||'classic'){
+  try{
+   if(!freeThemeIndex){freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index')}
+   const entry=(freeThemeIndex.themes||[]).find(t=>t.id===id)||(freeThemeIndex.themes||[]).find(t=>t.id==='classic');
+   if(!entry)throw Error('INVALID_REFERENCE theme '+id);
+   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');applyTheme(t);
+   try{localStorage.setItem('ggrid.freeplay.theme.v1',entry.id)}catch(_){}
+   return t;
+  }catch(e){console.error(e);SceneRenderer?.clear?.();AudioManager?.setThemeAudio?.(null)}
+ }
+ async function initFreeThemes(){
+  if(!freeThemeEl)return;
+  try{
+   freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index');
+   const saved=localStorage.getItem('ggrid.freeplay.theme.v1')||'classic';
+   freeThemeEl.innerHTML='';
+   for(const t of (freeThemeIndex.themes||[])){const o=document.createElement('option');o.value=t.id;o.textContent=t.name+(t.showcase?' ✦':'');freeThemeEl.append(o)}
+   freeThemeEl.value=(freeThemeIndex.themes||[]).some(t=>t.id===saved)?saved:'classic';
+   freeThemeEl.addEventListener('change',async()=>{if(!active){await loadFreeTheme();render({preservePieces:true})}});
+   if(!active)await loadFreeTheme();
+  }catch(e){console.error('Theme index',e)}
  }
  function abilityCount(type){const a=(effective?.abilities||[]).find(x=>x.type===type);return a?Math.max(0,a.count|0):0}
  function applyAbilities(){
@@ -110,8 +133,9 @@ const ScenarioMode=(()=>{
  }
  function close(){panel.hidden=true;MotionControl.resume()}
  async function start(){if(!scenario)return;panel.hidden=true;try{await loadStage(0,0)}catch(e){showError(e);active=false;MotionControl.resume()}}
- function freePlay(){active=false;scenario=null;effective=null;stopTimer();document.body.classList.remove('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;document.body.dataset.theme='classic';SceneRenderer?.clear?.();AudioManager?.setThemeAudio?.(null);info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';changeLevelProfile();MotionControl.resume()}
+ async function freePlay(){active=false;scenario=null;effective=null;stopTimer();document.body.classList.remove('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';await loadFreeTheme();changeLevelProfile();MotionControl.resume()}
+ initFreeThemes();
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir){const wasWon=!!state?.won;baseMove(dir);if(active&&!wasWon)setTimeout(onWin,180)};
- return{open,get active(){return active}};
+ return{open,loadFreeTheme,get active(){return active}};
 })();
