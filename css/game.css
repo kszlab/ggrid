@@ -458,3 +458,43 @@ body.full-ui-skin[data-scene="moonlit-zen"] .scene-front{inset:0}
  body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-top:76px;--skin-side:44px;--skin-bottom:52px}
  body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 48px)}
 }
+
+
+/* v0.12.38 – experimental theme gameplay skins.
+   These themes previously had cinema-card previews but no actual game selectors,
+   so they fell through to the Classic piece styling. */
+body[data-theme="ghost-manor"]{background:radial-gradient(circle at 72% 10%,#b9c9e622 0 8%,transparent 9%),linear-gradient(#161225,#07060d 72%)}
+body[data-theme="ghost-manor"] .board-wrap{background:linear-gradient(145deg,#21182a,#0d0a12);box-shadow:0 16px 45px #000b,inset 0 0 35px #8b79a51a}
+body[data-theme="ghost-manor"] .board{background:#241c2d;border-color:#756682}
+body[data-theme="ghost-manor"] .cell{background:linear-gradient(145deg,#30253a,#17121d)}
+body[data-theme="ghost-manor"] .ball{background:radial-gradient(circle at 38% 32%,#fff,#a7ffe0 30%,#55799a 62%,#182231);box-shadow:0 0 18px #b9ffdcaa}
+body[data-theme="ghost-manor"] .brick{background:linear-gradient(145deg,#855b38,#39251e);border-color:#c69b68}
+body[data-theme="ghost-manor"] .wall{background:linear-gradient(145deg,#665a70,#282330);border-color:#80738a}
+body[data-theme="ghost-manor"] .exit{filter:drop-shadow(0 0 8px #b9ffdc);color:#b9ffdc}
+
+body[data-theme="traffic-rescue"]{background:linear-gradient(#27343d,#111a20)}
+body[data-theme="traffic-rescue"] .board-wrap{background:#1b242a}
+body[data-theme="traffic-rescue"] .board{background:#303940;border-color:#aab3b8}
+body[data-theme="traffic-rescue"] .cell{background:linear-gradient(145deg,#39444a,#2b3439);box-shadow:inset 0 0 0 1px #ffffff0a}
+body[data-theme="traffic-rescue"] .ball{border-radius:22%;background:linear-gradient(#fff 0 30%,#e43f3f 31% 68%,#fff 69%);border-color:#ff9d9d;box-shadow:0 0 12px #ff4b4b66}
+body[data-theme="traffic-rescue"] .brick{border-radius:20%;background:linear-gradient(145deg,#3193df,#164d79);border-color:#d8f0ff}
+body[data-theme="traffic-rescue"] .wall{background:repeating-linear-gradient(135deg,#687176 0 7px,#353b3e 7px 14px);border-color:#929b9f}
+body[data-theme="traffic-rescue"] .exit{color:#ffdf4d;filter:drop-shadow(0 0 7px #ffdf4d)}
+
+body[data-theme="orbital-breach"]{background:radial-gradient(circle at 76% 12%,#184c7244,transparent 22%),linear-gradient(#020713,#000208 78%)}
+body[data-theme="orbital-breach"] .board-wrap{background:linear-gradient(145deg,#0c1c29,#040910);box-shadow:0 16px 45px #000c,inset 0 0 30px #00f0ff0c}
+body[data-theme="orbital-breach"] .board{background:#0a1722;border-color:#2d6d7b}
+body[data-theme="orbital-breach"] .cell{background:linear-gradient(145deg,#102a39,#07131d)}
+body[data-theme="orbital-breach"] .ball{background:radial-gradient(circle at 34% 30%,#fff,#4ffff2 27%,#007d91 58%,#03141e);border-color:#7ffff7;box-shadow:0 0 16px #00f0ffaa}
+body[data-theme="orbital-breach"] .brick{background:linear-gradient(145deg,#526f80,#182c38);border-color:#ff6b35;box-shadow:inset 0 0 0 2px #00f0ff22}
+body[data-theme="orbital-breach"] .wall{background:repeating-linear-gradient(90deg,#384650 0 7px,#151e24 7px 14px);border-color:#536671}
+body[data-theme="orbital-breach"] .exit{color:#00f0ff;filter:drop-shadow(0 0 8px #00f0ff)}
+
+body[data-theme="abyssal-lab"]{background:radial-gradient(circle at 18% 18%,#0e667055,transparent 22%),linear-gradient(#00131d,#00080d 78%)}
+body[data-theme="abyssal-lab"] .board-wrap{background:linear-gradient(145deg,#06303b,#01141c);box-shadow:0 18px 48px #000c,inset 0 0 38px #5dffd814}
+body[data-theme="abyssal-lab"] .board{background:#062b36;border-color:#278d8b}
+body[data-theme="abyssal-lab"] .cell{background:linear-gradient(145deg,#0a3b46,#041e28)}
+body[data-theme="abyssal-lab"] .ball{background:radial-gradient(circle at 34% 28%,#fff,#48ffd2 28%,#007f82 60%,#002d38);border-color:#8dffe9;box-shadow:0 0 19px #48ffd2bb}
+body[data-theme="abyssal-lab"] .brick{background:linear-gradient(145deg,#557d82,#203d43);border-color:#8df4e0;box-shadow:inset 0 0 0 2px #5dffd81c}
+body[data-theme="abyssal-lab"] .wall{background:repeating-linear-gradient(135deg,#35585e 0 7px,#10282e 7px 14px);border-color:#47747a}
+body[data-theme="abyssal-lab"] .exit{color:#5dffd8;filter:drop-shadow(0 0 9px #5dffd8)}
