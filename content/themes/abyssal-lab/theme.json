@@ -1,0 +1,70 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "abyssal-lab",
+  "version": 1,
+  "name": "ABYSS // Mélytengeri labor",
+  "description": "Egy elsüllyedt kutatóállomás az óceánfenéken. Biolumineszcens drón, nyomáskapuk és sodródó gépmodulok.",
+  "colors": {
+    "background": "#00131d",
+    "board": "#062b36",
+    "wrap": "#03202a",
+    "cell1": "#0a3b46",
+    "cell2": "#041e28",
+    "accent": "#5dffd8",
+    "ball1": "#eaffff",
+    "ball2": "#48ffd2",
+    "ball3": "#007f82",
+    "brick1": "#446d73",
+    "brick2": "#203d43",
+    "brickEdge": "#8df4e0",
+    "wall1": "#2b4a50",
+    "wall2": "#10282e"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Biolumineszcens drón"
+    },
+    "brick": {
+      "name": "Kutatómodul"
+    },
+    "wall": {
+      "name": "Nyomásfal"
+    },
+    "exit": {
+      "name": "Dokkolókamra"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Kriogél"
+    }
+  },
+  "scene": {
+    "type": "abyssal-lab",
+    "tagline": "11 000 m // kapcsolat megszakadt",
+    "layers": [
+      "deep-water",
+      "caustics",
+      "bubbles",
+      "portholes",
+      "tentacles"
+    ]
+  },
+  "audio": {
+    "profile": "abyss",
+    "ambient": {
+      "type": "procedural",
+      "name": "Mélyvízi rezonancia",
+      "enabled": true,
+      "volume": 0.03
+    },
+    "events": {
+      "move": "sub-pulse",
+      "blocked": "pressure-hit",
+      "freeze": "cryo",
+      "exit": "pressure-lock",
+      "win": "sonar-major"
+    }
+  }
+}
