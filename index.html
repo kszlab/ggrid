@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.6 tilt próba 2</title>
+<title>GGrid – v0.6 tilt próba 3</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#10283d;color:#fff}
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;background:linear-gradient(#173a58,#0d2031)}
@@ -68,7 +68,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 
 </style></head>
 <body><main id="game">
-<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba 2</small></h1>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba 3</small></h1>
 <div class="sub">Ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
@@ -379,19 +379,19 @@ document.querySelectorAll('[data-dir]').forEach(b=>{
 });
 
 /* ===== v0.6 MOBILE TILT INPUT – experimental =====
-   Discrete control: neutral is calibrated when enabled; ~8° engages, ~4° releases.
+   Discrete control: neutral is calibrated when enabled; ~10° engages, ~4° releases. First step is immediate, then 400 ms pause and 300 ms repeat.
    Holding the tilt repeats the same one-cell step() commands as press-and-hold. */
 const MotionControl=(()=>{
- let enabled=false,listener=false,baseBeta=0,baseGamma=0,haveBase=false,activeDir=null,lastStep=0;
+ let enabled=false,listener=false,baseBeta=0,baseGamma=0,haveBase=false,activeDir=null,lastStep=0,firstHold=true;
  let lastBeta=0,lastGamma=0;
- const ENTER=8,EXIT=4,REPEAT=175;
+ const ENTER=10,EXIT=4,FIRST_DELAY=400,REPEAT=300;
  function norm180(a){while(a>180)a-=360;while(a<-180)a+=360;return a}
  function supported(){return 'DeviceOrientationEvent' in window}
  function label(){motionBtn.classList.toggle('active',enabled);motionBtn.textContent=enabled?'📱 Mozgás be':'📱 Mozgás ki'}
  function note(t=''){motionNote.textContent=t}
- function stop(){activeDir=null;setBoardTilt(null,false)}
+ function stop(){activeDir=null;firstHold=true;setBoardTilt(null,false)}
  function setZero(beta,gamma,msg='Új középhelyzet rögzítve'){
-  baseBeta=beta;baseGamma=gamma;haveBase=true;activeDir=null;lastStep=0;setBoardTilt(null,false);note(msg);
+  baseBeta=beta;baseGamma=gamma;haveBase=true;activeDir=null;lastStep=0;firstHold=true;setBoardTilt(null,false);note(msg);
  }
  function calibrate(e){if(typeof e.beta!=='number'||typeof e.gamma!=='number')return false;lastBeta=e.beta;lastGamma=e.gamma;setZero(e.beta,e.gamma,'Mozgásvezérlés aktív · középhelyzet rögzítve');return true}
  function choose(db,dg){
@@ -421,9 +421,14 @@ const MotionControl=(()=>{
   if(!haveBase){calibrate(e);return}
   const db=norm180(e.beta-baseBeta),dg=norm180(e.gamma-baseGamma),dir=choose(db,dg);
   if(!dir){if(activeDir)stop();return}
-  if(dir!==activeDir){activeDir=dir;lastStep=0;setBoardTilt(dir,true)}
   const now=performance.now();
-  if(now-lastStep>=REPEAT){lastStep=now;tryTiltStep(dir,e.beta,e.gamma)}
+  if(dir!==activeDir){
+   activeDir=dir;lastStep=now;firstHold=true;setBoardTilt(dir,true);
+   tryTiltStep(dir,e.beta,e.gamma); /* első lépés azonnal */
+   return;
+  }
+  const wait=firstHold?FIRST_DELAY:REPEAT;
+  if(now-lastStep>=wait){lastStep=now;firstHold=false;tryTiltStep(dir,e.beta,e.gamma)}
  }
  async function enable(){if(!supported()){note('Ezen a böngészőn nem érhető el a mozgásérzékelő.');return}try{if(typeof DeviceOrientationEvent.requestPermission==='function'){const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){note('A mozgásérzékelő engedélye nem lett megadva.');return}}haveBase=false;enabled=true;stop();if(!listener){addEventListener('deviceorientation',onOrientation,true);listener=true}label();note('Tartsd kényelmes középhelyzetben a telefont…')}catch(err){enabled=false;label();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}}
  function disable(){enabled=false;haveBase=false;stop();label();note('')}
