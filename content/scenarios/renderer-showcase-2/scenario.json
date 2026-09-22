@@ -1,0 +1,63 @@
+{
+  "format": "ggrid-scenario",
+  "formatVersion": 1,
+  "id": "renderer-showcase-2",
+  "version": 1,
+  "name": "Scene Renderer 2 // Extra Worlds",
+  "description": "Két új kísérleti dioráma: MICROCORE elektronikai világ és holdfényes Koi szentély.",
+  "rules": [
+    "A teljes logikai állapot mindig látható marad.",
+    "A téma csak a megjelenítést és a hangulatot változtatja, a GGrid fizikáját nem."
+  ],
+  "defaults": {
+    "abilities": [
+      {
+        "type": "freeze",
+        "count": 1
+      }
+    ],
+    "timer": null,
+    "completion": {
+      "type": "allBallsExited"
+    }
+  },
+  "chapters": [
+    {
+      "id": "microcore",
+      "name": "I. MICROCORE // Circuit Lab",
+      "theme": {
+        "src": "../../themes/microchip-lab/theme.json",
+        "version": 1
+      },
+      "stages": [
+        {
+          "id": "microchip-01",
+          "name": "Buszütközés",
+          "level": {
+            "src": "../../levels/showcase-microchip-01.json",
+            "version": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-garden",
+      "name": "II. HOLDKERT // Koi szentély",
+      "theme": {
+        "src": "../../themes/moonlit-zen/theme.json",
+        "version": 1
+      },
+      "stages": [
+        {
+          "id": "zen-01",
+          "name": "A hold tava",
+          "level": {
+            "src": "../../levels/showcase-zen-01.json",
+            "version": 1
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": null
+}
