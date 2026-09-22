@@ -63,13 +63,8 @@ function render(opts={}){
  soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
  SceneRenderer?.afterBoardRender?.(board);
 }
-/* ===== BACKGROUND LEVEL PREFETCH =====
-   Három kész W-pályát tartunk az aktuális méret+nehézség kombinációhoz.
-   A generálás Web Workerben fut, így nem blokkolja a játék/UI főszálát. */
-const levelBuffer=[];
-function prefetchTarget(){const d=selectedDims();return d.w===d.h?2:1}
-/* ===== v0.12.36 FREE-PLAY LEVEL CREATION =====
-   A normál W-pálya szándékosan a főszálon készül: a v0.12.36 konstruktív
+/* ===== v0.12.37 FREE-PLAY LEVEL CREATION =====
+   A normál W-pálya szándékosan a főszálon készül: a v0.12.37 konstruktív
    generátor nem végez BFS-t, ezért azonnali. Ezzel a Worker/cache/request
    állapotlánc teljesen kiesik a normál Szabad játékból. */
 const levelBuffer=[];
