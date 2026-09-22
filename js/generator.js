@@ -78,7 +78,7 @@ function legacyCandidate(w,h,seed,attempt){
 }
 function makeCode(w,h,difficulty,seed,prefix='G'){return w===h?`${prefix}${w}${DIFFCODE[difficulty]}-${seed}`:`${prefix}${w}X${h}${DIFFCODE[difficulty]}-${seed}`;}
 function parseCode(raw){const s=String(raw).trim().toUpperCase(),m=s.match(/^([BGW])([345])([EMH])-([0-9A-Z]{1,7})$/);if(m)return{prefix:m[1],w:+m[2],h:+m[2],n:+m[2],difficulty:CODEDIFF[m[3]],seed:m[4].padStart(7,'0')};const r=s.match(/^([BGW])5X([678])([EMH])-([0-9A-Z]{1,7})$/);if(!r)return null;return{prefix:r[1],w:5,h:+r[2],difficulty:CODEDIFF[r[3]],seed:r[4].padStart(7,'0')};}
-/* v0.12.37 – constructive free-play generator.
+/* v0.12.38 – constructive free-play generator.
    A normál W-pálya nem brute-force BFS kereséssel készül. Előbb egy biztosan
    kijárható golyófolyosót hozunk létre, majd a maradék mezőkre tesszük a
    téglákat/falakat. Így a játék indítása determinisztikusan gyors és a pálya
