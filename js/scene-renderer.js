@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.15
+/* GGrid Scene Renderer 2 – v0.12.16
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -15,6 +15,12 @@ const SceneRenderer=(()=>{
   if(type==='neon-noir')return {
    back:'<i class="sr-city"></i><i class="sr-holo">九<small>SECTOR 9</small></i><i class="sr-glow"></i>',
    front:'<i class="sr-rain"></i><i class="sr-vapor"></i><span class="sr-caption neon">ACID RAIN // ROOFTOP 09 <b>EVAC</b></span>'};
+  if(type==='microchip-lab')return {
+   back:'<i class="sr-pcb"></i><i class="sr-trace tr1"></i><i class="sr-trace tr2"></i><i class="sr-capacitor"></i>',
+   front:'<i class="sr-signal"></i><span class="sr-caption circuit">MICROCORE // BUS 16 <b>CLK 4.77</b></span>'};
+  if(type==='moonlit-zen')return {
+   back:'<i class="sr-moon"></i><i class="sr-mountain"></i><i class="sr-water"></i>',
+   front:'<i class="sr-mist"></i><i class="sr-fireflies"></i><span class="sr-caption zen">MOON GARDEN // 静 <b>水</b></span>'};
   return{back:'',front:''};
  }
  function apply(t){
@@ -27,6 +33,8 @@ const SceneRenderer=(()=>{
   if(!el||!theme)return;const type=theme.scene?.type;
   if(type==='clockwork-sanctum'){el.classList.add('sr-exit','sr-astrolabe');el.innerHTML='<i></i><b>✦</b>'}
   if(type==='neon-noir'){el.classList.add('sr-exit','sr-evac');el.innerHTML='<b>09</b><small>EVAC</small>'}
+  if(type==='microchip-lab'){el.classList.add('sr-exit','sr-socket');el.innerHTML='<b>DATA</b><i></i>'}
+  if(type==='moonlit-zen'){el.classList.add('sr-exit','sr-torii');el.innerHTML='<i></i><b>鳥居</b>'}
  }
  function componentInfo(o,ci){
   const cells=o.cells||[],c=cells[ci]||{x:0,y:0},xs=cells.map(q=>q.x),ys=cells.map(q=>q.y);
@@ -47,6 +55,18 @@ const SceneRenderer=(()=>{
    else if(o.type==='brick')el.innerHTML='<i class="rivet rv1"></i><i class="rivet rv2"></i><b class="piece-glyph">'+(cp.count>1?(ci===0?'CHRONO':'⚙'):'⚙')+'</b>';
    else if(o.type==='wall')el.innerHTML='<i class="pillar-cap"></i><b class="piece-glyph">◆</b>';
   }
+  if(type==='microchip-lab'){
+   el.classList.add('sr-piece');
+   if(o.type==='ball')el.innerHTML='<i class="electron-orbit"></i><b class="electron-core">e−</b>';
+   else if(o.type==='brick')el.innerHTML='<i class="chip-pins"></i><b class="chip-label">IC</b>';
+   else if(o.type==='wall')el.innerHTML='<i class="sink-fins"></i><b>HS</b>';
+  }
+  if(type==='moonlit-zen'){
+   el.classList.add('sr-piece');
+   if(o.type==='ball')el.innerHTML='<i class="koi-tail"></i><b class="koi-body">◉</b>';
+   else if(o.type==='brick')el.innerHTML='<i class="lotus-leaf"></i><b class="lotus-flower">✿</b>';
+   else if(o.type==='wall')el.innerHTML='<i class="stone-cap"></i><b>灯</b>';
+  }
   if(type==='neon-noir'){
    el.classList.add('sr-piece');
    if(o.type==='ball')el.innerHTML='<i class="drone-wing dw1"></i><i class="drone-wing dw2"></i><b class="drone-eye"></b><em>K7</em>';
@@ -58,6 +78,8 @@ const SceneRenderer=(()=>{
  function compositeMarkup(type){
   if(type==='clockwork-sanctum')return '<i class="co-rail"></i><i class="co-gear cg1"></i><i class="co-gear cg2"></i><b>CHRONO ENGINE</b>';
   if(type==='neon-noir')return '<i class="co-window cw1"></i><i class="co-window cw2"></i><i class="co-thruster"></i><b>HEAVY CARGO</b><em>C-47</em>';
+  if(type==='microchip-lab')return '<i class="co-chip-pins"></i><b>74GGRID</b><em>LOGIC ARRAY</em>';
+  if(type==='moonlit-zen')return '<i class="co-moss"></i><i class="co-lotus">✿</i><b>浮島</b>';
   return '';
  }
  function buildComponentOverlays(board){
