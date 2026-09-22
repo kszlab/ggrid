@@ -1,0 +1,92 @@
+{
+  "format": "ggrid-scenario-project",
+  "formatVersion": 1,
+  "editorVersion": 3,
+  "engineVersion": "0.12.3",
+  "meta": {
+    "id": "custom-01",
+    "name": "Saját forgatókönyv 1",
+    "description": "Fokozatos nehézségű logikai kampány.",
+    "version": 3
+  },
+  "stages": [
+    {
+      "chapter": "1",
+      "name": "Alapok",
+      "size": "4",
+      "difficulty": "2",
+      "bricks": "1",
+      "walls": "0",
+      "glue": "none",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "0",
+      "theme": "classic"
+    },
+    {
+      "chapter": "1",
+      "name": "Kerülőút",
+      "size": "4",
+      "difficulty": "3",
+      "bricks": "1",
+      "walls": "1",
+      "glue": "none",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "0",
+      "theme": "classic"
+    },
+    {
+      "chapter": "1",
+      "name": "Freeze próba",
+      "size": "4",
+      "difficulty": "4",
+      "bricks": "2",
+      "walls": "0",
+      "glue": "none",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "0",
+      "theme": "classic"
+    },
+    {
+      "chapter": "2",
+      "name": "Mélyebbre",
+      "size": "4",
+      "difficulty": "4",
+      "bricks": "1",
+      "walls": "1",
+      "glue": "none",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "0",
+      "theme": "mine"
+    },
+    {
+      "chapter": "2",
+      "name": "Időpróba",
+      "size": "5",
+      "difficulty": "5",
+      "bricks": "2",
+      "walls": "1",
+      "glue": "required",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "60",
+      "theme": "classic"
+    },
+    {
+      "chapter": "2",
+      "name": "Ragasztott test",
+      "size": "5",
+      "difficulty": "6",
+      "bricks": "3",
+      "walls": "1",
+      "glue": "required",
+      "freeze": "1",
+      "freezeRole": "optional",
+      "timer": "90",
+      "theme": "mine"
+    }
+  ]
+}
