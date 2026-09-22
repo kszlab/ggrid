@@ -80,11 +80,11 @@ function generationFailed(message){
 }
 function ensureGeneratorWorker(){
  if(generatorWorker)return generatorWorker;
- generatorWorker=new Worker('js/generator-worker.js?v=0.12.31');
+ generatorWorker=new Worker('js/generator-worker.js?v=0.12.32');
  generatorWorker.onmessage=e=>{
   const m=e.data||{};
   if(m.type==='freezeAnalysis'){if(state&&m.stateKey===stateKey(state))freezeAnalysis=m.analysis;return}
-  if(m.type==='error'){generationFailed('A pálya generálása nem sikerült. Próbáld újra.');return}
+  if(m.type==='error'){console.error('Generator',m.message);generationFailed('A pálya generálása nem sikerült. Próbáld újra.');return}
   if(m.type==='level'){
    if(generationTimer){clearTimeout(generationTimer);generationTimer=null}
    prefetchPending=Math.max(0,prefetchPending-1);
@@ -101,7 +101,7 @@ function requestGeneratedLevel(){
  if(prefetchPending>0)return;
  const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration,d=selectedDims();
  prefetchPending=1;
- generationTimer=setTimeout(()=>generationFailed('A pálya készítése túl sokáig tartott. Próbáld újra vagy válassz kisebb méretet.'),12000);
+ generationTimer=setTimeout(()=>generationFailed('A pálya készítése túl sokáig tartott. Próbáld újra vagy válassz kisebb méretet.'),30000);
  w.postMessage({type:'generate',w:d.w,h:d.h,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq}});
 }
 function fillLevelBuffer(){/* v0.12.30: nincs automatikus háttér-prefetch; csak felhasználói kérésre generálunk. */}
