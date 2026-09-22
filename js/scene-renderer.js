@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.14
+/* GGrid Scene Renderer 2 – v0.12.15
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -55,31 +55,36 @@ const SceneRenderer=(()=>{
   }
  }
  function clearComponentOverlays(){componentOverlays.forEach(el=>el.remove());componentOverlays=[]}
+ function compositeMarkup(type){
+  if(type==='clockwork-sanctum')return '<i class="co-rail"></i><i class="co-gear cg1"></i><i class="co-gear cg2"></i><b>CHRONO ENGINE</b>';
+  if(type==='neon-noir')return '<i class="co-window cw1"></i><i class="co-window cw2"></i><i class="co-thruster"></i><b>HEAVY CARGO</b><em>C-47</em>';
+  return '';
+ }
  function buildComponentOverlays(board){
-  clearComponentOverlays();const type=theme?.scene?.type;if(!type)return;
+  const type=theme?.scene?.type;if(!type)return;
+  const live=new Set(),n=state?.width||1,cell=100/n,inset=1.8;
   for(const o of (state?.objects||[])){
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
-   const els=[...board.querySelectorAll('.piece')].filter(el=>String(el.dataset.id)===String(o.id));if(!els.length)continue;
-   const rects=els.map(el=>({el,l:parseFloat(el.style.left)||0,t:parseFloat(el.style.top)||0,w:el.offsetWidth,h:el.offsetHeight}));
-   const minL=Math.min(...rects.map(r=>r.el.offsetLeft)),minT=Math.min(...rects.map(r=>r.el.offsetTop));
-   const maxR=Math.max(...rects.map(r=>r.el.offsetLeft+r.el.offsetWidth)),maxB=Math.max(...rects.map(r=>r.el.offsetTop+r.el.offsetHeight));
-   const ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=o.id;
-   ov.style.left=minL+'px';ov.style.top=minT+'px';ov.style.width=(maxR-minL)+'px';ov.style.height=(maxB-minT)+'px';
-   if(type==='clockwork-sanctum')ov.innerHTML='<i class="co-rail"></i><i class="co-gear cg1"></i><i class="co-gear cg2"></i><b>CHRONO ENGINE</b>';
-   if(type==='neon-noir')ov.innerHTML='<i class="co-window cw1"></i><i class="co-window cw2"></i><i class="co-thruster"></i><b>HEAVY CARGO</b><em>C-47</em>';
-   board.append(ov);componentOverlays.push(ov);
+   const id=String(o.id);live.add(id);
+   const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+   let ov=componentOverlays.find(el=>el.dataset.objectId===id);
+   if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
+   ov.style.left=`calc(${(o.x+minX)*cell}% + ${inset}px)`;
+   ov.style.top=`calc(${(o.y+minY)*cell}% + ${inset}px)`;
+   ov.style.width=`calc(${(maxX-minX+1)*cell}% - ${inset*2}px)`;
+   ov.style.height=`calc(${(maxY-minY+1)*cell}% - ${inset*2}px)`;
   }
+  componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }
  function afterBoardRender(board){
   boardRef=board;if(!theme)return;decorateExit(board.querySelector('.exit'));
   const byId=new Map((state?.objects||[]).map(o=>[String(o.id),o]));
   board.querySelectorAll('.piece').forEach(el=>{const o=byId.get(String(el.dataset.id));if(o)decoratePiece(el,o,+(el.dataset.cellkey?.split(':')[1]||0))});
-  requestAnimationFrame(()=>buildComponentOverlays(board));
+  buildComponentOverlays(board);
  }
  function setDirection(dir){if(!wrap)return;wrap.dataset.moveDir=dir||''}
  function event(kind){
   ensure();if(!wrap||!theme)return;
-  if(kind==='move'&&boardRef)requestAnimationFrame(()=>buildComponentOverlays(boardRef));
   wrap.classList.remove('fx-move','fx-blocked','fx-freeze','fx-exit','fx-win');void wrap.offsetWidth;
   wrap.classList.add('fx-'+kind);setTimeout(()=>wrap?.classList.remove('fx-'+kind),kind==='win'?900:420);
  }
