@@ -117,8 +117,9 @@ function publicationBundle(){
  const id=lastPackage.scenario.id,version=lastPackage.scenario.version,base='content/scenarios/'+id+'/',files={};
  const pub=structuredClone(lastPackage.scenario);
  pub.defaults.theme={src:'../../themes/classic/theme.json',version:1};
- pub.chapters.forEach(ch=>ch.stages.forEach((st,i)=>{
-  const spec=specs[i],theme=spec.theme;
+ let stageNo=0;
+ pub.chapters.forEach(ch=>ch.stages.forEach(st=>{
+  const i=stageNo++,spec=specs[i],theme=spec.theme;
   st.level={src:'levels/stage-'+String(i+1).padStart(2,'0')+'.json',version:1};
   st.theme={src:'../../themes/'+theme+'/theme.json',version:1};
  }));
