@@ -120,9 +120,9 @@ function publicationBundle(){
  pub.defaults.theme={src:'../../themes/classic/theme.json',version:1};
  let stageNo=0;
  pub.chapters.forEach(ch=>ch.stages.forEach(st=>{
-  const i=stageNo++,spec=specs[i],theme=spec.theme;
+  const i=stageNo++,spec=specs[i],theme=spec.theme,tmeta=themeCatalog.find(t=>t.id===theme),tsrc=tmeta?.src||theme+'/theme.json';
   st.level={src:'levels/stage-'+String(i+1).padStart(2,'0')+'.json',version:1};
-  st.theme={src:'../../themes/'+theme+'/theme.json',version:1};
+  st.theme={src:'../../themes/'+tsrc,version:tmeta?.version||1};
  }));
  files[base+'scenario.json']=pub;
  generated.forEach((g,i)=>files[base+'levels/stage-'+String(i+1).padStart(2,'0')+'.json']=g.level);
