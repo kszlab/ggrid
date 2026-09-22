@@ -8,6 +8,13 @@
       "name": "Az elveszett járat",
       "description": "Hat pályás Scenario/Theme próbakampány.",
       "manifest": "lost-mine/scenario.json"
+    },
+    {
+      "id": "custom-01",
+      "version": 3,
+      "name": "Saját forgatókönyv 1",
+      "description": "Fokozatos nehézségű logikai kampány.",
+      "manifest": "custom-01/scenario.json"
     }
   ]
 }
