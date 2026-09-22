@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.30
+/* GGrid Scene Renderer 2 – v0.12.31
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
