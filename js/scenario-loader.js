@@ -1,4 +1,4 @@
-/* ===== v0.12.18 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.20 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
@@ -137,5 +137,5 @@ const ScenarioMode=(()=>{
  initFreeThemes();
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir){const wasWon=!!state?.won;baseMove(dir);if(active&&!wasWon)setTimeout(onWin,180)};
- return{open,loadFreeTheme,get active(){return active}};
+ return{open,loadFreeTheme,get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
 })();
