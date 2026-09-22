@@ -1,0 +1,160 @@
+{
+  "format": "ggrid-scenario",
+  "formatVersion": 1,
+  "id": "custom-01",
+  "version": 3,
+  "name": "Saját forgatókönyv 1",
+  "description": "Fokozatos nehézségű logikai kampány.",
+  "rules": [
+    "Juttasd ki az összes golyót.",
+    "A téglák nem hagyhatják el a pályát."
+  ],
+  "defaults": {
+    "theme": {
+      "src": "../../themes/classic/theme.json",
+      "version": 1
+    },
+    "abilities": [],
+    "timer": null,
+    "completion": {
+      "type": "allBallsExited"
+    }
+  },
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "name": "I. fejezet – A raktár",
+      "stages": [
+        {
+          "id": "stage-01",
+          "name": "Alapok",
+          "level": {
+            "src": "levels/stage-01.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/classic/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": null
+        },
+        {
+          "id": "stage-02",
+          "name": "Kerülőút",
+          "level": {
+            "src": "levels/stage-02.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/classic/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": null
+        },
+        {
+          "id": "stage-03",
+          "name": "Freeze próba",
+          "level": {
+            "src": "levels/stage-03.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/classic/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": null
+        }
+      ]
+    },
+    {
+      "id": "chapter-2",
+      "name": "II. fejezet – A bánya",
+      "stages": [
+        {
+          "id": "stage-04",
+          "name": "Mélyebbre",
+          "level": {
+            "src": "levels/stage-04.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/mine/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": null
+        },
+        {
+          "id": "stage-05",
+          "name": "Időpróba",
+          "level": {
+            "src": "levels/stage-05.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/classic/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": {
+            "mode": "countdown",
+            "seconds": 60,
+            "onExpire": "fail"
+          }
+        },
+        {
+          "id": "stage-06",
+          "name": "Ragasztott test",
+          "level": {
+            "src": "levels/stage-06.json",
+            "version": 1
+          },
+          "theme": {
+            "src": "../../themes/mine/theme.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ],
+          "timer": {
+            "mode": "countdown",
+            "seconds": 90,
+            "onExpire": "fail"
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": null
+}
