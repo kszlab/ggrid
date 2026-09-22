@@ -224,3 +224,25 @@ body[data-scene="neon-noir"] .sr-evac:before{content:"";position:absolute;inset:
 .scene-showcase.fx-exit .sr-evac{background:#bffcff88!important;box-shadow:0 0 28px #00efff,0 0 45px #ff2bd6!important}
 .scene-showcase.fx-freeze .selected{outline-color:#eaffff;box-shadow:0 0 0 3px #8df6ff,0 0 24px #8df6ff!important}
 @keyframes srScan{to{transform:translateY(8px)}}
+
+/* v0.12.14 – true unified polyomino overlays + richer scene depth */
+.sr-composite{position:absolute;z-index:7;pointer-events:none;box-sizing:border-box;transition:left .14s ease,top .14s ease;overflow:visible}
+.sr-composite-clockwork-sanctum{border:3px ridge #e1b25d;border-radius:9px;background:linear-gradient(180deg,#a96f30 0 10%,#3a2414 12% 72%,#775025 74%);box-shadow:inset 0 0 0 3px #170d07,0 7px 10px #0009,0 0 10px #e0ae4b22}
+.sr-composite-clockwork-sanctum:before,.sr-composite-clockwork-sanctum:after{content:"";position:absolute;top:8%;bottom:8%;width:5px;background:linear-gradient(#f2cd7b,#60401f,#d69b43);border-radius:3px}.sr-composite-clockwork-sanctum:before{left:6%}.sr-composite-clockwork-sanctum:after{right:6%}
+.sr-composite-clockwork-sanctum b{position:absolute;left:13%;right:13%;bottom:8%;font:700 6px ui-monospace,monospace;letter-spacing:.13em;text-align:center;color:#f5d58f;text-shadow:0 1px 3px #000}
+.co-rail{position:absolute;left:10%;right:10%;top:18%;height:3px;background:#e1b25d;box-shadow:0 0 0 1px #3d2411,0 16px #b77932}
+.co-gear{position:absolute;top:25%;width:25%;aspect-ratio:1;border:4px dotted #e0aa4e;border-radius:50%;box-shadow:inset 0 0 0 2px #62401e;animation:srSpin 3.2s linear infinite}.cg1{left:21%}.cg2{right:21%;animation-direction:reverse;animation-duration:4.3s}
+.sr-composite-neon-noir{border:2px solid #00eaff;border-radius:10px 4px 4px 10px;background:linear-gradient(180deg,#28133d,#0a1928 48%,#171029);box-shadow:inset 0 -7px #ff2bd633,0 0 11px #00eaff55,0 7px 10px #0009}
+.sr-composite-neon-noir:before{content:"";position:absolute;left:4%;right:4%;top:9%;height:2px;background:#ff2bd6;box-shadow:0 0 7px #ff2bd6}.sr-composite-neon-noir:after{content:"";position:absolute;left:7%;right:7%;bottom:12%;height:3px;background:#00eaff;box-shadow:0 0 7px #00eaff}
+.sr-composite-neon-noir b{position:absolute;left:8%;bottom:20%;font:700 6px ui-monospace,monospace;letter-spacing:.1em;color:#f09be8}.sr-composite-neon-noir em{position:absolute;right:8%;bottom:20%;font:700 7px ui-monospace,monospace;color:#8ff;font-style:normal}
+.co-window{position:absolute;top:25%;width:18%;height:25%;background:linear-gradient(#cfffff,#1584a5);border:1px solid #00eaff;box-shadow:0 0 6px #00eaff}.cw1{left:25%}.cw2{right:25%}.co-thruster{position:absolute;right:-8px;top:32%;width:10px;height:34%;background:#ff2bd6;clip-path:polygon(0 0,100% 25%,100% 75%,0 100%);box-shadow:0 0 9px #ff2bd6}
+.scene-showcase .brick.sr-component{opacity:.16}
+.scene-showcase.fx-freeze .sr-composite{filter:brightness(1.5) saturate(.45);box-shadow:0 0 22px #aef}
+body[data-scene="clockwork-sanctum"] .scene-back:after{content:"";position:absolute;inset:12% 8%;background:radial-gradient(circle at 22% 35%,#8eeaff0d,transparent 17%),radial-gradient(circle at 72% 25%,#ffd57d0d,transparent 20%);animation:srBreathe 6s ease-in-out infinite alternate}
+body[data-scene="neon-noir"] .scene-back:after{content:"";position:absolute;left:7%;right:7%;bottom:13%;height:17%;background:repeating-linear-gradient(90deg,#00eaff00 0 12%,#00eaff18 13% 14%,transparent 15% 25%),linear-gradient(#ff2bd60b,#00eaff12);transform:perspective(150px) rotateX(55deg);transform-origin:bottom}
+body[data-scene="neon-noir"] .sr-holo{animation:srHolo 3.8s steps(1,end) infinite}
+body[data-scene="neon-noir"] .sr-holo:after{content:"SIGNAL 89%";display:block;margin-top:2px;font:4px ui-monospace,monospace;color:#80faff}
+body[data-scene="clockwork-sanctum"] .sr-caption:before{content:"◉ ";color:#79efff;animation:srPulse 1.6s ease-in-out infinite}
+body[data-scene="neon-noir"] .sr-caption:before{content:"● ";color:#ff2bd6;animation:srPulse 1s steps(2,end) infinite}
+@keyframes srBreathe{to{opacity:.45;transform:scale(1.03)}}@keyframes srPulse{50%{opacity:.2}}@keyframes srHolo{0%,91%,100%{opacity:1;transform:skewY(-4deg)}92%{opacity:.35;transform:skewY(-4deg) translateX(2px)}94%{opacity:.8;transform:skewY(-4deg) translateX(-1px)}}
+@media(prefers-reduced-motion:reduce){.co-gear,.sr-holo,body[data-scene="clockwork-sanctum"] .scene-back:after,.sr-caption:before{animation:none!important}}
