@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.16
+/* GGrid Scene Renderer 2 – v0.12.17
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -24,6 +24,10 @@ const SceneRenderer=(()=>{
   return{back:'',front:''};
  }
  function apply(t){
+  /* A restart re-applies the same theme while the board DOM has already been
+     rebuilt. Composite overlays belong to that old board, so discard the
+     cached nodes before rendering the restarted state. */
+  clearComponentOverlays();boardRef=null;
   theme=t||null;ensure();const type=t?.scene?.type||'';
   document.body.dataset.scene=type;wrap.dataset.scene=type;
   const m=markup(type);back.innerHTML=m.back;front.innerHTML=m.front;frame.innerHTML='';
@@ -89,7 +93,7 @@ const SceneRenderer=(()=>{
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
    const id=String(o.id);live.add(id);
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-   let ov=componentOverlays.find(el=>el.dataset.objectId===id);
+   let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
    if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
    ov.style.left=`calc(${(o.x+minX)*cell}% + ${inset}px)`;
    ov.style.top=`calc(${(o.y+minY)*cell}% + ${inset}px)`;
