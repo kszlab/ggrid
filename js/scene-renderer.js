@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.28
+/* GGrid Scene Renderer 2 – v0.12.29
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -95,8 +95,8 @@ const SceneRenderer=(()=>{
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
    let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
    if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
-   ov.style.left=`calc(${(o.x+minX)*cell}% + ${inset}px)`;
-   ov.style.top=`calc(${(o.y+minY)*cell}% + ${inset}px)`;
+   ov.style.left=`calc(${(o.x+minX)*cellX}% + ${inset}px)`;
+   ov.style.top=`calc(${(o.y+minY)*cellY}% + ${inset}px)`;
    ov.style.width=`calc(${(maxX-minX+1)*cellX}% - ${inset*2}px)`;
    ov.style.height=`calc(${(maxY-minY+1)*cellY}% - ${inset*2}px)`;
   }
