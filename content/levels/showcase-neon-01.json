@@ -1,0 +1,102 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "showcase-neon-01",
+  "version": 1,
+  "name": "Rooftop 09",
+  "board": {
+    "width": 5,
+    "height": 5
+  },
+  "exit": {
+    "x": 2,
+    "y": 0,
+    "direction": "up"
+  },
+  "objects": [
+    {
+      "id": "k7",
+      "type": "ball",
+      "x": 2,
+      "y": 4,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "cargo-long",
+      "type": "brick",
+      "x": 0,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "glueEdges": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "cargo-a",
+      "type": "brick",
+      "x": 4,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "cargo-b",
+      "type": "brick",
+      "x": 0,
+      "y": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "hvac-a",
+      "type": "wall",
+      "x": 4,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "hvac-b",
+      "type": "wall",
+      "x": 1,
+      "y": 4,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}
