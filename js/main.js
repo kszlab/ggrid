@@ -56,8 +56,56 @@ function render(opts={}){
  freezeBtn.textContent=freezeArmed?(freezeId?`❄ Lefogva${suffix}`:`❄ Válassz elemet${suffix}`):`❄ Freeze${suffix}`;
  soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
 }
+/* ===== BACKGROUND LEVEL PREFETCH =====
+   Három kész W-pályát tartunk az aktuális méret+nehézség kombinációhoz.
+   A generálás Web Workerben fut, így nem blokkolja a játék/UI főszálát. */
+const PREFETCH_TARGET=3,levelBuffer=[];
+let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0;
+function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
+function ensureGeneratorWorker(){
+ if(generatorWorker)return generatorWorker;
+ generatorWorker=new Worker('js/generator-worker.js');
+ generatorWorker.onmessage=e=>{
+  const m=e.data||{};prefetchPending=Math.max(0,prefetchPending-1);
+  if(m.type==='level'&&m.requestId?.generation===prefetchGeneration&&m.requestId?.key===currentPrefetchKey()){
+   levelBuffer.push(m.g);
+  }
+  fillLevelBuffer();
+ };
+ generatorWorker.onerror=()=>{prefetchPending=Math.max(0,prefetchPending-1);};
+ return generatorWorker;
+}
+function fillLevelBuffer(){
+ const need=PREFETCH_TARGET-levelBuffer.length-prefetchPending;
+ if(need<=0)return;
+ const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration;
+ for(let k=0;k<need;k++){
+  prefetchPending++;
+  w.postMessage({type:'generate',n:+sizeEl.value,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq}});
+ }
+}
+function resetLevelBuffer(){
+ prefetchGeneration++;levelBuffer.length=0;prefetchPending=0;
+ if(generatorWorker){generatorWorker.terminate();generatorWorker=null;}
+ fillLevelBuffer();
+}
+function applyGeneratedLevel(g){
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution;currentCode=g.code;
+ freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';
+ render();scheduleFreezeAnalysis();
+}
 function newLevel(seed=null,prefix='W'){
- const g=generateLevel(+sizeEl.value,difficultyEl.value,seed||seedText(),prefix);state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution;currentCode=g.code;freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();
+ /* Pályakód betöltése determinisztikus marad; normál Új pálya a pufferből jön. */
+ if(seed||prefix!=='W'){
+  const g=generateLevel(+sizeEl.value,difficultyEl.value,seed||seedText(),prefix);
+  applyGeneratedLevel(g);return;
+ }
+ const g=levelBuffer.shift();
+ if(g){applyGeneratedLevel(g);fillLevelBuffer();return;}
+ /* Csak induláskor / extrém gyors kattintásnál lehet üres. A Worker elkészíti
+    a következőt; nem fagyasztjuk le a főszálat szinkron generálással. */
+ toast.textContent='A következő pálya készül…';
+ fillLevelBuffer();
 }
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
@@ -180,7 +228,17 @@ document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
 soundBtn.addEventListener('click',()=>{AudioManager.toggle();render({preservePieces:true});});
-difficultyEl.addEventListener('change',()=>newLevel());sizeEl.addEventListener('change',()=>newLevel());
+function changeLevelProfile(){
+ resetLevelBuffer();
+ toast.textContent='Új pályák előkészítése…';
+ const wait=()=>{
+  const g=levelBuffer.shift();
+  if(g){applyGeneratedLevel(g);fillLevelBuffer();}
+  else setTimeout(wait,25);
+ };
+ wait();
+}
+difficultyEl.addEventListener('change',changeLevelProfile);sizeEl.addEventListener('change',changeLevelProfile);
 freezeLimitEl.addEventListener('change',()=>{freezeUsed=0;freezeArmed=false;freezeId=null;render({preservePieces:true});scheduleFreezeAnalysis();});
 document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: W4H-01ABC23';return}sizeEl.value=String(p.n);difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
 /* Billentyűzet: a kurzornyíl lenyomásakor ugyanaz a térbeli billenés látszik.
@@ -201,4 +259,6 @@ addEventListener('keyup',e=>{
 });
 addEventListener('blur',()=>{keyboardDirs.clear();refreshKeyboardTilt();stopHold();});
 addEventListener('orientationchange',()=>setTimeout(()=>MotionControl.recalibrate(),250));
-newLevel();
+resetLevelBuffer();
+const startWhenReady=()=>{const g=levelBuffer.shift();if(g){applyGeneratedLevel(g);fillLevelBuffer();}else setTimeout(startWhenReady,25)};
+startWhenReady();
