@@ -1,0 +1,70 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "ghost-manor",
+  "version": 1,
+  "name": "Éjféli kastély",
+  "description": "Kísértetjárta kastély: a cél egy szellem, a blokkok bútorok és koporsók, a kijárat fénylő kapu.",
+  "colors": {
+    "background": "#090814",
+    "board": "#241c2d",
+    "wrap": "#15111d",
+    "cell1": "#30253a",
+    "cell2": "#17121d",
+    "accent": "#b9ffdc",
+    "ball1": "#ffffff",
+    "ball2": "#a7ffe0",
+    "ball3": "#4d78a1",
+    "brick1": "#70482e",
+    "brick2": "#39251e",
+    "brickEdge": "#c69b68",
+    "wall1": "#554b5d",
+    "wall2": "#282330"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Kóbor szellem"
+    },
+    "brick": {
+      "name": "Bútor / koporsó"
+    },
+    "wall": {
+      "name": "Kőpillér"
+    },
+    "exit": {
+      "name": "Túlvilági kapu"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Kővé dermesztés"
+    }
+  },
+  "scene": {
+    "type": "ghost-manor",
+    "tagline": "Találd meg a kijáratot hajnal előtt.",
+    "layers": [
+      "moon",
+      "windows",
+      "fog",
+      "candles",
+      "foreground-vines"
+    ]
+  },
+  "audio": {
+    "profile": "haunted",
+    "ambient": {
+      "type": "procedural",
+      "name": "Éjféli kastély atmoszféra",
+      "enabled": true,
+      "volume": 0.035
+    },
+    "events": {
+      "move": "wood-creak",
+      "blocked": "stone-knock",
+      "freeze": "spectral-chime",
+      "exit": "portal-rise",
+      "win": "ghost-release"
+    }
+  }
+}
