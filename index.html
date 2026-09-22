@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Billenő világ – v0.5</title>
+<title>GGrid – v0.6 tilt próba</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#10283d;color:#fff}
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;background:linear-gradient(#173a58,#0d2031)}
@@ -46,9 +46,9 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 .controls{display:grid;grid-template-columns:repeat(3,70px);justify-content:center;gap:6px;margin:10px auto}
 .controls button,.tools button,.mini-tools button{border:0;border-radius:14px;background:#315c7e;color:#fff;font-size:26px;min-height:49px;box-shadow:inset 0 1px #ffffff55,0 4px 8px #0005;touch-action:manipulation}
 .controls button:disabled,.tools button:disabled,.mini-tools button:disabled{opacity:.55}.controls .up{grid-column:2}.controls .left{grid-column:1;grid-row:2}.controls .down{grid-column:2;grid-row:2}.controls .right{grid-column:3;grid-row:2}
-.tools,.mini-tools{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.tools button,.mini-tools button{font-size:14px;padding:0 12px}.tools .active{background:#298bb5}
+.tools,.mini-tools{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.tools button,.mini-tools button{font-size:14px;padding:0 12px}.tools .active,.mini-tools .active{background:#298bb5}
 .mini-tools{margin-top:7px}.mini-tools button{min-height:40px;background:#274d69}.loadrow{display:flex;justify-content:center;gap:6px;align-items:center;flex-wrap:wrap;margin-top:7px}.codeinput{width:150px;text-transform:uppercase}.loadrow button{min-height:42px;border:0;border-radius:10px;padding:0 11px;background:#274d69;color:#fff;font-weight:700}
-.hint{font-size:.74rem;opacity:.62;margin-top:8px}.toast{min-height:20px;font-size:.78rem;color:#ffd98a;margin-top:4px}
+.hint{font-size:.74rem;opacity:.62;margin-top:8px}.toast{min-height:20px;font-size:.78rem;color:#ffd98a;margin-top:4px}.motion-note{font-size:.7rem;opacity:.68;min-height:17px}
 @media(max-height:760px){main{padding:6px}.board-wrap{padding:8px}.controls{margin:6px auto}.controls button{min-height:40px}.hint{display:none}}
 @media(prefers-reduced-motion:reduce){.piece{transition:none!important}.blocked,.winner{animation:none!important}}
 
@@ -68,7 +68,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 
 </style></head>
 <body><main id="game">
-<h1>Billenő világ <small style="font-size:.55em;opacity:.65">v0.5</small></h1>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba</small></h1>
 <div class="sub">Ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
@@ -96,11 +96,12 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 </div>
 <div class="mini-tools">
 <button type="button" id="sound">🔊 Hang</button>
+<button type="button" id="motion">📱 Mozgás ki</button>
 <button type="button" id="hint">💡 Súgó</button>
 </div>
 <div class="loadrow"><input id="codeInput" class="codeinput" maxlength="14" placeholder="Pályakód" aria-label="Pályakód"><button type="button" id="loadCode">Betöltés</button></div>
-<div id="toast" class="toast" aria-live="polite"></div>
-<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli mezők és az alsó nyilak is vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak.</div>
+<div id="toast" class="toast" aria-live="polite"></div><div id="motionNote" class="motion-note"></div>
+<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli mezők és az alsó nyilak is vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti telefon-döntésvezérlést; bekapcsoláskor az aktuális tartás lesz a középhelyzet. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak.</div>
 </main>
 <script>
 /* ===== GAME CORE ===== */
@@ -267,7 +268,7 @@ const AudioManager=(()=>{
 /* ===== UI ===== */
 let state,initial,optimal=[],freezeArmed=false,freezeId=null,currentCode='',busy=false,lastEvents=[],hintVisible=false,freezeUsed=0,freezeAnalysis=null;
 const board=document.querySelector('#board'),status=document.querySelector('#status'),meta=document.querySelector('#meta'),codeEl=document.querySelector('#code'),toast=document.querySelector('#toast');
-const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound');
+const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
 const codeInput=document.querySelector('#codeInput');
 function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=v);}
 function freezeLimit(){const v=freezeLimitEl.value;return v==='inf'?Infinity:Math.max(0,parseInt(v,10)||0);}
@@ -377,6 +378,28 @@ document.querySelectorAll('[data-dir]').forEach(b=>{
  b.addEventListener('lostpointercapture',stopHold);b.addEventListener('contextmenu',e=>e.preventDefault());
 });
 
+/* ===== v0.6 MOBILE TILT INPUT – experimental =====
+   Discrete control: neutral is calibrated when enabled; ~8° engages, ~4° releases.
+   Holding the tilt repeats the same one-cell step() commands as press-and-hold. */
+const MotionControl=(()=>{
+ let enabled=false,listener=false,baseBeta=0,baseGamma=0,haveBase=false,activeDir=null,lastStep=0;
+ const ENTER=8,EXIT=4,REPEAT=175;
+ function norm180(a){while(a>180)a-=360;while(a<-180)a+=360;return a}
+ function supported(){return 'DeviceOrientationEvent' in window}
+ function label(){motionBtn.classList.toggle('active',enabled);motionBtn.textContent=enabled?'📱 Mozgás be':'📱 Mozgás ki'}
+ function note(t=''){motionNote.textContent=t}
+ function stop(){activeDir=null;setBoardTilt(null,false)}
+ function calibrate(e){if(typeof e.beta!=='number'||typeof e.gamma!=='number')return false;baseBeta=e.beta;baseGamma=e.gamma;haveBase=true;note('Mozgásvezérlés aktív · középhelyzet rögzítve');return true}
+ function choose(db,dg){const ab=Math.abs(db),ag=Math.abs(dg);if(activeDir){const v=activeDir==='left'||activeDir==='right'?ag:ab;if(v<EXIT)return null;return activeDir}if(Math.max(ab,ag)<ENTER)return null;if(ag>ab)return dg>0?'right':'left';return db>0?'down':'up'}
+ function onOrientation(e){if(!enabled)return;if(!haveBase){calibrate(e);return}const db=norm180(e.beta-baseBeta),dg=norm180(e.gamma-baseGamma),dir=choose(db,dg);if(!dir){if(activeDir)stop();return}if(dir!==activeDir){activeDir=dir;lastStep=0;setBoardTilt(dir,true)}const now=performance.now();if(now-lastStep>=REPEAT&&!busy&&!state.won){lastStep=now;move(dir)}}
+ async function enable(){if(!supported()){note('Ezen a böngészőn nem érhető el a mozgásérzékelő.');return}try{if(typeof DeviceOrientationEvent.requestPermission==='function'){const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){note('A mozgásérzékelő engedélye nem lett megadva.');return}}haveBase=false;enabled=true;stop();if(!listener){addEventListener('deviceorientation',onOrientation,true);listener=true}label();note('Tartsd kényelmes középhelyzetben a telefont…')}catch(err){enabled=false;label();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}}
+ function disable(){enabled=false;haveBase=false;stop();label();note('')}
+ async function toggle(){if(enabled)disable();else await enable()}
+ function recalibrate(){if(enabled){haveBase=false;stop();note('Új középhelyzet: tartsd kényelmesen a telefont…')}}
+ return{toggle,recalibrate,get enabled(){return enabled}};
+})();
+motionBtn.addEventListener('click',()=>MotionControl.toggle());
+
 freezeBtn.addEventListener('click',()=>{if(busy||!canUseFreeze())return;freezeArmed=!freezeArmed;if(!freezeArmed)freezeId=null;render({preservePieces:true});});
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
@@ -402,5 +425,6 @@ addEventListener('keyup',e=>{
  if(m){e.preventDefault();keyboardDirs.delete(m);refreshKeyboardTilt();}
 });
 addEventListener('blur',()=>{keyboardDirs.clear();refreshKeyboardTilt();stopHold();});
+addEventListener('orientationchange',()=>setTimeout(()=>MotionControl.recalibrate(),250));
 newLevel();
 </script></body></html>
