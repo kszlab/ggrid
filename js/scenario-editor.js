@@ -1,4 +1,4 @@
-/* GGrid Scenario Editor v0.2 – GGrid v0.12.2 */
+/* GGrid Scenario Editor v0.3 – GGrid v0.12.3 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
 const STORE='ggrid.local.scenarios.v1';
@@ -30,7 +30,7 @@ function renderRows(){
    '<td><select data-k="theme">'+opt(['classic','mine'],s.theme)+'</select></td>'+
    '<td class="status '+(s.status==='ok'?'ok':s.status==='bad'?'bad':'wait')+'">'+({ok:'✓ kész',bad:'✕ nincs találat',working:'⟳ keresés',dirty:'○ újra',empty:'○ nincs'}[s.status]||'○ nincs')+'</td>'+
    '<td><div class="row-actions"><button data-act="dup">⧉</button><button data-act="up">↑</button><button data-act="down">↓</button><button data-act="regen">↻</button><button data-act="del">✕</button></div></td>';
-  tr.querySelectorAll('select').forEach(el=>el.onchange=()=>{s[el.dataset.k]=el.value;s.status='dirty';generated[i]=null;lastPackage=null;renderRows()});
+  tr.querySelectorAll('select').forEach(el=>el.onchange=()=>{s[el.dataset.k]=el.value;s.status='dirty';generated[i]=null;lastPackage=null;$('#publishBundle').disabled=true;renderRows()});
   tr.querySelectorAll('button').forEach(b=>b.onclick=()=>rowAction(i,b.dataset.act));
   rowsEl.append(tr);
  });
@@ -47,7 +47,7 @@ const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
 let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
 function ensureWorker(){
  if(genWorker)return genWorker;
- genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.2');
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.3');
  return genWorker;
 }
 function setBusy(v){
@@ -94,7 +94,7 @@ async function generateOne(i){
  }else log.textContent='✕ Stage '+(i+1)+': '+result.error;
  renderRows();return false
 }
-function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:1,engineVersion:'0.12.1',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
+function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:3,engineVersion:'0.12.3',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
 function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
 function buildPackage(){
  if(generated.length!==specs.length||generated.some(x=>!x)){lastPackage=null;return null}
@@ -106,10 +106,33 @@ function buildPackage(){
  });
  const scenario={format:'ggrid-scenario',formatVersion:1,id:p.meta.id,version:p.meta.version,name:p.meta.name,description:p.meta.description,rules:['Juttasd ki az összes golyót.','A téglák nem hagyhatják el a pályát.'],defaults:{theme:{key:'theme:classic',version:1},abilities:[],timer:null,completion:{type:'allBallsExited'}},chapters,scoring:null};
  const resources={'theme:classic':THEMES.classic,'theme:mine':THEMES.mine};generated.forEach(g=>resources['level:'+g.level.id]=g.level);
- lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.1',scenario,resources,editorProject:p};
- $('#downloadScenario').disabled=false;$('#installScenario').disabled=false;
+ lastPackage={format:'ggrid-scenario-package',formatVersion:1,packageVersion:1,engineVersion:'0.12.3',scenario,resources,editorProject:p};
+ $('#downloadScenario').disabled=false;$('#installScenario').disabled=false;$('#publishBundle').disabled=false;
  summary.textContent=specs.length+' stage · minden pálya legenerálva és solverrel ellenőrizve.';
  return lastPackage
+}
+function publicationBundle(){
+ if(!lastPackage||generated.some(x=>!x))throw Error('A publikáláshoz előbb minden stage-et le kell generálni.');
+ if(!validate(false))throw Error('A projekt ellenőrzése sikertelen.');
+ const id=lastPackage.scenario.id,version=lastPackage.scenario.version,base='content/scenarios/'+id+'/',files={};
+ const pub=structuredClone(lastPackage.scenario);
+ pub.defaults.theme={src:'../../themes/classic/theme.json',version:1};
+ pub.chapters.forEach(ch=>ch.stages.forEach((st,i)=>{
+  const spec=specs[i],theme=spec.theme;
+  st.level={src:'levels/stage-'+String(i+1).padStart(2,'0')+'.json',version:1};
+  st.theme={src:'../../themes/'+theme+'/theme.json',version:1};
+ }));
+ files[base+'scenario.json']=pub;
+ generated.forEach((g,i)=>files[base+'levels/stage-'+String(i+1).padStart(2,'0')+'.json']=g.level);
+ files[base+'editor-project.json']=project();
+ const indexEntry={id,version,name:pub.name,description:pub.description,manifest:id+'/scenario.json'};
+ return{format:'ggrid-publication-bundle',formatVersion:1,bundleVersion:1,engineVersion:'0.12.3',createdAt:new Date().toISOString(),scenarioId:id,scenarioVersion:version,indexEntry,repository:{repository:'kszlab/ggrid',branch:'main',root:'content/scenarios/',files},validation:{allStagesGenerated:true,editorValidated:true,solverChecked:true},instructions:['A repository.files minden kulcsa a cél GitHub repository relatív útvonala.','A content/scenarios/index.json scenarios tömbjéhez az indexEntry rekordot kell hozzáadni, vagy azonos id esetén verziófrissítésként cserélni.','Publikálás előtt a fogadó fél ismét validálja a csomagot.']};
+}
+function exportPublication(){
+ try{
+  const b=publicationBundle(),name=b.scenarioId+'-v'+b.scenarioVersion+'.ggrid-publish.json';
+  download(b,name);log.textContent='✓ Publikálási csomag elkészült: '+name+'\nA csomag tartalmazza a scenario.json-t, a konkrét stage JSON-okat, az Editor projektet és a Scenario Library index-bejegyzést.';
+ }catch(e){log.textContent='Publikálási hiba: '+e.message}
 }
 async function generateAll(){
  lastPackage=null;genCancelled=false;setBusy(true);
@@ -122,10 +145,10 @@ async function generateAll(){
  if(p)log.textContent='✓ Kész: '+specs.length+' stage generálva és ellenőrizve. A scenario exportálható vagy hozzáadható a játékhoz.';
  else if(!genCancelled&&!specs.some(s=>s.status==='bad'))log.textContent='A generálás nem fejeződött be.'
 }
-function validate(){
+function validate(show=true){
  const errs=[];if(!specs.length)errs.push('Nincs stage.');specs.forEach((s,i)=>{if(s.freeze==='0'&&s.freezeRole!=='none')errs.push('Stage '+(i+1)+': Freeze=0 mellett a szerep csak Nincs lehet.');if(s.freezeRole==='required'&&s.freeze==='0')errs.push('Stage '+(i+1)+': szükséges Freeze-hez legalább 1 Freeze kell.')});
  if(generated.some((g,i)=>g&&!solve(g.state,30)&&specs[i].freezeRole!=='required'&&!analyzeOneFreeze(g.state,30).bestFreeze))errs.push('Van nem megoldható generált stage.');
- log.textContent=errs.length?'ELLENŐRZÉSI HIBÁK:\n'+errs.join('\n'):'✓ A projekt szerkezete érvényes'+(lastPackage?', a scenario csomag elkészült.':'. A konkrét pályákhoz futtasd a generálást.');
+ if(show)log.textContent=errs.length?'ELLENŐRZÉSI HIBÁK:\n'+errs.join('\n'):'✓ A projekt szerkezete érvényes'+(lastPackage?', a scenario csomag elkészült.':'. A konkrét pályákhoz futtasd a generálást.');
  return !errs.length
 }
 function download(obj,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
@@ -153,9 +176,10 @@ function example(){
 }
 $('#addRow').onclick=()=>{specs.push(defaultSpec(specs.length));generated.push(null);renderRows()};
 $('#generateAll').onclick=generateAll;$('#cancelGenerate').onclick=()=>{genCancelled=true;genWorker?.postMessage({type:'cancel'});log.textContent+='\nMegszakítás…'};$('#validateAll').onclick=validate;$('#loadExample').onclick=example;
-$('#newProject').onclick=()=>{specs=[defaultSpec(0)];generated=[null];lastPackage=null;renderRows()};
+$('#newProject').onclick=()=>{specs=[defaultSpec(0)];generated=[null];lastPackage=null;$('#publishBundle').disabled=true;renderRows()};
 $('#saveProject').onclick=()=>download(project(),($('#scenarioId').value||'scenario')+'.ggrid-project.json');
 $('#downloadScenario').onclick=()=>lastPackage&&download(lastPackage,($('#scenarioId').value||'scenario')+'.ggrid-scenario.json');
+$('#publishBundle').onclick=exportPublication;
 $('#installScenario').onclick=install;
 $('#importFile').onchange=async e=>{try{loadProject(JSON.parse(await e.target.files[0].text()));log.textContent='✓ Import sikeres.'}catch(err){log.textContent='Import hiba: '+err.message}e.target.value=''};
 example();
