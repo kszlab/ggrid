@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.26
+/* GGrid Scene Renderer 2 – v0.12.27
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -29,7 +29,7 @@ const SceneRenderer=(()=>{
      cached nodes before rendering the restarted state. */
   clearComponentOverlays();boardRef=null;
   theme=t||null;ensure();const type=t?.scene?.type||'';
-  document.body.dataset.scene=type;wrap.dataset.scene=type;
+  document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');
   const m=markup(type);back.innerHTML=m.back;front.innerHTML=m.front;frame.innerHTML='';
   wrap.classList.toggle('scene-showcase',t?.scene?.tier==='showcase');
  }
@@ -114,6 +114,6 @@ const SceneRenderer=(()=>{
   wrap.classList.remove('fx-move','fx-blocked','fx-freeze','fx-exit','fx-win');void wrap.offsetWidth;
   wrap.classList.add('fx-'+kind);setTimeout(()=>wrap?.classList.remove('fx-'+kind),kind==='win'?900:420);
  }
- function clear(){clearComponentOverlays();theme=null;ensure();document.body.dataset.scene='';wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
+ function clear(){clearComponentOverlays();theme=null;ensure();document.body.dataset.scene='';document.body.dataset.uiSkin='';document.body.classList.remove('full-ui-skin');wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
  return{apply,afterBoardRender,event,setDirection,clear,get theme(){return theme}};
 })();
