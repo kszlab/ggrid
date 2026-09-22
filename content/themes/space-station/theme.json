@@ -1,0 +1,42 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "space-station",
+  "version": 1,
+  "name": "Űrállomás",
+  "colors": {
+    "background": "#071522",
+    "board": "#152b38",
+    "wrap": "#263f4c",
+    "cell1": "#294653",
+    "cell2": "#142a35",
+    "accent": "#62d9ff",
+    "ball1": "#ffffff",
+    "ball2": "#59d9ff",
+    "ball3": "#136087",
+    "brick1": "#647987",
+    "brick2": "#394b58",
+    "brickEdge": "#8eeaff",
+    "wall1": "#39434b",
+    "wall2": "#20282e"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Energiagömb"
+    },
+    "brick": {
+      "name": "Teherkonténer"
+    },
+    "wall": {
+      "name": "Hajótest"
+    },
+    "exit": {
+      "name": "Légzsilip"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Időmező"
+    }
+  }
+}
