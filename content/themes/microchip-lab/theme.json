@@ -1,0 +1,57 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "microchip-lab",
+  "version": 1,
+  "name": "MICROCORE // Circuit Lab",
+  "description": "SHOWCASE: egy nyomtatott áramköri lap belseje, elektronokkal, IC-tokokkal és fénylő adatporttal.",
+  "semantic": {
+    "ball": "Elektron-mag",
+    "brick": "IC modul",
+    "wall": "Hűtőborda",
+    "exit": "Adatport",
+    "freeze": "Clock Hold"
+  },
+  "colors": {
+    "background": "#020d09",
+    "board": "#061a12",
+    "cell1": "#0b2b1b",
+    "cell2": "#082316",
+    "accent": "#68ff8c",
+    "ball1": "#d9fff0",
+    "ball2": "#36ff88",
+    "brick1": "#17222a",
+    "brick2": "#05090c",
+    "wall1": "#7a8b82",
+    "wall2": "#26332d"
+  },
+  "scene": {
+    "type": "microchip-lab",
+    "tier": "showcase",
+    "tagline": "MICROCORE // BUS 16",
+    "layers": [
+      "pcb",
+      "traces",
+      "components",
+      "signal-pulses",
+      "solder-mask"
+    ],
+    "exitStyle": "data-socket"
+  },
+  "audio": {
+    "profile": "microchip",
+    "ambient": {
+      "type": "procedural",
+      "name": "Digitális arpeggio",
+      "enabled": true,
+      "volume": 0.055
+    },
+    "events": {
+      "move": "clock-tick",
+      "blocked": "error-bit",
+      "freeze": "clock-hold",
+      "exit": "data-lock",
+      "win": "boot-chime"
+    }
+  }
+}
