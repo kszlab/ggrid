@@ -1,4 +1,4 @@
-/* ===== v0.12.32 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.33 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
