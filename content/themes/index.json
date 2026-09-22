@@ -82,6 +82,24 @@
       "description": "Biolumineszcens mélytengeri kutatóállomás az óceánfenéken.",
       "src": "abyssal-lab/theme.json",
       "experimental": true
+    },
+    {
+      "id": "clockwork-sanctum",
+      "version": 1,
+      "name": "Aetherium Óramű",
+      "description": "SHOWCASE: lebegő viktoriánus csillagvizsgáló, óraművek és mechanikus csillagkapu.",
+      "src": "clockwork-sanctum/theme.json",
+      "experimental": true,
+      "showcase": true
+    },
+    {
+      "id": "neon-noir",
+      "version": 1,
+      "name": "NEON RAIN // Sector 9",
+      "description": "SHOWCASE: esőáztatta jövővárosi tető, futárdrón és holografikus evakuációs lift.",
+      "src": "neon-noir/theme.json",
+      "experimental": true,
+      "showcase": true
     }
   ]
 }
