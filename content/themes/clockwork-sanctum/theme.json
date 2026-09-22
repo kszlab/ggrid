@@ -1,0 +1,74 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "clockwork-sanctum",
+  "version": 1,
+  "name": "Aetherium Óramű",
+  "description": "Egy lebegő viktoriánus csillagvizsgáló belseje: réz fogaskerekek, zafír energiamag és mechanikus csillagkapu.",
+  "colors": {
+    "background": "#071017",
+    "wrap": "#111a1d",
+    "board": "#172326",
+    "cell1": "#203034",
+    "cell2": "#111b1e",
+    "accent": "#e8b85c",
+    "ball1": "#eaffff",
+    "ball2": "#5de1ff",
+    "ball3": "#135d7a",
+    "brick1": "#a66b2d",
+    "brick2": "#4e2f18",
+    "brickEdge": "#f0c778",
+    "wall1": "#566064",
+    "wall2": "#242c2f"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Aether-mag"
+    },
+    "brick": {
+      "name": "Óramű modul"
+    },
+    "wall": {
+      "name": "Obszidián pillér"
+    },
+    "exit": {
+      "name": "Csillagkapu"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Kronosztázis"
+    }
+  },
+  "scene": {
+    "type": "clockwork-sanctum",
+    "tier": "showcase",
+    "tagline": "THE AETHERIUM // 03:17",
+    "layers": [
+      "starfield",
+      "brass-arches",
+      "orrery",
+      "gear-trains",
+      "glass-floor",
+      "steam",
+      "foreground-dials"
+    ],
+    "exitStyle": "astrolabe-gate"
+  },
+  "audio": {
+    "profile": "clockwork",
+    "ambient": {
+      "type": "procedural",
+      "name": "Óramű + éteri rezonancia",
+      "enabled": true,
+      "volume": 0.026
+    },
+    "events": {
+      "move": "ratchet-glide",
+      "blocked": "brass-clang",
+      "freeze": "time-stop",
+      "exit": "astrolabe-open",
+      "win": "celestial-chord"
+    }
+  }
+}
