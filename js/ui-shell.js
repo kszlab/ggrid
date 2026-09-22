@@ -18,8 +18,8 @@ const AppUI=(()=>{
  function openSettings(){menu.hidden=true;settings.hidden=false;MotionControl?.pause?.()}
  function closeSettings(){settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
  function freePlayFromHome(){
-  document.body.classList.remove('scenario-mode');document.body.dataset.theme='classic';
-  enterGame();
+  if(ScenarioMode?.active){document.querySelector('#exitScenario').click();return}
+  document.body.classList.remove('scenario-mode');document.body.dataset.theme='classic';enterGame();
  }
  document.querySelector('#homeFreePlay').addEventListener('click',freePlayFromHome);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
@@ -29,7 +29,7 @@ const AppUI=(()=>{
  document.querySelector('#menuNew').addEventListener('click',()=>{document.querySelector('#new').click();closeMenu()});
  document.querySelector('#menuHint').addEventListener('click',()=>{document.querySelector('#hint').click();closeMenu()});
  document.querySelector('#menuSettings').addEventListener('click',openSettings);
- document.querySelector('#menuHome').addEventListener('click',showHome);
+ document.querySelector('#menuHome').addEventListener('click',()=>{if(ScenarioMode?.active)document.querySelector('#exitScenario').click();showHome()});
  document.querySelector('#settingsClose').addEventListener('click',closeSettings);
  return{enterGame,showHome,openSettings};
 })();
