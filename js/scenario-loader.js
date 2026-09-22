@@ -1,6 +1,6 @@
-/* ===== v0.12.0 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.1 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
- const ROOT='content/',progressKey='ggrid.scenario.progress.v1';
+ const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
  const panel=document.querySelector('#scenarioPanel'),list=document.querySelector('#scenarioList'),title=document.querySelector('#scenarioTitle'),desc=document.querySelector('#scenarioDesc'),info=document.querySelector('#scenarioInfo');
  const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
@@ -19,6 +19,12 @@ const ScenarioMode=(()=>{
   return{...cfg,chapter:ch,stage:st,base};
  }
  async function loadRef(ref,base,format){
+  if(ref?.key&&scenario?.__package){
+   const d=structuredClone(scenario.__package.resources?.[ref.key]);
+   if(!d)throw Error('INVALID_REFERENCE '+ref.key);checkDoc(d,format);
+   if(d.version!==ref.version)throw Error('CONTENT_VERSION_MISMATCH');
+   d.__url='local:'+ref.key;return d;
+  }
   if(!ref?.src)throw Error('INVALID_REFERENCE');
   const url=refUrl(base,ref.src),d=await fetchJson(url);checkDoc(d,format);
   if(d.version!==ref.version)throw Error('CONTENT_VERSION_MISMATCH');
@@ -70,16 +76,29 @@ const ScenarioMode=(()=>{
  }
  function onWin(){if(!active||!state?.won)return;stopTimer();setTimeout(()=>nextStage().catch(showError),700)}
  function showError(e){console.error(e);toast.textContent='Forgatókönyv-hiba: '+(e.message||e)}
+ function localPackages(){try{const a=JSON.parse(localStorage.getItem(localStore)||'[]');return Array.isArray(a)?a:[]}catch(_){return[]}}
+ function saveLocalPackage(p){
+  if(p?.format!=='ggrid-scenario-package'||p.formatVersion!==1||!p.scenario)throw Error('INVALID_CONTENT_FORMAT');
+  checkDoc(p.scenario,'ggrid-scenario');let a=localPackages();a=a.filter(x=>x?.scenario?.id!==p.scenario.id);a.push(p);localStorage.setItem(localStore,JSON.stringify(a));
+ }
+ function addChoice(s,loader,tag=''){
+  const b=document.createElement('button');b.type='button';b.className='scenario-choice';
+  const strong=document.createElement('strong');strong.textContent=s.name+(tag?' · '+tag:'');
+  const span=document.createElement('span');span.textContent=s.description||'';b.append(strong,span);
+  b.onclick=async()=>{try{const d=await loader();scenario=d;title.textContent=d.name;desc.textContent=d.description||'';playBtn.disabled=false;[...list.querySelectorAll('.scenario-choice')].forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}catch(e){showError(e)}};
+  list.append(b);
+ }
  async function open(){
-  panel.hidden=false;MotionControl.pause();list.innerHTML='<div>Forgatókönyvek betöltése…</div>';
+  panel.hidden=false;MotionControl.pause();list.innerHTML='<div>Forgatókönyvek betöltése…</div>';playBtn.disabled=true;
   try{
    const idx=await fetchJson(ROOT+'scenarios/index.json');checkDoc(idx,'ggrid-scenario-index');list.innerHTML='';
-   for(const s of idx.scenarios||[]){
-    const b=document.createElement('button');b.type='button';b.className='scenario-choice';
-    b.innerHTML='<strong>'+s.name+'</strong><span>'+s.description+'</span>';
-    b.onclick=async()=>{try{const url=refUrl(ROOT+'scenarios/index.json',s.manifest),d=await fetchJson(url);checkDoc(d,'ggrid-scenario');d.__url=url;scenario=d;title.textContent=d.name;desc.textContent=d.description||'';playBtn.disabled=false;[...list.children].forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}catch(e){showError(e)}};
-    list.append(b);
+   for(const s of idx.scenarios||[])addChoice(s,async()=>{const url=refUrl(ROOT+'scenarios/index.json',s.manifest),d=await fetchJson(url);checkDoc(d,'ggrid-scenario');d.__url=url;return d});
+   for(const p of localPackages()){
+    const s=p?.scenario;if(!s)continue;
+    addChoice(s,async()=>{const d=structuredClone(s);d.__url='local:'+d.id;d.__package=p;return d},'saját');
    }
+   const importBtn=document.createElement('button');importBtn.type='button';importBtn.textContent='＋ Scenario fájl importálása';importBtn.className='scenario-choice';
+   importBtn.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='.json,.ggrid-scenario';inp.onchange=async()=>{try{const p=JSON.parse(await inp.files[0].text());saveLocalPackage(p);await open();toast.textContent='Scenario importálva.'}catch(e){showError(e)}};inp.click()};list.append(importBtn);
   }catch(e){list.textContent='A forgatókönyvek nem tölthetők be.';showError(e)}
  }
  function close(){panel.hidden=true;MotionControl.resume()}
