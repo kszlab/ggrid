@@ -75,7 +75,7 @@ let generatorWorker=null,prefetchGeneration=0,prefetchPending=0,prefetchSeq=0,pe
 function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
 function ensureGeneratorWorker(){
  if(generatorWorker)return generatorWorker;
- generatorWorker=new Worker('js/generator-worker.js');
+ generatorWorker=new Worker('js/generator-worker.js?v=0.12.25');
  generatorWorker.onmessage=e=>{
   const m=e.data||{};
   if(m.type==='freezeAnalysis'){
@@ -93,7 +93,7 @@ function ensureGeneratorWorker(){
    fillLevelBuffer();
   }
  };
- generatorWorker.onerror=()=>{prefetchPending=Math.max(0,prefetchPending-1);};
+ generatorWorker.onerror=e=>{prefetchPending=Math.max(0,prefetchPending-1);console.error('Generator Worker',e);toast.textContent='Generátor újraindítása…';setTimeout(()=>{if(generatorWorker){generatorWorker.terminate();generatorWorker=null}fillLevelBuffer()},120);};
  return generatorWorker;
 }
 function fillLevelBuffer(){
