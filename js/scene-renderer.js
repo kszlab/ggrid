@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.23
+/* GGrid Scene Renderer 2 – v0.12.24
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -88,7 +88,7 @@ const SceneRenderer=(()=>{
  }
  function buildComponentOverlays(board){
   const type=theme?.scene?.type;if(!type)return;
-  const live=new Set(),n=state?.width||1,cell=100/n,inset=1.8;
+  const live=new Set(),w=state?.width||1,h=state?.height||w,cellX=100/w,cellY=100/h,inset=1.8;
   for(const o of (state?.objects||[])){
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
    const id=String(o.id);live.add(id);
@@ -97,8 +97,8 @@ const SceneRenderer=(()=>{
    if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
    ov.style.left=`calc(${(o.x+minX)*cell}% + ${inset}px)`;
    ov.style.top=`calc(${(o.y+minY)*cell}% + ${inset}px)`;
-   ov.style.width=`calc(${(maxX-minX+1)*cell}% - ${inset*2}px)`;
-   ov.style.height=`calc(${(maxY-minY+1)*cell}% - ${inset*2}px)`;
+   ov.style.width=`calc(${(maxX-minX+1)*cellX}% - ${inset*2}px)`;
+   ov.style.height=`calc(${(maxY-minY+1)*cellY}% - ${inset*2}px)`;
   }
   componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }
