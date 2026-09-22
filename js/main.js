@@ -63,8 +63,8 @@ function render(opts={}){
  soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
  SceneRenderer?.afterBoardRender?.(board);
 }
-/* ===== v0.12.37 FREE-PLAY LEVEL CREATION =====
-   A normál W-pálya szándékosan a főszálon készül: a v0.12.37 konstruktív
+/* ===== v0.12.38 FREE-PLAY LEVEL CREATION =====
+   A normál W-pálya szándékosan a főszálon készül: a v0.12.38 konstruktív
    generátor nem végez BFS-t, ezért azonnali. Ezzel a Worker/cache/request
    állapotlánc teljesen kiesik a normál Szabad játékból. */
 const levelBuffer=[];
