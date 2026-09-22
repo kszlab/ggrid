@@ -55,13 +55,14 @@ function render(opts={}){
   }
  }
  for(const [ck,el] of existing)if(!wanted.has(ck))el.remove();
- status.textContent=state.won?`Siker! ${state.moves} lépésből.`:`Lépések: ${state.moves} · ${state.width}×${state.height}`;
+ status.textContent=state.won?`Siker! ${state.moves} lépésből.`:'';
  const diff={easy:'Könnyű',medium:'Közepes',hard:'Nehéz'}[difficultyEl.value],glues=state.glueCount||0,walls=state.wallCount||0;
  meta.textContent=`${diff} · kezdő optimum: ${optimal.length} lépés · ragasztás: ${glues} · fix: ${walls}`;
  codeEl.textContent=`Pályakód: ${currentCode}`;
  const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
- freezeBtn.textContent=freezeArmed?(freezeId?`❄ Lefogva${suffix}`:`❄ Válassz elemet${suffix}`):`❄ Freeze${suffix}`;
+ const fc=document.querySelector('#freezeCount');if(fc)fc.textContent=left===Infinity?'∞':String(left);
+ freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}`);
  soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
  SceneRenderer?.afterBoardRender?.(board);
 }
