@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.9.1 előtöltés próba 2</title>
+<title>GGrid – v0.10 mozgás próba 1</title>
 <link rel="stylesheet" href="css/game.css"></head>
 <body><main id="game">
-<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.9.1 előtöltés próba 2</small></h1>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.10 mozgás próba 1</small></h1>
 <div class="sub">Fix akadályok · ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
@@ -32,11 +32,11 @@
 <div class="loadrow"><input id="codeInput" class="codeinput" maxlength="14" placeholder="Pályakód" aria-label="Pályakód"><button type="button" id="loadCode">Betöltés</button></div>
 <div id="toast" class="toast" aria-live="polite"></div>
 <div class="motion-tune" aria-label="Mozgásvezérlés hangolása">
- <div class="tune-box"><span>Döntési szög</span><button type="button" id="angleMinus">−</button><span id="angleValue" class="tune-value">10°</span><button type="button" id="anglePlus">+</button></div>
+ <div class="tune-box"><span>Érzékenység</span><button type="button" id="angleMinus">−</button><span id="angleValue" class="tune-value">10°</span><button type="button" id="anglePlus">+</button></div>
  <div class="tune-box"><span>Tempó</span><button type="button" id="tempoMinus">−</button><span id="tempoValue" class="tune-value">100%</span><button type="button" id="tempoPlus">+</button></div>
 </div>
 <div id="motionNote" class="motion-note"></div>
-<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli iránymezők vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti telefon-döntésvezérlést; bekapcsoláskor az aktuális tartás lesz a középhelyzet. A Döntési szög és Tempó ± gombjaival játék közben hangolható az érzékenység és a sebesség. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak. A szürke fix blokkok nem mozdulnak és nem Freeze-elhetők.</div>
+<div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli iránymezők vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti telefon-döntésvezérlést; bekapcsoláskor az aktuális tartás lesz a középhelyzet. Az Érzékenység és Tempó ± gombjaival játék közben hangolható a vezérlés. Erősebb döntésre gyorsabban gurul; új pályán rövid stabilizálás után aktiválódik. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak. A szürke fix blokkok nem mozdulnak és nem Freeze-elhetők.</div>
 </main>
 <script src="js/game-core.js"></script>
 <script src="js/solver.js"></script>
