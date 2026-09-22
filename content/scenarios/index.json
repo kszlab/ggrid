@@ -15,6 +15,13 @@
       "name": "Saját forgatókönyv 1",
       "description": "Fokozatos nehézségű logikai kampány.",
       "manifest": "custom-01/scenario.json"
+    },
+    {
+      "id": "renderer-showcase",
+      "version": 1,
+      "name": "Scene Renderer 2 Showcase",
+      "description": "Aetherium Óramű és NEON RAIN – két játszható, teljes Scene Theme referencia.",
+      "manifest": "renderer-showcase/scenario.json"
     }
   ]
 }
