@@ -43,7 +43,7 @@ function render(opts={}){
    const ck=`${o.id}:${ci}`;wanted.add(ck);let el=existing.get(ck);
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
    if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
-    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;freezeArmed=false;AudioManager.freeze();MotionControl.resume();render({preservePieces:true});}});board.append(el);}
+    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;freezeArmed=false;AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();render({preservePieces:true});}});board.append(el);}
    const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width);
    el.style.left=p.left;el.style.top=p.top;el.style.width=p.size;el.style.height=p.size;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
@@ -58,6 +58,7 @@ function render(opts={}){
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
  freezeBtn.textContent=freezeArmed?(freezeId?`❄ Lefogva${suffix}`:`❄ Válassz elemet${suffix}`):`❄ Freeze${suffix}`;
  soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
+ SceneRenderer?.afterBoardRender?.(board);
 }
 /* ===== BACKGROUND LEVEL PREFETCH =====
    Három kész W-pályát tartunk az aktuális méret+nehézség kombinációhoz.
@@ -123,8 +124,8 @@ function newLevel(seed=null,prefix='W'){
 }
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
- if(blocked)AudioManager.blocked();else if(moves)AudioManager.move(moves);
- if(exited)AudioManager.exit();if(won)AudioManager.win();
+ if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
+ if(exited){AudioManager.exit();SceneRenderer?.event?.('exit')}if(won){AudioManager.win();SceneRenderer?.event?.('win')}
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
