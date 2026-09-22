@@ -190,3 +190,37 @@ body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-left,body[data-scene="ne
 body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-up,body[data-scene="neon-noir"] .sr-evac.exit-up{align-self:start;transform:translateY(-58%)}
 body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-down,body[data-scene="neon-noir"] .sr-evac.exit-down{align-self:end;transform:translateY(58%)}
 .scene-showcase.fx-exit .exit-right{transform:translateX(58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-left{transform:translateX(-58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-up{transform:translateY(-58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-down{transform:translateY(58%) scale(1.18)!important}
+
+/* v0.12.13 – connected-object skins, depth and directional reactions */
+.scene-showcase .brick.sr-component{margin:0!important;border-radius:0;box-shadow:none!important;z-index:5}
+.scene-showcase .brick.sr-component:not(.sr-open-left){border-left-color:transparent!important}
+.scene-showcase .brick.sr-component:not(.sr-open-right){border-right-color:transparent!important}
+.scene-showcase .brick.sr-component:not(.sr-open-top){border-top-color:transparent!important}
+.scene-showcase .brick.sr-component:not(.sr-open-bottom){border-bottom-color:transparent!important}
+.scene-showcase .brick.sr-component.sr-open-left{border-top-left-radius:8px;border-bottom-left-radius:8px}
+.scene-showcase .brick.sr-component.sr-open-right{border-top-right-radius:8px;border-bottom-right-radius:8px}
+.scene-showcase .brick.sr-component.sr-open-top{border-top-left-radius:8px;border-top-right-radius:8px}
+.scene-showcase .brick.sr-component.sr-open-bottom{border-bottom-left-radius:8px;border-bottom-right-radius:8px}
+body[data-scene="clockwork-sanctum"] .brick.sr-component{background:linear-gradient(#9d682e,#3d2412 48%,#75471f);border:3px solid #d6a453!important;box-shadow:inset 0 4px #f0c56a44!important}
+body[data-scene="clockwork-sanctum"] .brick.sr-component:not(.sr-open-right):after{content:"";position:absolute;right:-5px;top:22%;width:10px;height:56%;z-index:8;background:radial-gradient(circle,#f4ce79 0 22%,#6d431c 25% 55%,#d8a44f 58%);border-radius:50%;box-shadow:0 0 5px #000}
+body[data-scene="clockwork-sanctum"] .brick.sr-component .piece-glyph{font:700 7px/1 ui-monospace,monospace;letter-spacing:.04em;color:#ffe0a0}
+body[data-scene="clockwork-sanctum"] .brick.sr-component[data-part="1"] .piece-glyph{font-size:20px;animation:srSpin 4s linear infinite}
+body[data-scene="neon-noir"] .brick.sr-component{background:linear-gradient(#311747,#0b1826 58%,#211035);border:2px solid #00dff0!important;box-shadow:inset 0 -5px #ff2bd644,0 0 8px #00eaff33!important}
+body[data-scene="neon-noir"] .brick.sr-component:not(.sr-open-right):after{content:"";position:absolute;right:-6px;top:32%;width:12px;height:36%;background:#ff2bd6;box-shadow:0 0 8px #ff2bd6;z-index:8}
+body[data-scene="neon-noir"] .brick.sr-component b{font-size:6px;letter-spacing:.08em}.scene-showcase .brick.sr-component em{z-index:3}
+body[data-scene="neon-noir"] .brick.sr-component.sr-horizontal:before{content:"";position:absolute;left:8%;right:-8%;bottom:8%;height:3px;background:#00efff;box-shadow:0 0 6px #00efff}
+.scene-showcase .piece{filter:drop-shadow(0 5px 4px #0007)}
+.scene-showcase .cell:nth-child(odd){filter:brightness(.96)}.scene-showcase .cell:nth-child(5n+1){box-shadow:inset 3px 0 #ffffff05}
+body[data-scene="clockwork-sanctum"] .edge-control{background:linear-gradient(#6f542e,#2e2418);border-color:#d9ad5e88;color:#ffe1a0;box-shadow:inset 0 0 0 2px #130e09,0 3px 8px #000}
+body[data-scene="neon-noir"] .edge-control{background:linear-gradient(#102638,#07131e);border-color:#00eaff66;color:#8ff7ff;box-shadow:inset 0 0 0 1px #ff2bd633,0 0 8px #00eaff22}
+body[data-scene="clockwork-sanctum"] .edge-control:active,body[data-scene="clockwork-sanctum"] .edge-control.pressed{background:#876431}
+body[data-scene="neon-noir"] .edge-control:active,body[data-scene="neon-noir"] .edge-control.pressed{background:#123d55;box-shadow:0 0 13px #00eaff66}
+.scene-showcase[data-move-dir="right"].fx-move .sr-steam,.scene-showcase[data-move-dir="right"].fx-move .sr-vapor{transform:translateX(-18px)}
+.scene-showcase[data-move-dir="left"].fx-move .sr-steam,.scene-showcase[data-move-dir="left"].fx-move .sr-vapor{transform:translateX(18px)}
+.scene-showcase[data-move-dir="up"].fx-move .sr-rain{filter:brightness(1.4)}.scene-showcase[data-move-dir="down"].fx-move .sr-rain{filter:brightness(.75)}
+body[data-scene="clockwork-sanctum"] .sr-astrolabe:before{content:"";position:absolute;inset:-16px;border:1px solid #6beaff77;border-radius:50%;border-top-color:transparent;border-bottom-color:transparent;animation:srSpin 9s linear infinite reverse}
+body[data-scene="neon-noir"] .sr-evac:before{content:"";position:absolute;inset:-8px -5px;background:repeating-linear-gradient(0deg,transparent 0 6px,#00efff44 7px 8px);animation:srScan 1.4s linear infinite;z-index:-1}
+.scene-showcase.fx-exit .sr-astrolabe i{animation-duration:.45s}.scene-showcase.fx-exit .sr-astrolabe:before{animation-duration:.7s}
+.scene-showcase.fx-exit .sr-evac{background:#bffcff88!important;box-shadow:0 0 28px #00efff,0 0 45px #ff2bd6!important}
+.scene-showcase.fx-freeze .selected{outline-color:#eaffff;box-shadow:0 0 0 3px #8df6ff,0 0 24px #8df6ff!important}
+@keyframes srScan{to{transform:translateY(8px)}}
