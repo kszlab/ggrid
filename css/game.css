@@ -183,3 +183,10 @@ body[data-scene="neon-noir"] .exit.sr-evac{width:39px!important;height:58px!impo
 .scene-showcase.fx-blocked .board{animation:bump .18s ease}.scene-showcase.fx-freeze .board{filter:brightness(1.35) saturate(.55);box-shadow:0 0 28px #aef}.scene-showcase.fx-exit .exit{filter:brightness(2);transform:scale(1.18)!important}.scene-showcase.fx-win{animation:srWin .85s ease}
 @keyframes srSpin{to{transform:rotate(360deg)}}@keyframes srSteam{to{transform:translate(35px,-9px) scale(1.2);opacity:.25}}@keyframes srRain{to{transform:translate(-12px,30px)}}@keyframes srWin{50%{filter:brightness(1.3) saturate(1.25)}}
 @media(prefers-reduced-motion:reduce){.sr-gear,.aether-ring,.sr-steam,.sr-rain,.sr-vapor{animation:none!important}}
+
+/* v0.12.12 exit placement: bespoke portals still sit on the logical exit edge */
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-right,body[data-scene="neon-noir"] .sr-evac.exit-right{justify-self:end;transform:translateX(58%)}
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-left,body[data-scene="neon-noir"] .sr-evac.exit-left{justify-self:start;transform:translateX(-58%)}
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-up,body[data-scene="neon-noir"] .sr-evac.exit-up{align-self:start;transform:translateY(-58%)}
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-down,body[data-scene="neon-noir"] .sr-evac.exit-down{align-self:end;transform:translateY(58%)}
+.scene-showcase.fx-exit .exit-right{transform:translateX(58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-left{transform:translateX(-58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-up{transform:translateY(-58%) scale(1.18)!important}.scene-showcase.fx-exit .exit-down{transform:translateY(58%) scale(1.18)!important}
