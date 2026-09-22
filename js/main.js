@@ -283,7 +283,15 @@ const MotionControl=(()=>{
  function recalibrate(){if(enabled)beginArming('Stabilizálás… új középhelyzet')}
  function onNewLevel(){if(enabled)beginArming('Stabilizálás… új pálya')}
  function pause(){if(enabled){stop();note('Freeze kiválasztás · mozgás szünetel')}}
- function resume(){if(enabled)beginArming('Stabilizálás… Freeze után')}
+ function resume(){
+  if(!enabled)return;
+  /* Freeze után nem kérünk új neutral→tilt ciklust: a kiválasztás pillanatában
+     mért testhelyzet lesz az új közép, így a következő valódi döntés az elsőre működik. */
+  stop();armingUntil=0;armedNeedsNeutral=false;stableSince=0;
+  if(gravity){baseGravity={...gravity};haveGravityBase=true}else{haveGravityBase=false}
+  if(filteredBeta!=null&&filteredGamma!=null){baseBeta=filteredBeta;baseGamma=filteredGamma;haveOrientationBase=true}else haveOrientationBase=false;
+  note('Freeze kész · mozgás aktív');
+ }
  function adjustAngle(delta){enterAngle=Math.max(3,Math.min(14,enterAngle+delta));angleValue.textContent=enterAngle+'°';saveSettings();if(enabled)beginArming('Érzékenység: '+enterAngle+'° · stabilizálás…')}
  function adjustTempo(delta){tempoPct=Math.max(50,Math.min(200,tempoPct+delta));tempoValue.textContent=tempoPct+'%';saveSettings();note('Gurulási tempó: '+tempoPct+'%')}
  loadSettings();
