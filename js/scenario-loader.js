@@ -1,9 +1,9 @@
-/* ===== v0.11.1 SCENARIO + THEME LOADER ===== */
+/* ===== v0.11.2 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
  const panel=document.querySelector('#scenarioPanel'),list=document.querySelector('#scenarioList'),title=document.querySelector('#scenarioTitle'),desc=document.querySelector('#scenarioDesc'),info=document.querySelector('#scenarioInfo');
- const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new');
+ const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
  const fetchJson=async src=>{const r=await fetch(src,{cache:'no-cache'});if(!r.ok)throw Error('CONTENT_FETCH_FAILED '+src);return r.json()};
  const refUrl=(base,src)=>new URL(src,new URL(base,location.href)).href;
  function checkDoc(d,format){if(!d||d.format!==format||d.formatVersion!==1)throw Error('INVALID_CONTENT_FORMAT');}
@@ -59,7 +59,7 @@ const ScenarioMode=(()=>{
   const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');applyTheme(theme);
   const lvl=await loadRef(effective.stage.level,effective.base,'ggrid-level'),s=toState(lvl);
   state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentCode='Scenario: '+scenario.id+' / '+effective.stage.id;
-  active=true;newBtn.hidden=true;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
+  active=true;newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
   try{localStorage.setItem(progressKey,JSON.stringify({scenarioId:scenario.id,version:scenario.version,chapterIndex,stageIndex}))}catch(_){}
  }
  async function nextStage(){
@@ -84,8 +84,8 @@ const ScenarioMode=(()=>{
  }
  function close(){panel.hidden=true;MotionControl.resume()}
  async function start(){if(!scenario)return;panel.hidden=true;try{await loadStage(0,0)}catch(e){showError(e);active=false;MotionControl.resume()}}
- function freePlay(){active=false;scenario=null;effective=null;stopTimer();newBtn.hidden=false;document.body.dataset.theme='classic';info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';changeLevelProfile();MotionControl.resume()}
- document.querySelector('#scenarioOpen').addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);
+ function freePlay(){active=false;scenario=null;effective=null;stopTimer();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;document.body.dataset.theme='classic';info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';changeLevelProfile();MotionControl.resume()}
+ scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir){const wasWon=!!state?.won;baseMove(dir);if(active&&!wasWon)setTimeout(onWin,180)};
  return{open,get active(){return active}};
 })();
