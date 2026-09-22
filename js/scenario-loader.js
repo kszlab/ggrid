@@ -1,4 +1,4 @@
-/* ===== v0.12.6 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.10 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
@@ -40,6 +40,7 @@ const ScenarioMode=(()=>{
   const c=t.colors||{},root=document.documentElement.style;
   root.setProperty('--scenario-bg',c.background||'');root.setProperty('--scenario-board',c.board||'');
   for(const [k,v] of Object.entries({wrap:c.wrap,board:c.board,cell1:c.cell1,cell2:c.cell2,accent:c.accent,ball1:c.ball1,ball2:c.ball2,ball3:c.ball3,brick1:c.brick1,brick2:c.brick2,'brick-edge':c.brickEdge,wall1:c.wall1,wall2:c.wall2}))root.setProperty('--theme-'+k,v||'');
+  AudioManager?.setThemeAudio?.(t.audio||null);
  }
  function abilityCount(type){const a=(effective?.abilities||[]).find(x=>x.type===type);return a?Math.max(0,a.count|0):0}
  function applyAbilities(){
