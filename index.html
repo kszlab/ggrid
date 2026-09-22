@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.6 tilt próba</title>
+<title>GGrid – v0.6 tilt próba 2</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#10283d;color:#fff}
 *{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;background:linear-gradient(#173a58,#0d2031)}
@@ -68,7 +68,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 
 </style></head>
 <body><main id="game">
-<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba</small></h1>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.6 tilt próba 2</small></h1>
 <div class="sub">Ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
@@ -383,15 +383,48 @@ document.querySelectorAll('[data-dir]').forEach(b=>{
    Holding the tilt repeats the same one-cell step() commands as press-and-hold. */
 const MotionControl=(()=>{
  let enabled=false,listener=false,baseBeta=0,baseGamma=0,haveBase=false,activeDir=null,lastStep=0;
+ let lastBeta=0,lastGamma=0;
  const ENTER=8,EXIT=4,REPEAT=175;
  function norm180(a){while(a>180)a-=360;while(a<-180)a+=360;return a}
  function supported(){return 'DeviceOrientationEvent' in window}
  function label(){motionBtn.classList.toggle('active',enabled);motionBtn.textContent=enabled?'📱 Mozgás be':'📱 Mozgás ki'}
  function note(t=''){motionNote.textContent=t}
  function stop(){activeDir=null;setBoardTilt(null,false)}
- function calibrate(e){if(typeof e.beta!=='number'||typeof e.gamma!=='number')return false;baseBeta=e.beta;baseGamma=e.gamma;haveBase=true;note('Mozgásvezérlés aktív · középhelyzet rögzítve');return true}
- function choose(db,dg){const ab=Math.abs(db),ag=Math.abs(dg);if(activeDir){const v=activeDir==='left'||activeDir==='right'?ag:ab;if(v<EXIT)return null;return activeDir}if(Math.max(ab,ag)<ENTER)return null;if(ag>ab)return dg>0?'right':'left';return db>0?'down':'up'}
- function onOrientation(e){if(!enabled)return;if(!haveBase){calibrate(e);return}const db=norm180(e.beta-baseBeta),dg=norm180(e.gamma-baseGamma),dir=choose(db,dg);if(!dir){if(activeDir)stop();return}if(dir!==activeDir){activeDir=dir;lastStep=0;setBoardTilt(dir,true)}const now=performance.now();if(now-lastStep>=REPEAT&&!busy&&!state.won){lastStep=now;move(dir)}}
+ function setZero(beta,gamma,msg='Új középhelyzet rögzítve'){
+  baseBeta=beta;baseGamma=gamma;haveBase=true;activeDir=null;lastStep=0;setBoardTilt(null,false);note(msg);
+ }
+ function calibrate(e){if(typeof e.beta!=='number'||typeof e.gamma!=='number')return false;lastBeta=e.beta;lastGamma=e.gamma;setZero(e.beta,e.gamma,'Mozgásvezérlés aktív · középhelyzet rögzítve');return true}
+ function choose(db,dg){
+  const ab=Math.abs(db),ag=Math.abs(dg);
+  if(activeDir){
+   const v=activeDir==='left'||activeDir==='right'?ag:ab;
+   if(v<EXIT)return null;
+   return activeDir;
+  }
+  if(Math.max(ab,ag)<ENTER)return null;
+  if(ag>ab)return dg>0?'right':'left';
+  return db>0?'down':'up';
+ }
+ function tryTiltStep(dir,beta,gamma){
+  if(busy||state.won)return;
+  /* Előre megnézzük ugyanazzal a step()-pel, hogy van-e tényleges mozgás.
+     Ha nincs, a telefon AKTUÁLIS tartása lesz az új dinamikus nullpont.
+     A blokkolt próba nem kerül be a játék lépésszámába és nem ad blokkolás-hangot. */
+  const probe=step(state,dir,freezeId);
+  const meaningful=probe.events.some(e=>e.type==='move'||e.type==='exit');
+  if(!meaningful){setZero(beta,gamma,'Véghelyzet · új középhelyzet rögzítve');return}
+  move(dir);
+ }
+ function onOrientation(e){
+  if(!enabled||typeof e.beta!=='number'||typeof e.gamma!=='number')return;
+  lastBeta=e.beta;lastGamma=e.gamma;
+  if(!haveBase){calibrate(e);return}
+  const db=norm180(e.beta-baseBeta),dg=norm180(e.gamma-baseGamma),dir=choose(db,dg);
+  if(!dir){if(activeDir)stop();return}
+  if(dir!==activeDir){activeDir=dir;lastStep=0;setBoardTilt(dir,true)}
+  const now=performance.now();
+  if(now-lastStep>=REPEAT){lastStep=now;tryTiltStep(dir,e.beta,e.gamma)}
+ }
  async function enable(){if(!supported()){note('Ezen a böngészőn nem érhető el a mozgásérzékelő.');return}try{if(typeof DeviceOrientationEvent.requestPermission==='function'){const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){note('A mozgásérzékelő engedélye nem lett megadva.');return}}haveBase=false;enabled=true;stop();if(!listener){addEventListener('deviceorientation',onOrientation,true);listener=true}label();note('Tartsd kényelmes középhelyzetben a telefont…')}catch(err){enabled=false;label();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}}
  function disable(){enabled=false;haveBase=false;stop();label();note('')}
  async function toggle(){if(enabled)disable();else await enable()}
