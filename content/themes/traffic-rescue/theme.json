@@ -1,0 +1,69 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "traffic-rescue",
+  "version": 1,
+  "name": "Városi mentőakció",
+  "description": "A cél egy mentőautó, a mozgó elemek járművek; a többcellás testek furgonok és buszok.",
+  "colors": {
+    "background": "#16222b",
+    "board": "#303940",
+    "wrap": "#1b242a",
+    "cell1": "#39444a",
+    "cell2": "#2b3439",
+    "accent": "#ffdf4d",
+    "ball1": "#ffffff",
+    "ball2": "#ff4b4b",
+    "ball3": "#a00",
+    "brick1": "#287dc2",
+    "brick2": "#164d79",
+    "brickEdge": "#d8f0ff",
+    "wall1": "#60686c",
+    "wall2": "#353b3e"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Mentőautó"
+    },
+    "brick": {
+      "name": "Jármű"
+    },
+    "wall": {
+      "name": "Útakadály"
+    },
+    "exit": {
+      "name": "Szabad út"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Piros lámpa"
+    }
+  },
+  "scene": {
+    "type": "traffic-rescue",
+    "tagline": "Nyiss utat a mentőnek!",
+    "layers": [
+      "city-blocks",
+      "road-markings",
+      "signals",
+      "street-lights"
+    ]
+  },
+  "audio": {
+    "profile": "city",
+    "ambient": {
+      "type": "procedural",
+      "name": "Éjszakai város",
+      "enabled": true,
+      "volume": 0.025
+    },
+    "events": {
+      "move": "engine-pulse",
+      "blocked": "horn",
+      "freeze": "traffic-signal",
+      "exit": "siren-clear",
+      "win": "rescue-clear"
+    }
+  }
+}
