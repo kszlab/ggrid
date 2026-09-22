@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.11.0 scenario-alapok</title>
-<link rel="stylesheet" href="css/game.css?v=0.11.0"></head>
+<title>GGrid – v0.11.1 scenario-javítás</title>
+<link rel="stylesheet" href="css/game.css?v=0.11.1"></head>
 <body><div id="startup" class="startup" aria-live="polite"><div class="startup-card"><div class="startup-title">GGrid</div><div class="startup-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="startup-ball"></i><i></i><i></i><i class="startup-brick"></i><i></i></div><div class="startup-text">A játék töltődik…</div></div></div><main id="game">
-<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.11.0 scenario-alapok</small></h1>
+<h1>GGrid <small style="font-size:.55em;opacity:.65">v0.11.1 scenario-javítás</small></h1>
 <div class="sub">Fix akadályok · ragasztott merev téglatestek · solverrel ellenőrzött pályák</div>
 <div class="topbar">
 <label>Nehézség: <select id="difficulty"><option value="easy">Könnyű</option><option value="medium" selected>Közepes</option><option value="hard">Nehéz</option></select></label>
@@ -22,7 +22,8 @@
 <div class="tools">
 <button type="button" id="freeze">❄ Freeze</button>
 <button type="button" id="restart">↶ Újrakezdés</button>
-<button type="button" id="new">⟳ Új pálya</button>\n<button type="button" id="scenarioOpen">▶ Játék indítása</button>
+<button type="button" id="new">⟳ Új pálya</button>
+<button type="button" id="scenarioOpen">▶ Játék indítása</button>
 </div>
 <div class="mini-tools">
 <button type="button" id="sound">🔊 Hang</button>
@@ -31,17 +32,20 @@
 <button type="button" id="calibrate">🧭 Kalibráció</button>
 </div>
 <div class="loadrow"><input id="codeInput" class="codeinput" maxlength="14" placeholder="Pályakód" aria-label="Pályakód"><button type="button" id="loadCode">Betöltés</button></div>
-<div id="scenarioInfo" class="scenario-info"></div>\n<div id="toast" class="toast" aria-live="polite"></div>
+<div id="scenarioInfo" class="scenario-info"></div>
+<div id="toast" class="toast" aria-live="polite"></div>
 <div class="motion-tune" aria-label="Mozgásvezérlés hangolása">
  <div class="tune-box"><span>Érzékenység</span><button type="button" id="angleMinus">−</button><span id="angleValue" class="tune-value">10°</span><button type="button" id="anglePlus">+</button></div>
  <div class="tune-box"><span>Tempó</span><button type="button" id="tempoMinus">−</button><span id="tempoValue" class="tune-value">100%</span><button type="button" id="tempoPlus">+</button></div>
 </div>
 <div id="motionNote" class="motion-note"></div>
 <div class="hint">Mozgás: nyilak vagy kurzorbillentyűk. A hang kikapcsolható. A tábla körüli iránymezők vezérelnek. Nyomva tartva a lépések folyamatosan ismétlődnek a lehetséges véghelyzetig. A 📱 Mozgás gomb bekapcsolja a kísérleti relatív telefon-döntésvezérlést; a közvetlen JOBBRA→LE és más irányváltásokhoz nem kell középhelyzetbe visszatérni. A gravitációs szenzoradat az elsődleges, az orientációs adat tartalék. Az Érzékenység és Tempó ± gombjaival játék közben hangolható a vezérlés; ezeket a böngésző tartósan megjegyzi. Erősebb döntésre gyorsabban gurul; új pályán rövid stabilizálás után aktiválódik. A közös vastag kontúrral körülrajzolt téglacellák egy merev testként mozognak. A szürke fix blokkok nem mozdulnak és nem Freeze-elhetők.</div>
-<div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>\n<div id="calibration" class="calibration" hidden><div class="cal-card"><div class="cal-head"><strong>GGrid Motion Calibration Lab</strong><button type="button" id="calClose">✕</button></div><div id="calPhase" class="cal-phase">Előkészítés</div><div id="calArrow" class="cal-arrow">•</div><div id="calInstruction" class="cal-instruction">Tartsd a telefont a játék közbeni természetes helyzetben.</div><div class="cal-progress"><i id="calProgress"></i></div><div id="calStats" class="cal-stats"></div><div class="cal-actions"><button type="button" id="calStart">Kalibráció indítása</button><button type="button" id="calExport" disabled>Mérési adatok exportálása</button></div><div class="cal-small">A teszt közvetlen irány→irány átmeneteket kér; nem kell középhelyzetbe visszatérni. A nyers DeviceMotion és DeviceOrientation adatok helyben kerülnek rögzítésre.</div></div></div>
+<div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>
+<div id="calibration" class="calibration" hidden><div class="cal-card"><div class="cal-head"><strong>GGrid Motion Calibration Lab</strong><button type="button" id="calClose">✕</button></div><div id="calPhase" class="cal-phase">Előkészítés</div><div id="calArrow" class="cal-arrow">•</div><div id="calInstruction" class="cal-instruction">Tartsd a telefont a játék közbeni természetes helyzetben.</div><div class="cal-progress"><i id="calProgress"></i></div><div id="calStats" class="cal-stats"></div><div class="cal-actions"><button type="button" id="calStart">Kalibráció indítása</button><button type="button" id="calExport" disabled>Mérési adatok exportálása</button></div><div class="cal-small">A teszt közvetlen irány→irány átmeneteket kér; nem kell középhelyzetbe visszatérni. A nyers DeviceMotion és DeviceOrientation adatok helyben kerülnek rögzítésre.</div></div></div>
 </main>
 <script src="js/game-core.js"></script>
 <script src="js/solver.js"></script>
 <script src="js/generator.js"></script>
 <script src="js/audio.js"></script>
-<script src="js/main.js?v=0.10.9"></script>\n<script src="js/scenario-loader.js?v=0.11.0"></script></body></html>
+<script src="js/main.js?v=0.11.1"></script>
+<script src="js/scenario-loader.js?v=0.11.1"></script></body></html>
