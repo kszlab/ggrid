@@ -88,9 +88,15 @@ function ensureGeneratorWorker(){
   if(m.type==='level'){
    if(generationTimer){clearTimeout(generationTimer);generationTimer=null}
    prefetchPending=Math.max(0,prefetchPending-1);
-   if(m.requestId?.generation===prefetchGeneration&&m.requestId?.key===currentPrefetchKey()){
+   const current=selectedDims(),rid=m.requestId||{},gs=m.g?.state;
+   const requestMatches=rid.generation===prefetchGeneration&&rid.key===currentPrefetchKey()&&rid.w===current.w&&rid.h===current.h;
+   const levelMatches=gs?.width===current.w&&gs?.height===current.h;
+   if(requestMatches&&levelMatches){
     if(pendingNewLevel){pendingNewLevel=false;applyGeneratedLevel(m.g)}
     else levelBuffer.push(m.g);
+   }else if(pendingNewLevel){
+    /* A méret közben megváltozott: a régi Worker-választ soha ne rajzoljuk ki. */
+    requestGeneratedLevel();
    }
   }
  };
@@ -102,7 +108,7 @@ function requestGeneratedLevel(){
  const w=ensureGeneratorWorker(),keyNow=currentPrefetchKey(),generation=prefetchGeneration,d=selectedDims();
  prefetchPending=1;
  generationTimer=setTimeout(()=>generationFailed('A pálya készítése túl sokáig tartott. Próbáld újra vagy válassz kisebb méretet.'),30000);
- w.postMessage({type:'generate',w:d.w,h:d.h,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq}});
+ w.postMessage({type:'generate',w:d.w,h:d.h,difficulty:difficultyEl.value,prefix:'W',seed:seedText(),requestId:{generation,key:keyNow,seq:++prefetchSeq,w:d.w,h:d.h}});
 }
 function fillLevelBuffer(){/* v0.12.30: nincs automatikus háttér-prefetch; csak felhasználói kérésre generálunk. */}
 function resetLevelBuffer(){
@@ -406,6 +412,11 @@ document.querySelector('#hint').addEventListener('click',hint);
 soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));if(state)render({preservePieces:true});});
 function changeLevelProfile(){
  resetLevelBuffer();
+ /* A régi pálya ne maradjon látható, miközben az új méret készül. */
+ state=null;initial=null;optimal=[];currentCode='';
+ board.innerHTML='';board.style.setProperty('--cols',selectedDims().w);board.style.setProperty('--rows',selectedDims().h);
+ board.style.aspectRatio=`${selectedDims().w}/${selectedDims().h}`;
+ toast.textContent=`Pálya készítése: ${selectedDims().w}×${selectedDims().h}…`;
  newLevel();
 }
 difficultyEl.addEventListener('change',changeLevelProfile);sizeEl.addEventListener('change',changeLevelProfile);
