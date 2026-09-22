@@ -1,4 +1,4 @@
-/* GGrid Scenario Editor v0.1 – GGrid v0.12.1 */
+/* GGrid Scenario Editor v0.2 – GGrid v0.12.2 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
 const STORE='ggrid.local.scenarios.v1';
@@ -28,7 +28,7 @@ function renderRows(){
    '<td><select data-k="freezeRole">'+opt(['none','optional','required'],s.freezeRole)+'</select></td>'+
    '<td><select data-k="timer">'+opt(['0','30','60','90','120','180'],s.timer)+'</select></td>'+
    '<td><select data-k="theme">'+opt(['classic','mine'],s.theme)+'</select></td>'+
-   '<td class="status '+(s.status==='ok'?'ok':s.status==='bad'?'bad':'wait')+'">'+({ok:'✓ kész',bad:'✕ hiba',dirty:'○ újra',empty:'○ nincs'}[s.status]||'○ nincs')+'</td>'+
+   '<td class="status '+(s.status==='ok'?'ok':s.status==='bad'?'bad':'wait')+'">'+({ok:'✓ kész',bad:'✕ nincs találat',working:'⟳ keresés',dirty:'○ újra',empty:'○ nincs'}[s.status]||'○ nincs')+'</td>'+
    '<td><div class="row-actions"><button data-act="dup">⧉</button><button data-act="up">↑</button><button data-act="down">↓</button><button data-act="regen">↻</button><button data-act="del">✕</button></div></td>';
   tr.querySelectorAll('select').forEach(el=>el.onchange=()=>{s[el.dataset.k]=el.value;s.status='dirty';generated[i]=null;lastPackage=null;renderRows()});
   tr.querySelectorAll('button').forEach(b=>b.onclick=()=>rowAction(i,b.dataset.act));
@@ -40,65 +40,59 @@ function rowAction(i,a){
  if(a==='dup'){specs.splice(i+1,0,{...specs[i],status:'dirty'});generated.splice(i+1,0,null)}
  if(a==='up'&&i>0){[specs[i-1],specs[i]]=[specs[i],specs[i-1]];[generated[i-1],generated[i]]=[generated[i],generated[i-1]]}
  if(a==='down'&&i<specs.length-1){[specs[i+1],specs[i]]=[specs[i],specs[i+1]];[generated[i+1],generated[i]]=[generated[i],generated[i+1]]}
- if(a==='regen'){generated[i]=null;specs[i].status='dirty';generateOne(i).then(()=>{buildPackage();renderRows()})}
+ if(a==='regen'){generated[i]=null;specs[i].status='dirty';lastPackage=null;generateOne(i).then(()=>{buildPackage();setBusy(false);renderRows()})}
  lastPackage=null;renderRows();
 }
-function eHash(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-function eRng(seed){let a=eHash(seed);return()=>{a|=0;a=a+0x6D2B79F5|0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
-function shuffleE(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function shapeE(count,r){
- const cells=[{x:0,y:0}],used=new Set(['0,0']),edges=[];
- while(cells.length<count){const ai=Math.floor(r()*cells.length),d=DIRS[DIR_NAMES[Math.floor(r()*4)]],b=cells[ai],c={x:b.x+d.dx,y:b.y+d.dy},k=key(c.x,c.y);if(!used.has(k)){used.add(k);edges.push([ai,cells.length]);cells.push(c)}}
- const minx=Math.min(...cells.map(c=>c.x)),miny=Math.min(...cells.map(c=>c.y));return{cells:cells.map(c=>({x:c.x-minx,y:c.y-miny})),glueEdges:edges}
+const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
+let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
+function ensureWorker(){
+ if(genWorker)return genWorker;
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.2');
+ return genWorker;
 }
-function placeE(n,shape,occ,r){
- const mx=Math.max(...shape.map(c=>c.x)),my=Math.max(...shape.map(c=>c.y)),aa=[];
- for(let y=0;y<n-my;y++)for(let x=0;x<n-mx;x++)if(shape.every(c=>!occ.has(key(x+c.x,y+c.y))))aa.push({x,y});
- if(!aa.length)return null;const a=aa[Math.floor(r()*aa.length)];shape.forEach(c=>occ.add(key(a.x+c.x,a.y+c.y)));return a
+function setBusy(v){
+ genBusy=v;$('#generateAll').disabled=v;$('#cancelGenerate').hidden=!v;
+ rowsEl.querySelectorAll('button,select').forEach(el=>el.disabled=v);
 }
-function targetRange(d){const m=[[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,10],[10,12],[12,16]];return m[Math.max(1,Math.min(10,+d))-1]}
-function counts(s,r){
- const n=+s.size;
- const b=s.bricks==='auto'?Math.max(1,Math.min(5,Math.round((n*n)/6+r()*2))):+s.bricks;
- const wm=Math.max(0,n-2),w=s.walls==='auto'?Math.floor(r()*(wm+1)):Math.min(+s.walls,wm);
- return{b,w}
+function formatProgress(i,st){
+ const sec=(st.elapsedMs/1000).toFixed(1),best=st.bestMetric==null?'–':st.bestMetric;
+ log.textContent='Stage '+(i+1)+' generálása… '+st.attempts+'/'+GEN_LIMITS.maxAttempts+' jelölt · '+sec+' s · megoldható: '+st.solvable+' · legjobb: '+best;
 }
-function candidate(s,seed,attempt){
- const r=eRng(seed+'|'+attempt),n=+s.size,{b,w}=counts(s,r),occ=new Set(),objects=[];
- for(let i=0;i<w;i++){const free=[];for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(!occ.has(key(x,y)))free.push({x,y});if(!free.length)return null;const c=free[Math.floor(r()*free.length)];occ.add(key(c.x,c.y));objects.push({id:'w'+(i+1),type:'wall',x:c.x,y:c.y,cells:[{x:0,y:0}]})}
- let glueCells=0,remaining=b,bi=1;
- while(remaining>0){
-  let sz=1;
-  if(s.glue!=='none'&&remaining>=2&&((s.glue==='required'&&glueCells===0)||r()<.42))sz=Math.min(remaining,2+(r()<.28&&remaining>=3?1:0));
-  const sh=shapeE(sz,r),a=placeE(n,sh.cells,occ,r);if(!a)return null;
-  objects.push({id:'b'+bi++,type:'brick',x:a.x,y:a.y,cells:sh.cells,glueEdges:sh.glueEdges,glued:sz>1});if(sz>1)glueCells+=sz-1;remaining-=sz;
- }
- if(s.glue==='required'&&glueCells===0)return null;
- const free=[];for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(!occ.has(key(x,y)))free.push({x,y});if(!free.length)return null;
- const ball=free[Math.floor(r()*free.length)],dir=DIR_NAMES[Math.floor(r()*4)],exit=(dir==='left'||dir==='right')?{x:dir==='left'?0:n-1,y:Math.floor(r()*n),dir}:{x:Math.floor(r()*n),y:dir==='up'?0:n-1,dir};
- objects.unshift({id:'ball1',type:'ball',x:ball.x,y:ball.y,cells:[{x:0,y:0}]});
- return{width:n,height:n,exit,moves:0,won:false,objects,brickCount:b,wallCount:w,glueCount:glueCells}
+function runWorker(i){
+ const s=specs[i],requestId=++genRequest,seed=($('#scenarioId').value||'scenario')+'-'+(i+1);
+ return new Promise(resolve=>{
+  const w=ensureWorker();
+  const onMessage=e=>{
+   const m=e.data||{};if(m.requestId!==requestId)return;
+   if(m.type==='progress'){formatProgress(i,m.stats);return}
+   w.removeEventListener('message',onMessage);
+   if(m.type==='result'){resolve({ok:true,...m});return}
+   if(m.type==='cancelled'){resolve({ok:false,cancelled:true,...m});return}
+   if(m.type==='notFound'){resolve({ok:false,notFound:true,...m});return}
+   resolve({ok:false,error:m.message||'Ismeretlen generálási hiba.'});
+  };
+  w.addEventListener('message',onMessage);
+  w.postMessage({type:'generateScenarioStage',requestId,spec:s,seed,maxAttempts:GEN_LIMITS.maxAttempts,maxMs:GEN_LIMITS.maxMs});
+ });
+}
+function levelFromResult(i,best){
+ const s=specs[i],st=best.st,id=($('#scenarioId').value||'scenario')+'-'+String(i+1).padStart(2,'0');
+ return{state:st,metric:best.metric,attempt:best.attempt,level:{format:'ggrid-level',formatVersion:1,id,version:1,name:s.name,board:{width:st.width,height:st.height},exit:{x:st.exit.x,y:st.exit.y,direction:st.exit.dir},objects:st.objects.map(o=>{const q=structuredClone(o);delete q.glued;return q})}}
 }
 async function generateOne(i){
- const s=specs[i],seed=($('#scenarioId').value||'scenario')+'-'+(i+1),[lo,hi]=targetRange(s.difficulty),budget=+s.freeze;
- s.status='dirty';renderRows();log.textContent='Stage '+(i+1)+' generálása…';
- await new Promise(r=>setTimeout(r,0));
- let best=null;
- for(let a=0;a<9000;a++){
-  const st=candidate(s,seed,a);if(!st)continue;let normal=solve(st,30),metric=normal?.length??999,freezeAnalysis=null,accepted=false;
-  if(s.freezeRole==='required'){
-   if(budget<1||normal)continue;freezeAnalysis=analyzeOneFreeze(st,30);if(!freezeAnalysis.bestFreeze)continue;metric=freezeAnalysis.bestFreeze.totalMoves;accepted=metric>=lo&&metric<=hi;
-  }else{
-   if(!normal&&budget>0){freezeAnalysis=analyzeOneFreeze(st,30);if(freezeAnalysis.bestFreeze)metric=freezeAnalysis.bestFreeze.totalMoves}
-   if(metric!==999)accepted=metric>=lo&&metric<=hi;
-  }
-  if(metric!==999&&(!best||Math.abs(metric-(lo+hi)/2)<best.dist))best={st,metric,freezeAnalysis,dist:Math.abs(metric-(lo+hi)/2),attempt:a};
-  if(accepted){best={st,metric,freezeAnalysis,attempt:a};break}
+ const s=specs[i];s.status='working';renderRows();setBusy(true);
+ const result=await runWorker(i);
+ if(result.cancelled){s.status=generated[i]?'ok':'dirty';log.textContent='Generálás megszakítva a '+(i+1)+'. stage-nél.';return false}
+ if(result.ok){
+  generated[i]=levelFromResult(i,result.best);s.status='ok';
+  const st=result.stats;log.textContent='✓ Stage '+(i+1)+' kész · '+st.attempts+' jelölt · '+(st.elapsedMs/1000).toFixed(1)+' s · optimális/értékelt hossz: '+result.best.metric+'.';renderRows();return true
  }
- if(!best){s.status='bad';generated[i]=null;log.textContent='Stage '+(i+1)+': nem sikerült megfelelő pályát generálni.';return false}
- const id=($('#scenarioId').value||'scenario')+'-'+String(i+1).padStart(2,'0');
- generated[i]={state:best.st,metric:best.metric,attempt:best.attempt,level:{format:'ggrid-level',formatVersion:1,id,version:1,name:s.name,board:{width:best.st.width,height:best.st.height},exit:{x:best.st.exit.x,y:best.st.exit.y,direction:best.st.exit.dir},objects:best.st.objects.map(o=>{const q=structuredClone(o);delete q.glued;return q})}};
- s.status='ok';renderRows();return true
+ generated[i]=null;s.status='bad';
+ if(result.notFound){
+  const st=result.stats,b=result.best?.metric;
+  log.textContent='✕ Stage '+(i+1)+': a keresési korláton belül nem találtam minden feltételnek megfelelő pályát.\nCél nehézségi tartomány: '+st.target[0]+'–'+st.target[1]+' lépés · próbált jelöltek: '+st.attempts+' · idő: '+(st.elapsedMs/1000).toFixed(1)+' s · megoldható jelöltek: '+st.solvable+(b!=null?' · legközelebbi talált: '+b+' lépés':'')+'.\nMódosítsd a feltételeket, vagy használd a ↻ gombot az újrapróbáláshoz.'
+ }else log.textContent='✕ Stage '+(i+1)+': '+result.error;
+ renderRows();return false
 }
 function project(){return{format:'ggrid-scenario-project',formatVersion:1,editorVersion:1,engineVersion:'0.12.1',meta:{id:$('#scenarioId').value,name:$('#scenarioName').value,description:$('#scenarioDesc').value,version:+$('#scenarioVersion').value},stages:specs.map(({status,...s})=>s)}}
 function roman(n){return['','I','II','III','IV','V'][n]||String(n)}
@@ -118,9 +112,15 @@ function buildPackage(){
  return lastPackage
 }
 async function generateAll(){
- generated=Array(specs.length).fill(null);lastPackage=null;$('#generateAll').disabled=true;
- for(let i=0;i<specs.length;i++){const ok=await generateOne(i);if(!ok)break}
- $('#generateAll').disabled=false;const p=buildPackage();log.textContent=p?'Kész: '+specs.length+' stage generálva. A scenario exportálható vagy hozzáadható a játékhoz.':'A generálás nem fejeződött be.'
+ lastPackage=null;genCancelled=false;setBusy(true);
+ for(let i=0;i<specs.length;i++){
+  if(genCancelled)break;
+  if(generated[i]&&specs[i].status==='ok')continue;
+  const ok=await generateOne(i);if(!ok)break;
+ }
+ setBusy(false);const p=buildPackage();
+ if(p)log.textContent='✓ Kész: '+specs.length+' stage generálva és ellenőrizve. A scenario exportálható vagy hozzáadható a játékhoz.';
+ else if(!genCancelled&&!specs.some(s=>s.status==='bad'))log.textContent='A generálás nem fejeződött be.'
 }
 function validate(){
  const errs=[];if(!specs.length)errs.push('Nincs stage.');specs.forEach((s,i)=>{if(s.freeze==='0'&&s.freezeRole!=='none')errs.push('Stage '+(i+1)+': Freeze=0 mellett a szerep csak Nincs lehet.');if(s.freezeRole==='required'&&s.freeze==='0')errs.push('Stage '+(i+1)+': szükséges Freeze-hez legalább 1 Freeze kell.')});
@@ -152,7 +152,7 @@ function example(){
  ].map(s=>({...s,status:'empty'}));generated=Array(specs.length).fill(null);lastPackage=null;renderRows();summary.textContent='Az elveszett járat szerkezeti mintája betöltve.'
 }
 $('#addRow').onclick=()=>{specs.push(defaultSpec(specs.length));generated.push(null);renderRows()};
-$('#generateAll').onclick=generateAll;$('#validateAll').onclick=validate;$('#loadExample').onclick=example;
+$('#generateAll').onclick=generateAll;$('#cancelGenerate').onclick=()=>{genCancelled=true;genWorker?.postMessage({type:'cancel'});log.textContent+='\nMegszakítás…'};$('#validateAll').onclick=validate;$('#loadExample').onclick=example;
 $('#newProject').onclick=()=>{specs=[defaultSpec(0)];generated=[null];lastPackage=null;renderRows()};
 $('#saveProject').onclick=()=>download(project(),($('#scenarioId').value||'scenario')+'.ggrid-project.json');
 $('#downloadScenario').onclick=()=>lastPackage&&download(lastPackage,($('#scenarioId').value||'scenario')+'.ggrid-scenario.json');
