@@ -1,0 +1,107 @@
+{
+  "format": "ggrid-scenario",
+  "formatVersion": 1,
+  "id": "lost-mine",
+  "version": 1,
+  "name": "Az elveszett járat",
+  "description": "Hat pályás próbakaland a raktártól az elhagyott bányáig.",
+  "rules": [
+    "Juttasd ki az összes golyót.",
+    "A téglák nem hagyhatják el a pályát."
+  ],
+  "defaults": {
+    "theme": {
+      "src": "../../themes/classic/theme.json",
+      "version": 1
+    },
+    "abilities": [],
+    "timer": null,
+    "completion": {
+      "type": "allBallsExited"
+    }
+  },
+  "chapters": [
+    {
+      "id": "warehouse",
+      "name": "I. fejezet – A raktár",
+      "stages": [
+        {
+          "id": "stage-01",
+          "name": "Alapok",
+          "level": {
+            "src": "../../levels/lost-mine-01.json",
+            "version": 1
+          }
+        },
+        {
+          "id": "stage-02",
+          "name": "Kerülőút",
+          "level": {
+            "src": "../../levels/lost-mine-02.json",
+            "version": 1
+          }
+        },
+        {
+          "id": "stage-03",
+          "name": "Freeze próba",
+          "level": {
+            "src": "../../levels/lost-mine-03.json",
+            "version": 1
+          },
+          "abilities": [
+            {
+              "type": "freeze",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mine",
+      "name": "II. fejezet – A bánya",
+      "theme": {
+        "src": "../../themes/mine/theme.json",
+        "version": 1
+      },
+      "abilities": [
+        {
+          "type": "freeze",
+          "count": 1
+        }
+      ],
+      "stages": [
+        {
+          "id": "stage-04",
+          "name": "Mélyebbre",
+          "level": {
+            "src": "../../levels/lost-mine-04.json",
+            "version": 1
+          }
+        },
+        {
+          "id": "stage-05",
+          "name": "Időpróba",
+          "level": {
+            "src": "../../levels/lost-mine-05.json",
+            "version": 1
+          },
+          "timer": {
+            "mode": "countdown",
+            "seconds": 90,
+            "onExpire": "fail"
+          }
+        },
+        {
+          "id": "stage-06",
+          "name": "Ragasztott test",
+          "level": {
+            "src": "../../levels/lost-mine-06.json",
+            "version": 1
+          }
+        }
+      ]
+    }
+  ],
+  "scoring": null
+}
