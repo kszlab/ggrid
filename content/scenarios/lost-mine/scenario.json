@@ -2,7 +2,7 @@
   "format": "ggrid-scenario",
   "formatVersion": 1,
   "id": "lost-mine",
-  "version": 1,
+  "version": 2,
   "name": "Az elveszett járat",
   "description": "Hat pályás próbakaland a raktártól az elhagyott bányáig.",
   "rules": [
@@ -54,6 +54,12 @@
               "count": 1
             }
           ]
+        }
+      ],
+      "abilities": [
+        {
+          "type": "freeze",
+          "count": 1
         }
       ]
     },
