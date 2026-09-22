@@ -353,3 +353,19 @@ body.scenario-mode #playChoose{display:none!important}
 .size-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}.size-picker button{min-width:0;min-height:34px;padding:0 3px;border:0;border-radius:9px;background:#ffffff0c;color:#d9e8f3;font-size:.69rem;font-weight:800}.size-picker button.active{background:#e8f5ff;color:#10273a;box-shadow:0 2px 8px #0005}
 @media(max-width:430px){.quick-row:has(.size-picker){grid-template-columns:62px 1fr}.size-picker{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,34px)}}
 .board[style*="5 / 6"],.board[style*="5 / 7"],.board[style*="5 / 8"]{width:100%;height:auto}
+
+
+/* v0.12.26 – integrated embossed edge controls, based on the hand sketch */
+.edge-control{overflow:visible;border:1px solid #ffffff16;background:linear-gradient(145deg,#ffffff0b,#00000013);color:inherit;box-shadow:inset 1px 1px 1px #ffffff18,inset -2px -2px 4px #0005,0 2px 5px #0003;border-radius:22px;opacity:.72;transition:opacity .12s,filter .12s,transform .12s}
+.edge-up,.edge-down{left:18%;width:64%;height:42px;border-radius:50% / 75%}
+.edge-left,.edge-right{top:18%;height:64%;width:42px;border-radius:75% / 50%}
+.edge-up{top:8px}.edge-down{bottom:8px}.edge-left{left:8px}.edge-right{right:8px}
+.emboss-arrow{position:relative;display:block;width:20px;height:20px;filter:drop-shadow(1px 2px 1px #0008) drop-shadow(-1px -1px 1px #ffffff3d)}
+.emboss-arrow::before{content:"";position:absolute;left:7px;top:7px;width:7px;height:12px;border-radius:2px;background:linear-gradient(145deg,#ffffff55,#00000032);box-shadow:inset 1px 1px 1px #ffffff66,inset -1px -1px 1px #0008}
+.emboss-arrow::after{content:"";position:absolute;left:2px;top:0;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid #ffffff35;filter:drop-shadow(0 -1px 0 #ffffff42)}
+.edge-right .emboss-arrow{transform:rotate(90deg)}.edge-down .emboss-arrow{transform:rotate(180deg)}.edge-left .emboss-arrow{transform:rotate(-90deg)}
+.edge-control:active,.edge-control.pressed{opacity:1;background:linear-gradient(145deg,#ffffff12,#0000001e);box-shadow:inset 2px 2px 5px #0007,inset -1px -1px 2px #ffffff20;filter:brightness(1.22)}
+.edge-control:active .emboss-arrow,.edge-control.pressed .emboss-arrow{filter:drop-shadow(0 1px 1px #0008);transform:translateY(1px)}
+.edge-right:active .emboss-arrow,.edge-right.pressed .emboss-arrow{transform:rotate(90deg) translateY(1px)}.edge-down:active .emboss-arrow,.edge-down.pressed .emboss-arrow{transform:rotate(180deg) translateY(1px)}.edge-left:active .emboss-arrow,.edge-left.pressed .emboss-arrow{transform:rotate(-90deg) translateY(1px)}
+body[data-scene="clockwork-sanctum"] .edge-control,body[data-scene="neon-noir"] .edge-control{background:linear-gradient(145deg,#ffffff0b,#00000018);border-color:#ffffff1c;color:inherit;box-shadow:inset 1px 1px 1px #ffffff1e,inset -2px -2px 4px #0007,0 2px 5px #0004}
+@media(max-height:760px){.edge-up,.edge-down{height:38px}.edge-left,.edge-right{width:38px}}
