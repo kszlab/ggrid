@@ -1,0 +1,58 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "moonlit-zen",
+  "version": 1,
+  "name": "HOLDKERT // Koi szentély",
+  "description": "SHOWCASE: holdfényes japán vízikert, koi szellem, lámpások, sziklák és torii-kapu.",
+  "semantic": {
+    "ball": "Koi szellem",
+    "brick": "Úszó kert",
+    "wall": "Kőlámpás",
+    "exit": "Torii kapu",
+    "freeze": "Csend"
+  },
+  "colors": {
+    "background": "#07111c",
+    "board": "#102a32",
+    "cell1": "#163943",
+    "cell2": "#12323b",
+    "accent": "#ff9b8d",
+    "ball1": "#fff5d6",
+    "ball2": "#ff806e",
+    "brick1": "#38574a",
+    "brick2": "#1c352d",
+    "wall1": "#9da49d",
+    "wall2": "#414944"
+  },
+  "scene": {
+    "type": "moonlit-zen",
+    "tier": "showcase",
+    "tagline": "MOON GARDEN // 静",
+    "layers": [
+      "moon",
+      "mountains",
+      "water",
+      "lotus",
+      "fireflies",
+      "mist"
+    ],
+    "exitStyle": "torii-gate"
+  },
+  "audio": {
+    "profile": "zen",
+    "ambient": {
+      "type": "procedural",
+      "name": "Víz + halk pentatonikus hangkép",
+      "enabled": true,
+      "volume": 0.05
+    },
+    "events": {
+      "move": "water-drop",
+      "blocked": "stone",
+      "freeze": "bell",
+      "exit": "gate-wind",
+      "win": "temple-chime"
+    }
+  }
+}
