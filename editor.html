@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="hu"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GGrid Scenario Editor v0.1</title>
+<link rel="stylesheet" href="css/editor.css?v=0.1"></head>
+<body>
+<header><div><h1>GGrid Scenario Editor</h1><div class="version">Editor v0.1 · GGrid v0.12.1</div></div><a href="index.html">← Játék</a></header>
+<main>
+<section class="card scenario-meta">
+ <h2>Forgatókönyv</h2>
+ <div class="meta-grid">
+  <label>Azonosító<select id="scenarioId"><option value="custom-01">custom-01</option><option value="lost-mine">lost-mine</option></select></label>
+  <label>Név<select id="scenarioName"><option>Az elveszett járat</option><option>Saját forgatókönyv 1</option><option>GGrid próbakampány</option></select></label>
+  <label>Leírás<select id="scenarioDesc"><option>Hat pályás próbakaland a raktártól az elhagyott bányáig.</option><option>GGrid egyedi próbakampány.</option><option>Fokozatos nehézségű logikai kampány.</option></select></label>
+  <label>Verzió<select id="scenarioVersion"><option>1</option><option selected>2</option><option>3</option></select></label>
+ </div>
+ <div class="toolbar">
+  <button id="loadExample">Minta: Az elveszett járat</button>
+  <button id="newProject">Új projekt</button>
+  <label class="filebtn">Projekt/scenario import<input id="importFile" type="file" accept=".json,.ggrid-project,.ggrid-scenario"></label>
+ </div>
+</section>
+
+<section class="card">
+ <div class="section-head"><div><h2>Stage-ek</h2><p>Minden cella kötött értékkészletből választható. Egy sor = egy generálandó pálya.</p></div><button id="addRow">＋ Új pálya</button></div>
+ <div class="table-wrap"><table><thead><tr>
+  <th>#</th><th>Fejezet</th><th>Méret</th><th>Neh.</th><th>Tégla</th><th>Fal</th><th>Ragasztás</th><th>Freeze</th><th>Freeze szerepe</th><th>Idő</th><th>Theme</th><th>Állapot</th><th></th>
+ </tr></thead><tbody id="rows"></tbody></table></div>
+</section>
+
+<section class="card actions">
+ <div><h2>Generálás és ellenőrzés</h2><p id="summary">Nincs generált forgatókönyv.</p></div>
+ <div class="toolbar">
+  <button id="generateAll" class="primary">⚙ Forgatókönyv generálása</button>
+  <button id="validateAll">✓ Ellenőrzés</button>
+  <button id="saveProject">Projekt export</button>
+  <button id="downloadScenario" disabled>Scenario export</button>
+  <button id="installScenario" disabled>＋ Hozzáadás ehhez a játékhoz</button>
+ </div>
+ <div id="log" class="log"></div>
+</section>
+</main>
+<script src="js/game-core.js"></script>
+<script src="js/solver.js"></script>
+<script src="js/generator.js"></script>
+<script src="js/scenario-editor.js?v=0.1"></script>
+</body></html>
