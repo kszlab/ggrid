@@ -1,0 +1,42 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "cybergrid",
+  "version": 1,
+  "name": "Neon Cybergrid",
+  "colors": {
+    "background": "#080719",
+    "board": "#10102b",
+    "wrap": "#151137",
+    "cell1": "#191945",
+    "cell2": "#0d0d28",
+    "accent": "#ff4df0",
+    "ball1": "#ffffff",
+    "ball2": "#55f7ff",
+    "ball3": "#126a88",
+    "brick1": "#9b36d1",
+    "brick2": "#511b87",
+    "brickEdge": "#ff72ef",
+    "wall1": "#293064",
+    "wall2": "#111636"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Fénygömb"
+    },
+    "brick": {
+      "name": "Adatblokk"
+    },
+    "wall": {
+      "name": "Tűzfal"
+    },
+    "exit": {
+      "name": "Portál"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Rendszerfagyasztás"
+    }
+  }
+}
