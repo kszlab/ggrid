@@ -167,7 +167,7 @@ document.querySelectorAll('[data-hold-dir]').forEach(b=>{
  b.addEventListener('lostpointercapture',stopHold);b.addEventListener('contextmenu',e=>e.preventDefault());
 });
 
-/* ===== v0.10.7 MOBILE TILT INPUT – relative H/V transitions =====
+/* ===== v0.10.9 MOBILE TILT INPUT – relative H/V transitions =====
    Calibration-derived controller: DeviceMotion gravity is converted to two physical
    tilt angles. Each accepted direction becomes the next relative reference, so direct
    RIGHT→DOWN etc. transitions do not require returning to neutral. */
@@ -200,7 +200,7 @@ const MotionControl=(()=>{
   if(!g)return null;const len=Math.hypot(g.x,g.y,g.z);if(!len)return null;
   const x=g.x/len,y=g.y/len,z=g.z/len;
   /* H: side tilt, V: fore/aft tilt. atan2 keeps the mapping usable far from horizontal. */
-  const h=Math.atan2(x,Math.hypot(y,z))*57.2957795;
+  const h=Math.atan2(-x,Math.hypot(y,z))*57.2957795;
   const v=Math.atan2(y,z)*57.2957795;
   return screenVector(h,v);
  }
