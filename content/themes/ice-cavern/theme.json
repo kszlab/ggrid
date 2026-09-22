@@ -1,0 +1,42 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "ice-cavern",
+  "version": 1,
+  "name": "Jéglabirintus",
+  "colors": {
+    "background": "#08233a",
+    "board": "#477e9b",
+    "wrap": "#1d506d",
+    "cell1": "#8fc9dc",
+    "cell2": "#477e9b",
+    "accent": "#d9fbff",
+    "ball1": "#ffffff",
+    "ball2": "#b9f3ff",
+    "ball3": "#3b91bd",
+    "brick1": "#83d2e8",
+    "brick2": "#4ba5c3",
+    "brickEdge": "#e4fcff",
+    "wall1": "#456878",
+    "wall2": "#263f4d"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Jéggömb"
+    },
+    "brick": {
+      "name": "Jégtömb"
+    },
+    "wall": {
+      "name": "Fagyott szikla"
+    },
+    "exit": {
+      "name": "Jégkapu"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Mélyfagyasztás"
+    }
+  }
+}
