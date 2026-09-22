@@ -1,0 +1,55 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "lost-mine-04",
+  "version": 1,
+  "name": "Mélyebbre",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 1,
+    "y": 3,
+    "direction": "down"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 1,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "brick1",
+      "type": "brick",
+      "x": 1,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "wall1",
+      "type": "wall",
+      "x": 0,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}
