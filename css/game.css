@@ -369,3 +369,33 @@ body.scenario-mode #playChoose{display:none!important}
 .edge-right:active .emboss-arrow,.edge-right.pressed .emboss-arrow{transform:rotate(90deg) translateY(1px)}.edge-down:active .emboss-arrow,.edge-down.pressed .emboss-arrow{transform:rotate(180deg) translateY(1px)}.edge-left:active .emboss-arrow,.edge-left.pressed .emboss-arrow{transform:rotate(-90deg) translateY(1px)}
 body[data-scene="clockwork-sanctum"] .edge-control,body[data-scene="neon-noir"] .edge-control{background:linear-gradient(145deg,#ffffff0b,#00000018);border-color:#ffffff1c;color:inherit;box-shadow:inset 1px 1px 1px #ffffff1e,inset -2px -2px 4px #0007,0 2px 5px #0004}
 @media(max-height:760px){.edge-up,.edge-down{height:38px}.edge-left,.edge-right{width:38px}}
+
+
+/* v0.12.27 – Theme v2 / Full UI Skin reference implementation: HOLDKERT */
+body.full-ui-skin[data-scene="moonlit-zen"]{background:
+ radial-gradient(circle at 78% 8%,#f6e5bd 0 2.8%,#f6e5bd22 3% 6%,transparent 6.2%),
+ radial-gradient(ellipse at 18% 15%,#9a557052,transparent 18%),
+ linear-gradient(#07111c 0 38%,#102b34 70%,#07151c)}
+body.full-ui-skin[data-scene="moonlit-zen"] main{max-width:620px}
+body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding:52px 50px;background:
+ radial-gradient(circle at 8% 12%,#ff9fb455 0 1.2%,transparent 1.4%),
+ radial-gradient(circle at 91% 18%,#ffb1c055 0 1%,transparent 1.2%),
+ linear-gradient(#152d38,#0a2028);border:1px solid #8ba5ad44;border-radius:24px;box-shadow:0 18px 42px #000b,inset 0 0 70px #02090e}
+body.full-ui-skin[data-scene="moonlit-zen"] .board{border:2px solid #829ba1;background:linear-gradient(#123642dd,#0b2934dd);box-shadow:0 8px 22px #0009,inset 0 0 28px #80d8dd0b}
+body.full-ui-skin[data-scene="moonlit-zen"] .cell{border-color:#b8d3d426;background:#ffffff05}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-control{opacity:.96;border:1px solid #9bb0b766;background:linear-gradient(145deg,#405462,#243742 58%,#172a34);box-shadow:inset 1px 1px 2px #d8eef04a,inset -3px -3px 6px #061018aa,0 4px 9px #0008}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-up,body.full-ui-skin[data-scene="moonlit-zen"] .edge-down{left:15%;width:70%;height:42px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-left,body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{top:15%;height:70%;width:42px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:7px;border-radius:18px 18px 6px 6px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-down{bottom:7px;border-radius:6px 6px 18px 18px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-left{left:7px;border-radius:18px 6px 6px 18px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{right:7px;border-radius:6px 18px 18px 6px}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow{filter:drop-shadow(1px 2px 1px #000b) drop-shadow(-1px -1px 1px #fff6)}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow::before{background:linear-gradient(145deg,#ffe5bd,#a96f51);box-shadow:inset 1px 1px 1px #fff9,inset -1px -1px 2px #4b271dcc}
+body.full-ui-skin[data-scene="moonlit-zen"] .emboss-arrow::after{border-bottom-color:#f2c69e;filter:drop-shadow(0 -1px #fff8)}
+body.full-ui-skin[data-scene="moonlit-zen"] .hud-row{padding:7px 6px;box-sizing:border-box;border-top:1px solid #78929b35;background:linear-gradient(90deg,#0b1a23cc,#102a34cc);border-radius:14px}
+body.full-ui-skin[data-scene="moonlit-zen"] .play-action,body.full-ui-skin[data-scene="moonlit-zen"] #freeze.play-action{background:linear-gradient(145deg,#38505f,#1d303b);border-color:#9db2ba4f;box-shadow:inset 1px 1px 2px #d9edf13b,inset -2px -2px 4px #06101899,0 3px 7px #0007;color:#ffe0bd}
+body.full-ui-skin[data-scene="moonlit-zen"] #freeze.freeze-action{color:#9beaff}
+body.full-ui-skin[data-scene="moonlit-zen"] .score-box{background:linear-gradient(#091923,#07141c);border-color:#78949f55;box-shadow:inset 0 0 16px #0008}
+body.full-ui-skin[data-scene="moonlit-zen"] .score-box span{color:#c9d7da;opacity:.65}
+@media(max-height:760px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding:46px 44px}}
