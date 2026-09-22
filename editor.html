@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GGrid Scenario Editor v0.3</title>
-<link rel="stylesheet" href="css/editor.css?v=0.3"></head>
+<title>GGrid Scenario Editor v0.4</title>
+<link rel="stylesheet" href="css/editor.css?v=0.4"></head>
 <body>
-<header><div><h1>GGrid Scenario Editor</h1><div class="version">Editor v0.3 · GGrid v0.12.3</div></div><a href="index.html">← Játék</a></header>
+<header><div><h1>GGrid Scenario Editor</h1><div class="version">Editor v0.4 · GGrid v0.12.5</div></div><a href="index.html">← Játék</a></header>
 <main>
 <section class="card scenario-meta">
  <h2>Forgatókönyv</h2>
@@ -39,6 +39,8 @@
   <button id="publishBundle" disabled>📦 Publikálási csomag</button>
   <button id="installScenario" disabled>＋ Hozzáadás ehhez a játékhoz</button>
  </div>
+ <button id="manageLocal">🧹 Helyi scenario-k kezelése</button>
+  <div id="localScenarios" class="publish-info" hidden></div>
  <div id="publishInfo" class="publish-info">A „Publikálási csomag” a GitHub Scenario Library számára készít ellenőrzött csomagot. Ettől még nem kerül automatikusan a szerverre.</div>
  <div id="log" class="log"></div>
 </section>
@@ -46,5 +48,5 @@
 <script src="js/game-core.js"></script>
 <script src="js/solver.js"></script>
 <script src="js/generator.js"></script>
-<script src="js/scenario-editor.js?v=0.3"></script>
+<script src="js/scenario-editor.js?v=0.4"></script>
 </body></html>
