@@ -1,4 +1,4 @@
-/* ===== v0.12.0 APPLICATION UI SHELL ===== */
+/* ===== v0.12.18 APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel');
  const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
@@ -19,7 +19,7 @@ const AppUI=(()=>{
  function closeSettings(){settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
  function freePlayFromHome(){
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click();return}
-  document.body.classList.remove('scenario-mode');document.body.dataset.theme='classic';enterGame();
+  document.body.classList.remove('scenario-mode');ScenarioMode?.loadFreeTheme?.();enterGame();
  }
  document.querySelector('#homeFreePlay').addEventListener('click',freePlayFromHome);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
