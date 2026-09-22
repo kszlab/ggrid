@@ -100,6 +100,24 @@
       "src": "neon-noir/theme.json",
       "experimental": true,
       "showcase": true
+    },
+    {
+      "id": "microchip-lab",
+      "version": 1,
+      "name": "MICROCORE // Circuit Lab",
+      "description": "SHOWCASE: nyomtatott áramköri lap világa, elektron-maggal és IC modulokkal.",
+      "src": "microchip-lab/theme.json",
+      "experimental": true,
+      "showcase": true
+    },
+    {
+      "id": "moonlit-zen",
+      "version": 1,
+      "name": "HOLDKERT // Koi szentély",
+      "description": "SHOWCASE: holdfényes japán vízikert koi szellemmel és torii-kapuval.",
+      "src": "moonlit-zen/theme.json",
+      "experimental": true,
+      "showcase": true
     }
   ]
 }
