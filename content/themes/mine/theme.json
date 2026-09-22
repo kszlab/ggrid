@@ -1,0 +1,30 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "mine",
+  "version": 1,
+  "name": "Elhagyott bánya",
+  "colors": {
+    "background": "#241b14",
+    "board": "#3a3026"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Csille"
+    },
+    "brick": {
+      "name": "Láda"
+    },
+    "wall": {
+      "name": "Szikla"
+    },
+    "exit": {
+      "name": "Tárnakijárat"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Fék"
+    }
+  }
+}
