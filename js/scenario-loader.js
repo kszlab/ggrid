@@ -1,4 +1,4 @@
-/* ===== v0.11.2 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.0 SCENARIO + THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
@@ -59,7 +59,7 @@ const ScenarioMode=(()=>{
   const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');applyTheme(theme);
   const lvl=await loadRef(effective.stage.level,effective.base,'ggrid-level'),s=toState(lvl);
   state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentCode='Scenario: '+scenario.id+' / '+effective.stage.id;
-  active=true;newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
+  active=true;document.body.classList.add('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
   try{localStorage.setItem(progressKey,JSON.stringify({scenarioId:scenario.id,version:scenario.version,chapterIndex,stageIndex}))}catch(_){}
  }
  async function nextStage(){
@@ -84,7 +84,7 @@ const ScenarioMode=(()=>{
  }
  function close(){panel.hidden=true;MotionControl.resume()}
  async function start(){if(!scenario)return;panel.hidden=true;try{await loadStage(0,0)}catch(e){showError(e);active=false;MotionControl.resume()}}
- function freePlay(){active=false;scenario=null;effective=null;stopTimer();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;document.body.dataset.theme='classic';info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';changeLevelProfile();MotionControl.resume()}
+ function freePlay(){active=false;scenario=null;effective=null;stopTimer();document.body.classList.remove('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;document.body.dataset.theme='classic';info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';changeLevelProfile();MotionControl.resume()}
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir){const wasWon=!!state?.won;baseMove(dir);if(active&&!wasWon)setTimeout(onWin,180)};
  return{open,get active(){return active}};
