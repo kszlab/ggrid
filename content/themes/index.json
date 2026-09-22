@@ -1,0 +1,55 @@
+{
+  "format": "ggrid-theme-index",
+  "formatVersion": 1,
+  "themes": [
+    {
+      "id": "classic",
+      "version": 1,
+      "name": "GGrid Classic",
+      "description": "Az eredeti GGrid megjelenés.",
+      "src": "classic/theme.json"
+    },
+    {
+      "id": "mine",
+      "version": 1,
+      "name": "Elhagyott bánya",
+      "description": "Sötét tárnák, sziklák és faládák.",
+      "src": "mine/theme.json"
+    },
+    {
+      "id": "space-station",
+      "version": 1,
+      "name": "Űrállomás",
+      "description": "Energiagömbök, teherkonténerek és légzsilip.",
+      "src": "space-station/theme.json"
+    },
+    {
+      "id": "ancient-temple",
+      "version": 1,
+      "name": "Ősi templom",
+      "description": "Kristálygömbök, faragott kőtömbök és rúnakapuk.",
+      "src": "ancient-temple/theme.json"
+    },
+    {
+      "id": "ice-cavern",
+      "version": 1,
+      "name": "Jéglabirintus",
+      "description": "Jéggömbök és fagyott akadályok egy kék barlangban.",
+      "src": "ice-cavern/theme.json"
+    },
+    {
+      "id": "cybergrid",
+      "version": 1,
+      "name": "Neon Cybergrid",
+      "description": "Fénygömbök, adatblokkok és digitális portálok.",
+      "src": "cybergrid/theme.json"
+    },
+    {
+      "id": "pirate-ship",
+      "version": 1,
+      "name": "Kalózhajó",
+      "description": "Ágyúgolyók, faládák és egy öreg hajó raktere.",
+      "src": "pirate-ship/theme.json"
+    }
+  ]
+}
