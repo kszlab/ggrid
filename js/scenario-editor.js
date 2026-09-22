@@ -1,4 +1,4 @@
-/* GGrid Scenario Editor v0.31 – GGrid v0.12.33 */
+/* GGrid Scenario Editor v0.32 – GGrid v0.12.34 */
 (()=>{
 const $=s=>document.querySelector(s), rowsEl=$('#rows'), log=$('#log'), summary=$('#summary');
 const STORE='ggrid.local.scenarios.v1',THEME_SELECTION='ggrid.theme-lab.enabled.v1';
@@ -48,7 +48,7 @@ const GEN_LIMITS={maxAttempts:2500,maxMs:12000};
 let genWorker=null,genRequest=0,genBusy=false,genCancelled=false;
 function ensureWorker(){
  if(genWorker)return genWorker;
- genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.33');
+ genWorker=new Worker('js/scenario-editor-worker.js?v=0.12.34');
  return genWorker;
 }
 function setBusy(v){
