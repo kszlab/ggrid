@@ -1,7 +1,7 @@
-/* GGrid Scene Renderer 2 – v0.12.13
+/* GGrid Scene Renderer 2 – v0.12.14
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
- let theme=null,wrap=null,back=null,front=null,frame=null;
+ let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
  function ensure(){
   wrap=document.querySelector('.board-wrap');if(!wrap)return;
   if(!back){back=document.createElement('div');back.className='scene-layer scene-back';wrap.prepend(back)}
@@ -54,17 +54,35 @@ const SceneRenderer=(()=>{
    else if(o.type==='wall')el.innerHTML='<i class="tower-light"></i><b>HVAC</b>';
   }
  }
+ function clearComponentOverlays(){componentOverlays.forEach(el=>el.remove());componentOverlays=[]}
+ function buildComponentOverlays(board){
+  clearComponentOverlays();const type=theme?.scene?.type;if(!type)return;
+  for(const o of (state?.objects||[])){
+   if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
+   const els=[...board.querySelectorAll('.piece')].filter(el=>String(el.dataset.id)===String(o.id));if(!els.length)continue;
+   const rects=els.map(el=>({el,l:parseFloat(el.style.left)||0,t:parseFloat(el.style.top)||0,w:el.offsetWidth,h:el.offsetHeight}));
+   const minL=Math.min(...rects.map(r=>r.el.offsetLeft)),minT=Math.min(...rects.map(r=>r.el.offsetTop));
+   const maxR=Math.max(...rects.map(r=>r.el.offsetLeft+r.el.offsetWidth)),maxB=Math.max(...rects.map(r=>r.el.offsetTop+r.el.offsetHeight));
+   const ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=o.id;
+   ov.style.left=minL+'px';ov.style.top=minT+'px';ov.style.width=(maxR-minL)+'px';ov.style.height=(maxB-minT)+'px';
+   if(type==='clockwork-sanctum')ov.innerHTML='<i class="co-rail"></i><i class="co-gear cg1"></i><i class="co-gear cg2"></i><b>CHRONO ENGINE</b>';
+   if(type==='neon-noir')ov.innerHTML='<i class="co-window cw1"></i><i class="co-window cw2"></i><i class="co-thruster"></i><b>HEAVY CARGO</b><em>C-47</em>';
+   board.append(ov);componentOverlays.push(ov);
+  }
+ }
  function afterBoardRender(board){
-  if(!theme)return;decorateExit(board.querySelector('.exit'));
+  boardRef=board;if(!theme)return;decorateExit(board.querySelector('.exit'));
   const byId=new Map((state?.objects||[]).map(o=>[String(o.id),o]));
   board.querySelectorAll('.piece').forEach(el=>{const o=byId.get(String(el.dataset.id));if(o)decoratePiece(el,o,+(el.dataset.cellkey?.split(':')[1]||0))});
+  requestAnimationFrame(()=>buildComponentOverlays(board));
  }
  function setDirection(dir){if(!wrap)return;wrap.dataset.moveDir=dir||''}
  function event(kind){
   ensure();if(!wrap||!theme)return;
+  if(kind==='move'&&boardRef)requestAnimationFrame(()=>buildComponentOverlays(boardRef));
   wrap.classList.remove('fx-move','fx-blocked','fx-freeze','fx-exit','fx-win');void wrap.offsetWidth;
   wrap.classList.add('fx-'+kind);setTimeout(()=>wrap?.classList.remove('fx-'+kind),kind==='win'?900:420);
  }
- function clear(){theme=null;ensure();document.body.dataset.scene='';wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
+ function clear(){clearComponentOverlays();theme=null;ensure();document.body.dataset.scene='';wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
  return{apply,afterBoardRender,event,setDirection,clear,get theme(){return theme}};
 })();
