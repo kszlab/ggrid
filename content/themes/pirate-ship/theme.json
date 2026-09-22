@@ -1,0 +1,42 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "pirate-ship",
+  "version": 1,
+  "name": "Kalózhajó",
+  "colors": {
+    "background": "#17100b",
+    "board": "#6b4427",
+    "wrap": "#3b2719",
+    "cell1": "#8a5a31",
+    "cell2": "#5b371f",
+    "accent": "#f1c35e",
+    "ball1": "#d8d8d8",
+    "ball2": "#5d6265",
+    "ball3": "#202326",
+    "brick1": "#9a5a29",
+    "brick2": "#6d391a",
+    "brickEdge": "#d6a453",
+    "wall1": "#59402c",
+    "wall2": "#322419"
+  },
+  "pieces": {
+    "ball": {
+      "name": "Ágyúgolyó"
+    },
+    "brick": {
+      "name": "Faláda"
+    },
+    "wall": {
+      "name": "Hajófal"
+    },
+    "exit": {
+      "name": "Rakodónyílás"
+    }
+  },
+  "abilities": {
+    "freeze": {
+      "name": "Horgony"
+    }
+  }
+}
