@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GGrid Scenario Editor v0.5</title>
-<link rel="stylesheet" href="css/editor.css?v=0.5"></head>
+<title>GGrid Scenario Editor v0.6</title>
+<link rel="stylesheet" href="css/editor.css?v=0.6"></head>
 <body>
-<header><div><h1>GGrid Scenario Editor</h1><div class="version">Editor v0.5 · GGrid v0.12.6</div></div><a href="index.html">← Játék</a></header>
+<header><div><h1>GGrid Scenario Editor</h1><div class="version">Editor v0.6 · GGrid v0.12.8</div></div><a href="index.html">← Játék</a></header>
 <main>
 <section class="card scenario-meta">
  <h2>Forgatókönyv</h2>
  <div class="meta-grid">
-  <label>Azonosító<select id="scenarioId"><option value="custom-01">custom-01</option><option value="lost-mine">lost-mine</option></select></label>
-  <label>Név<select id="scenarioName"><option>Az elveszett járat</option><option>Saját forgatókönyv 1</option><option>GGrid próbakampány</option></select></label>
-  <label>Leírás<select id="scenarioDesc"><option>Hat pályás próbakaland a raktártól az elhagyott bányáig.</option><option>GGrid egyedi próbakampány.</option><option>Fokozatos nehézségű logikai kampány.</option></select></label>
+  <label>Azonosító<input id="scenarioId" value="custom-01" maxlength="48" pattern="[a-z0-9-]+" placeholder="pl. urallomas-01"></label>
+  <label>Név<input id="scenarioName" value="Saját forgatókönyv 1" maxlength="80"></label>
+  <label>Leírás<input id="scenarioDesc" value="GGrid egyedi próbakampány." maxlength="180"></label>
   <label>Verzió<select id="scenarioVersion"><option>1</option><option selected>2</option><option>3</option></select></label>
  </div>
  <div class="toolbar">
@@ -49,5 +49,5 @@
 <script src="js/game-core.js"></script>
 <script src="js/solver.js"></script>
 <script src="js/generator.js"></script>
-<script src="js/scenario-editor.js?v=0.5"></script>
+<script src="js/scenario-editor.js?v=0.6"></script>
 </body></html>
