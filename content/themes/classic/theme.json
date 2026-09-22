@@ -1,0 +1,11 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "classic",
+  "version": 1,
+  "name": "GGrid Classic",
+  "colors": {
+    "background": "#10283d",
+    "board": "#2b3034"
+  }
+}
