@@ -430,3 +430,31 @@ body.full-ui-skin[data-scene="moonlit-zen"] .play-action,body.full-ui-skin[data-
 body.full-ui-skin[data-scene="moonlit-zen"] .score-box{height:50px}
 @media(max-width:430px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding-left:50px;padding-right:50px}}
 @media(max-height:760px){body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{padding-top:76px}body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:70px}body.full-ui-skin[data-scene="moonlit-zen"] .edge-left,body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{top:118px}}
+
+
+/* v0.12.31 – Full UI Skin geometry: scene follows the real board aspect ratio */
+body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{
+ --skin-side:50px;
+ --skin-top:86px;
+ --skin-bottom:58px;
+ padding:var(--skin-top) var(--skin-side) var(--skin-bottom);
+}
+body.full-ui-skin[data-scene="moonlit-zen"] .board{width:100%;height:auto}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 52px)}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-down{bottom:6px}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-left,
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-right{
+ top:var(--skin-top);
+ bottom:var(--skin-bottom);
+ height:auto;
+}
+body.full-ui-skin[data-scene="moonlit-zen"] .scene-back,
+body.full-ui-skin[data-scene="moonlit-zen"] .scene-frame,
+body.full-ui-skin[data-scene="moonlit-zen"] .scene-front{inset:0}
+@media(max-width:430px){
+ body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-side:48px}
+}
+@media(max-height:760px){
+ body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-top:76px;--skin-side:44px;--skin-bottom:52px}
+ body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 48px)}
+}
