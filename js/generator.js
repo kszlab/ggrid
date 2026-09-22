@@ -80,10 +80,21 @@ function makeCode(w,h,difficulty,seed,prefix='G'){return w===h?`${prefix}${w}${D
 function parseCode(raw){const s=String(raw).trim().toUpperCase(),m=s.match(/^([BGW])([345])([EMH])-([0-9A-Z]{1,7})$/);if(m)return{prefix:m[1],w:+m[2],h:+m[2],n:+m[2],difficulty:CODEDIFF[m[3]],seed:m[4].padStart(7,'0')};const r=s.match(/^([BGW])5X([678])([EMH])-([0-9A-Z]{1,7})$/);if(!r)return null;return{prefix:r[1],w:5,h:+r[2],difficulty:CODEDIFF[r[3]],seed:r[4].padStart(7,'0')};}
 function generateLevel(w,difficulty,seed=seedText(),prefix='W',h=w){
  const [lo,hi]=ranges[difficulty];let fallback=null,cand=prefix==='B'?legacyCandidate:prefix==='G'?gluedCandidate:wallCandidate;
- for(let tries=0;tries<5000;tries++){const s=cand(w,h,seed,tries);if(!s)continue;const sol=solve(s,24);if(!sol)continue;
+ /* v0.12.33: bounded generation. A korábbi 5000 teljes BFS egyetlen kérésben
+    mobilon túl drága volt. Már az első megoldható jelöltből van biztonságos fallback. */
+ const maxTries=(w*h<=16)?900:(w*h<=25?450:220);
+ for(let tries=0;tries<maxTries;tries++){
+  const s=cand(w,h,seed,tries);if(!s)continue;
+  const sol=solve(s,24);if(!sol)continue;
   if(!fallback||Math.abs(sol.length-(lo+hi)/2)<Math.abs(fallback.solution.length-(lo+hi)/2))fallback={state:s,solution:sol,attempt:tries};
   if(sol.length>=lo&&sol.length<=hi)return{state:s,solution:sol,attempt:tries,seed,code:makeCode(w,h,difficulty,seed,prefix)};
  }
- if(!fallback)throw Error("Nem sikerült pályát generálni.");
- return{...fallback,seed,code:makeCode(w,h,difficulty,seed,prefix),fallback:true};
+ if(fallback)return{...fallback,seed,code:makeCode(w,h,difficulty,seed,prefix),fallback:true};
+ /* Last-resort valid level: legacy geometry is simpler and prevents an empty board.
+    Still solver-verified; difficulty may be approximate in this rare path. */
+ for(let tries=0;tries<240;tries++){
+  const s=legacyCandidate(w,h,seed,10000+tries),sol=solve(s,24);
+  if(sol)return{state:s,solution:sol,attempt:10000+tries,seed,code:makeCode(w,h,difficulty,seed,prefix),fallback:true};
+ }
+ throw Error("Nem sikerült megoldható pályát generálni.");
 }
