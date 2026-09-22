@@ -200,7 +200,7 @@ const MotionControl=(()=>{
   if(!g)return null;const len=Math.hypot(g.x,g.y,g.z);if(!len)return null;
   const x=g.x/len,y=g.y/len,z=g.z/len;
   /* H: side tilt, V: fore/aft tilt. atan2 keeps the mapping usable far from horizontal. */
-  const h=Math.atan2(-x,Math.hypot(y,z))*57.2957795;
+  const h=Math.atan2(x,Math.hypot(y,z))*57.2957795;
   const v=Math.atan2(y,z)*57.2957795;
   return screenVector(h,v);
  }
@@ -222,14 +222,14 @@ const MotionControl=(()=>{
  function orientationVector(){
   if(filteredBeta==null||filteredGamma==null)return null;
   if(!haveOrientationRef){refBeta=filteredBeta;refGamma=filteredGamma;haveOrientationRef=true;return{x:0,y:0,mag:0,source:'orientation'}}
-  /* Match gravity convention: +x means LEFT, +y means DOWN. */
-  const p=screenVector(-norm180(filteredGamma-refGamma),norm180(filteredBeta-refBeta));
+  /* Match gravity convention: +x means RIGHT, +y means DOWN. */
+  const p=screenVector(norm180(filteredGamma-refGamma),norm180(filteredBeta-refBeta));
   return{x:p.x,y:p.y,mag:Math.hypot(p.x,p.y),source:'orientation'};
  }
  function controlVector(){return gravityVector()||orientationVector()}
  function rawDirection(v){
   const ax=Math.abs(v.x),ay=Math.abs(v.y);if(Math.max(ax,ay)<enterAngle)return null;
-  if(ax>ay)return v.x>0?'left':'right';return v.y>0?'down':'up';
+  if(ax>ay)return v.x>0?'right':'left';return v.y>0?'down':'up';
  }
  function repeatDelay(mag){const excess=Math.max(0,mag-enterAngle),t=Math.min(1,excess/14);return Math.round((420-300*t)*tempoPct/100)}
  function acceptDirection(dir,now){
