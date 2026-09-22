@@ -78,23 +78,53 @@ function legacyCandidate(w,h,seed,attempt){
 }
 function makeCode(w,h,difficulty,seed,prefix='G'){return w===h?`${prefix}${w}${DIFFCODE[difficulty]}-${seed}`:`${prefix}${w}X${h}${DIFFCODE[difficulty]}-${seed}`;}
 function parseCode(raw){const s=String(raw).trim().toUpperCase(),m=s.match(/^([BGW])([345])([EMH])-([0-9A-Z]{1,7})$/);if(m)return{prefix:m[1],w:+m[2],h:+m[2],n:+m[2],difficulty:CODEDIFF[m[3]],seed:m[4].padStart(7,'0')};const r=s.match(/^([BGW])5X([678])([EMH])-([0-9A-Z]{1,7})$/);if(!r)return null;return{prefix:r[1],w:5,h:+r[2],difficulty:CODEDIFF[r[3]],seed:r[4].padStart(7,'0')};}
+/* v0.12.35 – constructive free-play generator.
+   A normál W-pálya nem brute-force BFS kereséssel készül. Előbb egy biztosan
+   kijárható golyófolyosót hozunk létre, majd a maradék mezőkre tesszük a
+   téglákat/falakat. Így a játék indítása determinisztikusan gyors és a pálya
+   garantáltan megoldható. A solver továbbra is használható hinthez és
+   tartalom-validáláshoz. */
+function constructiveCandidate(w,h,seed,difficulty){
+ const rng=rngFor(seed,0),exit=randomExit(w,h,rng),occupied=new Set(),objects=[];
+ const horizontal=exit.dir==='left'||exit.dir==='right';
+ let ball;
+ if(horizontal){
+  const minX=exit.dir==='left'?0:Math.max(0,w-3),maxX=exit.dir==='left'?Math.min(w-1,2):w-1;
+  ball={x:minX+Math.floor(rng()*(maxX-minX+1)),y:exit.y};
+  for(let x=Math.min(ball.x,exit.x);x<=Math.max(ball.x,exit.x);x++)occupied.add(key(x,exit.y));
+ }else{
+  const minY=exit.dir==='up'?0:Math.max(0,h-3),maxY=exit.dir==='up'?Math.min(h-1,2):h-1;
+  ball={x:exit.x,y:minY+Math.floor(rng()*(maxY-minY+1))};
+  for(let y=Math.min(ball.y,exit.y);y<=Math.max(ball.y,exit.y);y++)occupied.add(key(exit.x,y));
+ }
+ objects.push({id:'ball1',type:'ball',x:ball.x,y:ball.y,cells:[{x:0,y:0}]});
+ const free=()=>shuffle(Array.from({length:w*h},(_,i)=>({x:i%w,y:Math.floor(i/w)})).filter(c=>!occupied.has(key(c.x,c.y))),rng);
+ let cells=free();
+ const brickCount=Math.min(3,cells.length);
+ for(let n=0;n<brickCount;n++){const a=cells.pop();occupied.add(key(a.x,a.y));objects.push({id:'b'+(n+1),type:'brick',x:a.x,y:a.y,cells:[{x:0,y:0}],glueEdges:[],glued:false});}
+ cells=free();
+ const wallTarget=difficulty==='hard'?Math.min(3,Math.max(1,w-2)):difficulty==='medium'?Math.min(2,Math.max(1,w-2)):Math.min(1,Math.max(0,w-2));
+ const wallCount=Math.min(Math.floor(rng()*(wallTarget+1)),cells.length);
+ for(let n=0;n<wallCount;n++){const a=cells.pop();occupied.add(key(a.x,a.y));objects.push({id:'w'+(n+1),type:'wall',x:a.x,y:a.y,cells:[{x:0,y:0}]});}
+ return{width:w,height:h,exit,moves:0,won:false,glueCount:0,brickCount,wallCount,objects};
+}
+function directSolution(s){
+ const b=s.objects.find(o=>o.type==='ball'&&!o.exited);if(!b)return[];
+ const n=s.exit.dir==='left'||s.exit.dir==='right'?Math.abs(b.x-s.exit.x)+1:Math.abs(b.y-s.exit.y)+1;
+ return Array(n).fill(s.exit.dir);
+}
 function generateLevel(w,difficulty,seed=seedText(),prefix='W',h=w){
- const [lo,hi]=ranges[difficulty];let fallback=null,cand=prefix==='B'?legacyCandidate:prefix==='G'?gluedCandidate:wallCandidate;
- /* v0.12.33: bounded generation. A korábbi 5000 teljes BFS egyetlen kérésben
-    mobilon túl drága volt. Már az első megoldható jelöltből van biztonságos fallback. */
+ if(prefix==='W'){
+  const s=constructiveCandidate(w,h,seed,difficulty),solution=directSolution(s);
+  return{state:s,solution,attempt:0,seed,code:makeCode(w,h,difficulty,seed,prefix),constructive:true};
+ }
+ const [lo,hi]=ranges[difficulty];let fallback=null,cand=prefix==='B'?legacyCandidate:gluedCandidate;
  const maxTries=(w*h<=16)?900:(w*h<=25?450:220);
  for(let tries=0;tries<maxTries;tries++){
-  const s=cand(w,h,seed,tries);if(!s)continue;
-  const sol=solve(s,24);if(!sol)continue;
+  const s=cand(w,h,seed,tries);if(!s)continue;const sol=solve(s,24);if(!sol)continue;
   if(!fallback||Math.abs(sol.length-(lo+hi)/2)<Math.abs(fallback.solution.length-(lo+hi)/2))fallback={state:s,solution:sol,attempt:tries};
   if(sol.length>=lo&&sol.length<=hi)return{state:s,solution:sol,attempt:tries,seed,code:makeCode(w,h,difficulty,seed,prefix)};
  }
  if(fallback)return{...fallback,seed,code:makeCode(w,h,difficulty,seed,prefix),fallback:true};
- /* Last-resort valid level: legacy geometry is simpler and prevents an empty board.
-    Still solver-verified; difficulty may be approximate in this rare path. */
- for(let tries=0;tries<240;tries++){
-  const s=legacyCandidate(w,h,seed,10000+tries),sol=solve(s,24);
-  if(sol)return{state:s,solution:sol,attempt:10000+tries,seed,code:makeCode(w,h,difficulty,seed,prefix),fallback:true};
- }
  throw Error("Nem sikerült megoldható pályát generálni.");
 }
