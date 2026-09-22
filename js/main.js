@@ -43,7 +43,7 @@ function render(opts={}){
    const ck=`${o.id}:${ci}`;wanted.add(ck);let el=existing.get(ck);
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
    if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
-    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;AudioManager.freeze();render({preservePieces:true});}});board.append(el);}
+    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;AudioManager.freeze();MotionControl.resume();render({preservePieces:true});}});board.append(el);}
    const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width);
    el.style.left=p.left;el.style.top=p.top;el.style.width=p.size;el.style.height=p.size;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
@@ -55,7 +55,7 @@ function render(opts={}){
  meta.textContent=`${diff} · kezdő optimum: ${optimal.length} lépés · ragasztás: ${glues} · fix: ${walls}`;
  codeEl.textContent=`Pályakód: ${currentCode}`;
  const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
- freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze()||busy;
+ freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
  freezeBtn.textContent=freezeArmed?(freezeId?`❄ Lefogva${suffix}`:`❄ Válassz elemet${suffix}`):`❄ Freeze${suffix}`;
  soundBtn.textContent=AudioManager.muted?'🔇 Hang ki':'🔊 Hang be';
 }
@@ -128,7 +128,7 @@ function playEvents(events){
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
-function move(dir){if(state.won||busy)return;if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId);state=r.state;lastEvents=r.events;if(usedFreeze)freezeUsed++;freezeArmed=false;freezeId=null;freezeAnalysis=null;render({preservePieces:true});playEvents(r.events);scheduleFreezeAnalysis();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+function move(dir){if(state.won||busy||freezeArmed)return;if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId);state=r.state;lastEvents=r.events;if(usedFreeze)freezeUsed++;freezeArmed=false;freezeId=null;freezeAnalysis=null;render({preservePieces:true});playEvents(r.events);scheduleFreezeAnalysis();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
 function hint(){
  if(hintVisible){hintVisible=false;toast.textContent='';return;}
  hintVisible=true;
@@ -275,9 +275,11 @@ const MotionControl=(()=>{
  async function toggle(){if(enabled)disable();else await enable()}
  function recalibrate(){if(enabled)beginArming('Stabilizálás… új középhelyzet')}
  function onNewLevel(){if(enabled)beginArming('Stabilizálás… új pálya')}
+ function pause(){if(enabled){stop();note('Freeze kiválasztás · mozgás szünetel')}}
+ function resume(){if(enabled)beginArming('Stabilizálás… Freeze után')}
  function adjustAngle(delta){enterAngle=Math.max(3,Math.min(14,enterAngle+delta));angleValue.textContent=enterAngle+'°';if(enabled)beginArming('Érzékenység: '+enterAngle+'° · stabilizálás…')}
  function adjustTempo(delta){tempoPct=Math.max(50,Math.min(200,tempoPct+delta));tempoValue.textContent=tempoPct+'%';note('Gurulási tempó: '+tempoPct+'%')}
- return{toggle,recalibrate,onNewLevel,adjustAngle,adjustTempo,get enabled(){return enabled}};
+ return{toggle,recalibrate,onNewLevel,pause,resume,adjustAngle,adjustTempo,get enabled(){return enabled}};
 })();
 motionBtn.addEventListener('click',()=>MotionControl.toggle());
 document.querySelector('#angleMinus').addEventListener('click',()=>MotionControl.adjustAngle(-1));
@@ -285,7 +287,7 @@ document.querySelector('#anglePlus').addEventListener('click',()=>MotionControl.
 document.querySelector('#tempoMinus').addEventListener('click',()=>MotionControl.adjustTempo(-10));
 document.querySelector('#tempoPlus').addEventListener('click',()=>MotionControl.adjustTempo(10));
 
-freezeBtn.addEventListener('click',()=>{if(busy||!canUseFreeze())return;freezeArmed=!freezeArmed;if(!freezeArmed)freezeId=null;render({preservePieces:true});});
+freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';render();scheduleFreezeAnalysis();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
