@@ -1,0 +1,55 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "custom-01-02",
+  "version": 1,
+  "name": "Kerülőút",
+  "board": {
+    "width": 4,
+    "height": 4
+  },
+  "exit": {
+    "x": 0,
+    "y": 3,
+    "direction": "left"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 2,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "w1",
+      "type": "wall",
+      "x": 1,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "type": "brick",
+      "x": 3,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    }
+  ]
+}
