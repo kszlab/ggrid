@@ -355,7 +355,7 @@ const CalibrationLab=(()=>{
   timer=setTimeout(()=>{segments.push({from:currentFrom,to:currentTarget,endSample:samples.length});if(i+1<sequence.length)countdown(i+1);else finish(true)},HOLD_MS);
  }
  function summarize(){
-  const motion=samples.filter(s=>s.source==='motion'&&[s.gx,s.gy,s.gz].every(Number.isFinite)).length;
+  const motion=samples.filter(s=>s.source==='motion'&&[s.gx,s.gy,s.gz].every(v=>Number.isFinite(v))).length;
   const orient=samples.filter(s=>s.source==='orientation'&&Number.isFinite(s.beta)&&Number.isFinite(s.gamma)).length;
   const transitions=new Set(segments.filter(s=>s.from!=='neutral').map(s=>s.from+'>'+s.to)).size;
   return{samples:samples.length,motionSamples:motion,orientationSamples:orient,transitionTypes:transitions,screenAngles:[...new Set(samples.map(s=>s.screenAngle))]};
@@ -365,7 +365,7 @@ const CalibrationLab=(()=>{
      offline analysis before this profile is allowed to drive gameplay. */
   const holds={};
   for(const d of ['up','down','left','right']){
-   const a=samples.filter(s=>s.phase==='hold'&&s.to===d&&[s.gx,s.gy,s.gz].every(Number.isFinite));
+   const a=samples.filter(s=>s.phase==='hold'&&s.to===d&&[s.gx,s.gy,s.gz].every(v=>Number.isFinite(v)));
    if(a.length)holds[d]={n:a.length,gravityMean:['gx','gy','gz'].map(k=>a.reduce((q,s)=>q+s[k],0)/a.length)};
   }
   return{version:1,created:new Date().toISOString(),holds,summary:summarize()};
