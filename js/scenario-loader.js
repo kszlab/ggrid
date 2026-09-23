@@ -156,6 +156,6 @@ const ScenarioMode=(()=>{
  async function freePlay(){active=false;scenario=null;effective=null;stopTimer();document.body.classList.remove('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';await loadFreeTheme();changeLevelProfile();MotionControl.resume()}
  initFreeThemes();
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
- const baseMove=move;move=function(dir){const wasWon=!!state?.won;baseMove(dir);if(active&&!wasWon)setTimeout(onWin,180)};
+ const baseMove=move;move=function(dir,automatic=false){const wasWon=!!state?.won;baseMove(dir,automatic);if(active&&!wasWon)setTimeout(onWin,180)};
  return{open,loadFreeTheme,get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
 })();
