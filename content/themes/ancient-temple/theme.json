@@ -32,11 +32,22 @@
     },
     "exit": {
       "name": "Rúnakapu"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Rúnazár"
     }
+  },
+  "scene": {
+    "type": "ancient-temple",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
