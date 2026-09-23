@@ -33,7 +33,8 @@
     },
     "exit": {
       "name": "Túlvilági kapu"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
@@ -49,7 +50,11 @@
       "fog",
       "candles",
       "foreground-vines"
-    ]
+    ],
+    "markup": {
+      "back": "",
+      "front": ""
+    }
   },
   "audio": {
     "profile": "haunted",
@@ -66,5 +71,8 @@
       "exit": "portal-rise",
       "win": "ghost-release"
     }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
