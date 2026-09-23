@@ -65,6 +65,10 @@ const ScenarioMode=(()=>{
   if(!freeThemeEl)return;
   try{
    freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index');
+   await Promise.all((freeThemeIndex.themes||[]).filter(t=>t.css).map(t=>new Promise(resolve=>{
+    const link=document.createElement('link');link.rel='stylesheet';link.dataset.ggridPreviewTheme=t.id;link.href=refUrl(ROOT+'themes/index.json',t.css);
+    link.onload=resolve;link.onerror=resolve;document.head.append(link);
+   })));
    const saved=localStorage.getItem('ggrid.freeplay.theme.v1')||'classic';
    freeThemeEl.innerHTML='';
    for(const t of (freeThemeIndex.themes||[])){const o=document.createElement('option');o.value=t.id;o.textContent=t.name+(t.showcase?' ✦':'');freeThemeEl.append(o)}
