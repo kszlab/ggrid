@@ -1,6 +1,6 @@
 /* GGrid v0.12.46 - data-driven Level Library with capability + coverage validation */
 const LevelLibrary=(()=>{
- let levels=null,cursor=new Map(),catalogLoaded=false;
+ let levels=null,cursor=new Map(),catalogLoaded=false,loadPromise=null;
  const SUPPORTED_FEATURES=new Set(['core.movement','core.exit','object.ball','object.rigid-body','object.wall','ability.freeze']);
  function parse(){
   if(levels)return levels;
@@ -14,17 +14,26 @@ const LevelLibrary=(()=>{
   return{format:'ggrid-level',formatVersion:r.formatVersion||2,levelId:r.levelId,rulesVersion:r.rulesVersion||1,requires:r.requires||{features:['core.movement','core.exit','object.ball','object.rigid-body','object.wall']},board:{width:r.board.width,height:r.board.height,exit:{dir:exit.direction||exit.dir,x:exit.x,y:exit.y}},initialResources:r.initialResources||{freeze:0},analysis:{...(r.analysis||{}),testDifficultyClass:d,rawDifficulty:r.difficulty?.score??r.analysis?.rawDifficulty??null,difficultyModelVersion:r.difficulty?.modelVersion??r.analysis?.difficultyModelVersion??2,solution:sol},_state:{width:r.board.width,height:r.board.height,exit:{dir:exit.direction||exit.dir,x:exit.x,y:exit.y},moves:0,won:false,glueCount:objects.filter(o=>o.type==='brick'&&o.cells.length>1).length,brickCount:objects.filter(o=>o.type==='brick').length,wallCount:objects.filter(o=>o.type==='wall').length,objects}};
  }
  async function init(){
-  if(catalogLoaded)return levels||parse();catalogLoaded=true;parse();
-  try{
-   const res=await fetch('content/levels/catalog.json',{cache:'no-cache'});if(!res.ok)return levels;
-   const cat=await res.json();if(cat.format!=='ggrid-level-catalog')throw Error('INVALID_LEVEL_CATALOG');
-   for(const p of (cat.packs||[])){
-    const pr=await fetch(new URL(p.src,new URL('content/levels/catalog.json',location.href)),{cache:'no-cache'});if(!pr.ok)throw Error('LEVEL_PACK_FETCH '+p.src);
-    const pack=await pr.json();if(pack.format!=='ggrid-level-pack')throw Error('INVALID_LEVEL_PACK '+p.src);
-    for(const r of (pack.levels||[])){const l=fromFullLevel(r);if(!levels.some(x=>x.levelId===l.levelId))levels.push(l)}
-   }
-  }catch(e){console.error('Level catalog',e)}
-  return levels;
+  if(catalogLoaded)return levels||parse();
+  if(loadPromise)return loadPromise;
+  parse();
+  loadPromise=(async()=>{
+   try{
+    const res=await fetch('content/levels/catalog.json',{cache:'no-cache'});if(!res.ok)throw Error('LEVEL_CATALOG_FETCH');
+    const cat=await res.json();if(cat.format!=='ggrid-level-catalog')throw Error('INVALID_LEVEL_CATALOG');
+    const packs=await Promise.all((cat.packs||[]).map(async p=>{
+     const pr=await fetch(new URL(p.src,new URL('content/levels/catalog.json',location.href)),{cache:'no-cache'});if(!pr.ok)throw Error('LEVEL_PACK_FETCH '+p.src);
+     const pack=await pr.json();if(pack.format!=='ggrid-level-pack')throw Error('INVALID_LEVEL_PACK '+p.src);
+     return pack.levels||[];
+    }));
+    const next=[],ids=new Set();
+    for(const pack of packs)for(const r of pack){const l=fromFullLevel(r);if(ids.has(l.levelId))throw Error('DUPLICATE_LEVEL '+l.levelId);ids.add(l.levelId);next.push(l)}
+    levels=next;catalogLoaded=true;
+   }catch(e){console.error('Level catalog',e)}
+   finally{loadPromise=null}
+   return levels;
+  })();
+  return loadPromise;
  }
  function compatible(l){
   return l.formatVersion<=2&&l.rulesVersion<=1&&(l.requires?.features||[]).every(f=>SUPPORTED_FEATURES.has(f));
@@ -43,7 +52,7 @@ const LevelLibrary=(()=>{
    if(!compatible(l))unsupported.push(l.levelId);
   }
   const cov=coverage(),missing=[],expected=['3x3','4x4','5x5','5x6','5x7','5x8'];
-  for(const size of expected){const a=cov[size]||Array(10).fill(0);for(let d=1;d<=10;d++)if(a[d-1]<5)missing.push(size+' D'+d+' ('+a[d-1]+'/5)');}
+  for(const size of expected){const a=cov[size]||Array(10).fill(0);for(let d=1;d<=10;d++)if(a[d-1]<10)missing.push(size+' D'+d+' ('+a[d-1]+'/10)');}
   return{total:all.length,compatible:all.length-unsupported.length,duplicates,invalid,unsupported,coverage:cov,missing,ok:!duplicates.length&&!invalid.length&&!unsupported.length&&!missing.length};
  }
  function candidates(w,h,d){return parse().filter(l=>compatible(l)&&l.board.width===w&&l.board.height===h&&l.analysis.testDifficultyClass===d)}

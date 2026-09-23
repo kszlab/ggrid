@@ -8,6 +8,12 @@
     {"id":"classified-v2-5x5","src":"packs/classified-v2-5x5.json"},
     {"id":"classified-v2-5x6","src":"packs/classified-v2-5x6.json"},
     {"id":"classified-v2-5x7","src":"packs/classified-v2-5x7.json"},
-    {"id":"classified-v2-5x8","src":"packs/classified-v2-5x8.json"}
+    {"id":"classified-v2-5x8","src":"packs/classified-v2-5x8.json"},
+    {"id":"expansion-v2-3x3","src":"packs/expansion-v2-3x3.json"},
+    {"id":"expansion-v2-4x4","src":"packs/expansion-v2-4x4.json"},
+    {"id":"expansion-v2-5x5","src":"packs/expansion-v2-5x5.json"},
+    {"id":"expansion-v2-5x6","src":"packs/expansion-v2-5x6.json"},
+    {"id":"expansion-v2-5x7","src":"packs/expansion-v2-5x7.json"},
+    {"id":"expansion-v2-5x8","src":"packs/expansion-v2-5x8.json"}
   ]
 }
