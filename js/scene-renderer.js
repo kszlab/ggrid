@@ -48,7 +48,7 @@ const SceneRenderer=(()=>{
  }
  function clearComponentOverlays(){componentOverlays.forEach(el=>el.remove());componentOverlays=[]}
  function buildComponentOverlays(board){
-  const spec=theme?.pieces?.rigidBody;if(!spec)return;
+  const spec=theme?.pieces?.rigidBody;if(!spec?.markup&&!spec?.className)return;
   const live=new Set(),w=state?.width||1,h=state?.height||w,cellX=100/w,cellY=100/h,inset=1.8;
   for(const o of (state?.objects||[])){
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
