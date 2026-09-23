@@ -71,9 +71,8 @@ function render(opts={}){
  const diff='D'+difficultyEl.value,glues=state.glueCount||0,walls=state.wallCount||0;
  meta.textContent=`${diff} · modell: ${currentLevelRecord?.analysis?.rawDifficulty??'-'} · optimum: ${optimal.length} · fix: ${walls}`;
  codeEl.textContent=`Pálya: ${currentLevelId}`;
- const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
+ const left=freezesLeft();
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
- const fc=document.querySelector('#freezeCount');if(fc)fc.textContent=left===Infinity?'∞':String(left);
  freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}${inFreePlay()?' · 10 pont':''}`);updateScore();
  syncSoundControls();
  SceneRenderer?.afterBoardRender?.(board);

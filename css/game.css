@@ -213,7 +213,7 @@ body:not(.scenario-mode) #scenarioInfo:empty:before{content:'Szabad játék';opa
 
 /* v0.12.22 – compact board action strip */
 .hud-row{justify-content:center!important;margin-top:7px;min-height:42px}.hud-row .status:empty{display:none}.hud-row .status:not(:empty){position:absolute;left:50%;transform:translateY(-34px) translateX(-50%);z-index:8;width:max-content;max-width:80%;padding:5px 10px;border-radius:12px;background:#071019d9;text-align:center}
-.play-actions{display:flex;align-items:center;justify-content:center;gap:7px;width:100%}.play-action,#freeze.play-action{box-sizing:border-box;width:44px;height:40px;min-height:40px;padding:0;border:1px solid #ffffff1c;border-radius:12px;background:#162737;color:#eef8ff;font-size:20px;font-weight:800;line-height:1;display:inline-flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 3px 9px #0005}.play-action:active{transform:translateY(1px)}#freeze.freeze-action{width:auto;min-width:58px;padding:0 9px;background:#315c7e;font-size:18px}#freeze.freeze-action #freezeCount{font:800 14px/1 system-ui;color:#fff}#freeze.freeze-action.active{background:#298bb5;box-shadow:0 0 12px #61d8ff66}#freeze.freeze-action:disabled{opacity:.42}.play-action[hidden]{display:none!important}
+.play-actions{display:flex;align-items:center;justify-content:center;gap:7px;width:100%}.play-action,#freeze.play-action{box-sizing:border-box;width:44px;height:40px;min-height:40px;padding:0;border:1px solid #ffffff1c;border-radius:12px;background:#162737;color:#eef8ff;font-size:20px;font-weight:800;line-height:1;display:inline-flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 3px 9px #0005}.play-action:active{transform:translateY(1px)}#freeze.freeze-action{width:auto;min-width:58px;padding:0 9px;background:#315c7e;font-size:18px}#freeze.freeze-action.active{background:#298bb5;box-shadow:0 0 12px #61d8ff66}#freeze.freeze-action:disabled{opacity:.42}.play-action[hidden]{display:none!important}
 .legacy-tools{display:none!important}
 body.scenario-mode #playChoose{display:none!important}
 
@@ -223,11 +223,10 @@ body.scenario-mode #playChoose{display:none!important}
 .play-actions{width:auto!important;flex:0 0 auto;justify-content:flex-start!important;gap:7px}
 .play-action,#freeze.play-action{width:53px;height:48px;min-height:48px;border-radius:14px;font-size:24px}
 #playHint{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-#freeze.freeze-action{min-width:70px;height:48px;padding:0 11px;font-size:22px}
-#freeze.freeze-action #freezeCount{font-size:17px}
-.score-box{margin-left:auto;height:48px;min-width:92px;box-sizing:border-box;padding:6px 10px;border:1px solid #ffffff1c;border-radius:14px;background:#101d29b8;box-shadow:inset 0 1px #ffffff0b,0 3px 9px #0004;display:flex;flex-direction:column;align-items:flex-end;justify-content:center}
-.score-box span{font-size:9px;line-height:1;letter-spacing:.12em;opacity:.48}.score-box strong{display:block;min-height:18px;font-size:18px;line-height:18px}
-@media(max-width:390px){.hud-row{gap:6px}.play-actions{gap:5px}.play-action,#freeze.play-action{width:49px}#freeze.freeze-action{min-width:64px;padding:0 8px}.score-box{min-width:72px;padding:6px 7px}}
+#freeze.freeze-action{width:47px;min-width:47px;height:48px;padding:0;font-size:22px}
+.score-box{margin-left:auto;height:48px;min-width:70px;box-sizing:border-box;padding:5px 8px;border:1px solid #ffffff1c;border-radius:14px;background:#101d29b8;box-shadow:inset 0 1px #ffffff0b,0 3px 9px #0004;display:flex;align-items:center;justify-content:center;text-align:center}
+.score-box strong{display:block;max-width:100%;font-size:23px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:390px){.hud-row{gap:5px}.play-actions{gap:4px}.play-action,#freeze.play-action{width:clamp(39px,11.8vw,46px)}#freeze.freeze-action{width:clamp(39px,11.8vw,46px);min-width:0;padding:0}.score-box{min-width:62px;padding:5px}}
 
 
 /* v0.12.24 – rectangular mobile boards + six-option size picker */

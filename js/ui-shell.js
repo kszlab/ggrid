@@ -101,7 +101,6 @@ const AppUI=(()=>{
  document.querySelector('#menuClose').addEventListener('click',closeMenu);
  document.querySelector('#menuRestart').addEventListener('click',()=>{document.querySelector('#restart').click();closeMenu()});
  document.querySelector('#menuNew').addEventListener('click',()=>{document.querySelector('#new').click();closeMenu()});
- document.querySelector('#menuHint').addEventListener('click',()=>{document.querySelector('#hint').click();closeMenu()});
  document.querySelector('#menuSettings').addEventListener('click',openSettings);
  document.querySelector('#menuHome').addEventListener('click',()=>{if(ScenarioMode?.active)document.querySelector('#exitScenario').click();showHome()});
  document.querySelector('#settingsClose').addEventListener('click',closeSettings);
