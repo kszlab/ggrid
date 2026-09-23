@@ -10,7 +10,7 @@ addEventListener('pointerdown',unlockAudio,{capture:true,passive:true});
 addEventListener('keydown',unlockAudio,{capture:true});
 const angleValue=document.querySelector('#angleValue'),tempoValue=document.querySelector('#tempoValue');
 function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=v);}
-function freezeLimit(){const v=freezeLimitEl.value;return v==='inf'?Infinity:Math.max(0,parseInt(v,10)||0);}
+function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
 let freezeAnalysisSeq=0;
@@ -71,7 +71,7 @@ let currentLevelRecord=null;
 function resetLevelBuffer(){}
 function applyGeneratedLevel(g){
  state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentCode=g.code;currentLevelRecord=g.level||null;
- const baseFreeze=currentLevelRecord?.initialResources?.freeze??0;freezeLimitEl.value=String(baseFreeze);
+ freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';
  render();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
 }
