@@ -1,0 +1,23 @@
+/* v0.12.16 – MICROCORE + MOON GARDEN showcase scenes */
+body[data-scene="microchip-lab"]{background:radial-gradient(circle at 50% 20%,#123521,#020806 72%)}
+
+body[data-scene="microchip-lab"] .board-wrap{background:#04140c;border-color:#2eff7a55;box-shadow:0 0 30px #00ff6620,inset 0 0 50px #000}
+
+body[data-scene="microchip-lab"] .board{background:#052216;border:4px solid #b88745;border-radius:5px;box-shadow:0 0 0 3px #102a1b,0 12px 25px #000a}
+
+body[data-scene="microchip-lab"] .cell{background:linear-gradient(135deg,#0a311e,#062416);border:1px solid #46ff7c18;box-shadow:inset 0 0 0 1px #0005}
+
+body[data-scene="microchip-lab"] .ball.sr-piece{overflow:visible;border-radius:50%;background:#07120c;border:2px solid #70ffa0;box-shadow:0 0 16px #43ff82}
+
+body[data-scene="microchip-lab"] .brick.sr-piece{background:#080d10;border:1px solid #8b9da1;border-radius:3px;box-shadow:inset 0 0 0 2px #1f2c31,0 5px 8px #000}
+
+body[data-scene="microchip-lab"] .wall.sr-piece{background:repeating-linear-gradient(90deg,#71817b 0 5px,#26332f 6px 10px);border:1px solid #a8b5ae;box-shadow:4px 5px 7px #000}
+
+body[data-scene="microchip-lab"] .sr-socket{background:#050807;border:3px solid #d8ad5d!important;border-radius:4px!important;box-shadow:0 0 18px #52ff8a!important;width:38px!important;height:38px!important;display:grid;place-items:center}
+
+.theme-preview[data-theme="microchip-lab"] .theme-preview-art{background:radial-gradient(circle at 72% 25%,#54ff8d55 0 2%,transparent 3% 8%),repeating-linear-gradient(90deg,transparent 0 31px,#3cff7928 32px 34px),repeating-linear-gradient(0deg,transparent 0 42px,#d3a64d22 43px 45px),#062418}
+
+.theme-preview[data-theme="microchip-lab"] .mini-board{background:repeating-linear-gradient(90deg,#082819 0 19%,#17442b 20% 20.5%);border:4px solid #b78c49}
+.theme-preview[data-theme="microchip-lab"] .mini-cell.block{border-radius:3px;background:#090d0f;border-color:#c9a65f;box-shadow:inset 0 0 0 2px #344}
+.theme-preview[data-theme="microchip-lab"] .mini-cell.target{background:radial-gradient(circle,#eafff0,#53ff8a 25%,#07150d 30%);border-color:#5cff91}
+.theme-preview[data-theme="microchip-lab"] .mini-cell.gate{border-color:#d4a955;color:#7dff9f}
