@@ -64,7 +64,21 @@
     "frame": "zen-slate",
     "controls": "embossed-integrated",
     "hud": "zen-slate",
-    "sceneChrome": true
+    "sceneChrome": true,
+    "tokens": {
+      "surface": "#091923",
+      "surfaceRaised": "#1d3944",
+      "control": "#1d303b",
+      "controlRaised": "#38505f",
+      "controlPressed": "#835654",
+      "accent": "#ffb9aa",
+      "text": "#f1f7f9",
+      "muted": "#c9d7da",
+      "border": "#ff9b8d66",
+      "shadow": "#00000099",
+      "focus": "#ff9b8d",
+      "scrim": "#07111ced"
+    }
   },
   "pieces": {
     "ball": {

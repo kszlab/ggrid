@@ -289,6 +289,25 @@
         ]
       },
       "css": "moonlit-zen/theme.css?v=0.12.57"
+    },
+    {
+      "id": "sunlit-greenhouse",
+      "version": 1,
+      "name": "NAPÜVEGHÁZ // Az aranymag kertje",
+      "description": "SHOWCASE: napfényes üvegház, aranymag, terrakotta ültetők és rézkapu.",
+      "showcase": true,
+      "preview": {
+        "shortName": "NAPÜVEGHÁZ",
+        "tag": "THE GOLDEN SEED",
+        "symbols": [
+          "✦",
+          "❧",
+          "❧",
+          "✧"
+        ]
+      },
+      "src": "sunlit-greenhouse/theme.json",
+      "css": "sunlit-greenhouse/theme.css?v=0.12.59"
     }
   ]
 }

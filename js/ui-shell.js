@@ -3,11 +3,16 @@ const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
  const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
  const controls=document.querySelector('#settingsControls'),code=document.querySelector('#settingsCode'),freeSettings=document.querySelector('#freeSettings');
+ const shellSelect=document.querySelector('#shellThemeSelect'),shellSection=document.querySelector('#shellThemeSection');
+ let shellTheme='classic';try{shellTheme=localStorage.getItem('ggrid.shell.theme.v1')||'classic'}catch(_){}
+ if(!['classic','warm'].includes(shellTheme))shellTheme='classic';
+ document.body.dataset.shellTheme=shellTheme;shellSelect.value=shellTheme;
+ shellSelect.addEventListener('change',()=>{document.body.dataset.shellTheme=shellSelect.value;try{localStorage.setItem('ggrid.shell.theme.v1',shellSelect.value)}catch(_){}});
  controls.append(mini,tune);code.append(loadrow);if(freeSettings)freeSettings.hidden=true;
 
  function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
- function enterGame(){home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();MotionControl?.resume?.()}
- function showHome(){menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;MotionControl?.pause?.()}
+ function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
+ function showHome(){document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
   menu.hidden=false;MotionControl?.pause?.();
   const active=!!ScenarioMode?.active;
@@ -16,7 +21,7 @@ const AppUI=(()=>{
   document.querySelector('#menuNew').hidden=active;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
- function openSettings(){menu.hidden=true;settings.hidden=false;MotionControl?.pause?.()}
+ function openSettings(){document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;MotionControl?.pause?.()}
  function closeSettings(){settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
 
  const themeEl=document.querySelector('#freeTheme'),preview=document.querySelector('#themePreview'),previewName=document.querySelector('#themePreviewName'),previewTag=document.querySelector('#themePreviewTag'),dots=document.querySelector('#themeDots');
@@ -51,7 +56,7 @@ const AppUI=(()=>{
  async function openFreeSetup(){
   await LevelLibrary.init();
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
-  home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;MotionControl?.pause?.();
+  document.body.dataset.uiContext='shell';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
   const a=themes(),saved=themeEl.value||'classic',idx=a.findIndex(t=>t.id===saved);themeIndex=idx>=0?idx:0;paintTheme();paintSize();paintDiff();syncLevelAvailability();
  }

@@ -48,6 +48,15 @@ const ScenarioMode=(()=>{
   const c=t.colors||{},root=document.documentElement.style;
   root.setProperty('--scenario-bg',c.background||'');root.setProperty('--scenario-board',c.board||'');
   for(const [k,v] of Object.entries({wrap:c.wrap,board:c.board,cell1:c.cell1,cell2:c.cell2,accent:c.accent,ball1:c.ball1,ball2:c.ball2,ball3:c.ball3,brick1:c.brick1,brick2:c.brick2,'brick-edge':c.brickEdge,wall1:c.wall1,wall2:c.wall2}))root.setProperty('--theme-'+k,v||'');
+  /* Tokens belong to the active game. The UI shell uses its own appearance,
+     and returning to it only switches context; it does not mutate the theme. */
+  const tokens=t.ui?.tokens||{},uiRoot=document.body.style;
+  const defaults={surface:c.background||'#10283d',surfaceRaised:c.board||'#2b3034',
+   control:c.board||'#294357',controlRaised:c.wrap||c.board||'#3b5264',
+   controlPressed:c.accent||c.brick1||'#5986a0',accent:c.accent||c.ball2||'#d6e9f3',
+   text:'#f4f7fa',muted:'#c9d2d9',border:'#ffffff55',shadow:'#0009',
+   focus:c.accent||'#9adeff',scrim:'#07131de8'};
+  for(const [key,fallback] of Object.entries(defaults))uiRoot.setProperty('--ui-'+key.replace(/[A-Z]/g,ch=>'-'+ch.toLowerCase()),tokens[key]||fallback);
   AudioManager?.setThemeAudio?.(t.audio||null);
   SceneRenderer?.apply?.(t);
  }

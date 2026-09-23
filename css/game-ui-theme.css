@@ -1,0 +1,84 @@
+/* Shared gameplay UI contract. A game theme supplies tokens; every present and
+   future control using data-ui-role inherits them. Independent shell screens
+   deliberately do not inherit these rules. */
+body[data-ui-context="game"] #game .game-head,
+body[data-ui-context="game"] #game .hud-row{
+ color:var(--ui-text,#f4f7fa);
+}
+body[data-ui-context="game"] #game .game-head .scenario-info{
+ color:var(--ui-text,#f4f7fa);
+ text-shadow:0 1px 3px var(--ui-shadow,#0008);
+}
+body[data-ui-context="game"] #game .game-head .play-level-id{
+ color:var(--ui-muted,#c9d2d9);
+ opacity:1;
+}
+body[data-ui-context="game"] #game .icon-menu,
+body[data-ui-context="game"] #game .play-action,
+body[data-ui-context="game"] #game [data-ui-role="action"],
+body[data-ui-context="game"] #game [data-ui-role="ability"]{
+ color:var(--ui-text,#f4f7fa);
+ background:linear-gradient(145deg,var(--ui-control-raised,#385064),var(--ui-control,#162737));
+ border:1px solid var(--ui-border,#ffffff44);
+ box-shadow:inset 0 1px 1px #ffffff2b,0 3px 9px var(--ui-shadow,#0008);
+}
+body[data-ui-context="game"] #game #freeze.freeze-action{
+ color:var(--ui-accent,#b9ddff);
+ background:linear-gradient(145deg,var(--ui-control-raised,#385064),var(--ui-control,#162737));
+}
+body[data-ui-context="game"] #game #freeze.freeze-action #freezeCount{color:var(--ui-text,#f4f7fa)}
+body[data-ui-context="game"] #game .play-action:active,
+body[data-ui-context="game"] #game .play-action.pressed,
+body[data-ui-context="game"] #game [data-ui-role="action"]:active{
+ background:var(--ui-control-pressed,var(--ui-accent,#7ac9ff));
+ filter:brightness(1.12);
+}
+body[data-ui-context="game"] #game .play-action:disabled,
+body[data-ui-context="game"] #game [data-ui-role="action"]:disabled{opacity:.46;filter:saturate(.45)}
+body[data-ui-context="game"] #game .play-action:focus-visible,
+body[data-ui-context="game"] #game .icon-menu:focus-visible,
+body[data-ui-context="game"] .ui-panel button:focus-visible{
+ outline:3px solid var(--ui-focus,var(--ui-accent,#7ac9ff));outline-offset:2px;
+}
+body[data-ui-context="game"] #game .score-box,
+body[data-ui-context="game"] #game [data-ui-role="display"]{
+ background:linear-gradient(160deg,var(--ui-surface-raised,#213748),var(--ui-surface,#101d29));
+ border:1px solid var(--ui-border,#ffffff44);
+ color:var(--ui-text,#f4f7fa);
+ box-shadow:inset 0 1px 1px #ffffff22,0 3px 9px var(--ui-shadow,#0008);
+}
+body[data-ui-context="game"] #game .score-box span{color:var(--ui-muted,#c9d2d9);opacity:1}
+body[data-ui-context="game"] #game .score-box strong{color:var(--ui-accent,#b9ddff)}
+body[data-ui-context="game"] #game .status:not(:empty),
+body[data-ui-context="game"] #game .toast:not(:empty){
+ background:var(--ui-surface,#101d29);border:1px solid var(--ui-border,#ffffff44);
+ color:var(--ui-text,#f4f7fa);text-shadow:0 1px 2px var(--ui-shadow,#0008);
+}
+body[data-ui-context="game"] .ui-panel{background:var(--ui-scrim,#07131de6)}
+body[data-ui-context="game"] .ui-panel .ui-card{
+ background:linear-gradient(155deg,var(--ui-surface-raised,#213748),var(--ui-surface,#101d29));
+ border:1px solid var(--ui-border,#ffffff44);color:var(--ui-text,#f4f7fa);
+ box-shadow:0 16px 40px var(--ui-shadow,#0008);
+}
+body[data-ui-context="game"] .ui-panel button{
+ color:var(--ui-text,#f4f7fa);
+ border-color:var(--ui-border,#ffffff44);
+ background:var(--ui-control,#162737);
+}
+body[data-ui-context="game"] .ui-panel .ui-sub,
+body[data-ui-context="game"] .ui-panel .panel-version{color:var(--ui-muted,#c9d2d9)}
+@media(prefers-reduced-motion:reduce){body[data-ui-context="game"] #game .play-action{transition:none}}
+
+/* The menu appearance is independent of the theme of the current level. */
+body[data-ui-context="shell"][data-shell-theme="warm"] .home-screen,
+body[data-ui-context="shell"][data-shell-theme="warm"] .free-setup{
+ background:radial-gradient(circle at 50% 18%,#556b54,#172d31 72%);
+}
+body[data-ui-context="shell"][data-shell-theme="warm"] .home-card,
+body[data-ui-context="shell"][data-shell-theme="warm"] .ui-card{
+ background:linear-gradient(160deg,#283c39,#12262a);border-color:#d3b87888;
+}
+body[data-ui-context="shell"][data-shell-theme="warm"] .home-card button,
+body[data-ui-context="shell"][data-shell-theme="warm"] .ui-panel button{
+ border-color:#d3b87888;
+}

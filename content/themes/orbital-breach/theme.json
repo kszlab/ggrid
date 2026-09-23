@@ -75,5 +75,21 @@
   },
   "assets": {
     "css": "theme.css"
+  },
+  "ui": {
+    "tokens": {
+      "surface": "#020610",
+      "surfaceRaised": "#19252f",
+      "control": "#09151f",
+      "controlRaised": "#2f3a43",
+      "controlPressed": "#017c89",
+      "accent": "#00f0ff",
+      "text": "#f1f7f9",
+      "muted": "#94ebf0",
+      "border": "#00f0ff66",
+      "shadow": "#00000099",
+      "focus": "#00f0ff",
+      "scrim": "#020713ed"
+    }
   }
 }
