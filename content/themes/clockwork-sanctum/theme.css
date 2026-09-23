@@ -1,0 +1,61 @@
+body[data-scene="clockwork-sanctum"]{background:radial-gradient(circle at 50% 15%,#29414b,#0b1216 42%,#040708 85%)}
+
+body[data-scene="clockwork-sanctum"] .board-wrap{background:radial-gradient(circle at 50% 22%,#273d43,#0a1114 70%);border-color:#8f682f}
+
+body[data-scene="clockwork-sanctum"] .board{background:#0c1518;border:5px ridge #b08240;border-radius:8px}
+
+body[data-scene="clockwork-sanctum"] .cell{background:radial-gradient(circle,#203438,#101a1d 72%);border:1px solid #d6a14d22;border-radius:3px;box-shadow:inset 0 0 0 1px #0008}
+
+body[data-scene="clockwork-sanctum"] .ball.sr-piece{overflow:visible;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff,#78f0ff 18%,#14738c 48%,#061116 72%);box-shadow:0 0 8px #fff,0 0 20px #5de1ff}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-piece{background:linear-gradient(135deg,#bd8138,#4a2b14 52%,#9d6329);box-shadow:inset 0 0 0 2px #e4b85e,3px 5px 8px #0009;border-radius:4px}
+
+body[data-scene="clockwork-sanctum"] .wall.sr-piece{background:linear-gradient(90deg,#151b1d,#697579 48%,#171e20);border:2px solid #947244;border-radius:28% 28% 7% 7%;box-shadow:inset 0 5px #a07b4b,3px 5px 8px #0009}
+
+body[data-scene="clockwork-sanctum"] .exit.sr-astrolabe{background:radial-gradient(circle,#eaffff 0 12%,#55eaff 13% 28%,#173d4b 30% 46%,#100d09 48%);border:3px solid #d8a84f!important;border-radius:50%!important;box-shadow:0 0 17px #64eaff,0 0 0 4px #493016!important;width:34px!important;height:34px!important;transform:none}
+
+
+/* v0.12.12 exit placement: bespoke portals still sit on the logical exit edge */
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-right,body[data-scene="neon-noir"] .sr-evac.exit-right{justify-self:end;transform:translateX(58%)}
+
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-left,body[data-scene="neon-noir"] .sr-evac.exit-left{justify-self:start;transform:translateX(-58%)}
+
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-up,body[data-scene="neon-noir"] .sr-evac.exit-up{align-self:start;transform:translateY(-58%)}
+
+body[data-scene="clockwork-sanctum"] .sr-astrolabe.exit-down,body[data-scene="neon-noir"] .sr-evac.exit-down{align-self:end;transform:translateY(58%)}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-component{background:linear-gradient(#9d682e,#3d2412 48%,#75471f);border:3px solid #d6a453!important;box-shadow:inset 0 4px #f0c56a44!important}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-component:not(.sr-open-right):after{content:"";position:absolute;right:-5px;top:22%;width:10px;height:56%;z-index:8;background:radial-gradient(circle,#f4ce79 0 22%,#6d431c 25% 55%,#d8a44f 58%);border-radius:50%;box-shadow:0 0 5px #000}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-component .piece-glyph{font:700 7px/1 ui-monospace,monospace;letter-spacing:.04em;color:#ffe0a0}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-component[data-part="1"] .piece-glyph{font-size:20px;animation:srSpin 4s linear infinite}
+
+body[data-scene="clockwork-sanctum"] .edge-control{background:linear-gradient(#6f542e,#2e2418);border-color:#d9ad5e88;color:#ffe1a0;box-shadow:inset 0 0 0 2px #130e09,0 3px 8px #000}
+
+body[data-scene="clockwork-sanctum"] .edge-control:active,body[data-scene="clockwork-sanctum"] .edge-control.pressed{background:#876431}
+
+body[data-scene="clockwork-sanctum"] .sr-astrolabe:before{content:"";position:absolute;inset:-16px;border:1px solid #6beaff77;border-radius:50%;border-top-color:transparent;border-bottom-color:transparent;animation:srSpin 9s linear infinite reverse}
+
+body[data-scene="clockwork-sanctum"] .scene-back:after{content:"";position:absolute;inset:12% 8%;background:radial-gradient(circle at 22% 35%,#8eeaff0d,transparent 17%),radial-gradient(circle at 72% 25%,#ffd57d0d,transparent 20%);animation:srBreathe 6s ease-in-out infinite alternate}
+
+body[data-scene="clockwork-sanctum"] .sr-caption:before{content:"◉ ";color:#79efff;animation:srPulse 1.6s ease-in-out infinite}
+
+@media(prefers-reduced-motion:reduce){.co-gear,.sr-holo,body[data-scene="clockwork-sanctum"] .scene-back:after,.sr-caption:before{animation:none!important}}
+
+.theme-preview[data-theme="clockwork-sanctum"] .theme-preview-art{background:radial-gradient(circle at 68% 30%,#8cecff55 0 4%,transparent 5% 14%,#d4a75a33 15% 16%,transparent 17%),repeating-radial-gradient(circle at 24% 55%,#d0a052 0 3px,#47321b 4px 8px,#0000 9px 17px),linear-gradient(145deg,#382814,#080706 70%)}
+
+.theme-preview[data-theme="clockwork-sanctum"] .mini-board{background:#1c140ae8;border:5px double #c69b50}
+.theme-preview[data-theme="clockwork-sanctum"] .mini-cell.block{background:radial-gradient(circle,#b88a43 0 18%,#4a3015 20% 28%,#b98b44 30% 38%,#39250f 40%);border-color:#d9b66c}
+.theme-preview[data-theme="clockwork-sanctum"] .mini-cell.target{background:radial-gradient(circle,#fff,#8beeff 18%,#356d83 35%,#c39b52 39% 44%,#17130d 46%)}
+
+body[data-scene="clockwork-sanctum"] .edge-control,body[data-scene="neon-noir"] .edge-control{background:linear-gradient(145deg,#ffffff0b,#00000018);border-color:#ffffff1c;color:inherit;box-shadow:inset 1px 1px 1px #ffffff1e,inset -2px -2px 4px #0007,0 2px 5px #0004}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source){
+ background:linear-gradient(135deg,#a96f30 0 10%,#3a2414 12% 72%,#775025 74%);
+ box-shadow:inset 0 0 0 2px #e4b85e,0 4px 7px #0008;
+}
+
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .rivet,
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .piece-glyph{opacity:.72}
