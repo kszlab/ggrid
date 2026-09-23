@@ -222,7 +222,7 @@
           "◉"
         ]
       },
-      "css": "clockwork-sanctum/theme.css?v=0.12.56"
+      "css": "clockwork-sanctum/theme.css?v=0.12.57"
     },
     {
       "id": "neon-noir",
@@ -242,7 +242,7 @@
           "EVAC"
         ]
       },
-      "css": "neon-noir/theme.css?v=0.12.56"
+      "css": "neon-noir/theme.css?v=0.12.57"
     },
     {
       "id": "microchip-lab",
@@ -262,7 +262,7 @@
           "DATA"
         ]
       },
-      "css": "microchip-lab/theme.css?v=0.12.56"
+      "css": "microchip-lab/theme.css?v=0.12.57"
     },
     {
       "id": "moonlit-zen",
@@ -282,7 +282,7 @@
           "鳥居"
         ]
       },
-      "css": "moonlit-zen/theme.css?v=0.12.56"
+      "css": "moonlit-zen/theme.css?v=0.12.57"
     }
   ]
 }
