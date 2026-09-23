@@ -20,11 +20,22 @@
     },
     "exit": {
       "name": "Tárnakijárat"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Fék"
     }
+  },
+  "scene": {
+    "type": "mine",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
