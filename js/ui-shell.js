@@ -45,12 +45,12 @@ const AppUI=(()=>{
   const box=document.querySelector(id),paint=()=>box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(!b)return;select.value=b.dataset.value;paint()});paint();return paint;
  }
- const paintSize=bindSegments('#quickSize',sizeEl),paintDiff=bindSegments('#quickDifficulty',difficultyEl),paintFreeze=bindSegments('#quickFreeze',freezeLimitEl);
+ const paintSize=bindSegments('#quickSize',sizeEl),paintDiff=bindSegments('#quickDifficulty',difficultyEl);
  async function openFreeSetup(){
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
-  const a=themes(),saved=themeEl.value||'classic',idx=a.findIndex(t=>t.id===saved);themeIndex=idx>=0?idx:0;paintTheme();paintSize();paintDiff();paintFreeze();
+  const a=themes(),saved=themeEl.value||'classic',idx=a.findIndex(t=>t.id===saved);themeIndex=idx>=0?idx:0;paintTheme();paintSize();paintDiff();
  }
  async function launchFreePlay(){
   document.body.classList.remove('scenario-mode');await ScenarioMode?.loadFreeTheme?.(themeEl.value);changeLevelProfile();enterGame();
