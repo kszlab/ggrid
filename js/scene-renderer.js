@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.51
+/* GGrid Scene Renderer 2 – v0.12.52
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -102,7 +102,12 @@ const SceneRenderer=(()=>{
       L/U/sparse rigid bodies have legal empty cells inside their bounding box; a
       bounding-box overlay would visually cover balls or other pieces in those cells. */
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
-   if(o.cells.length!==boxArea)continue;
+   /* Rectangular bodies use one showcase overlay. Irregular polyominoes stay
+      cell-composed; their joined-edge classes fuse them into one uniformly
+      themed body without painting over logical holes. */
+   const rectangular=o.cells.length===boxArea;
+   board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>el.classList.toggle('sr-composite-source',rectangular));
+   if(!rectangular)continue;
    let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
    if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
    ov.style.left=`calc(${(o.x+minX)*cellX}% + ${inset}px)`;
