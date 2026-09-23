@@ -542,3 +542,15 @@ body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 
  body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-top:90px}
  body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 48px)}
 }
+
+
+/* v0.12.52 – irregular showcase rigid bodies keep one visual identity.
+   Only cells actually covered by a rectangular composite are dimmed. */
+.scene-showcase .brick.sr-component{opacity:1}
+.scene-showcase .brick.sr-component.sr-composite-source{opacity:.16}
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source){
+ background:linear-gradient(135deg,#a96f30 0 10%,#3a2414 12% 72%,#775025 74%);
+ box-shadow:inset 0 0 0 2px #e4b85e,0 4px 7px #0008;
+}
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .rivet,
+body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .piece-glyph{opacity:.72}
