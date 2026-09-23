@@ -17,10 +17,8 @@ function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [
 function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
 function outerEdgeClasses(o,ci){
  const c=o.cells[ci],all=new Set(o.cells.map(q=>key(q.x,q.y))),cl=[];
- if(!all.has(key(c.x,c.y-1)))cl.push('edge-t');
- if(!all.has(key(c.x+1,c.y)))cl.push('edge-r');
- if(!all.has(key(c.x,c.y+1)))cl.push('edge-b');
- if(!all.has(key(c.x-1,c.y)))cl.push('edge-l');
+ const sides=[['t',0,-1],['r',1,0],['b',0,1],['l',-1,0]];
+ for(const [n,dx,dy] of sides)cl.push((all.has(key(c.x+dx,c.y+dy))?'join-':'edge-')+n);
  return cl.join(' ');
 }
 function render(opts={}){
