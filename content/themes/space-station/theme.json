@@ -32,11 +32,22 @@
     },
     "exit": {
       "name": "Légzsilip"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Időmező"
     }
+  },
+  "scene": {
+    "type": "space-station",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
