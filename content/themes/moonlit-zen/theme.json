@@ -37,7 +37,11 @@
       "fireflies",
       "mist"
     ],
-    "exitStyle": "torii-gate"
+    "exitStyle": "torii-gate",
+    "markup": {
+      "back": "<i class=\"sr-moon\"></i><i class=\"sr-mountain\"></i><i class=\"sr-water\"></i>",
+      "front": "<i class=\"sr-mist\"></i><i class=\"sr-fireflies\"></i><span class=\"sr-caption zen\">MOON GARDEN // 静 <b>水</b></span>"
+    }
   },
   "audio": {
     "profile": "zen",
@@ -61,5 +65,27 @@
     "controls": "embossed-integrated",
     "hud": "zen-slate",
     "sceneChrome": true
+  },
+  "pieces": {
+    "ball": {
+      "markup": "<i class=\"koi-tail\"></i><b class=\"koi-body\">◉</b>",
+      "className": "sr-piece"
+    },
+    "brick": {
+      "markup": "<i class=\"lotus-leaf\"></i><b class=\"lotus-flower\">✿</b>",
+      "className": "sr-piece"
+    },
+    "wall": {
+      "markup": "<i class=\"stone-cap\"></i><b>灯</b>",
+      "className": "sr-piece"
+    },
+    "rigidBody": {
+      "className": "sr-composite sr-composite-moonlit-zen",
+      "markup": "<i class=\"co-moss\"></i><i class=\"co-lotus\">✿</i><b>浮島</b>"
+    },
+    "exit": {
+      "className": "sr-exit sr-torii",
+      "markup": "<i></i><b>鳥居</b>"
+    }
   }
 }
