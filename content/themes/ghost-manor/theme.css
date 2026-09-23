@@ -1,0 +1,26 @@
+.theme-preview[data-theme="ghost-manor"] .theme-preview-art{background:radial-gradient(circle at 70% 22%,#e7e8ff99 0 7%,transparent 8%),linear-gradient(155deg,#30304b,#080811 68%),linear-gradient(90deg,transparent 20%,#817d9d22 21% 23%,transparent 24%)}
+
+.theme-preview[data-theme="ghost-manor"] .mini-board{background:#171626e8;border-color:#9187bd}
+.theme-preview[data-theme="ghost-manor"] .mini-cell.block{background:#453c59;border-color:#b4a8d0}
+.theme-preview[data-theme="ghost-manor"] .mini-cell.target{background:radial-gradient(circle,#fff,#b7c6ff 25%,#6b6ca4 55%,transparent 72%)}
+
+
+
+/* v0.12.38 – experimental theme gameplay skins.
+   These themes previously had cinema-card previews but no actual game selectors,
+   so they fell through to the Classic piece styling. */
+body[data-theme="ghost-manor"]{background:radial-gradient(circle at 72% 10%,#b9c9e622 0 8%,transparent 9%),linear-gradient(#161225,#07060d 72%)}
+
+body[data-theme="ghost-manor"] .board-wrap{background:linear-gradient(145deg,#21182a,#0d0a12);box-shadow:0 16px 45px #000b,inset 0 0 35px #8b79a51a}
+
+body[data-theme="ghost-manor"] .board{background:#241c2d;border-color:#756682}
+
+body[data-theme="ghost-manor"] .cell{background:linear-gradient(145deg,#30253a,#17121d)}
+
+body[data-theme="ghost-manor"] .ball{background:radial-gradient(circle at 38% 32%,#fff,#a7ffe0 30%,#55799a 62%,#182231);box-shadow:0 0 18px #b9ffdcaa}
+
+body[data-theme="ghost-manor"] .brick{background:linear-gradient(145deg,#855b38,#39251e);border-color:#c69b68}
+
+body[data-theme="ghost-manor"] .wall{background:linear-gradient(145deg,#665a70,#282330);border-color:#80738a}
+
+body[data-theme="ghost-manor"] .exit{filter:drop-shadow(0 0 8px #b9ffdc);color:#b9ffdc}
