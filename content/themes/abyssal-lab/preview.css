@@ -1,0 +1,4 @@
+.scene[data-scene="abyssal-lab"]{background:radial-gradient(ellipse at 50% -10%,#0b6b78,#00212c 45%,#000b12 90%)}
+.scene[data-scene="abyssal-lab"]::before{inset:-20%;background:repeating-radial-gradient(ellipse at 50% 0,#7ffff414 0 2%,transparent 3% 8%);transform:perspective(180px) rotateX(50deg);animation:water 6s linear infinite}
+.scene[data-scene="abyssal-lab"]::after{width:12px;height:12px;border:2px solid #8fffe0;border-radius:50%;left:12%;bottom:10%;box-shadow:24px -36px 0 -3px #8fffe0,50px -15px 0 -4px #8fffe0,240px -20px 0 -2px #8fffe0;animation:bubbles 4s linear infinite}
+.scene[data-scene="abyssal-lab"] .ball{border-radius:50% 35% 50% 35%;box-shadow:0 0 18px #5dffd8}
