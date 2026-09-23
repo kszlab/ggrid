@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.46
+/* GGrid Scene Renderer 2 – v0.12.47
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -97,6 +97,11 @@ const SceneRenderer=(()=>{
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
    const id=String(o.id);live.add(id);
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+   /* A single rectangular composite may only cover a completely filled footprint.
+      L/U/sparse rigid bodies have legal empty cells inside their bounding box; a
+      bounding-box overlay would visually cover balls or other pieces in those cells. */
+   const boxArea=(maxX-minX+1)*(maxY-minY+1);
+   if(o.cells.length!==boxArea)continue;
    let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
    if(!ov){ov=document.createElement('div');ov.className='sr-composite sr-composite-'+type;ov.dataset.objectId=id;ov.innerHTML=compositeMarkup(type);board.append(ov);componentOverlays.push(ov);}
    ov.style.left=`calc(${(o.x+minX)*cellX}% + ${inset}px)`;
