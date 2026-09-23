@@ -32,11 +32,22 @@
     },
     "exit": {
       "name": "Rakodónyílás"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Horgony"
     }
+  },
+  "scene": {
+    "type": "pirate-ship",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
