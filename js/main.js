@@ -59,7 +59,7 @@ function render(opts={}){
    A pályagenerálás a fejlesztői/content pipeline feladata, nem runtime funkció. */
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
- state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;const homeLevelId=document.querySelector('#homeLevelId');if(homeLevelId)homeLevelId.textContent=currentLevelId;
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;const homeLevelId=document.querySelector('#homeLevelId'),playLevelId=document.querySelector('#playLevelId');if(homeLevelId)homeLevelId.textContent=currentLevelId;if(playLevelId)playLevelId.textContent=currentLevelId;
  freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';
  render();MotionControl?.onNewLevel?.();
