@@ -70,6 +70,8 @@ const SceneRenderer=(()=>{
    ov.style.top=`calc(${(o.y+minY)*cellY}% + ${inset}px)`;
    ov.style.width=`calc(${(maxX-minX+1)*cellX}% - ${inset*2}px)`;
    ov.style.height=`calc(${(maxY-minY+1)*cellY}% - ${inset*2}px)`;
+   ov.style.setProperty('--sg-tile-w',`${100/(maxX-minX+1)}%`);
+   ov.style.setProperty('--sg-tile-h',`${100/(maxY-minY+1)}%`);
   }
   componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }

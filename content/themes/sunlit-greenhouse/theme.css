@@ -111,3 +111,8 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate{overflow:visible;back
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate:after{content:"";inset:auto;position:absolute;width:32px;height:37px;left:50%;top:50%;transform:translate(-50%,-50%);border:3px double #d7af58;border-radius:50% 50% 3px 3px / 35% 35% 3px 3px;background:repeating-linear-gradient(90deg,#315d39 0 2px,#f8f1c2b3 3px 9px);box-shadow:0 0 8px #fff5c5;pointer-events:none}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate.exit-left:after,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate.exit-right:after{width:29px;height:42px}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate-glass,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-gate b{display:none}
+/* Hand-painted plant pots from the approved design, repeated per occupied cell. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter{background:url("planter-v3.webp") center / 100% 100% no-repeat;border:0;border-radius:0;box-shadow:none;overflow:visible}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter:after,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-rim,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter b{display:none}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite{background:url("planter-v3.webp") left top / var(--sg-tile-w,50%) var(--sg-tile-h,100%) repeat;border:0;border-radius:0;box-shadow:none;overflow:visible}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-co-soil,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-co-leaves{display:none}
