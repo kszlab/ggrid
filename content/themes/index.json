@@ -17,7 +17,8 @@
           "▣",
           "◆"
         ]
-      }
+      },
+      "css": "classic/theme.css?v=0.12.56"
     },
     {
       "id": "mine",
@@ -34,7 +35,8 @@
           "▤",
           "▥"
         ]
-      }
+      },
+      "css": "mine/theme.css?v=0.12.56"
     },
     {
       "id": "space-station",
@@ -51,7 +53,8 @@
           "▰",
           "◎"
         ]
-      }
+      },
+      "css": "space-station/theme.css?v=0.12.56"
     },
     {
       "id": "ancient-temple",
@@ -68,7 +71,8 @@
           "▧",
           "◇"
         ]
-      }
+      },
+      "css": "ancient-temple/theme.css?v=0.12.56"
     },
     {
       "id": "ice-cavern",
@@ -85,7 +89,8 @@
           "◆",
           "◈"
         ]
-      }
+      },
+      "css": "ice-cavern/theme.css?v=0.12.56"
     },
     {
       "id": "cybergrid",
@@ -102,7 +107,8 @@
           "▣",
           "◇"
         ]
-      }
+      },
+      "css": "cybergrid/theme.css?v=0.12.56"
     },
     {
       "id": "pirate-ship",
@@ -119,7 +125,8 @@
           "▤",
           "⚓"
         ]
-      }
+      },
+      "css": "pirate-ship/theme.css?v=0.12.56"
     },
     {
       "id": "ghost-manor",
@@ -137,7 +144,8 @@
           "▥",
           "✧"
         ]
-      }
+      },
+      "css": "ghost-manor/theme.css?v=0.12.56"
     },
     {
       "id": "traffic-rescue",
@@ -155,7 +163,8 @@
           "▰",
           "▥"
         ]
-      }
+      },
+      "css": "traffic-rescue/theme.css?v=0.12.56"
     },
     {
       "id": "orbital-breach",
@@ -173,7 +182,8 @@
           "▰",
           "◎"
         ]
-      }
+      },
+      "css": "orbital-breach/theme.css?v=0.12.56"
     },
     {
       "id": "abyssal-lab",
@@ -191,7 +201,8 @@
           "▣",
           "◌"
         ]
-      }
+      },
+      "css": "abyssal-lab/theme.css?v=0.12.56"
     },
     {
       "id": "clockwork-sanctum",
@@ -210,7 +221,8 @@
           "⚙",
           "◉"
         ]
-      }
+      },
+      "css": "clockwork-sanctum/theme.css?v=0.12.56"
     },
     {
       "id": "neon-noir",
@@ -229,7 +241,8 @@
           "C-47",
           "EVAC"
         ]
-      }
+      },
+      "css": "neon-noir/theme.css?v=0.12.56"
     },
     {
       "id": "microchip-lab",
@@ -248,7 +261,8 @@
           "74G",
           "DATA"
         ]
-      }
+      },
+      "css": "microchip-lab/theme.css?v=0.12.56"
     },
     {
       "id": "moonlit-zen",
@@ -267,7 +281,8 @@
           "浮島",
           "鳥居"
         ]
-      }
+      },
+      "css": "moonlit-zen/theme.css?v=0.12.56"
     }
   ]
 }
