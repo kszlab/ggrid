@@ -1,0 +1,21 @@
+.theme-preview[data-theme="space-station"] .theme-preview-art,.theme-preview[data-theme="orbital-breach"] .theme-preview-art{background:radial-gradient(circle at 68% 28%,#b9f5ff 0 3%,#4be4ff44 4% 11%,transparent 12%),linear-gradient(135deg,#152a42,#02060c 68%),repeating-linear-gradient(90deg,transparent 0 48px,#54e8ff1c 49px 51px)}
+
+.theme-preview[data-theme="space-station"] .mini-board,.theme-preview[data-theme="orbital-breach"] .mini-board{background:#071523e8;border-color:#68eaff}
+.theme-preview[data-theme="space-station"] .mini-cell.block,.theme-preview[data-theme="orbital-breach"] .mini-cell.block{background:linear-gradient(145deg,#5e7382,#182936);border-color:#9ceeff}
+
+
+body[data-theme="orbital-breach"]{background:radial-gradient(circle at 76% 12%,#184c7244,transparent 22%),linear-gradient(#020713,#000208 78%)}
+
+body[data-theme="orbital-breach"] .board-wrap{background:linear-gradient(145deg,#0c1c29,#040910);box-shadow:0 16px 45px #000c,inset 0 0 30px #00f0ff0c}
+
+body[data-theme="orbital-breach"] .board{background:#0a1722;border-color:#2d6d7b}
+
+body[data-theme="orbital-breach"] .cell{background:linear-gradient(145deg,#102a39,#07131d)}
+
+body[data-theme="orbital-breach"] .ball{background:radial-gradient(circle at 34% 30%,#fff,#4ffff2 27%,#007d91 58%,#03141e);border-color:#7ffff7;box-shadow:0 0 16px #00f0ffaa}
+
+body[data-theme="orbital-breach"] .brick{background:linear-gradient(145deg,#526f80,#182c38);border-color:#ff6b35;box-shadow:inset 0 0 0 2px #00f0ff22}
+
+body[data-theme="orbital-breach"] .wall{background:repeating-linear-gradient(90deg,#384650 0 7px,#151e24 7px 14px);border-color:#536671}
+
+body[data-theme="orbital-breach"] .exit{color:#00f0ff;filter:drop-shadow(0 0 8px #00f0ff)}
