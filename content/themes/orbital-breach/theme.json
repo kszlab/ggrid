@@ -33,7 +33,8 @@
     },
     "exit": {
       "name": "Légzsilip"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
@@ -50,7 +51,11 @@
       "warning-stripes",
       "sparks",
       "hud"
-    ]
+    ],
+    "markup": {
+      "back": "",
+      "front": ""
+    }
   },
   "audio": {
     "profile": "orbital",
@@ -67,5 +72,8 @@
       "exit": "airlock",
       "win": "system-clear"
     }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
