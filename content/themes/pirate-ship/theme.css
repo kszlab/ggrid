@@ -1,0 +1,23 @@
+/* v0.12.6 – data-driven extended Theme Library */
+body[data-theme="space-station"],body[data-theme="ancient-temple"],body[data-theme="ice-cavern"],body[data-theme="cybergrid"],body[data-theme="pirate-ship"]{background:linear-gradient(var(--theme-bg1),var(--theme-bg2))}
+
+body[data-theme="pirate-ship"]{--theme-bg1:#49301d;--theme-bg2:#100b08}
+
+body[data-theme="space-station"] .board-wrap,body[data-theme="ancient-temple"] .board-wrap,body[data-theme="ice-cavern"] .board-wrap,body[data-theme="cybergrid"] .board-wrap,body[data-theme="pirate-ship"] .board-wrap{background:var(--theme-wrap,#263f4c)}
+
+body[data-theme="space-station"] .board,body[data-theme="ancient-temple"] .board,body[data-theme="ice-cavern"] .board,body[data-theme="cybergrid"] .board,body[data-theme="pirate-ship"] .board{background:var(--theme-board,#152b38);border-color:var(--theme-accent,#62d9ff)}
+
+body[data-theme="space-station"] .cell,body[data-theme="ancient-temple"] .cell,body[data-theme="ice-cavern"] .cell,body[data-theme="cybergrid"] .cell,body[data-theme="pirate-ship"] .cell{background:linear-gradient(145deg,var(--theme-cell1,#294653),var(--theme-cell2,#142a35))}
+
+body[data-theme="space-station"] .ball,body[data-theme="ancient-temple"] .ball,body[data-theme="ice-cavern"] .ball,body[data-theme="cybergrid"] .ball,body[data-theme="pirate-ship"] .ball{background:radial-gradient(circle at 32% 27%,var(--theme-ball1,#fff),var(--theme-ball2,#59d9ff) 28%,var(--theme-ball3,#136087) 70%);box-shadow:0 0 14px var(--theme-accent,#62d9ff),3px 5px 7px #0007}
+
+body[data-theme="space-station"] .brick,body[data-theme="ancient-temple"] .brick,body[data-theme="ice-cavern"] .brick,body[data-theme="cybergrid"] .brick,body[data-theme="pirate-ship"] .brick{background:repeating-linear-gradient(90deg,var(--theme-brick1,#647987) 0 6px,var(--theme-brick2,#394b58) 6px 12px);box-shadow:inset 0 0 0 2px var(--theme-brick-edge,#8eeaff),3px 5px 7px #0007}
+
+body[data-theme="space-station"] .wall,body[data-theme="ancient-temple"] .wall,body[data-theme="ice-cavern"] .wall,body[data-theme="cybergrid"] .wall,body[data-theme="pirate-ship"] .wall{background:repeating-linear-gradient(135deg,var(--theme-wall1,#39434b) 0 6px,var(--theme-wall2,#20282e) 6px 12px)}
+
+body[data-theme="space-station"] .exit,body[data-theme="ancient-temple"] .exit,body[data-theme="ice-cavern"] .exit,body[data-theme="cybergrid"] .exit,body[data-theme="pirate-ship"] .exit{border-color:var(--theme-accent,#62d9ff);box-shadow:0 0 14px var(--theme-accent,#62d9ff)}
+
+.theme-preview[data-theme="pirate-ship"] .theme-preview-art{background:radial-gradient(circle at 20% 24%,#ffc35b66,transparent 17%),repeating-linear-gradient(90deg,#5a321b 0 42px,#382011 43px 47px),linear-gradient(#162c3b,#05090c)}
+
+.theme-preview[data-theme="pirate-ship"] .mini-board{background:#402313e8;border:6px solid #7a4827}
+.theme-preview[data-theme="pirate-ship"] .mini-cell.block{background:#7d4a24;border-color:#d49b56}
