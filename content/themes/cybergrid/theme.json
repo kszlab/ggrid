@@ -32,11 +32,22 @@
     },
     "exit": {
       "name": "Portál"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Rendszerfagyasztás"
     }
+  },
+  "scene": {
+    "type": "cybergrid",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
