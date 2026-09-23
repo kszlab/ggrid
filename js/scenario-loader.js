@@ -1,8 +1,15 @@
-/* ===== v0.12.38 SCENARIO + THEME LOADER ===== */
+/* ===== v0.12.46 SCENARIO + DATA-DRIVEN THEME LOADER ===== */
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
- const freeThemeEl=document.querySelector('#freeTheme');let freeThemeIndex=null;
+ const freeThemeEl=document.querySelector('#freeTheme');let freeThemeIndex=null,themeCssLink=null;
+ async function applyThemeAssetCss(t,base){
+  const src=t?.assets?.css||t?.css||null;
+  if(themeCssLink){themeCssLink.remove();themeCssLink=null}
+  if(!src)return;
+  themeCssLink=document.createElement('link');themeCssLink.rel='stylesheet';themeCssLink.dataset.ggridThemeCss='1';themeCssLink.href=refUrl(base,src);document.head.append(themeCssLink);
+  await new Promise(resolve=>{themeCssLink.onload=resolve;themeCssLink.onerror=resolve});
+ }
  const panel=document.querySelector('#scenarioPanel'),list=document.querySelector('#scenarioList'),title=document.querySelector('#scenarioTitle'),desc=document.querySelector('#scenarioDesc'),info=document.querySelector('#scenarioInfo');
  const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
  const fetchJson=async src=>{const r=await fetch(src,{cache:'no-cache'});if(!r.ok)throw Error('CONTENT_FETCH_FAILED '+src);return r.json()};
@@ -49,7 +56,7 @@ const ScenarioMode=(()=>{
    if(!freeThemeIndex){freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index')}
    const entry=(freeThemeIndex.themes||[]).find(t=>t.id===id)||(freeThemeIndex.themes||[]).find(t=>t.id==='classic');
    if(!entry)throw Error('INVALID_REFERENCE theme '+id);
-   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');applyTheme(t);
+   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');t.__index=entry;await applyThemeAssetCss(t,url);applyTheme(t);
    try{localStorage.setItem('ggrid.freeplay.theme.v1',entry.id)}catch(_){}
    return t;
   }catch(e){console.error(e);SceneRenderer?.clear?.();AudioManager?.setThemeAudio?.(null)}
