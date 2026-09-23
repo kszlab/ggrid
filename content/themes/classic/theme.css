@@ -1,0 +1,2 @@
+/* Each card is an intentionally cinematic preview of the actual theme palette/scene. */
+.theme-preview[data-theme="classic"] .theme-preview-art{background:radial-gradient(circle at 30% 32%,#dfe8ee 0 5%,transparent 6%),linear-gradient(135deg,#5f686d 0 24%,#333b40 25% 50%,#b8783e 51% 67%,#26323a 68%)}
