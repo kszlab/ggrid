@@ -2,5 +2,5 @@
   "format": "ggrid-level-catalog",
   "formatVersion": 1,
   "description": "Additional JSON level packs. The built-in LF2 240-level set remains the base pack for backward compatibility.",
-  "packs": []
+  "packs": [{"id":"classified-v1","src":"packs/classified-v1.json"}]
 }

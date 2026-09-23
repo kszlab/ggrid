@@ -106,24 +106,34 @@ function classify(entry){
  const uniqueness=clamp(routeConstraint+.2*(forcedMoves/route.length));
  const raw=1+9*(.35*solution+.25*dependency+.20*decision+.15*mistakes+.05*uniqueness);
  let grade=clamp(Math.round(raw),1,10),cap=10;
- if(route.length===direct.baseline&&setup===0&&retreat===0)cap=routeConstraint>0?4:3;
+ if(route.length===direct.baseline&&setup===0&&retreat===0)cap=routeConstraint>0?(raw>=5?5:4):3;
  else if(detour<2&&setup===0)cap=5;
  else if(detour<2&&setup<1)cap=6;
  if(detour<2&&setup<2)cap=Math.min(cap,7);
  if(detour<3||setup<2||turns<4)cap=Math.min(cap,9);
  grade=Math.min(grade,cap);
+ // Keep mild but constrained navigation distinct from nearly trivial paths,
+ // and avoid a gap between the D4 and D6 structural bands on small boards.
+ if(raw<2.85&&turns>0)grade=Math.min(grade,2);
+ if(detour>0&&raw>=5.45&&raw<5.6)grade=Math.min(grade,5);
+ // D10 requires substantial forced complexity; the 9.0 raw threshold is
+ // calibrated against the small boards where raw 9.5 is rarely attainable.
+ if(raw>=9&&cap===10)grade=10;
  // A single-direction clear exit remains D1 even if wrong moves exist.
  if(route.length===direct.baseline&&turns===0&&direct.valid>0)grade=1;
  return {levelId:entry.id,status:'ok',difficulty:grade,raw:+raw.toFixed(3),cap,
   metrics:{optimalMoves:route.length,baselineMoves:direct.baseline,detourMoves:detour,directionChanges:turns,setupMoves:setup,retreatMoves:retreat,geometricShortestRoutes:direct.count,feasibleGeometricRoutes:direct.valid,averageAlternatives,forcedMoves,searchedStates:solved.states,mistakeAlternatives:risk.examinedAlternatives},
   components:{solution:+solution.toFixed(3),dependency:+dependency.toFixed(3),decision:+decision.toFixed(3),mistakes:+mistakes.toFixed(3),uniqueness:+uniqueness.toFixed(3)},
-  optimalSolution:route,priorClass:entry.storedClass??null,priorRaw:entry.storedRaw??null,model:'human-estimate-v1'};
+  optimalSolution:route,priorClass:entry.storedClass??null,priorRaw:entry.storedRaw??null,model:'human-estimate-v1.2'};
 }
-const input=process.argv[2];if(!input){console.error('Usage: node tools/classify-level.mjs LEVEL_ID | level.json | --all [--json]');process.exit(2)}
-const entries=input==='--all'||input.startsWith('LF2-')?builtins():fromJson(input);
-const selected=input==='--all'?entries:input.startsWith('LF2-')?entries.filter(e=>e.id===input):entries;
-if(!selected.length){console.error('Level not found:',input);process.exit(2)}
-const results=selected.map(classify);
-if(process.argv.includes('--json'))console.log(JSON.stringify(results.length===1?results[0]:results,null,2));
-else for(const r of results)console.log(`${r.levelId}: ${r.status==='ok'?`D${r.difficulty} (raw ${r.raw}, old D${r.priorClass??'?'}) · ${r.metrics.optimalMoves} moves, detour ${r.metrics.detourMoves}, setup ${r.metrics.setupMoves}`:r.status}`);
-if(results.some(r=>r.status!=='ok'))process.exitCode=1;
+export {builtins,classify};
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+ const input=process.argv[2];if(!input){console.error('Usage: node tools/classify-level.mjs LEVEL_ID | level.json | --all [--json]');process.exit(2)}
+ const entries=input==='--all'||input.startsWith('LF2-')?builtins():fromJson(input);
+ const selected=input==='--all'?entries:input.startsWith('LF2-')?entries.filter(e=>e.id===input):entries;
+ if(!selected.length){console.error('Level not found:',input);process.exit(2)}
+ const results=selected.map(classify);
+ if(process.argv.includes('--json'))console.log(JSON.stringify(results.length===1?results[0]:results,null,2));
+ else for(const r of results)console.log(`${r.levelId}: ${r.status==='ok'?`D${r.difficulty} (raw ${r.raw}, old D${r.priorClass??'?'}) · ${r.metrics.optimalMoves} moves, detour ${r.metrics.detourMoves}, setup ${r.metrics.setupMoves}`:r.status}`);
+ if(results.some(r=>r.status!=='ok'))process.exitCode=1;
+}

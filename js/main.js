@@ -22,7 +22,8 @@ function scoreReward(){const optimum=Math.max(1,optimal.length),steps=Math.max(o
 function updateLevelScore(){
  if(!state||!currentLevelId||!inFreePlay())return;
  const best=Math.max(0,Math.min(scoreBase(),Number(scoreData.best[currentLevelId])||0)),done=best>0;
- const label=`${done?'✓ ':''}${currentLevelId} · ${best}/${scoreBase()} pont`;
+ const levelClass=Number(currentLevelRecord?.analysis?.testDifficultyClass)||Number(difficultyEl.value);
+ const label=`${done?'✓ ':''}${currentLevelId} · D${levelClass} · ${best}/${scoreBase()} pont`;
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
 function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=inFreePlay()&&!hintVisible&&scoreData.balance<1;hintBtn.title=inFreePlay()?'Súgó: 1 pont (újbóli megnyitása ingyenes)':''}if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}

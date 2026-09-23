@@ -8,7 +8,8 @@ const LevelLibrary=(()=>{
   levels=GGRID_TEST_LEVELS_V2.map(r=>{
    const objects=r.o.map((p,i)=>({id:p[0]==='B'?'ball1':p[0]==='K'?'b'+i:'w'+i,type:p[0]==='B'?'ball':p[0]==='K'?'brick':'wall',x:p[1],y:p[2],cells:p[3].map(c=>({x:c[0],y:c[1]})),glueEdges:[],glued:p[3].length>1}));
    const glueCount=objects.filter(o=>o.type==='brick'&&o.cells.length>1).length;
-   return{format:'ggrid-level',formatVersion:2,levelId:r.id,rulesVersion:1,requires:{features:['core.movement','core.exit','object.ball','object.rigid-body','object.wall']},board:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]}},initialResources:{freeze:0},analysis:{testDifficultyClass:r.d,rawDifficulty:r.raw,difficultyModelVersion:2,solution:[...r.sol].map(x=>dm[x])},_state:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]},moves:0,won:false,glueCount,brickCount:objects.filter(o=>o.type==='brick').length,wallCount:objects.filter(o=>o.type==='wall').length,objects}};
+   const updated=typeof GGRID_CLASSIFICATION_V1==='object'?GGRID_CLASSIFICATION_V1[r.id]:null;
+   return{format:'ggrid-level',formatVersion:2,levelId:r.id,rulesVersion:1,requires:{features:['core.movement','core.exit','object.ball','object.rigid-body','object.wall']},board:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]}},initialResources:{freeze:0},analysis:{testDifficultyClass:updated?.class??r.d,rawDifficulty:updated?.raw??r.raw,difficultyModelVersion:updated?.model??2,solution:[...r.sol].map(x=>dm[x])},_state:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]},moves:0,won:false,glueCount,brickCount:objects.filter(o=>o.type==='brick').length,wallCount:objects.filter(o=>o.type==='wall').length,objects}};
   });
   return levels;
  }
@@ -48,7 +49,7 @@ const LevelLibrary=(()=>{
    if(!compatible(l))unsupported.push(l.levelId);
   }
   const cov=coverage(),missing=[],expected=['3x3','4x4','5x5','5x6','5x7','5x8'];
-  for(const size of expected){const a=cov[size]||Array(10).fill(0);for(let d=1;d<=10;d++)if(!a[d-1])missing.push(size+' D'+d);}
+  for(const size of expected){const a=cov[size]||Array(10).fill(0);for(let d=1;d<=10;d++)if(a[d-1]<5)missing.push(size+' D'+d+' ('+a[d-1]+'/5)');}
   return{total:all.length,compatible:all.length-unsupported.length,duplicates,invalid,unsupported,coverage:cov,missing,ok:!duplicates.length&&!invalid.length&&!unsupported.length&&!missing.length};
  }
  function candidates(w,h,d){return parse().filter(l=>compatible(l)&&l.board.width===w&&l.board.height===h&&l.analysis.testDifficultyClass===d)}
