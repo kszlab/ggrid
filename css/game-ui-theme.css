@@ -111,3 +111,9 @@ body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-control:focus-
  body[data-ui-context="game"] .board .exit-beacon-left span{left:calc(100% + 2px);right:auto}
  body[data-ui-context="game"] .board .exit-beacon-right span{right:calc(100% + 2px);left:auto}
 }
+/* Keep the caption inside the board. The outer control rail is a separate,
+   higher stacking layer and could otherwise hide the word on side exits. */
+body[data-ui-context="game"] .board .exit-beacon-left span{left:calc(100% + 4px);right:auto}
+body[data-ui-context="game"] .board .exit-beacon-right span{right:calc(100% + 4px);left:auto}
+body[data-ui-context="game"] .board .exit-beacon-up span{top:calc(100% + 4px);bottom:auto;right:50%;transform:translateX(50%)}
+body[data-ui-context="game"] .board .exit-beacon-down span{bottom:calc(100% + 4px);top:auto;right:50%;transform:translateX(50%)}
