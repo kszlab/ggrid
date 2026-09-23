@@ -33,7 +33,8 @@
     },
     "exit": {
       "name": "Szabad út"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
@@ -48,7 +49,11 @@
       "road-markings",
       "signals",
       "street-lights"
-    ]
+    ],
+    "markup": {
+      "back": "",
+      "front": ""
+    }
   },
   "audio": {
     "profile": "city",
@@ -65,5 +70,8 @@
       "exit": "siren-clear",
       "win": "rescue-clear"
     }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
