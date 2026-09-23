@@ -145,7 +145,8 @@
           "✧"
         ]
       },
-      "css": "ghost-manor/theme.css?v=0.12.56"
+      "css": "ghost-manor/theme.css?v=0.12.56",
+      "previewCss": "ghost-manor/preview.css?v=0.12.58"
     },
     {
       "id": "traffic-rescue",
@@ -164,7 +165,8 @@
           "▥"
         ]
       },
-      "css": "traffic-rescue/theme.css?v=0.12.56"
+      "css": "traffic-rescue/theme.css?v=0.12.56",
+      "previewCss": "traffic-rescue/preview.css?v=0.12.58"
     },
     {
       "id": "orbital-breach",
@@ -183,7 +185,8 @@
           "◎"
         ]
       },
-      "css": "orbital-breach/theme.css?v=0.12.56"
+      "css": "orbital-breach/theme.css?v=0.12.56",
+      "previewCss": "orbital-breach/preview.css?v=0.12.58"
     },
     {
       "id": "abyssal-lab",
@@ -202,7 +205,8 @@
           "◌"
         ]
       },
-      "css": "abyssal-lab/theme.css?v=0.12.56"
+      "css": "abyssal-lab/theme.css?v=0.12.56",
+      "previewCss": "abyssal-lab/preview.css?v=0.12.58"
     },
     {
       "id": "clockwork-sanctum",
@@ -222,7 +226,8 @@
           "◉"
         ]
       },
-      "css": "clockwork-sanctum/theme.css?v=0.12.57"
+      "css": "clockwork-sanctum/theme.css?v=0.12.57",
+      "previewCss": "clockwork-sanctum/preview.css?v=0.12.58"
     },
     {
       "id": "neon-noir",
@@ -242,7 +247,8 @@
           "EVAC"
         ]
       },
-      "css": "neon-noir/theme.css?v=0.12.57"
+      "css": "neon-noir/theme.css?v=0.12.57",
+      "previewCss": "neon-noir/preview.css?v=0.12.58"
     },
     {
       "id": "microchip-lab",
