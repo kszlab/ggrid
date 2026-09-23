@@ -129,4 +129,7 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-r:not(.sr-composite-source){border-right:0}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-t:not(.sr-composite-source){border-top:0}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-b:not(.sr-composite-source){border-bottom:0}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.sr-open-top:not(.sr-composite-source):before{content:"";position:absolute;left:0;right:0;top:-10%;height:42%;background:url("planter-v3.webp") center top / 100% auto no-repeat;pointer-events:none}
+/* Preserve the joined-cell bridge pseudo-elements; foliage uses the real markup node. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-b:not(.sr-composite-source)::after{display:block;content:"";background:inherit}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.sr-open-top:not(.sr-composite-source) .sg-planter-rim{display:block;left:0;right:0;top:-6%;height:41%;border:0;border-radius:0;background:url("planter-v3.webp") center top / 100% auto no-repeat;pointer-events:none}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component:not(.sr-composite-source) b{display:none}
