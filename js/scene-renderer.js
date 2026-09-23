@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.47
+/* GGrid Scene Renderer 2 – v0.12.50
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -55,6 +55,7 @@ const SceneRenderer=(()=>{
   el.classList.toggle('sr-component',cp.count>1);
   for(const k of ['left','right','top','bottom'])el.classList.toggle('sr-open-'+k,cp[k]);
   el.classList.toggle('sr-horizontal',cp.count>1&&cp.h===1);el.classList.toggle('sr-vertical',cp.count>1&&cp.w===1);
+  el.classList.toggle('sr-rigid-cell',o.type==='brick'&&cp.count>1);
   const spec=theme?.pieces?.[o.type];if(spec?.className)el.classList.add(...String(spec.className).split(/\s+/).filter(Boolean));if(spec?.markup!=null){el.innerHTML=spec.markup;return}
   if(type==='clockwork-sanctum'){
    el.classList.add('sr-piece');
