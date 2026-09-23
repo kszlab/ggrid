@@ -13,6 +13,7 @@ const directions=['up','down','left','right'];
 const letter={U:'up',D:'down',L:'left',R:'right'};
 const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
 const MAX_STATES=50000,MAX_DEPTH=40;
+let calibration={};try{calibration=JSON.parse(fs.readFileSync(path.join(root,'tools/difficulty-calibration-v2.json'),'utf8'))}catch(_){}
 
 function builtins(){
  vm.runInContext(fs.readFileSync(path.join(root,'content/levels/test-library-v1.js'),'utf8')+'\nthis.rows=GGRID_TEST_LEVELS_V2',context);
@@ -104,27 +105,16 @@ function classify(entry){
  const decision=clamp(.6*averageAlternatives+.4*routeConstraint);
  const mistakes=risk.risk;
  const uniqueness=clamp(routeConstraint+.2*(forcedMoves/route.length));
- const raw=1+9*(.35*solution+.25*dependency+.20*decision+.15*mistakes+.05*uniqueness);
- let grade=clamp(Math.round(raw),1,10),cap=10;
- if(route.length===direct.baseline&&setup===0&&retreat===0)cap=routeConstraint>0?(raw>=5?5:4):3;
- else if(detour<2&&setup===0)cap=5;
- else if(detour<2&&setup<1)cap=6;
- if(detour<2&&setup<2)cap=Math.min(cap,7);
- if(detour<3||setup<2||turns<4)cap=Math.min(cap,9);
- grade=Math.min(grade,cap);
- // Keep mild but constrained navigation distinct from nearly trivial paths,
- // and avoid a gap between the D4 and D6 structural bands on small boards.
- if(raw<2.85&&turns>0)grade=Math.min(grade,2);
- if(detour>0&&raw>=5.45&&raw<5.6)grade=Math.min(grade,5);
- // D10 requires substantial forced complexity; the 9.0 raw threshold is
- // calibrated against the small boards where raw 9.5 is rarely attainable.
- if(raw>=9&&cap===10)grade=10;
- // A single-direction clear exit remains D1 even if wrong moves exist.
- if(route.length===direct.baseline&&turns===0&&direct.valid>0)grade=1;
- return {levelId:entry.id,status:'ok',difficulty:grade,raw:+raw.toFixed(3),cap,
-  metrics:{optimalMoves:route.length,baselineMoves:direct.baseline,detourMoves:detour,directionChanges:turns,setupMoves:setup,retreatMoves:retreat,geometricShortestRoutes:direct.count,feasibleGeometricRoutes:direct.valid,averageAlternatives,forcedMoves,searchedStates:solved.states,mistakeAlternatives:risk.examinedAlternatives},
+ const challenge=.45*clamp(detour/2)+.35*clamp(setup)+.20*routeConstraint;
+ const score=.25*solution+.35*dependency+.15*decision+.15*mistakes+.10*uniqueness;
+ const raw=1+9*(score-.24)/.72,size=s.width+'x'+s.height,limits=calibration[size];
+ const grade=Array.isArray(limits)&&limits.length===9?1+limits.filter(boundary=>raw>=boundary).length:clamp(Math.round(raw),1,10);
+ const measured={optimalMoves:route.length,baselineMoves:direct.baseline,detourMoves:detour,directionChanges:turns,setupMoves:setup,retreatMoves:retreat,geometricShortestRoutes:direct.count,feasibleGeometricRoutes:direct.valid,averageAlternatives,forcedMoves,searchedStates:solved.states,mistakeAlternatives:risk.examinedAlternatives,challengeSignal:+challenge.toFixed(4)};
+ if(challenge<.08)return {levelId:entry.id,status:'trivial',raw:+raw.toFixed(3),metrics:measured,optimalSolution:route,model:'puzzle-v2'};
+ return {levelId:entry.id,status:'ok',difficulty:grade,raw:+raw.toFixed(3),
+  metrics:measured,
   components:{solution:+solution.toFixed(3),dependency:+dependency.toFixed(3),decision:+decision.toFixed(3),mistakes:+mistakes.toFixed(3),uniqueness:+uniqueness.toFixed(3)},
-  optimalSolution:route,priorClass:entry.storedClass??null,priorRaw:entry.storedRaw??null,model:'human-estimate-v1.2'};
+  optimalSolution:route,priorClass:entry.storedClass??null,priorRaw:entry.storedRaw??null,model:'puzzle-v2'};
 }
 export {builtins,classify};
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

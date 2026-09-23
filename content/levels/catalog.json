@@ -1,6 +1,13 @@
 {
   "format": "ggrid-level-catalog",
   "formatVersion": 1,
-  "description": "Additional JSON level packs. The built-in LF2 240-level set remains the base pack for backward compatibility.",
-  "packs": [{"id":"classified-v1","src":"packs/classified-v1.json"}]
+  "description": "Puzzle v2: only structurally nontrivial levels, with remeasured D1-D10 classes.",
+  "packs": [
+    {"id":"classified-v2-3x3","src":"packs/classified-v2-3x3.json"},
+    {"id":"classified-v2-4x4","src":"packs/classified-v2-4x4.json"},
+    {"id":"classified-v2-5x5","src":"packs/classified-v2-5x5.json"},
+    {"id":"classified-v2-5x6","src":"packs/classified-v2-5x6.json"},
+    {"id":"classified-v2-5x7","src":"packs/classified-v2-5x7.json"},
+    {"id":"classified-v2-5x8","src":"packs/classified-v2-5x8.json"}
+  ]
 }

@@ -1,0 +1,3794 @@
+[
+  {
+    "levelId": "LC1-3X3-0001",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.871,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.778,
+      "forcedMoves": 0,
+      "searchedStates": 17,
+      "mistakeAlternatives": 7,
+      "challengeSignal": 0.1
+    },
+    "components": {
+      "solution": 0.119,
+      "dependency": 0.075,
+      "decision": 0.667,
+      "mistakes": 0.691,
+      "uniqueness": 0.5
+    },
+    "optimalSolution": [
+      "left",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0002",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.871,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.778,
+      "forcedMoves": 0,
+      "searchedStates": 18,
+      "mistakeAlternatives": 7,
+      "challengeSignal": 0.1
+    },
+    "components": {
+      "solution": 0.119,
+      "dependency": 0.075,
+      "decision": 0.667,
+      "mistakes": 0.691,
+      "uniqueness": 0.5
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0003",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.871,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.778,
+      "forcedMoves": 0,
+      "searchedStates": 16,
+      "mistakeAlternatives": 7,
+      "challengeSignal": 0.1
+    },
+    "components": {
+      "solution": 0.119,
+      "dependency": 0.075,
+      "decision": 0.667,
+      "mistakes": 0.691,
+      "uniqueness": 0.5
+    },
+    "optimalSolution": [
+      "left",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0004",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.49,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 28,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.252,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.56,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0005",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.49,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 27,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.252,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.56,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0006",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.49,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 28,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.252,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.56,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0007",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.49,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 29,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.252,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.56,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0008",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.821,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 22,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.392,
+      "decision": 0.85,
+      "mistakes": 0.547,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "up",
+      "right",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0009",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.821,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 22,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.392,
+      "decision": 0.85,
+      "mistakes": 0.547,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "down",
+      "left",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0010",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.821,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 22,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.392,
+      "decision": 0.85,
+      "mistakes": 0.547,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "down",
+      "right",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0011",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.83,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 2,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 20,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.324,
+      "dependency": 0.392,
+      "decision": 0.95,
+      "mistakes": 0.571,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "up",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0012",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.895,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 4,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.619,
+      "forcedMoves": 0,
+      "searchedStates": 29,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.783,
+      "dependency": 0.875,
+      "decision": 0.771,
+      "mistakes": 0.493,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "left",
+      "down",
+      "left",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0013",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.895,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 4,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.619,
+      "forcedMoves": 0,
+      "searchedStates": 28,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.783,
+      "dependency": 0.875,
+      "decision": 0.771,
+      "mistakes": 0.493,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "up",
+      "right",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0014",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.895,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 4,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.619,
+      "forcedMoves": 0,
+      "searchedStates": 28,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.783,
+      "dependency": 0.875,
+      "decision": 0.771,
+      "mistakes": 0.493,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "left",
+      "up",
+      "left",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0015",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.782,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 3,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 32,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.711,
+      "dependency": 0.875,
+      "decision": 0.8,
+      "mistakes": 0.524,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "left",
+      "left",
+      "down",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0016",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 9.247,
+    "metrics": {
+      "optimalMoves": 11,
+      "baselineMoves": 4,
+      "detourMoves": 7,
+      "directionChanges": 7,
+      "setupMoves": 3,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.727,
+      "forcedMoves": 0,
+      "searchedStates": 48,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 1,
+      "dependency": 1,
+      "decision": 0.836,
+      "mistakes": 0.495,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "up",
+      "right",
+      "up",
+      "down",
+      "left",
+      "left",
+      "down",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0017",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 9.247,
+    "metrics": {
+      "optimalMoves": 11,
+      "baselineMoves": 4,
+      "detourMoves": 7,
+      "directionChanges": 7,
+      "setupMoves": 3,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.727,
+      "forcedMoves": 0,
+      "searchedStates": 48,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 1,
+      "dependency": 1,
+      "decision": 0.836,
+      "mistakes": 0.495,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "down",
+      "left",
+      "down",
+      "up",
+      "right",
+      "right",
+      "up",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0018",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.782,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 4,
+      "detourMoves": 0,
+      "directionChanges": 2,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.583,
+      "forcedMoves": 0,
+      "searchedStates": 45,
+      "mistakeAlternatives": 7,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.214,
+      "dependency": 0.1,
+      "decision": 0.616,
+      "mistakes": 0.366,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0019",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.049,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 34,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.229,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.364,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0020",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.973,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 36,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.229,
+      "dependency": 0.392,
+      "decision": 0.85,
+      "mistakes": 0.373,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0021",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.973,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 34,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.229,
+      "dependency": 0.392,
+      "decision": 0.85,
+      "mistakes": 0.373,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0022",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.049,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 43,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.229,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.364,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0023",
+    "status": "ok",
+    "difficulty": 6,
+    "raw": 6.44,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 4,
+      "detourMoves": 2,
+      "directionChanges": 1,
+      "setupMoves": 2,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.722,
+      "forcedMoves": 0,
+      "searchedStates": 36,
+      "mistakeAlternatives": 12,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.386,
+      "dependency": 0.633,
+      "decision": 0.833,
+      "mistakes": 0.88,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0024",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.234,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 5,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.722,
+      "forcedMoves": 0,
+      "searchedStates": 48,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.443,
+      "dependency": 0.392,
+      "decision": 0.833,
+      "mistakes": 0.705,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "left",
+      "up",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0025",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.234,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 5,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.722,
+      "forcedMoves": 0,
+      "searchedStates": 52,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.443,
+      "dependency": 0.392,
+      "decision": 0.833,
+      "mistakes": 0.705,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "down",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0026",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.234,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 5,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.722,
+      "forcedMoves": 0,
+      "searchedStates": 48,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.443,
+      "dependency": 0.392,
+      "decision": 0.833,
+      "mistakes": 0.705,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "left",
+      "down",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0027",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.657,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 3,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.714,
+      "forcedMoves": 0,
+      "searchedStates": 51,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.652,
+      "dependency": 0.875,
+      "decision": 0.828,
+      "mistakes": 0.527,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "right",
+      "down",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0028",
+    "status": "ok",
+    "difficulty": 8,
+    "raw": 7.657,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 4,
+      "detourMoves": 3,
+      "directionChanges": 3,
+      "setupMoves": 3,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.714,
+      "forcedMoves": 0,
+      "searchedStates": 56,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.652,
+      "dependency": 0.875,
+      "decision": 0.828,
+      "mistakes": 0.527,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "left",
+      "up",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0029",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 9.59,
+    "metrics": {
+      "optimalMoves": 15,
+      "baselineMoves": 7,
+      "detourMoves": 8,
+      "directionChanges": 6,
+      "setupMoves": 4,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 20,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.778,
+      "forcedMoves": 0,
+      "searchedStates": 119,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 1,
+      "dependency": 1,
+      "decision": 0.867,
+      "mistakes": 0.648,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "right",
+      "right",
+      "down",
+      "up",
+      "up",
+      "left",
+      "left",
+      "left",
+      "up",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0030",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 9.59,
+    "metrics": {
+      "optimalMoves": 15,
+      "baselineMoves": 7,
+      "detourMoves": 8,
+      "directionChanges": 6,
+      "setupMoves": 4,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 20,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.778,
+      "forcedMoves": 0,
+      "searchedStates": 119,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 1,
+      "dependency": 1,
+      "decision": 0.867,
+      "mistakes": 0.648,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "left",
+      "left",
+      "left",
+      "up",
+      "down",
+      "down",
+      "right",
+      "right",
+      "right",
+      "down",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0031",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.302,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.867,
+      "forcedMoves": 0,
+      "searchedStates": 98,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.315,
+      "dependency": 0.392,
+      "decision": 0.92,
+      "mistakes": 0.335,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0032",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.302,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.867,
+      "forcedMoves": 0,
+      "searchedStates": 98,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.315,
+      "dependency": 0.392,
+      "decision": 0.92,
+      "mistakes": 0.335,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "down",
+      "down",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0033",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.302,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.867,
+      "forcedMoves": 0,
+      "searchedStates": 98,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.315,
+      "dependency": 0.392,
+      "decision": 0.92,
+      "mistakes": 0.335,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "down",
+      "down",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0034",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.023,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 80,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.387,
+      "dependency": 0.392,
+      "decision": 1,
+      "mistakes": 0.52,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "down",
+      "left",
+      "left",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0035",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.023,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 81,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.387,
+      "dependency": 0.392,
+      "decision": 1,
+      "mistakes": 0.52,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "down",
+      "right",
+      "right",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0036",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.023,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 3,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 72,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.387,
+      "dependency": 0.392,
+      "decision": 1,
+      "mistakes": 0.52,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "up",
+      "left",
+      "left",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0037",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 9.147,
+    "metrics": {
+      "optimalMoves": 12,
+      "baselineMoves": 7,
+      "detourMoves": 5,
+      "directionChanges": 5,
+      "setupMoves": 3,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 714,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.901,
+      "dependency": 1,
+      "decision": 0.85,
+      "mistakes": 0.593,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "up",
+      "right",
+      "right",
+      "right",
+      "down",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0038",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 9.147,
+    "metrics": {
+      "optimalMoves": 12,
+      "baselineMoves": 7,
+      "detourMoves": 5,
+      "directionChanges": 5,
+      "setupMoves": 3,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.75,
+      "forcedMoves": 0,
+      "searchedStates": 735,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.901,
+      "dependency": 1,
+      "decision": 0.85,
+      "mistakes": 0.593,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "down",
+      "left",
+      "left",
+      "left",
+      "up",
+      "right",
+      "right",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0039",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 9.407,
+    "metrics": {
+      "optimalMoves": 13,
+      "baselineMoves": 6,
+      "detourMoves": 7,
+      "directionChanges": 7,
+      "setupMoves": 3,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 5,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.769,
+      "forcedMoves": 0,
+      "searchedStates": 126,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.93,
+      "dependency": 1,
+      "decision": 0.861,
+      "mistakes": 0.673,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "right",
+      "down",
+      "up",
+      "left",
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "right",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0040",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 8,
+      "mistakeAlternatives": 4,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0041",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 8,
+      "mistakeAlternatives": 4,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0042",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.311,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 103,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.21,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.536,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0043",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.311,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 88,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.21,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.536,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0044",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.311,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 3,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 100,
+      "mistakeAlternatives": 10,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.21,
+      "dependency": 0.392,
+      "decision": 0.9,
+      "mistakes": 0.536,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0045",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.643,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 6,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.905,
+      "forcedMoves": 0,
+      "searchedStates": 251,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.287,
+      "dependency": 0.392,
+      "decision": 0.943,
+      "mistakes": 0.542,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0046",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.643,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 6,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.905,
+      "forcedMoves": 0,
+      "searchedStates": 236,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.287,
+      "dependency": 0.392,
+      "decision": 0.943,
+      "mistakes": 0.542,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0047",
+    "status": "ok",
+    "difficulty": 6,
+    "raw": 5.602,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 6,
+      "detourMoves": 2,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 10,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 1056,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.65
+    },
+    "components": {
+      "solution": 0.528,
+      "dependency": 0.4,
+      "decision": 0.95,
+      "mistakes": 0.624,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "right",
+      "right",
+      "up",
+      "up",
+      "up",
+      "right",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0048",
+    "status": "ok",
+    "difficulty": 6,
+    "raw": 5.602,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 6,
+      "detourMoves": 2,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 10,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 859,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.65
+    },
+    "components": {
+      "solution": 0.528,
+      "dependency": 0.4,
+      "decision": 0.95,
+      "mistakes": 0.624,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "left",
+      "down",
+      "down",
+      "down",
+      "left",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0049",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 8.808,
+    "metrics": {
+      "optimalMoves": 11,
+      "baselineMoves": 5,
+      "detourMoves": 6,
+      "directionChanges": 6,
+      "setupMoves": 2,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.939,
+      "forcedMoves": 0,
+      "searchedStates": 1171,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.85,
+      "dependency": 0.883,
+      "decision": 0.963,
+      "mistakes": 0.656,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "right",
+      "right",
+      "down",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "right",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0050",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.184,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 7,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.958,
+      "forcedMoves": 0,
+      "searchedStates": 2082,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.371,
+      "dependency": 0.392,
+      "decision": 0.975,
+      "mistakes": 0.657,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "down",
+      "down",
+      "right",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0051",
+    "status": "ok",
+    "difficulty": 6,
+    "raw": 5.731,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 7,
+      "detourMoves": 1,
+      "directionChanges": 4,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.958,
+      "forcedMoves": 0,
+      "searchedStates": 2298,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.515,
+      "dependency": 0.392,
+      "decision": 0.975,
+      "mistakes": 0.709,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "down",
+      "up",
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0052",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.804,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 8,
+      "detourMoves": 0,
+      "directionChanges": 3,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 35,
+      "feasibleGeometricRoutes": 4,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 471,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1771
+    },
+    "components": {
+      "solution": 0.357,
+      "dependency": 0.133,
+      "decision": 0.904,
+      "mistakes": 0.696,
+      "uniqueness": 0.886
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "right",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0053",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.804,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 8,
+      "detourMoves": 0,
+      "directionChanges": 3,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 35,
+      "feasibleGeometricRoutes": 4,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 523,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1771
+    },
+    "components": {
+      "solution": 0.357,
+      "dependency": 0.133,
+      "decision": 0.904,
+      "mistakes": 0.696,
+      "uniqueness": 0.886
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "left",
+      "down",
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0054",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.804,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 8,
+      "detourMoves": 0,
+      "directionChanges": 3,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 35,
+      "feasibleGeometricRoutes": 4,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 526,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1771
+    },
+    "components": {
+      "solution": 0.357,
+      "dependency": 0.133,
+      "decision": 0.904,
+      "mistakes": 0.696,
+      "uniqueness": 0.886
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "down",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0055",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.891,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 4,
+      "detourMoves": 2,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.944,
+      "forcedMoves": 0,
+      "searchedStates": 152,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.65
+    },
+    "components": {
+      "solution": 0.468,
+      "dependency": 0.4,
+      "decision": 0.966,
+      "mistakes": 0.328,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "left",
+      "left",
+      "up",
+      "left",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0056",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 4.891,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 4,
+      "detourMoves": 2,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.944,
+      "forcedMoves": 0,
+      "searchedStates": 150,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.65
+    },
+    "components": {
+      "solution": 0.468,
+      "dependency": 0.4,
+      "decision": 0.966,
+      "mistakes": 0.328,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "right",
+      "right",
+      "down",
+      "right",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0057",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 8.722,
+    "metrics": {
+      "optimalMoves": 10,
+      "baselineMoves": 4,
+      "detourMoves": 6,
+      "directionChanges": 5,
+      "setupMoves": 2,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.9,
+      "forcedMoves": 0,
+      "searchedStates": 944,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.808,
+      "dependency": 0.883,
+      "decision": 0.94,
+      "mistakes": 0.705,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "left",
+      "right",
+      "up",
+      "down",
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0058",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 8.705,
+    "metrics": {
+      "optimalMoves": 10,
+      "baselineMoves": 4,
+      "detourMoves": 6,
+      "directionChanges": 5,
+      "setupMoves": 2,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.9,
+      "forcedMoves": 0,
+      "searchedStates": 1096,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.808,
+      "dependency": 0.883,
+      "decision": 0.94,
+      "mistakes": 0.695,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "left",
+      "down",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0059",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 11,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0060",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.924,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 6,
+      "feasibleGeometricRoutes": 2,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 327,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.137,
+      "dependency": 0.1,
+      "decision": 0.867,
+      "mistakes": 0.32,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "right",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0061",
+    "status": "ok",
+    "difficulty": 2,
+    "raw": 1.924,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 1,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 6,
+      "feasibleGeometricRoutes": 2,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 211,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.137,
+      "dependency": 0.1,
+      "decision": 0.867,
+      "mistakes": 0.32,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0062",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.288,
+    "metrics": {
+      "optimalMoves": 9,
+      "baselineMoves": 8,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 7,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.963,
+      "forcedMoves": 0,
+      "searchedStates": 4186,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.31,
+      "dependency": 0.392,
+      "decision": 0.978,
+      "mistakes": 0.811,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0063",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.336,
+    "metrics": {
+      "optimalMoves": 9,
+      "baselineMoves": 8,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 7,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.963,
+      "forcedMoves": 0,
+      "searchedStates": 4326,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.31,
+      "dependency": 0.392,
+      "decision": 0.978,
+      "mistakes": 0.837,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0064",
+    "status": "ok",
+    "difficulty": 5,
+    "raw": 5.336,
+    "metrics": {
+      "optimalMoves": 9,
+      "baselineMoves": 8,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 7,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.963,
+      "forcedMoves": 0,
+      "searchedStates": 4326,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.31,
+      "dependency": 0.392,
+      "decision": 0.978,
+      "mistakes": 0.837,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0065",
+    "status": "ok",
+    "difficulty": 3,
+    "raw": 3.415,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 7,
+      "detourMoves": 0,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 5,
+      "averageAlternatives": 0.952,
+      "forcedMoves": 0,
+      "searchedStates": 1551,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.1,
+      "decision": 0.838,
+      "mistakes": 0.712,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "down",
+      "left",
+      "down",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0066",
+    "status": "ok",
+    "difficulty": 3,
+    "raw": 3.46,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 7,
+      "detourMoves": 0,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 5,
+      "averageAlternatives": 0.952,
+      "forcedMoves": 0,
+      "searchedStates": 1736,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.1,
+      "decision": 0.838,
+      "mistakes": 0.736,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "up",
+      "right",
+      "up",
+      "right",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0067",
+    "status": "ok",
+    "difficulty": 3,
+    "raw": 3.415,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 7,
+      "detourMoves": 0,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 5,
+      "averageAlternatives": 0.952,
+      "forcedMoves": 0,
+      "searchedStates": 1513,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1333
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.1,
+      "decision": 0.838,
+      "mistakes": 0.712,
+      "uniqueness": 0.667
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "up",
+      "left",
+      "up",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0068",
+    "status": "ok",
+    "difficulty": 9,
+    "raw": 8.957,
+    "metrics": {
+      "optimalMoves": 11,
+      "baselineMoves": 7,
+      "detourMoves": 4,
+      "directionChanges": 6,
+      "setupMoves": 4,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 6,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.727,
+      "forcedMoves": 0,
+      "searchedStates": 975,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.815,
+      "dependency": 1,
+      "decision": 0.836,
+      "mistakes": 0.649,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "right",
+      "down",
+      "left",
+      "down",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0069",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 9.991,
+    "metrics": {
+      "optimalMoves": 14,
+      "baselineMoves": 5,
+      "detourMoves": 9,
+      "directionChanges": 10,
+      "setupMoves": 5,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.881,
+      "forcedMoves": 0,
+      "searchedStates": 5131,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.88,
+      "dependency": 1,
+      "decision": 0.929,
+      "mistakes": 1,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "up",
+      "left",
+      "up",
+      "right",
+      "down",
+      "right",
+      "down",
+      "down",
+      "down",
+      "left",
+      "up",
+      "right",
+      "right",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0070",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 9.798,
+    "metrics": {
+      "optimalMoves": 14,
+      "baselineMoves": 5,
+      "detourMoves": 9,
+      "directionChanges": 8,
+      "setupMoves": 7,
+      "retreatMoves": 1,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.833,
+      "forcedMoves": 0,
+      "searchedStates": 5858,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.88,
+      "dependency": 1,
+      "decision": 0.9,
+      "mistakes": 0.926,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "right",
+      "down",
+      "down",
+      "right",
+      "down",
+      "left",
+      "left",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0071",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 9.991,
+    "metrics": {
+      "optimalMoves": 14,
+      "baselineMoves": 5,
+      "detourMoves": 9,
+      "directionChanges": 10,
+      "setupMoves": 5,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 4,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.881,
+      "forcedMoves": 0,
+      "searchedStates": 6008,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.88,
+      "dependency": 1,
+      "decision": 0.929,
+      "mistakes": 1,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "down",
+      "left",
+      "down",
+      "right",
+      "up",
+      "right",
+      "up",
+      "up",
+      "up",
+      "left",
+      "down",
+      "right",
+      "right",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0072",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.889,
+      "forcedMoves": 0,
+      "searchedStates": 8,
+      "mistakeAlternatives": 8,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0073",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.556,
+      "forcedMoves": 0,
+      "searchedStates": 9,
+      "mistakeAlternatives": 5,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0074",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.889,
+      "forcedMoves": 0,
+      "searchedStates": 10,
+      "mistakeAlternatives": 8,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0075",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 5,
+      "mistakeAlternatives": 4,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-3X3-0076",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 1,
+      "baselineMoves": 1,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 3,
+      "mistakeAlternatives": 2,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0077",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 13,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0078",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 4,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.583,
+      "forcedMoves": 0,
+      "searchedStates": 14,
+      "mistakeAlternatives": 7,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0079",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 1,
+      "baselineMoves": 1,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 2,
+      "mistakeAlternatives": 3,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0080",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 9,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0081",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 1,
+      "baselineMoves": 1,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 3,
+      "mistakeAlternatives": 2,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0082",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 15,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0083",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 10,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0084",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 9,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0085",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.933,
+      "forcedMoves": 0,
+      "searchedStates": 24,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0086",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.933,
+      "forcedMoves": 0,
+      "searchedStates": 27,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0087",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 14,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0088",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 9,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0089",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 15,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0090",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 4,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 19,
+      "mistakeAlternatives": 8,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0091",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 13,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0092",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 29,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0093",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 1,
+      "baselineMoves": 1,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 3,
+      "mistakeAlternatives": 2,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0094",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 23,
+      "mistakeAlternatives": 9,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0095",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 30,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0096",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 6,
+      "baselineMoves": 6,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 34,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0097",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 4,
+      "baselineMoves": 4,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 19,
+      "mistakeAlternatives": 8,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0098",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 5,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.933,
+      "forcedMoves": 0,
+      "searchedStates": 32,
+      "mistakeAlternatives": 14,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "right",
+      "right",
+      "right"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0099",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 1,
+      "baselineMoves": 1,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 2,
+      "mistakeAlternatives": 3,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "up"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0100",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 2,
+      "baselineMoves": 2,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 9,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "down",
+      "down"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X7-0101",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.774,
+    "metrics": {
+      "optimalMoves": 8,
+      "baselineMoves": 8,
+      "detourMoves": 0,
+      "directionChanges": 3,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 35,
+      "feasibleGeometricRoutes": 4,
+      "averageAlternatives": 0.917,
+      "forcedMoves": 0,
+      "searchedStates": 818,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.1771
+    },
+    "components": {
+      "solution": 0.357,
+      "dependency": 0.133,
+      "decision": 0.904,
+      "mistakes": 0.68,
+      "uniqueness": 0.886
+    },
+    "optimalSolution": [
+      "down",
+      "down",
+      "left",
+      "down",
+      "left",
+      "left",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0102",
+    "status": "ok",
+    "difficulty": 10,
+    "raw": 10,
+    "metrics": {
+      "optimalMoves": 18,
+      "baselineMoves": 7,
+      "detourMoves": 11,
+      "directionChanges": 13,
+      "setupMoves": 7,
+      "retreatMoves": 2,
+      "geometricShortestRoutes": 6,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.759,
+      "forcedMoves": 0,
+      "searchedStates": 7553,
+      "mistakeAlternatives": 11,
+      "challengeSignal": 1
+    },
+    "components": {
+      "solution": 0.966,
+      "dependency": 1,
+      "decision": 0.855,
+      "mistakes": 0.956,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "up",
+      "up",
+      "left",
+      "down",
+      "left",
+      "up",
+      "right",
+      "up",
+      "up",
+      "right",
+      "down",
+      "right",
+      "down",
+      "left",
+      "left",
+      "up",
+      "up"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X8-0103",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 3.626,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 7,
+      "detourMoves": 0,
+      "directionChanges": 4,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 15,
+      "feasibleGeometricRoutes": 3,
+      "averageAlternatives": 0.905,
+      "forcedMoves": 0,
+      "searchedStates": 1402,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.16
+    },
+    "components": {
+      "solution": 0.396,
+      "dependency": 0.12,
+      "decision": 0.863,
+      "mistakes": 0.664,
+      "uniqueness": 0.8
+    },
+    "optimalSolution": [
+      "right",
+      "right",
+      "up",
+      "right",
+      "right",
+      "up",
+      "right"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-4X4-0104",
+    "status": "trivial",
+    "raw": 1,
+    "metrics": {
+      "optimalMoves": 3,
+      "baselineMoves": 3,
+      "detourMoves": 0,
+      "directionChanges": 0,
+      "setupMoves": 0,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 1,
+      "averageAlternatives": 0.667,
+      "forcedMoves": 0,
+      "searchedStates": 12,
+      "mistakeAlternatives": 6,
+      "challengeSignal": 0
+    },
+    "optimalSolution": [
+      "left",
+      "left",
+      "left"
+    ],
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X6-0105",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.291,
+    "metrics": {
+      "optimalMoves": 7,
+      "baselineMoves": 6,
+      "detourMoves": 1,
+      "directionChanges": 1,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 1,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 0.905,
+      "forcedMoves": 0,
+      "searchedStates": 125,
+      "mistakeAlternatives": 13,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.287,
+      "dependency": 0.392,
+      "decision": 0.943,
+      "mistakes": 0.354,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "left",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  },
+  {
+    "levelId": "LC1-5X5-0106",
+    "status": "ok",
+    "difficulty": 4,
+    "raw": 4.453,
+    "metrics": {
+      "optimalMoves": 5,
+      "baselineMoves": 4,
+      "detourMoves": 1,
+      "directionChanges": 2,
+      "setupMoves": 1,
+      "retreatMoves": 0,
+      "geometricShortestRoutes": 3,
+      "feasibleGeometricRoutes": 0,
+      "averageAlternatives": 1,
+      "forcedMoves": 0,
+      "searchedStates": 102,
+      "mistakeAlternatives": 15,
+      "challengeSignal": 0.775
+    },
+    "components": {
+      "solution": 0.315,
+      "dependency": 0.392,
+      "decision": 1,
+      "mistakes": 0.336,
+      "uniqueness": 1
+    },
+    "optimalSolution": [
+      "right",
+      "down",
+      "down",
+      "left",
+      "left"
+    ],
+    "priorClass": null,
+    "priorRaw": null,
+    "model": "puzzle-v2-preview"
+  }
+]

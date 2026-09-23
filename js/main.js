@@ -12,7 +12,7 @@ const angleValue=document.querySelector('#angleValue'),tempoValue=document.query
 function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=v);}
 /* Free play wallet v1: only this browser stores points. A level's best reward
    prevents repeated runs from minting unlimited points. */
-const SCORE_KEY='ggrid.freeplay.score.v1',scoreValue=document.querySelector('#scoreValue'),hintBtn=document.querySelector('#hint');
+const SCORE_KEY='ggrid.freeplay.score.v2',scoreValue=document.querySelector('#scoreValue'),hintBtn=document.querySelector('#hint');
 let scoreData={balance:0,best:{}},rewardedThisRun=false;
 try{const saved=JSON.parse(localStorage.getItem(SCORE_KEY)||'null');if(saved&&Number.isSafeInteger(saved.balance)&&saved.balance>=0&&saved.best&&typeof saved.best==='object'&&!Array.isArray(saved.best))scoreData=saved;}catch(_){}
 function saveScore(){try{localStorage.setItem(SCORE_KEY,JSON.stringify(scoreData))}catch(e){console.warn('Pontok helyi mentése sikertelen',e)}}

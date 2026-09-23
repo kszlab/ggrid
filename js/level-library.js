@@ -1,16 +1,10 @@
 /* GGrid v0.12.46 - data-driven Level Library with capability + coverage validation */
 const LevelLibrary=(()=>{
- const dm={U:'up',D:'down',L:'left',R:'right'};
  let levels=null,cursor=new Map(),catalogLoaded=false;
  const SUPPORTED_FEATURES=new Set(['core.movement','core.exit','object.ball','object.rigid-body','object.wall','ability.freeze']);
  function parse(){
   if(levels)return levels;
-  levels=GGRID_TEST_LEVELS_V2.map(r=>{
-   const objects=r.o.map((p,i)=>({id:p[0]==='B'?'ball1':p[0]==='K'?'b'+i:'w'+i,type:p[0]==='B'?'ball':p[0]==='K'?'brick':'wall',x:p[1],y:p[2],cells:p[3].map(c=>({x:c[0],y:c[1]})),glueEdges:[],glued:p[3].length>1}));
-   const glueCount=objects.filter(o=>o.type==='brick'&&o.cells.length>1).length;
-   const updated=typeof GGRID_CLASSIFICATION_V1==='object'?GGRID_CLASSIFICATION_V1[r.id]:null;
-   return{format:'ggrid-level',formatVersion:2,levelId:r.id,rulesVersion:1,requires:{features:['core.movement','core.exit','object.ball','object.rigid-body','object.wall']},board:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]}},initialResources:{freeze:0},analysis:{testDifficultyClass:updated?.class??r.d,rawDifficulty:updated?.raw??r.raw,difficultyModelVersion:updated?.model??2,solution:[...r.sol].map(x=>dm[x])},_state:{width:r.w,height:r.h,exit:{dir:dm[r.e[0]],x:r.e[1],y:r.e[2]},moves:0,won:false,glueCount,brickCount:objects.filter(o=>o.type==='brick').length,wallCount:objects.filter(o=>o.type==='wall').length,objects}};
-  });
+  levels=[];
   return levels;
  }
  function fromFullLevel(r){
