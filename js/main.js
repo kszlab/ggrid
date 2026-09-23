@@ -53,8 +53,8 @@ function render(opts={}){
  }
  for(const [ck,el] of existing)if(!wanted.has(ck))el.remove();
  status.textContent=state.won?`Siker! ${state.moves} lépésből.`:'';
- const diff={easy:'Könnyű',medium:'Közepes',hard:'Nehéz'}[difficultyEl.value],glues=state.glueCount||0,walls=state.wallCount||0;
- meta.textContent=`${diff} · kezdő optimum: ${optimal.length} lépés · ragasztás: ${glues} · fix: ${walls}`;
+ const diff='D'+difficultyEl.value,glues=state.glueCount||0,walls=state.wallCount||0;
+ meta.textContent=`${diff} · modell: ${currentLevelRecord?.analysis?.rawDifficulty??'-'} · optimum: ${optimal.length} · fix: ${walls}`;
  codeEl.textContent=`Pályakód: ${currentCode}`;
  const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
@@ -63,34 +63,28 @@ function render(opts={}){
  soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
  SceneRenderer?.afterBoardRender?.(board);
 }
-/* ===== v0.12.38 FREE-PLAY LEVEL CREATION =====
+/* ===== v0.12.39 PRE-GENERATED LEVEL LIBRARY =====
    A normál W-pálya szándékosan a főszálon készül: a v0.12.38 konstruktív
    generátor nem végez BFS-t, ezért azonnali. Ezzel a Worker/cache/request
    állapotlánc teljesen kiesik a normál Szabad játékból. */
-const levelBuffer=[];
-let prefetchGeneration=0,prefetchPending=0,pendingNewLevel=false;
-function currentPrefetchKey(){return sizeEl.value+'|'+difficultyEl.value}
-function stopGenerator(){prefetchPending=0;pendingNewLevel=false}
-function fillLevelBuffer(){}
-function resetLevelBuffer(){prefetchGeneration++;levelBuffer.length=0;stopGenerator()}
+let currentLevelRecord=null;
+function resetLevelBuffer(){}
 function applyGeneratedLevel(g){
- state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentCode=g.code;
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentCode=g.code;currentLevelRecord=g.level||null;
+ const baseFreeze=currentLevelRecord?.initialResources?.freeze??0;freezeLimitEl.value=String(baseFreeze);
  freezeArmed=false;freezeId=null;freezeUsed=0;freezeAnalysis=null;hintVisible=false;toast.textContent='';
  render();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
 }
-function requestGeneratedLevel(seed=null,prefix='W'){
- const d=selectedDims();
+function requestGeneratedLevel(){
+ const d=selectedDims(),difficulty=Math.max(1,Math.min(10,parseInt(difficultyEl.value,10)||1));
  try{
-  const g=generateLevel(d.w,difficultyEl.value,seed||seedText(),prefix,d.h);
-  if(g?.state?.width!==d.w||g?.state?.height!==d.h)throw Error('GENERATOR_SIZE_MISMATCH');
-  applyGeneratedLevel(g);return true;
+  const l=LevelLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_LIBRARY_LEVEL');
+  applyGeneratedLevel(LevelLibrary.toGame(l));return true;
  }catch(e){
-  console.error('Level generation',e);
-  toast.textContent='A pálya generálása nem sikerült: '+(e?.message||e);
-  return false;
+  console.error('Level library',e);toast.textContent='Nincs kompatibilis tesztpálya ehhez a mérethez és nehézséghez.';return false;
  }
 }
-function newLevel(seed=null,prefix='W'){return requestGeneratedLevel(seed,prefix)}
+function newLevel(){return requestGeneratedLevel()}
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
  if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
@@ -374,12 +368,12 @@ function changeLevelProfile(){
  state=null;initial=null;optimal=[];currentCode='';
  board.innerHTML='';board.style.setProperty('--cols',selectedDims().w);board.style.setProperty('--rows',selectedDims().h);
  board.style.aspectRatio=`${selectedDims().w}/${selectedDims().h}`;
- toast.textContent=`Pálya készítése: ${selectedDims().w}×${selectedDims().h}…`;
+ toast.textContent=`Tesztpálya betöltése: ${selectedDims().w}×${selectedDims().h} · D${difficultyEl.value}…`;
  newLevel();
 }
 difficultyEl.addEventListener('change',changeLevelProfile);sizeEl.addEventListener('change',changeLevelProfile);
 freezeLimitEl.addEventListener('change',()=>{freezeUsed=0;freezeArmed=false;freezeId=null;render({preservePieces:true});scheduleFreezeAnalysis();});
-document.querySelector('#loadCode').addEventListener('click',()=>{const p=parseCode(codeInput.value);if(!p){toast.textContent='Hibás pályakód. Példa: W4H-01ABC23';return}sizeEl.value=p.w===p.h?String(p.w):`${p.w}x${p.h}`;difficultyEl.value=p.difficulty;try{newLevel(p.seed,p.prefix);toast.textContent='Pálya betöltve.'}catch(e){toast.textContent='A pálya nem tölthető be.'}});
+document.querySelector('#loadCode').addEventListener('click',()=>{toast.textContent='A generatív pályakód betöltése ebben a tesztverzióban ki van kapcsolva.';});
 /* Billentyűzet: a kurzornyíl lenyomásakor ugyanaz a térbeli billenés látszik.
    Az operációs rendszer key-repeatje továbbra is ismételt egycellás move()-okat ad. */
 const keyboardDirs=new Set();
