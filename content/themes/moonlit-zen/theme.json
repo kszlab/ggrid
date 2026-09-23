@@ -89,6 +89,6 @@
     }
   },
   "assets": {
-    "css": "theme.css"
+    "css": "theme.css?v=0.12.57"
   }
 }
