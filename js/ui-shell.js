@@ -1,4 +1,4 @@
-/* ===== v0.12.38 APPLICATION UI SHELL ===== */
+/* ===== v0.12.46 DATA-DRIVEN APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
  const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
@@ -21,15 +21,8 @@ const AppUI=(()=>{
 
  const themeEl=document.querySelector('#freeTheme'),preview=document.querySelector('#themePreview'),previewName=document.querySelector('#themePreviewName'),previewTag=document.querySelector('#themePreviewTag'),dots=document.querySelector('#themeDots');
  let themeIndex=0,touchX=null;
- const shortNames={'classic':'CLASSIC','mine':'BÁNYA','space-station':'ORBITAL','ancient-temple':'TEMPLOM','ice-cavern':'JÉGBARLANG','cybergrid':'CYBERGRID','pirate-ship':'KALÓZHAJÓ','ghost-manor':'ÉJFÉLI KASTÉLY','traffic-rescue':'MENTŐAKCIÓ','orbital-breach':'ORBITAL // BREACH','abyssal-lab':'ABYSS','clockwork-sanctum':'AETHERIUM','neon-noir':'NEON RAIN','microchip-lab':'MICROCORE','moonlit-zen':'HOLDKERT'};
- function themes(){return ScenarioMode?.freeThemes||[]}
- const previewKinds={
-  'classic':['●','▣','▣','◆'],'mine':['●','▤','▤','▥'],'space-station':['◉','▰','▰','◎'],'ancient-temple':['✦','▧','▧','◇'],'ice-cavern':['❄','◆','◆','◈'],
-  'cybergrid':['●','▣','▣','◇'],'pirate-ship':['●','▤','▤','⚓'],'ghost-manor':['◉','▥','▥','✧'],'traffic-rescue':['✚','▰','▰','▥'],'orbital-breach':['◉','▰','▰','◎'],
-  'abyssal-lab':['◉','▣','▣','◌'],'clockwork-sanctum':['✦','⚙','⚙','◉'],'neon-noir':['K7','CARGO','C-47','EVAC'],'microchip-lab':['e−','IC','74G','DATA'],'moonlit-zen':['◉','✿','浮島','鳥居']
- };
  function previewBoard(id){
-  const q=previewKinds[id]||previewKinds.classic;
+  const t=themes().find(x=>x.id===id),q=t?.preview?.symbols||['●','▣','▣','◆'];
   const cells=[['','','','',''],['',q[1],'',q[3],''],['','','','',''],[q[0],'',q[2],q[2],''],['','','','','']];
   let h='<div class="mini-board" aria-hidden="true">';
   for(let y=0;y<5;y++)for(let x=0;x<5;x++){const v=cells[y][x];let k='';if(v===q[0])k=' target';else if(v===q[3])k=' gate';else if(v)k=' block';h+='<i class="mini-cell'+k+'">'+v+'</i>'}
@@ -37,20 +30,26 @@ const AppUI=(()=>{
  }
  function paintTheme(){
   const a=themes();if(!a.length)return;themeIndex=(themeIndex+a.length)%a.length;const t=a[themeIndex];
-  themeEl.value=t.id;preview.dataset.theme=t.id;previewName.textContent=shortNames[t.id]||t.name;previewTag.textContent=t.showcase?'SHOWCASE WORLD':'GGRID WORLD';preview.querySelector('.theme-preview-art').innerHTML=previewBoard(t.id);
+  themeEl.value=t.id;preview.dataset.theme=t.id;previewName.textContent=t.preview?.shortName||t.name;previewTag.textContent=t.preview?.tag||(t.showcase?'SHOWCASE WORLD':'GGRID WORLD');preview.querySelector('.theme-preview-art').innerHTML=previewBoard(t.id);
   dots.innerHTML='';a.forEach((_,i)=>{const d=document.createElement('i');if(i===themeIndex)d.className='active';dots.append(d)});
  }
  function selectTheme(delta){themeIndex+=delta;paintTheme()}
- function bindSegments(id,select){
-  const box=document.querySelector(id),paint=()=>box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));
-  box.addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(!b)return;select.value=b.dataset.value;paint()});paint();return paint;
+ function syncLevelAvailability(){
+  const d=selectedDims(),box=document.querySelector('#quickDifficulty');let any=false;
+  box.querySelectorAll('button[data-value]').forEach(b=>{const ok=LevelLibrary.has(d.w,d.h,+b.dataset.value);b.disabled=!ok;b.classList.toggle('unavailable',!ok);if(ok)any=true;});
+  const chosen=box.querySelector('button[data-value="'+difficultyEl.value+'"]');if(chosen?.disabled){const first=[...box.querySelectorAll('button[data-value]')].find(b=>!b.disabled);if(first)difficultyEl.value=first.dataset.value;}
+  document.querySelector('#freeSetupPlay').disabled=!any||!LevelLibrary.has(d.w,d.h,+difficultyEl.value);
  }
- const paintSize=bindSegments('#quickSize',sizeEl),paintDiff=bindSegments('#quickDifficulty',difficultyEl);
+ function bindSegments(id,select,onChange){
+  const box=document.querySelector(id),paint=()=>{box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));onChange?.()};
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(!b||b.disabled)return;select.value=b.dataset.value;paint()});paint();return paint;
+ }
+ const paintSize=bindSegments('#quickSize',sizeEl,syncLevelAvailability),paintDiff=bindSegments('#quickDifficulty',difficultyEl,syncLevelAvailability);
  async function openFreeSetup(){
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
-  const a=themes(),saved=themeEl.value||'classic',idx=a.findIndex(t=>t.id===saved);themeIndex=idx>=0?idx:0;paintTheme();paintSize();paintDiff();
+  const a=themes(),saved=themeEl.value||'classic',idx=a.findIndex(t=>t.id===saved);themeIndex=idx>=0?idx:0;paintTheme();paintSize();paintDiff();syncLevelAvailability();
  }
  async function launchFreePlay(){
   document.body.classList.remove('scenario-mode');await ScenarioMode?.loadFreeTheme?.(themeEl.value);changeLevelProfile();enterGame();
