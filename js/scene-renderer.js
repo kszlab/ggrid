@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 2 – v0.12.38
+/* GGrid Scene Renderer 2 – v0.12.46
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
@@ -9,6 +9,7 @@ const SceneRenderer=(()=>{
   if(!front){front=document.createElement('div');front.className='scene-layer scene-front';wrap.append(front)}
  }
  function markup(type){
+  if(theme?.scene?.markup)return{back:theme.scene.markup.back||'',front:theme.scene.markup.front||''};
   if(type==='clockwork-sanctum')return {
    back:'<i class="sr-stars"></i><i class="sr-arch"></i><i class="sr-gear sg1"></i><i class="sr-gear sg2"></i><i class="sr-orrery"></i>',
    front:'<i class="sr-steam ss1"></i><i class="sr-steam ss2"></i><span class="sr-caption">AETHERIUM OBSERVATORY <b>03:17</b></span>'};
@@ -35,6 +36,7 @@ const SceneRenderer=(()=>{
  }
  function decorateExit(el){
   if(!el||!theme)return;const type=theme.scene?.type;
+  if(theme?.pieces?.exit?.markup!=null){el.classList.add('sr-exit');el.innerHTML=theme.pieces.exit.markup;return}
   if(type==='clockwork-sanctum'){el.classList.add('sr-exit','sr-astrolabe');el.innerHTML='<i></i><b>✦</b>'}
   if(type==='neon-noir'){el.classList.add('sr-exit','sr-evac');el.innerHTML='<b>09</b><small>EVAC</small>'}
   if(type==='microchip-lab'){el.classList.add('sr-exit','sr-socket');el.innerHTML='<b>DATA</b><i></i>'}
@@ -53,6 +55,7 @@ const SceneRenderer=(()=>{
   el.classList.toggle('sr-component',cp.count>1);
   for(const k of ['left','right','top','bottom'])el.classList.toggle('sr-open-'+k,cp[k]);
   el.classList.toggle('sr-horizontal',cp.count>1&&cp.h===1);el.classList.toggle('sr-vertical',cp.count>1&&cp.w===1);
+  const spec=theme?.pieces?.[o.type];if(spec?.className)el.classList.add(...String(spec.className).split(/\s+/).filter(Boolean));if(spec?.markup!=null){el.innerHTML=spec.markup;return}
   if(type==='clockwork-sanctum'){
    el.classList.add('sr-piece');
    if(o.type==='ball')el.innerHTML='<i class="aether-ring r1"></i><i class="aether-ring r2"></i><b class="aether-light"></b>';
@@ -80,6 +83,7 @@ const SceneRenderer=(()=>{
  }
  function clearComponentOverlays(){componentOverlays.forEach(el=>el.remove());componentOverlays=[]}
  function compositeMarkup(type){
+  if(theme?.scene?.compositeMarkup!=null)return theme.scene.compositeMarkup;
   if(type==='clockwork-sanctum')return '<i class="co-rail"></i><i class="co-gear cg1"></i><i class="co-gear cg2"></i><b>CHRONO ENGINE</b>';
   if(type==='neon-noir')return '<i class="co-window cw1"></i><i class="co-window cw2"></i><i class="co-thruster"></i><b>HEAVY CARGO</b><em>C-47</em>';
   if(type==='microchip-lab')return '<i class="co-chip-pins"></i><b>74GGRID</b><em>LOGIC ARRAY</em>';
