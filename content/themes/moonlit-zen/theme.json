@@ -87,5 +87,8 @@
       "className": "sr-exit sr-torii",
       "markup": "<i></i><b>鳥居</b>"
     }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
