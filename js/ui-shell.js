@@ -1,4 +1,4 @@
-/* ===== v0.12.46 DATA-DRIVEN APPLICATION UI SHELL ===== */
+/* ===== v0.12.48 DATA-DRIVEN APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
  const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
@@ -21,6 +21,9 @@ const AppUI=(()=>{
 
  const themeEl=document.querySelector('#freeTheme'),preview=document.querySelector('#themePreview'),previewName=document.querySelector('#themePreviewName'),previewTag=document.querySelector('#themePreviewTag'),dots=document.querySelector('#themeDots');
  let themeIndex=0,touchX=null;
+ /* Theme registry is owned by ScenarioMode; the setup UI only consumes its
+    data-driven index. This accessor was accidentally removed in v0.12.46. */
+ const themes=()=>ScenarioMode?.freeThemes||[];
  function previewBoard(id){
   const t=themes().find(x=>x.id===id),q=t?.preview?.symbols||['●','▣','▣','◆'];
   const cells=[['','','','',''],['',q[1],'',q[3],''],['','','','',''],[q[0],'',q[2],q[2],''],['','','','','']];
