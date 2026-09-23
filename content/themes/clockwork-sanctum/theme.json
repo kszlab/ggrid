@@ -86,5 +86,8 @@
       "exit": "astrolabe-open",
       "win": "celestial-chord"
     }
+  },
+  "preview": {
+    "markup": "<div class=\"sky-detail\"><i></i><i></i><i></i></div><div class=\"ornament gear g1\"></div><div class=\"ornament gear g2\"></div><div class=\"ornament orrery\"><b></b><em></em></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero aether-core\"><b></b></i><i class=\"piece object brass-crate bc1\"></i><i class=\"piece object brass-crate bc2\"></i><i class=\"piece object pillar p1\"></i><i class=\"piece object pillar p2\"></i><i class=\"piece object long-machine lm1\"></i><i class=\"exit astrolabe-exit\"><b></b><em>✦</em></i></div><div class=\"scene-label\">AETHERIUM OBSERVATORY <b>03:17</b></div>"
   }
 }
