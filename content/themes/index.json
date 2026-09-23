@@ -7,49 +7,119 @@
       "version": 1,
       "name": "GGrid Classic",
       "description": "Az eredeti GGrid megjelenés.",
-      "src": "classic/theme.json"
+      "src": "classic/theme.json",
+      "preview": {
+        "shortName": "CLASSIC",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "●",
+          "▣",
+          "▣",
+          "◆"
+        ]
+      }
     },
     {
       "id": "mine",
       "version": 1,
       "name": "Elhagyott bánya",
       "description": "Sötét tárnák, sziklák és faládák.",
-      "src": "mine/theme.json"
+      "src": "mine/theme.json",
+      "preview": {
+        "shortName": "BÁNYA",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "●",
+          "▤",
+          "▤",
+          "▥"
+        ]
+      }
     },
     {
       "id": "space-station",
       "version": 1,
       "name": "Űrállomás",
       "description": "Energiagömbök, teherkonténerek és légzsilip.",
-      "src": "space-station/theme.json"
+      "src": "space-station/theme.json",
+      "preview": {
+        "shortName": "ORBITAL",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "◉",
+          "▰",
+          "▰",
+          "◎"
+        ]
+      }
     },
     {
       "id": "ancient-temple",
       "version": 1,
       "name": "Ősi templom",
       "description": "Kristálygömbök, faragott kőtömbök és rúnakapuk.",
-      "src": "ancient-temple/theme.json"
+      "src": "ancient-temple/theme.json",
+      "preview": {
+        "shortName": "TEMPLOM",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "✦",
+          "▧",
+          "▧",
+          "◇"
+        ]
+      }
     },
     {
       "id": "ice-cavern",
       "version": 1,
       "name": "Jéglabirintus",
       "description": "Jéggömbök és fagyott akadályok egy kék barlangban.",
-      "src": "ice-cavern/theme.json"
+      "src": "ice-cavern/theme.json",
+      "preview": {
+        "shortName": "JÉGBARLANG",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "❄",
+          "◆",
+          "◆",
+          "◈"
+        ]
+      }
     },
     {
       "id": "cybergrid",
       "version": 1,
       "name": "Neon Cybergrid",
       "description": "Fénygömbök, adatblokkok és digitális portálok.",
-      "src": "cybergrid/theme.json"
+      "src": "cybergrid/theme.json",
+      "preview": {
+        "shortName": "CYBERGRID",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "●",
+          "▣",
+          "▣",
+          "◇"
+        ]
+      }
     },
     {
       "id": "pirate-ship",
       "version": 1,
       "name": "Kalózhajó",
       "description": "Ágyúgolyók, faládák és egy öreg hajó raktere.",
-      "src": "pirate-ship/theme.json"
+      "src": "pirate-ship/theme.json",
+      "preview": {
+        "shortName": "KALÓZHAJÓ",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "●",
+          "▤",
+          "▤",
+          "⚓"
+        ]
+      }
     },
     {
       "id": "ghost-manor",
@@ -57,7 +127,17 @@
       "name": "Éjféli kastély",
       "description": "Kísértetjárta kastély szellemmel, bútorokkal, köddel és túlvilági kapuval.",
       "src": "ghost-manor/theme.json",
-      "experimental": true
+      "experimental": true,
+      "preview": {
+        "shortName": "ÉJFÉLI KASTÉLY",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "◉",
+          "▥",
+          "▥",
+          "✧"
+        ]
+      }
     },
     {
       "id": "traffic-rescue",
@@ -65,7 +145,17 @@
       "name": "Városi mentőakció",
       "description": "Forgalmi puzzle: mentőautó, autók, buszok és városi úthálózat.",
       "src": "traffic-rescue/theme.json",
-      "experimental": true
+      "experimental": true,
+      "preview": {
+        "shortName": "MENTŐAKCIÓ",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "✚",
+          "▰",
+          "▰",
+          "▥"
+        ]
+      }
     },
     {
       "id": "orbital-breach",
@@ -73,7 +163,17 @@
       "name": "ORBITAL // BREACH",
       "description": "Filmszerű sci-fi vészhelyzet sérült űrállomáson.",
       "src": "orbital-breach/theme.json",
-      "experimental": true
+      "experimental": true,
+      "preview": {
+        "shortName": "ORBITAL // BREACH",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "◉",
+          "▰",
+          "▰",
+          "◎"
+        ]
+      }
     },
     {
       "id": "abyssal-lab",
@@ -81,7 +181,17 @@
       "name": "ABYSS // Mélytengeri labor",
       "description": "Biolumineszcens mélytengeri kutatóállomás az óceánfenéken.",
       "src": "abyssal-lab/theme.json",
-      "experimental": true
+      "experimental": true,
+      "preview": {
+        "shortName": "ABYSS",
+        "tag": "GGRID WORLD",
+        "symbols": [
+          "◉",
+          "▣",
+          "▣",
+          "◌"
+        ]
+      }
     },
     {
       "id": "clockwork-sanctum",
@@ -90,7 +200,17 @@
       "description": "SHOWCASE: lebegő viktoriánus csillagvizsgáló, óraművek és mechanikus csillagkapu.",
       "src": "clockwork-sanctum/theme.json",
       "experimental": true,
-      "showcase": true
+      "showcase": true,
+      "preview": {
+        "shortName": "AETHERIUM",
+        "tag": "SHOWCASE WORLD",
+        "symbols": [
+          "✦",
+          "⚙",
+          "⚙",
+          "◉"
+        ]
+      }
     },
     {
       "id": "neon-noir",
@@ -99,7 +219,17 @@
       "description": "SHOWCASE: esőáztatta jövővárosi tető, futárdrón és holografikus evakuációs lift.",
       "src": "neon-noir/theme.json",
       "experimental": true,
-      "showcase": true
+      "showcase": true,
+      "preview": {
+        "shortName": "NEON RAIN",
+        "tag": "SHOWCASE WORLD",
+        "symbols": [
+          "K7",
+          "CARGO",
+          "C-47",
+          "EVAC"
+        ]
+      }
     },
     {
       "id": "microchip-lab",
@@ -108,7 +238,17 @@
       "description": "SHOWCASE: nyomtatott áramköri lap világa, elektron-maggal és IC modulokkal.",
       "src": "microchip-lab/theme.json",
       "experimental": true,
-      "showcase": true
+      "showcase": true,
+      "preview": {
+        "shortName": "MICROCORE",
+        "tag": "SHOWCASE WORLD",
+        "symbols": [
+          "e−",
+          "IC",
+          "74G",
+          "DATA"
+        ]
+      }
     },
     {
       "id": "moonlit-zen",
@@ -117,7 +257,17 @@
       "description": "SHOWCASE: holdfényes japán vízikert koi szellemmel és torii-kapuval.",
       "src": "moonlit-zen/theme.json",
       "experimental": true,
-      "showcase": true
+      "showcase": true,
+      "preview": {
+        "shortName": "HOLDKERT",
+        "tag": "SHOWCASE WORLD",
+        "symbols": [
+          "◉",
+          "✿",
+          "浮島",
+          "鳥居"
+        ]
+      }
     }
   ]
 }
