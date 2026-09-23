@@ -79,5 +79,8 @@
       "className": "sr-exit sr-socket",
       "markup": "<b>DATA</b><i></i>"
     }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
