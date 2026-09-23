@@ -46,6 +46,7 @@ const AppUI=(()=>{
  }
  const paintSize=bindSegments('#quickSize',sizeEl,syncLevelAvailability),paintDiff=bindSegments('#quickDifficulty',difficultyEl,syncLevelAvailability);
  async function openFreeSetup(){
+  await LevelLibrary.init();
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
