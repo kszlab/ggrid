@@ -1,0 +1,19 @@
+body[data-theme="mine"]{background:linear-gradient(#3b2b1e,#17110d)}
+
+body[data-theme="mine"] .board-wrap{background:#4a3422}
+
+body[data-theme="mine"] .board{background:#3a3026;border-color:#8b673f}
+
+body[data-theme="mine"] .cell{background:linear-gradient(145deg,#594c3b,#30291f)}
+
+body[data-theme="mine"] .ball{background:radial-gradient(circle at 32% 27%,#e9d8aa,#a07c43 28%,#594229 68%,#20170f)}
+
+body[data-theme="mine"] .brick{background:repeating-linear-gradient(90deg,#805126 0 5px,#a36a31 5px 11px)}
+
+body[data-theme="mine"] .wall{background:repeating-linear-gradient(135deg,#514b43 0 6px,#302d29 6px 12px);box-shadow:inset 0 0 0 3px #756d61,inset 0 0 0 5px #201e1b,3px 5px 7px #0008}
+
+.theme-preview[data-theme="mine"] .theme-preview-art{background:radial-gradient(circle at 72% 28%,#ffd27655,transparent 16%),linear-gradient(155deg,#33241b,#090807 60%),repeating-linear-gradient(75deg,transparent 0 35px,#80542c 36px 42px)}
+
+.theme-preview[data-theme="mine"] .mini-board{background:#20150ed9;border-color:#a56b37}
+.theme-preview[data-theme="mine"] .mini-cell.block{background:#70431f;border-color:#ad7442}
+.theme-preview[data-theme="mine"] .mini-cell.target{background:radial-gradient(circle at 35% 30%,#ddd,#555 35%,#171717 70%);box-shadow:none}
