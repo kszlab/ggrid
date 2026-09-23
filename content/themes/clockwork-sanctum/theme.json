@@ -23,16 +23,28 @@
   },
   "pieces": {
     "ball": {
-      "name": "Aether-mag"
+      "name": "Aether-mag",
+      "markup": "<i class=\"aether-ring r1\"></i><i class=\"aether-ring r2\"></i><b class=\"aether-light\"></b>",
+      "className": "sr-piece"
     },
     "brick": {
-      "name": "Óramű modul"
+      "name": "Óramű modul",
+      "markup": "<i class=\"rivet rv1\"></i><i class=\"rivet rv2\"></i><b class=\"piece-glyph\">{{first:CHRONO|⚙}}</b>",
+      "className": "sr-piece"
     },
     "wall": {
-      "name": "Obszidián pillér"
+      "name": "Obszidián pillér",
+      "markup": "<i class=\"pillar-cap\"></i><b class=\"piece-glyph\">◆</b>",
+      "className": "sr-piece"
     },
     "exit": {
-      "name": "Csillagkapu"
+      "name": "Csillagkapu",
+      "className": "sr-exit sr-astrolabe",
+      "markup": "<i></i><b>✦</b>"
+    },
+    "rigidBody": {
+      "className": "sr-composite sr-composite-clockwork-sanctum",
+      "markup": "<i class=\"co-rail\"></i><i class=\"co-gear cg1\"></i><i class=\"co-gear cg2\"></i><b>CHRONO ENGINE</b>"
     }
   },
   "abilities": {
@@ -53,7 +65,11 @@
       "steam",
       "foreground-dials"
     ],
-    "exitStyle": "astrolabe-gate"
+    "exitStyle": "astrolabe-gate",
+    "markup": {
+      "back": "<i class=\"sr-stars\"></i><i class=\"sr-arch\"></i><i class=\"sr-gear sg1\"></i><i class=\"sr-gear sg2\"></i><i class=\"sr-orrery\"></i>",
+      "front": "<i class=\"sr-steam ss1\"></i><i class=\"sr-steam ss2\"></i><span class=\"sr-caption\">AETHERIUM OBSERVATORY <b>03:17</b></span>"
+    }
   },
   "audio": {
     "profile": "clockwork",
