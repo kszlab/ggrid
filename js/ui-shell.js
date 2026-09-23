@@ -18,8 +18,9 @@ const AppUI=(()=>{
 
  function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
  function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
- function showHome(){document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
+ function showHome(){cancelAutoSolve();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
+  cancelAutoSolve();
   menu.hidden=false;MotionControl?.pause?.();
   const active=!!ScenarioMode?.active;
   document.querySelector('#menuTitle').textContent=active?'Játék':'Szabad játék';

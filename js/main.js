@@ -26,7 +26,7 @@ function updateLevelScore(){
  const label=`${done?'✓ ':''}${currentLevelId} · D${levelClass} · ${best}/${scoreBase()} pont`;
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
-function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=inFreePlay()&&!hintVisible&&scoreData.balance<1;hintBtn.title=inFreePlay()?'Súgó: 1 pont (újbóli megnyitása ingyenes)':''}if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}
+function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=false;hintBtn.title=inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}const visibleHint=document.querySelector('#playHint');if(visibleHint)visibleHint.title='Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.';if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
 function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore();updateLevelScore()}
 function freezeLimit(){return Infinity;}
@@ -83,6 +83,7 @@ function render(opts={}){
    A pályagenerálás a fejlesztői/content pipeline feladata, nem runtime funkció. */
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
+ cancelAutoSolve();
  state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
  freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';
@@ -105,8 +106,34 @@ function playEvents(events){
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
-function move(dir){if(state.won||busy||freezeArmed)return;SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId),meaningful=r.events.some(e=>e.type==='move'||e.type==='exit');if(usedFreeze&&meaningful&&inFreePlay()&&!spendScore(10)){freezeId=null;freezeArmed=false;setBusy(false);render({preservePieces:true});return}state=r.state;lastEvents=r.events;if(usedFreeze&&meaningful)freezeUsed++;freezeArmed=false;freezeId=null;render({preservePieces:true});playEvents(r.events);awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+function move(dir,automatic=false){if(!state||state.won||busy||freezeArmed||(autoSolveActive&&!automatic))return;SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId),meaningful=r.events.some(e=>e.type==='move'||e.type==='exit');if(usedFreeze&&meaningful&&inFreePlay()&&!spendScore(10)){freezeId=null;freezeArmed=false;setBusy(false);render({preservePieces:true});return}state=r.state;lastEvents=r.events;if(usedFreeze&&meaningful)freezeUsed++;freezeArmed=false;freezeId=null;render({preservePieces:true});playEvents(r.events);if(automatic&&state.won)toast.textContent='Automatikus megoldás kész · 0 pont';else awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+let autoSolveActive=false,autoSolveTimer=null,autoSolveToken=0;
+function cancelAutoSolve(){autoSolveToken++;if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;if(autoSolveActive){autoSolveActive=false;MotionControl?.resume?.()}}
+function startAutoSolve(){
+ if(!state||state.won||autoSolveActive)return;
+ stopHold();freezeArmed=false;freezeId=null;hintVisible=false;
+ const token=++autoSolveToken;toast.textContent='Automatikus megoldás számítása…';
+ setTimeout(()=>{
+  if(token!==autoSolveToken||!state)return;
+  const route=state.moves===0?optimal:solve(state,40);
+  if(token!==autoSolveToken)return;
+  if(!route?.length){toast.textContent='Innen Freeze nélkül nincs megoldás.';return}
+  // A demonstration cannot earn points, even if it is interrupted before victory.
+  rewardedThisRun=true;autoSolveActive=true;MotionControl?.pause?.();render({preservePieces:true});
+  let index=0;
+  function next(){
+   if(token!==autoSolveToken)return;
+   if(index>=route.length||state.won){autoSolveActive=false;MotionControl?.resume?.();return}
+   if(busy){autoSolveTimer=setTimeout(next,80);return}
+   toast.textContent=`Automatikus megoldás: ${index+1}/${route.length} · 0 pont`;
+   move(route[index++],true);
+   autoSolveTimer=setTimeout(next,680);
+  }
+  next();
+ },0);
+}
 function hint(){
+ if(autoSolveActive)return;
  if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return;}
  if(inFreePlay()&&scoreData.balance<1)return;
  hintVisible=true;
@@ -371,14 +398,22 @@ const CalibrationLab=(()=>{
  return{open};
 })();
 
-freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
-document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
+freezeBtn.addEventListener('click',()=>{if(autoSolveActive||!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
+document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
+// Short click still requests a hint; a three-second pointer hold runs the demo.
+const playHintBtn=document.querySelector('#playHint');let hintHoldTimer=null,hintHoldFired=false;
+function clearHintHold(){if(hintHoldTimer)clearTimeout(hintHoldTimer);hintHoldTimer=null}
+playHintBtn.addEventListener('pointerdown',e=>{if(e.button!==0)return;clearHintHold();hintHoldFired=false;hintHoldTimer=setTimeout(()=>{hintHoldTimer=null;hintHoldFired=true;startAutoSolve()},3000)});
+for(const event of ['pointerup','pointercancel','pointerleave'])playHintBtn.addEventListener(event,clearHintHold);
+playHintBtn.addEventListener('click',e=>{if(!hintHoldFired)return;e.preventDefault();e.stopImmediatePropagation();hintHoldFired=false},true);
+playHintBtn.addEventListener('contextmenu',e=>e.preventDefault());
 soundBtn.addEventListener('click',async()=>{await AudioManager.toggleEffects();syncSoundControls()});
 ambientBtn.addEventListener('click',async()=>{await AudioManager.toggleAmbient();syncSoundControls()});
 syncSoundControls();
 function changeLevelProfile(){
+ cancelAutoSolve();
  
  /* A régi pálya ne maradjon látható, miközben az új méret készül. */
  state=null;initial=null;optimal=[];currentLevelId='';
