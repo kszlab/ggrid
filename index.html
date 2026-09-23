@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.12.48 letisztult UI</title>
-<link rel="stylesheet" href="css/game.css?v=0.12.48"></head>
+<title>GGrid – v0.12.49 letisztult UI</title>
+<link rel="stylesheet" href="css/game.css?v=0.12.49"></head>
 <body>
 <div id="startup" class="startup" aria-live="polite"><div class="startup-card"><div class="startup-title">GGrid</div><div class="startup-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="startup-ball"></i><i></i><i></i><i class="startup-brick"></i><i></i></div><div class="startup-text">A játék töltődik…</div></div></div>
 
 <div id="homeScreen" class="home-screen">
  <div class="home-card">
   <div class="home-logo">GGrid</div>
-  <div class="home-version">v0.12.48</div>
+  <div class="home-version">v0.12.49</div>
   <button type="button" id="scenarioOpen" hidden></button>
   <button type="button" id="homeFreePlay" class="primary-home">▶ Szabad játék <span id="homeLevelId" class="home-level-id">—</span></button>
   <button type="button" id="homeSettings">⚙ Beállítások</button>
@@ -32,6 +32,7 @@
   <button type="button" id="freeze" class="play-action freeze-action" aria-label="Freeze" title="Freeze">❄ <span id="freezeCount">∞</span></button>
   <button type="button" id="playHint" class="play-action" aria-label="Súgó" title="Súgó">💡</button>
   <button type="button" id="playRestart" class="play-action" aria-label="Pálya újrakezdése" title="Pálya újrakezdése">↶</button>
+  <button type="button" id="playNext" class="play-action" aria-label="Következő pálya" title="Új pálya ugyanilyen mérettel, nehézséggel és skinnel">⟳</button>
   <button type="button" id="playChoose" class="play-action" aria-label="Új pálya választása" title="Új pálya választása">▦</button>
  </div><div id="scoreBox" class="score-box" aria-label="Pontszám"><span>PONTSZÁM</span><strong id="scoreValue"></strong></div></div>
  <div id="toast" class="toast" aria-live="polite"></div>
@@ -76,7 +77,7 @@
    
   </div>
   <button type="button" id="freeSetupPlay" class="free-play-launch">▶ JÁTÉK INDÍTÁSA</button>
-  <div class="panel-version">GGrid v0.12.48</div>
+  <div class="panel-version">GGrid v0.12.49</div>
  </div>
 </div>
 
@@ -88,7 +89,7 @@
  <button type="button" id="menuHint">💡 Súgó</button>
  <button type="button" id="menuSettings">⚙ Beállítások</button>
  <button type="button" id="menuHome">⌂ Kilépés a főmenübe</button>
- <div class="panel-version">GGrid v0.12.48</div>
+ <div class="panel-version">GGrid v0.12.49</div>
 </div></div>
 
 <div id="settingsPanel" class="ui-panel" hidden><div class="ui-card">
@@ -96,20 +97,20 @@
  <section><h3>Vezérlés és hang</h3><div id="settingsControls"></div></section>
  <section id="freeSettings"><h3>Szabad játék</h3><div id="settingsFree"></div></section>
  <div id="settingsCode" hidden></div>
- <div class="panel-version">GGrid v0.12.48</div>
+ <div class="panel-version">GGrid v0.12.49</div>
 </div></div>
 
 <div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>
 
 <div id="calibration" class="calibration" hidden><div class="cal-card"><div class="cal-head"><strong>GGrid Motion Calibration Lab</strong><button type="button" id="calClose">✕</button></div><div id="calPhase" class="cal-phase">Előkészítés</div><div id="calArrow" class="cal-arrow">•</div><div id="calInstruction" class="cal-instruction">Tartsd a telefont a játék közbeni természetes helyzetben.</div><div class="cal-progress"><i id="calProgress"></i></div><div id="calStats" class="cal-stats"></div><div class="cal-actions"><button type="button" id="calStart">Kalibráció indítása</button><button type="button" id="calExport" disabled>Mérési adatok exportálása</button></div><div class="cal-small">A teszt közvetlen irány→irány átmeneteket kér; nem kell középhelyzetbe visszatérni.</div></div></div>
 
-<script src="js/game-core.js?v=0.12.48"></script>
-<script src="js/solver.js?v=0.12.48"></script>
-<script src="content/levels/test-library-v1.js?v=0.12.48"></script>
-<script src="js/level-library.js?v=0.12.48"></script>
-<script src="js/audio.js?v=0.12.48"></script>
-<script src="js/scene-renderer.js?v=0.12.48"></script>
-<script src="js/main.js?v=0.12.48"></script>
-<script src="js/scenario-loader.js?v=0.12.48"></script>
-<script src="js/ui-shell.js?v=0.12.48"></script>
+<script src="js/game-core.js?v=0.12.49"></script>
+<script src="js/solver.js?v=0.12.49"></script>
+<script src="content/levels/test-library-v1.js?v=0.12.49"></script>
+<script src="js/level-library.js?v=0.12.49"></script>
+<script src="js/audio.js?v=0.12.49"></script>
+<script src="js/scene-renderer.js?v=0.12.49"></script>
+<script src="js/main.js?v=0.12.49"></script>
+<script src="js/scenario-loader.js?v=0.12.49"></script>
+<script src="js/ui-shell.js?v=0.12.49"></script>
 </body></html>
