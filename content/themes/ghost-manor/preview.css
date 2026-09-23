@@ -1,0 +1,7 @@
+.scene[data-scene="ghost-manor"]{background:radial-gradient(circle at 82% 13%,#e5e8d5 0 5%,#7980a2 6%,transparent 12%),linear-gradient(#080714 0 55%,#18111d 55%);box-shadow:inset 0 0 70px #000}
+
+.scene[data-scene="ghost-manor"]::before{inset:7% 4% 5%;background:linear-gradient(90deg,#241c2d 0 12%,transparent 12% 88%,#241c2d 88%),repeating-linear-gradient(90deg,transparent 0 14%,#ffc86b22 14% 17%,transparent 17% 28%);clip-path:polygon(0 20%,8% 20%,8% 5%,15% 5%,15% 20%,84% 20%,84% 8%,91% 8%,91% 20%,100% 20%,100% 100%,0 100%)}
+
+.scene[data-scene="ghost-manor"]::after{left:-10%;right:-10%;bottom:-2%;height:30%;background:radial-gradient(ellipse,#c8ffe52e,transparent 60%);filter:blur(9px);animation:fog 5s ease-in-out infinite alternate}
+
+.scene[data-scene="ghost-manor"] .ball{border-radius:55% 55% 45% 45%;filter:drop-shadow(0 0 8px #b9ffdc)}
