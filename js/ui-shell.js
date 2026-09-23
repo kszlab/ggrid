@@ -1,6 +1,6 @@
 /* ===== v0.12.49 DATA-DRIVEN APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
- const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
+ const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup'),help=document.querySelector('#helpPanel');
  const topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow');
  const code=document.querySelector('#settingsCode'),freeSettings=document.querySelector('#freeSettings');
  const shellSelect=document.querySelector('#shellThemeSelect'),shellSection=document.querySelector('#shellThemeSection');
@@ -17,8 +17,8 @@ const AppUI=(()=>{
  settings.addEventListener('keydown',e=>{if(e.key==='Escape')closeInfos()});
 
  function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
- function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
- function showHome(){cancelAutoSolve();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
+ function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
+ function showHome(){cancelAutoSolve();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
   cancelAutoSolve();
   menu.hidden=false;MotionControl?.pause?.();
@@ -30,6 +30,19 @@ const AppUI=(()=>{
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
  function openSettings(){document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
  function closeSettings(){closeInfos();settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
+ let helpOpenedFromMenu=false;
+ function openHelp(fromMenu=false){
+  helpOpenedFromMenu=fromMenu;menu.hidden=true;settings.hidden=true;help.hidden=false;
+  help.querySelector('.help-content').scrollTop=0;
+  MotionControl?.pause?.();document.querySelector('#helpClose').focus();
+ }
+ function closeHelp(){
+  help.hidden=true;
+  if(helpOpenedFromMenu){menu.hidden=false;document.querySelector('#menuHelp').focus()}
+  else if(home.hidden)MotionControl?.resume?.();
+  else document.querySelector('#homeHelp').focus();
+  helpOpenedFromMenu=false;
+ }
 
  const themeEl=document.querySelector('#freeTheme'),preview=document.querySelector('#themePreview'),previewName=document.querySelector('#themePreviewName'),previewTag=document.querySelector('#themePreviewTag'),dots=document.querySelector('#themeDots');
  let themeIndex=0,touchX=null;
@@ -79,6 +92,11 @@ const AppUI=(()=>{
  document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);
  document.querySelector('#homeFreePlay').addEventListener('click',openFreeSetup);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
+ document.querySelector('#homeHelp').addEventListener('click',()=>openHelp());
+ document.querySelector('#menuHelp').addEventListener('click',()=>openHelp(true));
+ document.querySelector('#helpClose').addEventListener('click',closeHelp);
+ help.addEventListener('click',e=>{if(e.target===help)closeHelp()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!help.hidden){e.preventDefault();closeHelp()}});
  document.querySelector('#gameMenu').addEventListener('click',openMenu);
  document.querySelector('#menuClose').addEventListener('click',closeMenu);
  document.querySelector('#menuRestart').addEventListener('click',()=>{document.querySelector('#restart').click();closeMenu()});

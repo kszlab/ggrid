@@ -85,6 +85,17 @@ body[data-ui-context="shell"][data-shell-theme="warm"] .ui-panel button{
 
 /* Settings: independent sound channels and motion controls. */
 #settingsPanel .settings-card{width:min(94vw,510px);padding:18px 19px 15px;gap:13px;background:#203e35;color:#f4f7ef;border:2px solid #e6c982;border-radius:22px;overflow:auto;scrollbar-width:thin}
+#helpPanel .help-card{width:min(94vw,510px);max-height:min(88dvh,760px);grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;padding:17px 19px 12px;gap:8px}
+#helpPanel .ui-head{padding-bottom:9px;border-bottom:1px solid #ffffff36}
+#helpPanel .help-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 7px 4px 0;font-size:.86rem;line-height:1.48}
+#helpPanel .help-content:focus-visible{outline:2px solid #ffd98a;outline-offset:-2px}
+#helpPanel .help-content section{padding:10px 2px 11px;border-top:1px solid #ffffff25}
+#helpPanel .help-content section:first-child{border-top:0}
+#helpPanel .help-content h3{margin:0 0 5px;color:#f3d49a;opacity:1;font-size:.79rem;letter-spacing:.045em}
+#helpPanel .help-content p{margin:0 0 7px}
+#helpPanel .help-content p:last-child{margin-bottom:0}
+#helpPanel .panel-version{margin:0;padding-top:6px;border-top:1px solid #ffffff26}
+@media(max-width:390px){#helpPanel .help-card{padding:13px 12px 9px}#helpPanel .help-content{font-size:.8rem}}
 #settingsPanel .ui-head{padding-bottom:11px;border-bottom:1px solid #ffffff2c}
 #settingsPanel .ui-head strong{font-size:1.17rem}
 #settingsPanel .settings-section{border:0;padding:2px 0 0}
