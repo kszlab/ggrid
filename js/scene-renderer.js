@@ -66,6 +66,9 @@ const SceneRenderer=(()=>{
    if(!rectangular)continue;
    let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
    if(!ov){ov=document.createElement('div');ov.className=spec.className||'sr-composite';ov.dataset.objectId=id;ov.innerHTML=spec.markup||'';board.append(ov);componentOverlays.push(ov);}
+   ov.classList.toggle('sr-wide',maxX-minX>maxY-minY);
+   ov.classList.toggle('sr-tall',maxY-minY>maxX-minX);
+   ov.classList.toggle('sr-square',maxX-minX===maxY-minY);
    ov.style.left=`calc(${(o.x+minX)*cellX}% + ${inset}px)`;
    ov.style.top=`calc(${(o.y+minY)*cellY}% + ${inset}px)`;
    ov.style.width=`calc(${(maxX-minX+1)*cellX}% - ${inset*2}px)`;

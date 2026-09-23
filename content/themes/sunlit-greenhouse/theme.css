@@ -116,3 +116,17 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter{background:u
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter:after,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-rim,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter b{display:none}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite{background:url("planter-v3.webp") left top / var(--sg-tile-w,50%) var(--sg-tile-h,100%) repeat;border:0;border-radius:0;box-shadow:none;overflow:visible}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-co-soil,body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-co-leaves{display:none}
+/* v0.12.64: one visual vessel for each logical connected block. The tile-sized
+   bitmap repetition made a single object look like unrelated small pots. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"]{background-image:url("greenhouse-scene-v2.webp"),linear-gradient(#20362555,#20362555),url("greenhouse-scene-v2.webp");background-position:center top,center,center 42%;background-size:auto 100dvh,cover,cover;background-repeat:no-repeat}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite{background:linear-gradient(95deg,#99552f,#c77945 18%,#b46a3d 78%,#8c4d2d);border:3px solid #da995d;border-radius:11px;box-shadow:inset 0 2px #ffe0a1,inset 0 -5px #743f28,0 5px 8px #1b3628aa;overflow:visible}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite:before{content:"";position:absolute;z-index:1;left:-1%;right:-1%;top:-14%;height:min(42%,44px);border:2px solid #e5ab6e;border-radius:45% 45% 14% 14% / 40% 40% 15% 15%;background:url("planter-v3.webp") 0 0 / var(--sg-tile-w,50%) auto repeat-x,#38562c;box-shadow:inset 0 -3px #5d3c24,0 2px 3px #472a1c;pointer-events:none}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite:after{content:"❧";position:absolute;inset:26% 0 8%;display:grid;place-items:center;color:#55793c;font:clamp(18px,4vw,32px) Georgia,serif;text-shadow:0 1px #f1c083,0 0 3px #7a4e2e;pointer-events:none}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-tall:before{top:-4%;height:min(25%,38px)}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-tall:after{inset:25% 0 10%}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component:not(.sr-composite-source){background:linear-gradient(95deg,#a45d35,#c17b4a,#a35d38);border:2px solid #da995d;border-radius:0;box-shadow:inset 0 2px #e8b879;overflow:visible}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-l:not(.sr-composite-source){border-left:0}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-r:not(.sr-composite-source){border-right:0}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-t:not(.sr-composite-source){border-top:0}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-b:not(.sr-composite-source){border-bottom:0}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.sr-open-top:not(.sr-composite-source):before{content:"";position:absolute;left:0;right:0;top:-10%;height:42%;background:url("planter-v3.webp") center top / 100% auto no-repeat;pointer-events:none}
