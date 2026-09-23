@@ -1,11 +1,11 @@
-/* ===== v0.12.48 DATA-DRIVEN APPLICATION UI SHELL ===== */
+/* ===== v0.12.49 DATA-DRIVEN APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
  const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
  const controls=document.querySelector('#settingsControls'),code=document.querySelector('#settingsCode'),freeSettings=document.querySelector('#freeSettings');
  controls.append(mini,tune);code.append(loadrow);if(freeSettings)freeSettings.hidden=true;
 
- function syncPlayActions(){const choose=document.querySelector('#playChoose');if(choose)choose.hidden=!!ScenarioMode?.active}
+ function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
  function enterGame(){home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();MotionControl?.resume?.()}
  function showHome(){menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;home.hidden=false;MotionControl?.pause?.()}
  function openMenu(){
@@ -60,6 +60,7 @@ const AppUI=(()=>{
  }
  document.querySelector('#playHint').addEventListener('click',()=>document.querySelector('#hint').click());
  document.querySelector('#playRestart').addEventListener('click',()=>document.querySelector('#restart').click());
+ document.querySelector('#playNext').addEventListener('click',()=>document.querySelector('#new').click());
  document.querySelector('#playChoose').addEventListener('click',openFreeSetup);
  document.querySelector('#themePrev').addEventListener('click',()=>selectTheme(-1));document.querySelector('#themeNext').addEventListener('click',()=>selectTheme(1));
  preview.addEventListener('pointerdown',e=>{touchX=e.clientX});preview.addEventListener('pointerup',e=>{if(touchX==null)return;const dx=e.clientX-touchX;touchX=null;if(Math.abs(dx)>42)selectTheme(dx<0?1:-1)});
