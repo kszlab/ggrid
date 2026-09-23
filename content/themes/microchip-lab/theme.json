@@ -36,7 +36,11 @@
       "signal-pulses",
       "solder-mask"
     ],
-    "exitStyle": "data-socket"
+    "exitStyle": "data-socket",
+    "markup": {
+      "back": "<i class=\"sr-pcb\"></i><i class=\"sr-trace tr1\"></i><i class=\"sr-trace tr2\"></i><i class=\"sr-capacitor\"></i>",
+      "front": "<i class=\"sr-signal\"></i><span class=\"sr-caption circuit\">MICROCORE // BUS 16 <b>CLK 4.77</b></span>"
+    }
   },
   "audio": {
     "profile": "microchip",
@@ -52,6 +56,28 @@
       "freeze": "clock-hold",
       "exit": "data-lock",
       "win": "boot-chime"
+    }
+  },
+  "pieces": {
+    "ball": {
+      "markup": "<i class=\"electron-orbit\"></i><b class=\"electron-core\">e−</b>",
+      "className": "sr-piece"
+    },
+    "brick": {
+      "markup": "<i class=\"chip-pins\"></i><b class=\"chip-label\">IC</b>",
+      "className": "sr-piece"
+    },
+    "wall": {
+      "markup": "<i class=\"sink-fins\"></i><b>HS</b>",
+      "className": "sr-piece"
+    },
+    "rigidBody": {
+      "className": "sr-composite sr-composite-microchip-lab",
+      "markup": "<i class=\"co-chip-pins\"></i><b>74GGRID</b><em>LOGIC ARRAY</em>"
+    },
+    "exit": {
+      "className": "sr-exit sr-socket",
+      "markup": "<b>DATA</b><i></i>"
     }
   }
 }
