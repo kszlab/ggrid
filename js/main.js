@@ -10,6 +10,18 @@ addEventListener('pointerdown',unlockAudio,{capture:true,passive:true});
 addEventListener('keydown',unlockAudio,{capture:true});
 const angleValue=document.querySelector('#angleValue'),tempoValue=document.querySelector('#tempoValue');
 function setBusy(v){busy=v;document.querySelectorAll('[data-dir]').forEach(b=>b.disabled=v);}
+/* Free play wallet v1: only this browser stores points. A level's best reward
+   prevents repeated runs from minting unlimited points. */
+const SCORE_KEY='ggrid.freeplay.score.v1',scoreValue=document.querySelector('#scoreValue'),hintBtn=document.querySelector('#hint');
+let scoreData={balance:0,best:{}},rewardedThisRun=false;
+try{const saved=JSON.parse(localStorage.getItem(SCORE_KEY)||'null');if(saved&&Number.isSafeInteger(saved.balance)&&saved.balance>=0&&saved.best&&typeof saved.best==='object'&&!Array.isArray(saved.best))scoreData=saved;}catch(_){}
+function saveScore(){try{localStorage.setItem(SCORE_KEY,JSON.stringify(scoreData))}catch(e){console.warn('Pontok helyi mentése sikertelen',e)}}
+function inFreePlay(){return !document.body.classList.contains('scenario-mode')}
+function scoreBase(){const d=Math.max(1,Math.min(10,Number(currentLevelRecord?.analysis?.testDifficultyClass)||Number(difficultyEl.value)||1));return 5+Math.ceil(state.width*state.height/5)+2*d+Math.ceil(optimal.length/3)}
+function scoreReward(){const optimum=Math.max(1,optimal.length),steps=Math.max(optimum,state.moves);return Math.max(1,Math.round(scoreBase()*(0.5+0.5*optimum/steps)))}
+function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=inFreePlay()&&!hintVisible&&scoreData.balance<1;hintBtn.title=inFreePlay()?'Súgó: 1 pont (újbóli megnyitása ingyenes)':''}if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}
+function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
+function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore()}
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
@@ -54,7 +66,7 @@ function render(opts={}){
  const left=freezesLeft(),suffix=left===Infinity?' ∞':` ${left}`;
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
  const fc=document.querySelector('#freezeCount');if(fc)fc.textContent=left===Infinity?'∞':String(left);
- freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}`);
+ freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}${inFreePlay()?' · 10 pont':''}`);updateScore();
  soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
  SceneRenderer?.afterBoardRender?.(board);
 }
@@ -65,7 +77,7 @@ let currentLevelRecord=null;
 function applyLibraryLevel(g){
  state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;const homeLevelId=document.querySelector('#homeLevelId'),playLevelId=document.querySelector('#playLevelId');if(homeLevelId)homeLevelId.textContent=currentLevelId;if(playLevelId)playLevelId.textContent=currentLevelId;
  freezeLimitEl.value='inf';
- freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';
+ freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';
  render();MotionControl?.onNewLevel?.();
 }
 function requestLibraryLevel(){
@@ -85,13 +97,14 @@ function playEvents(events){
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
-function move(dir){if(state.won||busy||freezeArmed)return;SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId);state=r.state;lastEvents=r.events;if(usedFreeze)freezeUsed++;freezeArmed=false;freezeId=null;render({preservePieces:true});playEvents(r.events);setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+function move(dir){if(state.won||busy||freezeArmed)return;SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId),meaningful=r.events.some(e=>e.type==='move'||e.type==='exit');if(usedFreeze&&meaningful&&inFreePlay()&&!spendScore(10)){freezeId=null;freezeArmed=false;setBusy(false);render({preservePieces:true});return}state=r.state;lastEvents=r.events;if(usedFreeze&&meaningful)freezeUsed++;freezeArmed=false;freezeId=null;render({preservePieces:true});playEvents(r.events);awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
 function hint(){
- if(hintVisible){hintVisible=false;toast.textContent='';return;}
+ if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return;}
+ if(inFreePlay()&&scoreData.balance<1)return;
  hintVisible=true;
  if(state.won){toast.textContent='A pálya már kész.';return}
  toast.textContent='Solver számol…';
- setTimeout(()=>{if(!hintVisible)return;const sol=solve(state,30);if(!sol)toast.textContent='Innen Freeze nélkül nincs megoldás.';else{const arrows={up:'↑',down:'↓',left:'←',right:'→'};toast.textContent=`Innen minimum ${sol.length} lépés. Következő optimális irány: ${arrows[sol[0]]}`;}},0);
+ setTimeout(()=>{if(!hintVisible)return;const sol=solve(state,30);if(!sol)toast.textContent='Innen Freeze nélkül nincs megoldás.';else{if(inFreePlay()&&!spendScore(1)){hintVisible=false;return}const arrows={up:'↑',down:'↓',left:'←',right:'→'};toast.textContent=`Innen minimum ${sol.length} lépés. Következő optimális irány: ${arrows[sol[0]]}`;}updateScore()},0);
 }
 
 /* ===== v0.5 PRESS / HOLD INPUT =====
@@ -351,7 +364,7 @@ const CalibrationLab=(()=>{
 })();
 
 freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
-document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();});
+document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
 soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));if(state)render({preservePieces:true});});
