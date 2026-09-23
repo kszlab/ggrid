@@ -23,16 +23,28 @@
   },
   "pieces": {
     "ball": {
-      "name": "K-7 futárdrón"
+      "name": "K-7 futárdrón",
+      "markup": "<i class=\"drone-wing dw1\"></i><i class=\"drone-wing dw2\"></i><b class=\"drone-eye\"></b><em>K7</em>",
+      "className": "sr-piece"
     },
     "brick": {
-      "name": "Cargó pod"
+      "name": "Cargó pod",
+      "markup": "<i class=\"cargo-line\"></i><b>{{first:HEAVY|CARGO}}</b><em>{{multi:C-47|47}}</em>",
+      "className": "sr-piece"
     },
     "wall": {
-      "name": "Klímatorony"
+      "name": "Klímatorony",
+      "markup": "<i class=\"tower-light\"></i><b>HVAC</b>",
+      "className": "sr-piece"
     },
     "exit": {
-      "name": "Evakuációs lift"
+      "name": "Evakuációs lift",
+      "className": "sr-exit sr-evac",
+      "markup": "<b>09</b><small>EVAC</small>"
+    },
+    "rigidBody": {
+      "className": "sr-composite sr-composite-neon-noir",
+      "markup": "<i class=\"co-window cw1\"></i><i class=\"co-window cw2\"></i><i class=\"co-thruster\"></i><b>HEAVY CARGO</b><em>C-47</em>"
     }
   },
   "abilities": {
@@ -53,7 +65,11 @@
       "steam",
       "foreground-signage"
     ],
-    "exitStyle": "holo-elevator"
+    "exitStyle": "holo-elevator",
+    "markup": {
+      "back": "<i class=\"sr-city\"></i><i class=\"sr-holo\">九<small>SECTOR 9</small></i><i class=\"sr-glow\"></i>",
+      "front": "<i class=\"sr-rain\"></i><i class=\"sr-vapor\"></i><span class=\"sr-caption neon\">ACID RAIN // ROOFTOP 09 <b>EVAC</b></span>"
+    }
   },
   "audio": {
     "profile": "neon",
