@@ -59,3 +59,52 @@ body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-sour
 
 body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .rivet,
 body[data-scene="clockwork-sanctum"] .brick.sr-rigid-cell:not(.sr-composite-source) .piece-glyph{opacity:.72}
+
+
+.sr-stars{position:absolute;inset:3%;background:radial-gradient(circle at 12% 16%,#fff 0 1px,transparent 2px),radial-gradient(circle at 78% 11%,#7eeaff 0 1px,transparent 2px),radial-gradient(circle at 52% 27%,#fff 0 1px,transparent 2px),radial-gradient(circle at 91% 40%,#ffe5a0 0 1px,transparent 2px)}
+
+.sr-arch{position:absolute;inset:5% 3% 3%;border:8px double #9b6b2e;border-radius:48% 48% 8% 8%;box-shadow:inset 0 0 0 2px #e7c67b2c}
+
+.sr-gear{position:absolute;border:7px dotted #a87835;border-radius:50%;box-shadow:inset 0 0 0 3px #593716,0 0 0 2px #d6a65a55;animation:srSpin 12s linear infinite}
+.sg1{width:88px;height:88px;left:-24px;bottom:35px}
+.sg2{width:62px;height:62px;right:-9px;top:48px;animation-direction:reverse;animation-duration:8s}
+
+.sr-orrery{position:absolute;width:100px;height:54px;right:8px;bottom:22px;border:1px solid #d2a85b66;border-radius:50%;transform:rotate(-8deg)}
+.sr-orrery:before,.sr-orrery:after{content:"";position:absolute;inset:8px;border:1px solid #d2a85b88;border-radius:50%;transform:rotate(28deg)}
+.sr-orrery:after{transform:rotate(-38deg)}
+.aether-ring{position:absolute;border:2px solid #e6b75b;border-radius:50%;inset:-10%;border-left-color:transparent;animation:srSpin 4s linear infinite}
+.aether-ring.r2{inset:-20%;border-color:#7beaff transparent #7beaff #7beaff;animation-direction:reverse;animation-duration:6s}
+.aether-light{position:absolute;inset:32%;border-radius:50%;background:#fff;box-shadow:0 0 9px #fff}
+.rv1{left:5px;top:5px}
+.rv2{right:5px;bottom:5px}
+.pillar-cap{position:absolute;left:-5%;right:-5%;top:5%;height:12%;background:#bd955c;border-radius:50%}
+.sr-astrolabe i{position:absolute;inset:-9px;border:2px dashed #e6b85d;border-radius:50%;animation:srSpin 5s linear infinite}
+.sr-astrolabe b{position:absolute;inset:0;display:grid;place-items:center;color:#fff}
+.sr-astrolabe:after{display:none!important}
+
+.sr-steam{position:absolute;width:60px;height:24px;border-radius:50%;background:#d8ffff14;filter:blur(7px);bottom:15px;animation:srSteam 5s ease-in-out infinite alternate}
+.ss1{left:8%}
+.ss2{right:11%;animation-delay:-2s}
+
+@media(prefers-reduced-motion:reduce){.sr-gear,.aether-ring,.sr-steam,.sr-rain,.sr-vapor{animation:none!important}}
+
+.scene-showcase[data-move-dir="right"].fx-move .sr-steam,.scene-showcase[data-move-dir="right"].fx-move .sr-vapor{transform:translateX(-18px)}
+
+.scene-showcase[data-move-dir="left"].fx-move .sr-steam,.scene-showcase[data-move-dir="left"].fx-move .sr-vapor{transform:translateX(18px)}
+
+.scene-showcase.fx-exit .sr-astrolabe i{animation-duration:.45s}
+.scene-showcase.fx-exit .sr-astrolabe:before{animation-duration:.7s}
+
+.sr-composite-clockwork-sanctum{border:3px ridge #e1b25d;border-radius:9px;background:linear-gradient(180deg,#a96f30 0 10%,#3a2414 12% 72%,#775025 74%);box-shadow:inset 0 0 0 3px #170d07,0 7px 10px #0009,0 0 10px #e0ae4b22}
+
+.sr-composite-clockwork-sanctum:before,.sr-composite-clockwork-sanctum:after{content:"";position:absolute;top:8%;bottom:8%;width:5px;background:linear-gradient(#f2cd7b,#60401f,#d69b43);border-radius:3px}
+.sr-composite-clockwork-sanctum:before{left:6%}
+.sr-composite-clockwork-sanctum:after{right:6%}
+
+.sr-composite-clockwork-sanctum b{position:absolute;left:13%;right:13%;bottom:8%;font:700 6px ui-monospace,monospace;letter-spacing:.13em;text-align:center;color:#f5d58f;text-shadow:0 1px 3px #000}
+
+.co-rail{position:absolute;left:10%;right:10%;top:18%;height:3px;background:#e1b25d;box-shadow:0 0 0 1px #3d2411,0 16px #b77932}
+
+.co-gear{position:absolute;top:25%;width:25%;aspect-ratio:1;border:4px dotted #e0aa4e;border-radius:50%;box-shadow:inset 0 0 0 2px #62401e;animation:srSpin 3.2s linear infinite}
+.cg1{left:21%}
+.cg2{right:21%;animation-direction:reverse;animation-duration:4.3s}
