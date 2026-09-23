@@ -503,3 +503,6 @@ body[data-theme="abyssal-lab"] .exit{color:#5dffd8;filter:drop-shadow(0 0 9px #5
 .difficulty-picker{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;width:100%}
 .difficulty-picker button{min-width:0;min-height:34px;padding:0 4px;border:0;border-radius:9px;background:#ffffff0c;color:#d9e8f3;font-weight:800}
 .difficulty-picker button.active{background:#e8f5ff;color:#10273a;box-shadow:0 2px 8px #0005}
+
+/* v0.12.43 - compact level reference on Free Play */
+.home-level-id{display:block;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:.04em;opacity:.72;text-transform:none}
