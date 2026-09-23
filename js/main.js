@@ -19,9 +19,15 @@ function saveScore(){try{localStorage.setItem(SCORE_KEY,JSON.stringify(scoreData
 function inFreePlay(){return !document.body.classList.contains('scenario-mode')}
 function scoreBase(){const d=Math.max(1,Math.min(10,Number(currentLevelRecord?.analysis?.testDifficultyClass)||Number(difficultyEl.value)||1));return 5+Math.ceil(state.width*state.height/5)+2*d+Math.ceil(optimal.length/3)}
 function scoreReward(){const optimum=Math.max(1,optimal.length),steps=Math.max(optimum,state.moves);return Math.max(1,Math.round(scoreBase()*(0.5+0.5*optimum/steps)))}
+function updateLevelScore(){
+ if(!state||!currentLevelId||!inFreePlay())return;
+ const best=Math.max(0,Math.min(scoreBase(),Number(scoreData.best[currentLevelId])||0)),done=best>0;
+ const label=`${done?'✓ ':''}${currentLevelId} · ${best}/${scoreBase()} pont`;
+ for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
+}
 function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=inFreePlay()&&!hintVisible&&scoreData.balance<1;hintBtn.title=inFreePlay()?'Súgó: 1 pont (újbóli megnyitása ingyenes)':''}if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
-function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore()}
+function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore();updateLevelScore()}
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
@@ -75,7 +81,7 @@ function render(opts={}){
    A pályagenerálás a fejlesztői/content pipeline feladata, nem runtime funkció. */
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
- state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;const homeLevelId=document.querySelector('#homeLevelId'),playLevelId=document.querySelector('#playLevelId');if(homeLevelId)homeLevelId.textContent=currentLevelId;if(playLevelId)playLevelId.textContent=currentLevelId;
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
  freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';
  render();MotionControl?.onNewLevel?.();

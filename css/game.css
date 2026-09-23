@@ -264,6 +264,7 @@ body.scenario-mode #playChoose{display:none!important}
 /* v0.12.44 - stable in-game level reference and HOLDKERT header clearance */
 .game-head .scenario-info{display:flex;align-items:baseline;gap:8px;min-width:0;font-weight:800}
 .game-head .play-level-id{font:700 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.72;overflow:hidden;text-overflow:ellipsis}
+.game-head .play-level-id.completed,.home-level-id.completed{color:var(--ui-accent,#9ee0a9);opacity:1}
 
 
 /* v0.12.52 – irregular showcase rigid bodies keep one visual identity.
