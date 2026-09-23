@@ -90,8 +90,8 @@ const ScenarioMode=(()=>{
   if(effective.completion?.type&&effective.completion.type!=='allBallsExited')throw Error('UNSUPPORTED_COMPLETION');
   const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');applyTheme(theme);
   const lvl=await loadRef(effective.stage.level,effective.base,'ggrid-level'),s=toState(lvl);
-  state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentCode='Scenario: '+scenario.id+' / '+effective.stage.id;
-  active=true;document.body.classList.add('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();scheduleFreezeAnalysis();MotionControl?.onNewLevel?.();
+  state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentLevelId='Scenario: '+scenario.id+' / '+effective.stage.id;
+  active=true;document.body.classList.add('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();MotionControl?.onNewLevel?.();
   try{localStorage.setItem(progressKey,JSON.stringify({scenarioId:scenario.id,version:scenario.version,chapterIndex,stageIndex}))}catch(_){}
  }
  async function nextStage(){
