@@ -26,6 +26,12 @@ function render(opts={}){
  board.style.setProperty('--cols',state.width);board.style.setProperty('--rows',state.height);board.style.aspectRatio=`${state.width}/${state.height}`;
  if(!opts.preservePieces){board.innerHTML='';for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++){const c=document.createElement('div');c.className='cell';c.style.gridColumn=x+1;c.style.gridRow=y+1;board.append(c);}
   const e=document.createElement('div');e.className=`exit exit-${state.exit.dir}`;e.style.gridColumn=state.exit.x+1;e.style.gridRow=state.exit.y+1;board.append(e);
+  // The visual waypoint remains separate from the theme's decorative exit.
+  // Its position follows the real exit, including every board size/direction.
+  const beacon=document.createElement('div');beacon.className=`exit-beacon exit-beacon-${state.exit.dir}`;
+  beacon.style.gridColumn=state.exit.x+1;beacon.style.gridRow=state.exit.y+1;
+  beacon.setAttribute('role','img');beacon.setAttribute('aria-label',`Kijárat ${({up:'felül',down:'alul',left:'balra',right:'jobbra'})[state.exit.dir]||''}`);
+  const label=document.createElement('span');label.textContent='KIJÁRAT';label.setAttribute('aria-hidden','true');beacon.append(label);board.append(beacon);
  }
  const existing=new Map([...board.querySelectorAll('.piece')].map(el=>[el.dataset.cellkey,el]));
  const wanted=new Set();

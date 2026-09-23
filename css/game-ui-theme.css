@@ -82,3 +82,32 @@ body[data-ui-context="shell"][data-shell-theme="warm"] .home-card button,
 body[data-ui-context="shell"][data-shell-theme="warm"] .ui-panel button{
  border-color:#d3b87888;
 }
+
+/* One clear exit landmark for every world. It is a separate grid item at the
+   actual exit, so decorative theme markup and game physics stay untouched. */
+body[data-ui-context="game"] .board .exit-beacon{position:relative;z-index:16;box-sizing:border-box;pointer-events:none;display:block;width:18px;height:66%;align-self:center;justify-self:start;transform:translateX(-37%);border:2px solid #fbd890;border-right:4px solid #fff1bc;border-radius:12px 3px 3px 12px;background:linear-gradient(90deg,#083945,#35e7f0 64%,#c4fff3);box-shadow:0 0 0 2px #144b54,0 0 11px 3px #66ecff,inset 0 0 5px #fff8bb;filter:drop-shadow(0 1px 2px #000a)}
+body[data-ui-context="game"] .board .exit-beacon span{position:absolute;top:50%;right:calc(100% + 4px);transform:translateY(-50%);padding:3px 4px;border:1px solid #f4d082;border-radius:5px;background:#102b34f5;color:#fff0bd;font:800 clamp(7px,1.6vw,10px)/1 system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;text-shadow:0 1px #000;box-shadow:0 0 7px #40dcedbd}
+body[data-ui-context="game"] .board .exit-beacon-right{justify-self:end;transform:translateX(37%);border-right:2px solid #fbd890;border-left:4px solid #fff1bc;border-radius:3px 12px 12px 3px;background:linear-gradient(90deg,#c4fff3,#35e7f0 36%,#083945)}
+body[data-ui-context="game"] .board .exit-beacon-right span{right:auto;left:calc(100% + 4px)}
+body[data-ui-context="game"] .board .exit-beacon-up,body[data-ui-context="game"] .board .exit-beacon-down{width:66%;height:17px;justify-self:center;align-self:start;transform:translateY(-37%);border:2px solid #fbd890;border-bottom:4px solid #fff1bc;border-radius:12px 12px 3px 3px;background:linear-gradient(#083945,#35e7f0 64%,#c4fff3)}
+body[data-ui-context="game"] .board .exit-beacon-up span{top:auto;bottom:calc(100% + 3px);right:50%;transform:translateX(50%)}
+body[data-ui-context="game"] .board .exit-beacon-down{align-self:end;transform:translateY(37%);border-bottom:2px solid #fbd890;border-top:4px solid #fff1bc;border-radius:3px 3px 12px 12px;background:linear-gradient(#c4fff3,#35e7f0 36%,#083945)}
+body[data-ui-context="game"] .board .exit-beacon-down span{top:calc(100% + 3px);right:50%;transform:translateX(50%)}
+body[data-ui-context="game"]:not(.full-ui-skin) .board .exit::after{opacity:0}
+
+/* Common machined rails for the simpler worlds. Color tokens inherit from
+   each world; showcase worlds with full UI retain their own sculpted controls. */
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-control{opacity:1;border:2px solid var(--ui-accent,#e4c587);background:linear-gradient(160deg,#5c6671 0%,var(--ui-control-raised,#4b535a) 14%,var(--ui-control,#262f37) 42%,#222b33 87%,#121b22);box-shadow:inset 0 1px 1px #fff8,inset 0 0 0 2px #19252ecf,inset 0 -3px 5px #0009,0 4px 9px #000a,0 0 0 1px #e3b76f6b;filter:none}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-up,body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-down{border-radius:999px;height:43px}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-left,body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-right{border-radius:999px;width:43px}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .emboss-arrow{width:27px;height:27px;filter:drop-shadow(0 2px 2px #000d);transition:transform .12s ease,filter .12s ease}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .emboss-arrow::before{left:9px;top:9px;width:9px;height:16px;border-radius:2px;background:linear-gradient(#fffef0,#e9e0c8);box-shadow:inset 1px 1px #fff,inset -1px -1px #94734f}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .emboss-arrow::after{left:1px;border-left-width:13px;border-right-width:13px;border-bottom-width:13px;border-bottom-color:#fff7dd;filter:drop-shadow(0 -1px 1px #d6a45e)}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-control:active,body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-control.pressed{background:linear-gradient(155deg,var(--ui-control-pressed,#547a86),var(--ui-control,#243847));box-shadow:inset 0 3px 7px #000a,0 0 9px var(--ui-accent,#e9d08d);filter:brightness(1.08)}
+body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-control:focus-visible{outline:3px solid var(--ui-focus,#ffe1a0);outline-offset:3px}
+@media(max-width:430px){body[data-ui-context="game"] .board .exit-beacon span{font-size:7px;padding:2px 3px}body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-left,body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .edge-right{width:38px}}
+@media(prefers-reduced-motion:reduce){body[data-ui-context="game"]:not(.full-ui-skin) .board-wrap .emboss-arrow{transition:none}}
+@media(max-width:430px){
+ body[data-ui-context="game"] .board .exit-beacon-left span{left:calc(100% + 2px);right:auto}
+ body[data-ui-context="game"] .board .exit-beacon-right span{right:calc(100% + 2px);left:auto}
+}
