@@ -32,11 +32,22 @@
     },
     "exit": {
       "name": "Jégkapu"
-    }
+    },
+    "rigidBody": {}
   },
   "abilities": {
     "freeze": {
       "name": "Mélyfagyasztás"
     }
+  },
+  "scene": {
+    "type": "ice-cavern",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
