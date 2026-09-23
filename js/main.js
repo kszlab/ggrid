@@ -403,10 +403,18 @@ document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
 // Short click still requests a hint; a three-second pointer hold runs the demo.
-const playHintBtn=document.querySelector('#playHint');let hintHoldTimer=null,hintHoldFired=false;
-function clearHintHold(){if(hintHoldTimer)clearTimeout(hintHoldTimer);hintHoldTimer=null}
-playHintBtn.addEventListener('pointerdown',e=>{if(e.button!==0)return;clearHintHold();hintHoldFired=false;hintHoldTimer=setTimeout(()=>{hintHoldTimer=null;hintHoldFired=true;startAutoSolve()},3000)});
-for(const event of ['pointerup','pointercancel','pointerleave'])playHintBtn.addEventListener(event,clearHintHold);
+const playHintBtn=document.querySelector('#playHint');let hintHoldTimer=null,hintHoldFired=false,hintHoldPointer=null;
+function clearHintHold(){if(hintHoldTimer)clearTimeout(hintHoldTimer);hintHoldTimer=null;hintHoldPointer=null;playHintBtn.classList.remove('pressed')}
+playHintBtn.addEventListener('pointerdown',e=>{
+ if(e.button!==0||hintHoldPointer!==null)return;
+ clearHintHold();hintHoldFired=false;hintHoldPointer=e.pointerId;
+ // Keep receiving the release even if the finger drifts off this small button.
+ try{playHintBtn.setPointerCapture(e.pointerId)}catch(_){}
+ playHintBtn.classList.add('pressed');
+ hintHoldTimer=setTimeout(()=>{hintHoldTimer=null;hintHoldFired=true;playHintBtn.classList.remove('pressed');startAutoSolve()},3000);
+});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])playHintBtn.addEventListener(event,e=>{if(e.pointerId===hintHoldPointer)clearHintHold()});
+// Some mobile browsers issue a context menu on long touch; CSS disables that gesture.
 playHintBtn.addEventListener('click',e=>{if(!hintHoldFired)return;e.preventDefault();e.stopImmediatePropagation();hintHoldFired=false},true);
 playHintBtn.addEventListener('contextmenu',e=>e.preventDefault());
 soundBtn.addEventListener('click',async()=>{await AudioManager.toggleEffects();syncSoundControls()});
