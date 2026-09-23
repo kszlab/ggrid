@@ -506,3 +506,17 @@ body[data-theme="abyssal-lab"] .exit{color:#5dffd8;filter:drop-shadow(0 0 9px #5
 
 /* v0.12.43 - compact level reference on Free Play */
 .home-level-id{display:block;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:.04em;opacity:.72;text-transform:none}
+
+/* v0.12.44 - stable in-game level reference and HOLDKERT header clearance */
+.game-head .scenario-info{display:flex;align-items:baseline;gap:8px;min-width:0;font-weight:800}
+.game-head .play-level-id{font:700 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.72;overflow:hidden;text-overflow:ellipsis}
+body.full-ui-skin[data-scene="moonlit-zen"] .game-head{height:38px;padding-left:0}
+body.full-ui-skin[data-scene="moonlit-zen"] .game-head .scenario-info{color:#d6b56d;padding-left:0}
+body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-top:100px}
+body.full-ui-skin[data-scene="moonlit-zen"] .skin-scene-title{top:14px}
+body.full-ui-skin[data-scene="moonlit-zen"] .skin-scene-title span{display:none}
+body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 52px)}
+@media(max-height:760px){
+ body.full-ui-skin[data-scene="moonlit-zen"] .board-wrap{--skin-top:90px}
+ body.full-ui-skin[data-scene="moonlit-zen"] .edge-up{top:calc(var(--skin-top) - 48px)}
+}
