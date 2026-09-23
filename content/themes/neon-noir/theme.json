@@ -89,5 +89,8 @@
   },
   "preview": {
     "markup": "<div class=\"cityline\"><i></i><i></i><i></i><i></i><i></i></div><div class=\"rain\"></div><div class=\"holo-sign\">九<br><b>SECTOR</b></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero courier\"><b></b><em></em></i><i class=\"piece object cargo ca1\"></i><i class=\"piece object cargo ca2\"></i><i class=\"piece object tower tw1\"></i><i class=\"piece object tower tw2\"></i><i class=\"piece object long-machine neon-bus\"></i><i class=\"exit holo-exit\"><b>09</b><em>EVAC</em></i></div><div class=\"scene-label neon-label\">ACID RAIN // ROOFTOP 09 <b>02:41</b></div>"
+  },
+  "assets": {
+    "css": "theme.css"
   }
 }
