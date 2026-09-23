@@ -1,7 +1,7 @@
 /* ===== UI ===== */
 let state,initial,optimal=[],freezeArmed=false,freezeId=null,currentLevelId='',busy=false,lastEvents=[],hintVisible=false,freezeUsed=0;
 const board=document.querySelector('#board'),status=document.querySelector('#status'),meta=document.querySelector('#meta'),codeEl=document.querySelector('#code'),toast=document.querySelector('#toast');
-const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
+const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),ambientBtn=document.querySelector('#ambientSound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
 
 /* Browsers suspend Web Audio until a genuine user gesture. Capture the first
    pointer/key gesture and let AudioManager start the selected theme ambient. */
@@ -32,6 +32,7 @@ function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLeve
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
+function syncSoundControls(){soundBtn.setAttribute('aria-checked',String(AudioManager.effectsEnabled));ambientBtn.setAttribute('aria-checked',String(AudioManager.ambientEnabled))}
 function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [w,h]=v.split('x').map(Number);return{w,h}}const n=+v;return{w:n,h:n}}
 function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
 function outerEdgeClasses(o,ci){
@@ -74,7 +75,7 @@ function render(opts={}){
  freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
  const fc=document.querySelector('#freezeCount');if(fc)fc.textContent=left===Infinity?'∞':String(left);
  freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}${inFreePlay()?' · 10 pont':''}`);updateScore();
- soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));
+ syncSoundControls();
  SceneRenderer?.afterBoardRender?.(board);
 }
 /* ===== PRE-GENERATED LEVEL LIBRARY =====
@@ -166,7 +167,7 @@ const MotionControl=(()=>{
  function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({enterAngle,tempoPct}))}catch(_){}}
  function norm180(a){while(a>180)a-=360;while(a<-180)a+=360;return a}
  function supported(){return 'DeviceOrientationEvent' in window||'DeviceMotionEvent' in window}
- function label(){motionBtn.classList.toggle('active',enabled);motionBtn.textContent=enabled?'📱 Mozgás be':'📱 Mozgás ki'}
+ function label(){motionBtn.setAttribute('aria-checked',String(enabled))}
  function note(t=''){motionNote.textContent=t}
  function stop(){activeDir=null;candidateDir=null;candidateSince=0;setBoardTilt(null,false)}
  function screenVector(x,y){
@@ -374,7 +375,9 @@ freezeBtn.addEventListener('click',()=>{if(!canUseFreeze())return;freezeArmed=!f
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
-soundBtn.addEventListener('click',async()=>{await AudioManager.toggle();soundBtn.textContent=AudioManager.muted?'🔇 Hang kikapcsolva':'🔊 Hang bekapcsolva';soundBtn.setAttribute('aria-pressed',String(!AudioManager.muted));if(state)render({preservePieces:true});});
+soundBtn.addEventListener('click',async()=>{await AudioManager.toggleEffects();syncSoundControls()});
+ambientBtn.addEventListener('click',async()=>{await AudioManager.toggleAmbient();syncSoundControls()});
+syncSoundControls();
 function changeLevelProfile(){
  
  /* A régi pálya ne maradjon látható, miközben az új méret készül. */

@@ -1,16 +1,16 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>GGrid – v0.12.70 letisztult UI</title>
-<link rel="stylesheet" href="css/game.css?v=0.12.70">
-<link rel="stylesheet" href="css/game-ui-theme.css?v=0.12.70"></head>
+<title>GGrid – v0.12.71 letisztult UI</title>
+<link rel="stylesheet" href="css/game.css?v=0.12.71">
+<link rel="stylesheet" href="css/game-ui-theme.css?v=0.12.71"></head>
 <body data-ui-context="shell">
 <div id="startup" class="startup" aria-live="polite"><div class="startup-card"><div class="startup-title">GGrid</div><div class="startup-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="startup-ball"></i><i></i><i></i><i class="startup-brick"></i><i></i></div><div class="startup-text">A játék töltődik…</div></div></div>
 
 <div id="homeScreen" class="home-screen">
  <div class="home-card">
   <div class="home-logo">GGrid</div>
-  <div class="home-version">v0.12.70</div>
+  <div class="home-version">v0.12.71</div>
   <button type="button" id="scenarioOpen" hidden></button>
   <button type="button" id="homeFreePlay" class="primary-home">▶ Szabad játék <span id="homeLevelId" class="home-level-id">—</span></button>
   <button type="button" id="homeSettings">⚙ Beállítások</button>
@@ -49,17 +49,9 @@
  <div class="tools legacy-tools">
   <button type="button" id="restart">↶ Újrakezdés</button>
   <button type="button" id="new">⟳ Új pálya</button>
-  <button type="button" id="exitScenario" hidden>↩ Szabad játék</button>
- </div>
- <div class="mini-tools settings-only">
-  <button type="button" id="sound">🔊 Hang</button>
-  <button type="button" id="motion">📱 Mozgás ki</button>
-  <button type="button" id="hint">💡 Súgó</button>
-  <button type="button" id="calibrate">🧭 Kalibráció</button>
- </div>
- <div class="motion-tune settings-only" aria-label="Mozgásvezérlés hangolása">
-  <div class="tune-box"><span>Érzékenység</span><button type="button" id="angleMinus">−</button><span id="angleValue" class="tune-value">10°</span><button type="button" id="anglePlus">+</button></div>
-  <div class="tune-box"><span>Tempó</span><button type="button" id="tempoMinus">−</button><span id="tempoValue" class="tune-value">100%</span><button type="button" id="tempoPlus">+</button></div>
+ <button type="button" id="exitScenario" hidden>↩ Szabad játék</button>
+  <button type="button" id="hint" hidden>💡 Súgó</button>
+  <button type="button" id="calibrate" hidden>🧭 Kalibráció</button>
  </div>
 </main>
 
@@ -78,7 +70,7 @@
    
   </div>
   <button type="button" id="freeSetupPlay" class="free-play-launch">▶ JÁTÉK INDÍTÁSA</button>
-  <div class="panel-version">GGrid v0.12.70</div>
+  <div class="panel-version">GGrid v0.12.71</div>
  </div>
 </div>
 
@@ -90,30 +82,42 @@
  <button type="button" id="menuHint">💡 Súgó</button>
  <button type="button" id="menuSettings">⚙ Beállítások</button>
  <button type="button" id="menuHome">⌂ Kilépés a főmenübe</button>
- <div class="panel-version">GGrid v0.12.70</div>
+ <div class="panel-version">GGrid v0.12.71</div>
 </div></div>
 
-<div id="settingsPanel" class="ui-panel" hidden><div class="ui-card">
+<div id="settingsPanel" class="ui-panel" hidden><div class="ui-card settings-card">
   <div class="ui-head"><strong>Beállítások</strong><button type="button" id="settingsClose">✕</button></div>
-  <section><h3>Vezérlés és hang</h3><div id="settingsControls"></div></section>
+  <section class="settings-section"><h3>Hangok</h3><p>A játék és a háttér külön kapcsolható</p>
+   <div class="settings-group">
+    <div class="settings-row"><div class="settings-copy"><div class="settings-name">Játék-akció hangok <button type="button" class="settings-info" aria-label="Információ a játék-akció hangokról" aria-expanded="false">i<span class="settings-tooltip" role="tooltip">A mozgás, ütközés, Freeze, kijutás és győzelem hangjait kapcsolja. A háttérzene ettől független.</span></button></div><small>Mozgás, ütközés, Freeze, kijutás</small></div><button type="button" id="sound" class="settings-switch" role="switch" aria-label="Játék-akció hangok" aria-checked="true"><span></span></button></div>
+    <div class="settings-row"><div class="settings-copy"><div class="settings-name">Háttérhang és zene <button type="button" class="settings-info" aria-label="Információ a háttérhangokról és zenéről" aria-expanded="false">i<span class="settings-tooltip" role="tooltip">A választott téma zenéjét és környezeti hangjait kapcsolja. A játék-akció hangok ettől függetlenül működnek.</span></button></div><small>A választott téma hangulata</small></div><button type="button" id="ambientSound" class="settings-switch" role="switch" aria-label="Háttérhang és zene" aria-checked="true"><span></span></button></div>
+   </div>
+  </section>
+  <section class="settings-section"><h3>Mozgásvezérlés</h3><p>Telefon döntésével is irányíthatod a pályát</p>
+   <div class="settings-group">
+    <div class="settings-row"><div class="settings-copy"><div class="settings-name">Mozgásvezérlés <button type="button" class="settings-info" aria-label="Információ a mozgásvezérlésről" aria-expanded="false">i<span class="settings-tooltip" role="tooltip">Telefonon a készülék döntésével mozgathatod a pálya elemeit. A bekapcsoláshoz a telefon mozgásérzékelőjének engedélye szükséges.</span></button></div><small>Döntéses irányítás be / ki</small></div><button type="button" id="motion" class="settings-switch" role="switch" aria-label="Mozgásvezérlés" aria-checked="false"><span></span></button></div>
+    <div class="settings-row"><div class="settings-copy"><div class="settings-name">Érzékenység <button type="button" class="settings-info" aria-label="Információ az érzékenységről" aria-expanded="false">i<span class="settings-tooltip" role="tooltip">A szükséges döntési szög. Kisebb értéknél a játék már kisebb mozdulatra reagál; nagyobb értéknél határozottabban kell dönteni.</span></button></div><small>Kisebb szögre hamarabb reagál</small></div><div class="settings-stepper"><button type="button" id="angleMinus" aria-label="Érzékenység csökkentése">−</button><output id="angleValue">6°</output><button type="button" id="anglePlus" aria-label="Érzékenység növelése">+</button></div></div>
+    <div class="settings-row"><div class="settings-copy"><div class="settings-name">Tempó <button type="button" class="settings-info" aria-label="Információ a tempóról" aria-expanded="false">i<span class="settings-tooltip" role="tooltip">A telefon döntve tartásakor ismétlődő lépések üteme. Kisebb százalék gyorsabb, nagyobb százalék lassabb ismétlést jelent.</span></button></div><small>Az ismétlődő lépések üteme</small></div><div class="settings-stepper"><button type="button" id="tempoMinus" aria-label="Tempó százalékának csökkentése">−</button><output id="tempoValue">100%</output><button type="button" id="tempoPlus" aria-label="Tempó százalékának növelése">+</button></div></div>
+   </div>
+  </section>
   <section id="shellThemeSection"><h3>Főképernyő és menük</h3><label for="shellThemeSelect">Megjelenés</label> <select id="shellThemeSelect"><option value="classic">Klasszikus</option><option value="warm">Meleg üveg</option></select></section>
   <section id="freeSettings"><h3>Szabad játék</h3><div id="settingsFree"></div></section>
  <div id="settingsCode" hidden></div>
- <div class="panel-version">GGrid v0.12.70</div>
+ <div class="panel-version">GGrid v0.12.71</div>
 </div></div>
 
 <div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>
 
 <div id="calibration" class="calibration" hidden><div class="cal-card"><div class="cal-head"><strong>GGrid Motion Calibration Lab</strong><button type="button" id="calClose">✕</button></div><div id="calPhase" class="cal-phase">Előkészítés</div><div id="calArrow" class="cal-arrow">•</div><div id="calInstruction" class="cal-instruction">Tartsd a telefont a játék közbeni természetes helyzetben.</div><div class="cal-progress"><i id="calProgress"></i></div><div id="calStats" class="cal-stats"></div><div class="cal-actions"><button type="button" id="calStart">Kalibráció indítása</button><button type="button" id="calExport" disabled>Mérési adatok exportálása</button></div><div class="cal-small">A teszt közvetlen irány→irány átmeneteket kér; nem kell középhelyzetbe visszatérni.</div></div></div>
 
-<script src="js/game-core.js?v=0.12.70"></script>
-<script src="js/solver.js?v=0.12.70"></script>
-<script src="content/levels/test-library-v1.js?v=0.12.70"></script>
-<script src="content/levels/classification-v1.js?v=0.12.70"></script>
-<script src="js/level-library.js?v=0.12.70"></script>
-<script src="js/audio.js?v=0.12.70"></script>
-<script src="js/scene-renderer.js?v=0.12.70"></script>
-<script src="js/main.js?v=0.12.70"></script>
-<script src="js/scenario-loader.js?v=0.12.70"></script>
-<script src="js/ui-shell.js?v=0.12.70"></script>
+<script src="js/game-core.js?v=0.12.71"></script>
+<script src="js/solver.js?v=0.12.71"></script>
+<script src="content/levels/test-library-v1.js?v=0.12.71"></script>
+<script src="content/levels/classification-v1.js?v=0.12.71"></script>
+<script src="js/level-library.js?v=0.12.71"></script>
+<script src="js/audio.js?v=0.12.71"></script>
+<script src="js/scene-renderer.js?v=0.12.71"></script>
+<script src="js/main.js?v=0.12.71"></script>
+<script src="js/scenario-loader.js?v=0.12.71"></script>
+<script src="js/ui-shell.js?v=0.12.71"></script>
 </body></html>

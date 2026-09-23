@@ -83,6 +83,38 @@ body[data-ui-context="shell"][data-shell-theme="warm"] .ui-panel button{
  border-color:#d3b87888;
 }
 
+/* Settings: independent sound channels and motion controls. */
+#settingsPanel .settings-card{width:min(94vw,510px);padding:18px 19px 15px;gap:13px;background:#203e35;color:#f4f7ef;border:2px solid #e6c982;border-radius:22px;overflow:auto;scrollbar-width:thin}
+#settingsPanel .ui-head{padding-bottom:11px;border-bottom:1px solid #ffffff2c}
+#settingsPanel .ui-head strong{font-size:1.17rem}
+#settingsPanel .settings-section{border:0;padding:2px 0 0}
+#settingsPanel .settings-section h3{color:#f2cb83;font-size:.82rem;opacity:1;letter-spacing:.09em;margin:0 0 4px}
+#settingsPanel .settings-section>p{font-size:.77rem;color:#c2d6c8;margin:0 0 10px}
+#settingsPanel .settings-group{padding:0 13px;background:#294b40;border:1px solid #799e83;border-radius:15px}
+#settingsPanel .settings-row{min-height:76px;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0}
+#settingsPanel .settings-row+.settings-row{border-top:1px solid #ffffff26}
+#settingsPanel .settings-copy{min-width:0;flex:1}
+#settingsPanel .settings-name{display:flex;align-items:center;gap:7px;font-size:.9rem;font-weight:750;line-height:1.25}
+#settingsPanel .settings-copy small{display:block;font-size:.7rem;color:#c2d6c8;margin-top:4px;line-height:1.35}
+#settingsPanel .settings-info{position:relative;display:inline-grid;place-items:center;flex:0 0 23px;width:23px;height:23px;padding:0;border:1px solid #9ebd93;border-radius:50%;background:#3f6954;color:#ffe0a2;font-size:.78rem;font-weight:800;cursor:help}
+#settingsPanel .settings-tooltip{display:none;position:fixed;z-index:1000;left:var(--tip-left,50vw);top:var(--tip-top,50vh);width:min(270px,calc(100vw - 28px));padding:12px 14px;border:1px solid #d6b36d;border-radius:12px;background:#f6ebcf;color:#294338;box-shadow:0 12px 28px #07150ece;font:500 .8rem/1.42 system-ui,sans-serif;text-align:left;pointer-events:none}
+#settingsPanel .settings-info:hover .settings-tooltip,#settingsPanel .settings-info:focus-visible .settings-tooltip,#settingsPanel .settings-info.is-open .settings-tooltip{display:block}
+@media(hover:none){#settingsPanel .settings-info:hover .settings-tooltip{display:none}#settingsPanel .settings-info.is-open .settings-tooltip,#settingsPanel .settings-info:focus-visible .settings-tooltip{display:block}}
+#settingsPanel .settings-switch{flex:0 0 60px;width:60px;height:32px;padding:3px;border:0;border-radius:30px;background:#5a7365;cursor:pointer;transition:background .15s}
+#settingsPanel .settings-switch[aria-checked="true"]{background:#63ab83}
+#settingsPanel .settings-switch span{display:block;width:26px;height:26px;border-radius:50%;background:#f7faee;transition:transform .15s}
+#settingsPanel .settings-switch[aria-checked="true"] span{transform:translateX(28px)}
+#settingsPanel .settings-stepper{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+#settingsPanel .settings-stepper button{width:31px;height:34px;min-height:34px;padding:0;border:0;border-radius:9px;background:#3d7057;color:#fff;font-size:1.25rem;font-weight:800}
+#settingsPanel .settings-stepper output{width:48px;text-align:center;color:#f2cd8a;font-size:.81rem;font-weight:800}
+#settingsPanel .panel-version{text-align:center;margin-top:1px}
+#settingsPanel button:focus-visible{outline:2px solid #ffd88b;outline-offset:2px}
+body[data-ui-context="game"] #settingsPanel .settings-switch[aria-checked="true"]{background:#63ab83}
+body[data-ui-context="game"] #settingsPanel .settings-switch[aria-checked="false"]{background:#5a7365}
+body[data-ui-context="game"] #settingsPanel .settings-stepper button{background:#3d7057}
+body[data-ui-context="game"] #settingsPanel .settings-info{background:#3f6954}
+@media(max-width:390px){#settingsPanel .settings-card{padding:14px 12px}#settingsPanel .settings-group{padding:0 9px}#settingsPanel .settings-name{font-size:.8rem}#settingsPanel .settings-copy small{font-size:.64rem}#settingsPanel .settings-stepper{gap:2px}#settingsPanel .settings-stepper output{width:39px}}
+
 /* One clear exit landmark for every world. It is a separate grid item at the
    actual exit, so decorative theme markup and game physics stay untouched. */
 body[data-ui-context="game"] .board .exit-beacon{position:relative;z-index:16;box-sizing:border-box;pointer-events:none;display:block;width:18px;height:66%;align-self:center;justify-self:start;transform:translateX(-37%);border:2px solid #fbd890;border-right:4px solid #fff1bc;border-radius:12px 3px 3px 12px;background:linear-gradient(90deg,#083945,#35e7f0 64%,#c4fff3);box-shadow:0 0 0 2px #144b54,0 0 11px 3px #66ecff,inset 0 0 5px #fff8bb;filter:drop-shadow(0 1px 2px #000a)}

@@ -1,14 +1,20 @@
 /* ===== v0.12.49 DATA-DRIVEN APPLICATION UI SHELL ===== */
 const AppUI=(()=>{
  const home=document.querySelector('#homeScreen'),menu=document.querySelector('#gameMenuPanel'),settings=document.querySelector('#settingsPanel'),freeSetup=document.querySelector('#freePlaySetup');
- const topbar=document.querySelector('.topbar'),mini=document.querySelector('.mini-tools'),tune=document.querySelector('.motion-tune'),loadrow=document.querySelector('.loadrow');
- const controls=document.querySelector('#settingsControls'),code=document.querySelector('#settingsCode'),freeSettings=document.querySelector('#freeSettings');
+ const topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow');
+ const code=document.querySelector('#settingsCode'),freeSettings=document.querySelector('#freeSettings');
  const shellSelect=document.querySelector('#shellThemeSelect'),shellSection=document.querySelector('#shellThemeSection');
  let shellTheme='classic';try{shellTheme=localStorage.getItem('ggrid.shell.theme.v1')||'classic'}catch(_){}
  if(!['classic','warm'].includes(shellTheme))shellTheme='classic';
  document.body.dataset.shellTheme=shellTheme;shellSelect.value=shellTheme;
  shellSelect.addEventListener('change',()=>{document.body.dataset.shellTheme=shellSelect.value;try{localStorage.setItem('ggrid.shell.theme.v1',shellSelect.value)}catch(_){}});
- controls.append(mini,tune);code.append(loadrow);if(freeSettings)freeSettings.hidden=true;
+ code.append(loadrow);if(freeSettings)freeSettings.hidden=true;
+ const infos=[...settings.querySelectorAll('.settings-info')];
+ function closeInfos(except=null){for(const b of infos)if(b!==except){b.classList.remove('is-open');b.setAttribute('aria-expanded','false')}}
+ function placeInfo(b){const r=b.getBoundingClientRect(),tip=b.querySelector('.settings-tooltip'),w=Math.min(270,innerWidth-28),h=tip.scrollHeight||92;b.style.setProperty('--tip-left',Math.max(14,Math.min(innerWidth-w-14,r.left+r.width/2-w/2))+'px');b.style.setProperty('--tip-top',Math.max(12,r.bottom+h+12<innerHeight?r.bottom+9:r.top-h-9)+'px')}
+ infos.forEach(b=>{b.setAttribute('aria-description',b.querySelector('.settings-tooltip').textContent.trim());b.addEventListener('pointerenter',()=>placeInfo(b));b.addEventListener('focus',()=>placeInfo(b));b.addEventListener('click',e=>{e.stopPropagation();placeInfo(b);const open=!b.classList.contains('is-open');closeInfos(b);b.classList.toggle('is-open',open);b.setAttribute('aria-expanded',String(open))})});
+ settings.addEventListener('click',e=>{if(!e.target.closest('.settings-info'))closeInfos()});
+ settings.addEventListener('keydown',e=>{if(e.key==='Escape')closeInfos()});
 
  function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
  function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
@@ -21,8 +27,8 @@ const AppUI=(()=>{
   document.querySelector('#menuNew').hidden=active;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
- function openSettings(){document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;MotionControl?.pause?.()}
- function closeSettings(){settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
+ function openSettings(){document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
+ function closeSettings(){closeInfos();settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
 
  const themeEl=document.querySelector('#freeTheme'),preview=document.querySelector('#themePreview'),previewName=document.querySelector('#themePreviewName'),previewTag=document.querySelector('#themePreviewTag'),dots=document.querySelector('#themeDots');
  let themeIndex=0,touchX=null;
