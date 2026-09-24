@@ -1,4 +1,4 @@
-/* GGrid Artwork Theme Layout – v0.15.7
+/* GGrid Artwork Theme Layout – v0.15.9
    Converts approved artwork coordinates into responsive geometry.
    Board cells stay square; directional hit zones are independent from their visual cue.
    Artwork themes may opt into portrait height expansion so tall boards keep their width. */
@@ -22,6 +22,9 @@
  function layouts(theme){return theme?.artwork?.layouts||theme?.layout||{}}
  function modeFor(theme,width,height){
   const all=layouts(theme),hasP=!!all.portrait,hasL=!!all.landscape;
+  const requested=String(theme?.artwork?.layoutMode||'auto').toLowerCase();
+  if(requested==='portrait'&&hasP)return'portrait';
+  if(requested==='landscape'&&hasL)return'landscape';
   if(hasP&&!hasL)return'portrait';if(hasL&&!hasP)return'landscape';
   const threshold=Math.max(.5,finite(theme?.artwork?.landscapeMinAspect,1.05));
   return width/Math.max(1,height)>=threshold?'landscape':'portrait';
@@ -90,7 +93,8 @@
   return{
    band:Math.max(36,finite(v.band??v.thickness,52)),
    gap:Math.max(0,finite(v.gap,6)),
-   extend:Math.max(0,finite(v.extend,0))
+   extend:Math.max(0,finite(v.extend,0)),
+   cueInset:Math.max(0,finite(v.cueInset,0))
   };
  }
  function zonesForResolved(r,theme,boardBox){
@@ -112,13 +116,21 @@
  }
  function applyGameplay(root,board,theme,cols,rows,width,height){
   if(!root||!board)return null;
-  const fit=fitBoard(theme,cols,rows,width,height),zones=zonesForResolved(fit,theme,fit.board);
+  const fit=fitBoard(theme,cols,rows,width,height),zones=zonesForResolved(fit,theme,fit.board),controls=controlConfig(fit,theme);
   applyResolved(root,fit);applyBoxStyle(board,fit.board,fit.design);
-  for(const dir of ['up','down','left','right'])applyBoxStyle(root.querySelector('.edge-'+dir),zones[dir],fit.design);
+  const rect=typeof root.getBoundingClientRect==='function'?root.getBoundingClientRect():null;
+  const scaleX=rect?.width?rect.width/fit.design.width:1,scaleY=rect?.height?rect.height/fit.design.height:scaleX;
+  for(const dir of ['up','down','left','right']){
+   const el=root.querySelector('.edge-'+dir);applyBoxStyle(el,zones[dir],fit.design);if(!el)continue;
+   const px=controls.cueInset;
+   const x=dir==='left'?px*scaleX:dir==='right'?-px*scaleX:0;
+   const y=dir==='up'?px*scaleY:dir==='down'?-px*scaleY:0;
+   el.style.setProperty('--art-cue-x',x+'px');el.style.setProperty('--art-cue-y',y+'px');
+  }
   root.style.setProperty('--art-board-aspect',String(Math.max(.01,finite(cols,1)/Math.max(.01,finite(rows,1)))));
-  return{...fit,zones};
+  return{...fit,zones,controls};
  }
- function clearBoxStyle(el){if(!el)return;for(const p of ['position','left','top','width','height'])el.style.removeProperty(p)}
+ function clearBoxStyle(el){if(!el)return;for(const p of ['position','left','top','width','height','--art-cue-x','--art-cue-y'])el.style.removeProperty(p)}
  function clearGameplay(root,board){
   if(!root)return;clearBoxStyle(board||root.querySelector('.board'));for(const dir of ['up','down','left','right'])clearBoxStyle(root.querySelector('.edge-'+dir));
   const props=[];for(let i=0;i<root.style.length;i++)props.push(root.style[i]);for(const p of props)if(p.startsWith('--art-'))root.style.removeProperty(p);delete root.dataset.artLayout;delete root.dataset.artBoardProfile;
