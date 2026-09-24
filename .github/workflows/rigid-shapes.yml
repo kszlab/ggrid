@@ -21,6 +21,7 @@ jobs:
           node --check js/theme-visuals.js
           node --check js/theme-assets.js
           node --check js/theme-layout.js
+          node --check js/theme-frame.js
           node --check js/scene-renderer.js
           node --check js/main.js
           node --check js/scenario-loader.js
@@ -32,6 +33,8 @@ jobs:
         run: node tools/test-theme-assets-v2.mjs
       - name: Artwork Theme Layout
         run: node tools/test-theme-layout.mjs
+      - name: Artwork Theme Frame
+        run: node tools/test-theme-frame.mjs
       - name: Verify shape catalog
         run: node tools/scan-rigid-shapes.mjs --check
       - name: Verify theme coverage audit
