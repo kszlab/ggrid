@@ -9,7 +9,8 @@ The current theme format is `ggrid-theme` with `formatVersion: 1`. Add a folder 
 | `scene.tier: "showcase"` | Showcase board layout. |
 | `scene.markup.back`, `scene.markup.front` | Decorative scene HTML. |
 | `pieces.ball/brick/wall/exit.className`, `.markup` | Decorations for pieces and exit. |
-| `pieces.rigidBody.className`, `.markup` | Generic visual overlay for rectangular multicell bricks. It remains the backward-compatible fallback. |\n| `pieces.rigidBodyVariants.<shapeId>.className`, `.markup` | Optional dedicated overlay for one exact rigid-body orientation, including irregular shapes. Current IDs are `2H`, `2V`, `3H`, `3V`, `L3-TL`, `L3-TR`, `L3-BL`, `L3-BR`. |
+| `pieces.rigidBody.className`, `.markup` | Generic visual overlay for rectangular multicell bricks. It remains the backward-compatible fallback. |
+| `pieces.rigidBodyVariants.<shapeId>.className`, `.markup` | Optional dedicated overlay for one exact rigid-body orientation, including irregular shapes. Current IDs are `2H`, `2V`, `3H`, `3V`, `L3-TL`, `L3-TR`, `L3-BL`, `L3-BR`. |
 | `preview.markup` | Optional Theme Lab preview HTML; use `{{cells25}}` to generate 25 preview cells. Without it, Theme Lab uses its standard grid. |
 | `assets.css` or `css` | Theme stylesheet path relative to `theme.json`, loaded by the game. |
 | `ui.skin: "full"` | Full UI skin layout. |
@@ -17,7 +18,9 @@ The current theme format is `ggrid-theme` with `formatVersion: 1`. Add a folder 
 
 Piece markup supports `{{first:yes|no}}` (first cell of a multicell object) and `{{multi:yes|no}}` (any cell of a multicell object). Keep theme HTML and CSS under trusted authorship because they render in the page.
 
-All built-in themes use `theme.css`; `css/game.css` contains shared game layout and effects. Add the theme's CSS path as `css` in the theme index entry so the Free Play carousel can display every theme preview at once. The active theme also loads `assets.css` during play, including Scenario mode.\n\nThe Theme Lab has its own shared layout in `css/theme-lab.css`. A theme with an elaborate Theme Lab preview may add `preview.css` and list it as `previewCss` in its index entry. Its `preview.markup` should use Theme Lab classes and preview CSS rather than game board markup.
+All built-in themes use `theme.css`; `css/game.css` contains shared game layout and effects. Add the theme's CSS path as `css` in the theme index entry so the Free Play carousel can display every theme preview at once. The active theme also loads `assets.css` during play, including Scenario mode.
+
+The Theme Lab has its own shared layout in `css/theme-lab.css`. A theme with an elaborate Theme Lab preview may add `preview.css` and list it as `previewCss` in its index entry. Its `preview.markup` should use Theme Lab classes and preview CSS rather than game board markup.
 
 
 ## Rigid-body shape coverage
