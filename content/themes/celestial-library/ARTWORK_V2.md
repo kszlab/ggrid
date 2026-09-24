@@ -29,7 +29,7 @@ The theme title and short description belong to the theme selector only.
 Portrait reference zones on the 540×748 design canvas:
 
 - top functional header: approximately y=0..56
-- square-board safe area: x=70, y=132, width=400, height=390
+- square-board safe area: x=46, y=68, width=448, height=448
 - left/right interaction gutters run beside the fitted board
 - upper/lower interaction gutters run across the fitted board width
 - HUD is below the scene and remains compact
@@ -201,3 +201,26 @@ Portrait artwork uses adaptive scene height. A 5×6, 5×7 or 5×8 board must not
 - the library background fills the expanded scene without geometric distortion.
 
 Landscape currently retains contain-mode behavior because the available horizontal composition is substantially wider.
+
+
+## 14. Direction artwork rule
+
+Artwork direction cues are already orientation-specific assets. The generic legacy CSS rotation must never be applied to an artwork cue.
+
+- control-up.svg points up;
+- control-right.svg points right;
+- control-down.svg points down;
+- control-left.svg points left.
+
+The full surrounding hit band remains directional even though only a compact central arrow is visible.
+
+## 15. L-shape artwork semantics
+
+The rigid shape ID names describe the occupied junction corner, not the missing corner:
+
+- L3-TL occupies TL/TR/BL and therefore has BR missing;
+- L3-TR occupies TL/TR/BR and therefore has BL missing;
+- L3-BL occupies TL/BL/BR and therefore has TR missing;
+- L3-BR occupies TR/BL/BR and therefore has TL missing.
+
+Each L artwork must use a real transparent missing quadrant. Decorative lines, highlights and emblems must be clipped to the actual L silhouette.
