@@ -16,7 +16,7 @@ const AppUI=(()=>{
  settings.addEventListener('click',e=>{if(!e.target.closest('.settings-info'))closeInfos()});
  settings.addEventListener('keydown',e=>{if(e.key==='Escape')closeInfos()});
 
- function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext'),test=!!globalThis.inMultiBallTest?.();if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active||test}
+ function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
  function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
  function showHome(){cancelAutoSolve();cancelFreezeSelection();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
@@ -24,9 +24,9 @@ const AppUI=(()=>{
   cancelFreezeSelection();
   menu.hidden=false;MotionControl?.pause?.();
   const active=!!ScenarioMode?.active,test=!!globalThis.inMultiBallTest?.();
-  document.querySelector('#menuTitle').textContent=active?'Játék':test?'Kétgolyós teszt':'Szabad játék';
-  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):test?'Fix 5×8 prototípus · pontozás nélkül':'Aktuális pálya';
-  document.querySelector('#menuNew').hidden=active||test;
+  document.querySelector('#menuTitle').textContent=active?'Játék':test?'Kétgolyós játék':'Szabad játék';
+  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):test?`${sizeEl.value} · D${difficultyEl.value} · pontozás nélkül`:'Aktuális pálya';
+  document.querySelector('#menuNew').hidden=active;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
  function openSettings(){cancelFreezeSelection();document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
@@ -68,6 +68,7 @@ const AppUI=(()=>{
   box.querySelectorAll('button[data-value]').forEach(b=>{const ok=LevelLibrary.has(d.w,d.h,+b.dataset.value);b.disabled=!ok;b.classList.toggle('unavailable',!ok);if(ok)any=true;});
   const chosen=box.querySelector('button[data-value="'+difficultyEl.value+'"]');if(chosen?.disabled){const first=[...box.querySelectorAll('button[data-value]')].find(b=>!b.disabled);if(first)difficultyEl.value=first.dataset.value;}
   document.querySelector('#freeSetupPlay').disabled=!any||!LevelLibrary.has(d.w,d.h,+difficultyEl.value);
+  const multi=document.querySelector('#freeSetupMultiBall');if(multi)multi.disabled=!MultiBallLibrary.has(d.w,d.h,+difficultyEl.value);
  }
  function bindSegments(id,select,onChange){
   const box=document.querySelector(id),paint=()=>{box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));onChange?.()};
@@ -76,7 +77,7 @@ const AppUI=(()=>{
  const paintSize=bindSegments('#quickSize',sizeEl,syncLevelAvailability),paintDiff=bindSegments('#quickDifficulty',difficultyEl,syncLevelAvailability);
  async function openFreeSetup(){
   cancelFreezeSelection();
-  await LevelLibrary.init();
+  await Promise.all([LevelLibrary.init(),MultiBallLibrary.init()]);
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   document.body.dataset.uiContext='shell';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
@@ -85,10 +86,10 @@ const AppUI=(()=>{
  async function launchFreePlay(){
   document.body.classList.remove('scenario-mode');await ScenarioMode?.loadFreeTheme?.(themeEl.value);changeLevelProfile();enterGame();
  }
- async function launchMultiBallTest(){
+ async function launchMultiBallGame(){
   document.body.classList.remove('scenario-mode');
   await ScenarioMode?.loadFreeTheme?.(themeEl.value);
-  if(await globalThis.startMultiBallTest?.())enterGame();
+  if(await globalThis.startMultiBallGame?.())enterGame();
  }
  document.querySelector('#playHint').addEventListener('click',()=>document.querySelector('#hint').click());
  document.querySelector('#playRestart').addEventListener('click',()=>document.querySelector('#restart').click());
@@ -96,7 +97,7 @@ const AppUI=(()=>{
  document.querySelector('#playChoose').addEventListener('click',openFreeSetup);
  document.querySelector('#themePrev').addEventListener('click',()=>selectTheme(-1));document.querySelector('#themeNext').addEventListener('click',()=>selectTheme(1));
  preview.addEventListener('pointerdown',e=>{touchX=e.clientX});preview.addEventListener('pointerup',e=>{if(touchX==null)return;const dx=e.clientX-touchX;touchX=null;if(Math.abs(dx)>42)selectTheme(dx<0?1:-1)});
- document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);document.querySelector('#freeSetupMultiBall').addEventListener('click',launchMultiBallTest);
+ document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);document.querySelector('#freeSetupMultiBall').addEventListener('click',launchMultiBallGame);
  document.querySelector('#homeFreePlay').addEventListener('click',openFreeSetup);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
  document.querySelector('#homeHelp').addEventListener('click',()=>openHelp());

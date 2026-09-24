@@ -219,5 +219,5 @@ body[data-scene="sunlit-greenhouse"] .victory-card{border-color:color-mix(in srg
 }
 @media(prefers-reduced-motion:reduce){.victory-overlay,.victory-card{animation:none!important}}
 
-/* v0.12.95 – victory layout for the unscored two-ball prototype */
-body.multiball-test-mode .victory-actions{grid-template-columns:1fr 1fr}
+/* v0.12.97 – three normal victory actions also remain available in two-ball play */
+body.multiball-test-mode .victory-actions{grid-template-columns:repeat(3,minmax(0,1fr))}

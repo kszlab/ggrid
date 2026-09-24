@@ -300,10 +300,9 @@ body[data-ui-context="game"] main #freeze.freeze-action[data-freeze-state="unava
 #settingsPanel .settings-checkbox:disabled,
 #settingsPanel .settings-calibrate:disabled{opacity:.42;cursor:not-allowed;filter:saturate(.25)}
 
-/* v0.12.95 – isolated two-ball engine test launcher/state */
+/* v0.12.97 – separate two-ball library launcher/state */
 .multiball-test-launch{border:1px solid #8fd7f466;border-radius:14px;min-height:46px;background:linear-gradient(135deg,#17394e,#235d72);color:#eafaff;font-weight:850;letter-spacing:.045em;box-shadow:0 5px 16px #0005,inset 0 1px #ffffff20}
 .multiball-test-launch:active{transform:translateY(1px)}
 .multiball-test-note{text-align:center;font-size:.67rem;line-height:1.3;color:#c9dce7;opacity:.72;padding:0 8px}
-body.multiball-test-mode #playNext{display:none!important}
 body.multiball-test-mode .score-box{border-color:#78d8ef55;background:#102b38d6}
 body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spacing:.06em}

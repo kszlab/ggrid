@@ -35,7 +35,7 @@ function updateLevelScore(){
 function updateScore(){
  const won=!!state?.won,test=inMultiBallTest();
  if(scoreValue){
-  if(test){scoreValue.textContent='TESZT';scoreValue.dataset.size='sm'}
+  if(test){scoreValue.textContent='D'+difficultyEl.value;scoreValue.dataset.size='sm';scoreValue.title='Kétgolyós játék · pontozás nélkül'}
   else{
    scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');
    const digits=String(Math.abs(scoreData.balance)).length;
@@ -43,12 +43,12 @@ function updateScore(){
   }
  }
  const hintDisabled=won;
- if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?'Kétgolyós teszt: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':isScoredFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
+ if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?'Kétgolyós játék: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':isScoredFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
  const visibleHint=document.querySelector('#playHint');
  if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?'Kétgolyós teszt: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
  freezeBtn.disabled=won||!canUseFreeze()||(isScoredFreePlay()&&scoreData.balance<10);
  freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
- freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':test?'Freeze teszt: pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
+ freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':test?'Kétgolyós játék: Freeze pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
 }
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
 function awardWin(){
@@ -72,14 +72,14 @@ function enterVictory(automatic=false,rewardInfo=null){
  document.body.classList.add('victory-state');updateScore();
  victoryMoves.textContent=String(state.moves);
  const test=inMultiBallTest();
- if(test)victoryScore.textContent='Kétgolyós tesztpálya · pontozás nélkül';
+ if(test)victoryScore.textContent=`Kétgolyós pálya · D${difficultyEl.value} · pontozás nélkül`;
  else if(solverUsedThisRun||automatic)victoryScore.textContent='Automatikus megoldás · 0 pont';
  else if(isScoredFreePlay()&&rewardInfo)victoryScore.textContent=rewardInfo.earned?`+${rewardInfo.earned} pont · Egyenleg: ${rewardInfo.balance}`:`Korábbi legjobb eredmény: ${rewardInfo.previous} pont`;
  else victoryScore.textContent='Pálya teljesítve';
  victoryChoose.hidden=!!ScenarioMode?.active;
- victoryNext.hidden=test;
+ victoryNext.hidden=false;
  victoryNext.textContent=(ScenarioMode?.active&&!ScenarioMode?.hasNext)?'Befejezés':'Következő →';
- victoryTimer=setTimeout(()=>{victoryTimer=null;victoryPending=false;victoryOverlay.hidden=false;(test?victoryChoose:victoryNext).focus();},380);
+ victoryTimer=setTimeout(()=>{victoryTimer=null;victoryPending=false;victoryOverlay.hidden=false;victoryNext.focus();},380);
 }
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
@@ -125,9 +125,9 @@ function render(opts={}){
  const diff='D'+difficultyEl.value,glues=state.glueCount||0,walls=state.wallCount||0;
  const modeLabel=document.querySelector('#playModeLabel'),levelLabel=document.querySelector('#playLevelId');
  if(inMultiBallTest()){
-  if(modeLabel)modeLabel.textContent='Kétgolyós teszt';
-  if(levelLabel){levelLabel.textContent=`${remainingBalls()}/${totalBalls(initial)} golyó`;levelLabel.classList.remove('completed');levelLabel.title='Hátralévő golyók / induló golyók'}
-  meta.textContent=`TESZT · golyók: ${remainingBalls()}/${totalBalls(initial)} · fix: ${walls}`;
+  if(modeLabel)modeLabel.textContent='Kétgolyós játék';
+  if(levelLabel){levelLabel.textContent=`D${difficultyEl.value} · ${remainingBalls()}/${totalBalls(initial)} golyó`;levelLabel.classList.remove('completed');levelLabel.title=`${currentLevelId} · hátralévő golyók / induló golyók`}
+  meta.textContent=`D${difficultyEl.value} · modell: ${currentLevelRecord?.difficulty?.modelVersion||'puzzle-v3-multiball'} · optimum: ${optimal.length} · golyók: ${remainingBalls()}/${totalBalls(initial)} · fix: ${walls}`;
  }else meta.textContent=`${diff} · modell: ${currentLevelRecord?.analysis?.rawDifficulty??'-'} · optimum: ${optimal.length} · fix: ${walls}`;
  codeEl.textContent=`Pálya: ${currentLevelId}`;
  const left=freezesLeft();
@@ -139,32 +139,42 @@ function render(opts={}){
  board.querySelectorAll('.freeze-selection-marker').forEach(el=>el.remove());
  if(freezeArmed&&freezeId!=null){const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);if(selected)for(const c of selected.cells){const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker)}}
 }
-/* ===== v0.12.96 MULTI-BALL ENGINE + SOLVER TEST =====
-   Isolated from the scored Level Library: fixed geometry, selected free-play
-   theme, no difficulty class and no points. Solver assistance is bounded. */
-async function startMultiBallTest(){
+/* ===== v0.12.97 TWO-BALL LEVEL LIBRARY =====
+   Separate, pre-generated and solver-verified library. It uses the same size,
+   D1-D10 and theme selectors as Free Play, but remains unscored while the
+   multi-ball difficulty calibration is being play-tested. */
+function applyMultiBallLevel(g){
  cancelAutoSolve();clearSolverCache();resetWinState();
+ state=g.state;validateLevel(state);
+ if(totalBalls(state)!==2)throw Error('MULTIBALL_LEVEL_REQUIRES_TWO_BALLS');
+ document.body.classList.add('multiball-test-mode');
+ initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;
+ freezeLimitEl.value='inf';freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;
+ rewardedThisRun=true;solverUsedThisRun=false;toast.textContent='';
+ if(optimal.length)rememberSolverRoute(state,optimal);
+ render();MotionControl?.onNewLevel?.();
+}
+function requestMultiBallLevel(){
+ const d=selectedDims(),difficulty=Math.max(1,Math.min(10,parseInt(difficultyEl.value,10)||1));
  try{
-  const r=await fetch('content/levels/test-multiball-01.json?v=0.12.96',{cache:'no-cache'});
-  if(!r.ok)throw Error('MULTIBALL_TEST_FETCH');
-  const l=await r.json();
-  if(l.format!=='ggrid-level'||l.formatVersion!==1)throw Error('INVALID_MULTIBALL_TEST_FORMAT');
-  const s={width:l.board.width,height:l.board.height,exit:{x:l.exit.x,y:l.exit.y,dir:l.exit.direction},objects:structuredClone(l.objects),moves:0,won:false};
-  validateLevel(s);
-  if(totalBalls(s)!==2)throw Error('MULTIBALL_TEST_REQUIRES_TWO_BALLS');
-  document.body.classList.add('multiball-test-mode');
-  state=s;initial=cloneState(s);optimal=[];currentLevelId=l.id||'test-multiball-01';currentLevelRecord=null;
-  freezeLimitEl.value='inf';freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=true;solverUsedThisRun=false;toast.textContent='';
-  render();MotionControl?.onNewLevel?.();return true;
+  const l=MultiBallLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_MULTIBALL_LEVEL');
+  applyMultiBallLevel(MultiBallLibrary.toGame(l));return true;
  }catch(e){
-  console.error('Multi-ball test',e);toast.textContent='A kétgolyós tesztpálya nem tölthető be.';return false;
+  console.error('Multi-ball library',e);toast.textContent='Nincs kétgolyós pálya ehhez a mérethez és nehézséghez.';return false;
  }
+}
+async function startMultiBallGame(){
+ cancelAutoSolve();clearSolverCache();resetWinState();
+ await MultiBallLibrary.init();
+ return requestMultiBallLevel();
 }
 function leaveMultiBallTest(){
  document.body.classList.remove('multiball-test-mode');
  const modeLabel=document.querySelector('#playModeLabel');if(modeLabel)modeLabel.textContent='Szabad játék';
+ if(scoreValue)scoreValue.title='';
 }
-globalThis.startMultiBallTest=startMultiBallTest;
+globalThis.startMultiBallGame=startMultiBallGame;
+globalThis.startMultiBallTest=startMultiBallGame;
 globalThis.inMultiBallTest=inMultiBallTest;
 
 /* ===== PRE-GENERATED LEVEL LIBRARY =====
@@ -184,10 +194,10 @@ function requestLibraryLevel(){
   const l=LevelLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_LIBRARY_LEVEL');
   applyLibraryLevel(LevelLibrary.toGame(l));return true;
  }catch(e){
-  console.error('Level library',e);toast.textContent='Nincs kompatibilis tesztpálya ehhez a mérethez és nehézséghez.';return false;
+  console.error('Level library',e);toast.textContent='Nincs kompatibilis pálya ehhez a mérethez és nehézséghez.';return false;
  }
 }
-function newLevel(){return requestLibraryLevel()}
+function newLevel(){return inMultiBallTest()?requestMultiBallLevel():requestLibraryLevel()}
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
  if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
@@ -245,7 +255,7 @@ function startAutoSolve(){
  setTimeout(()=>{
   if(token!==autoSolveToken||!state)return;
   let result;
-  if(state.moves===0&&optimal.length&&!inMultiBallTest()){
+  if(state.moves===0&&optimal.length){
    result={status:'solved',path:[...optimal],states:0,elapsedMs:0,cached:true};
    rememberSolverRoute(state,result.path);
   }else result=solveForPlay(state,'auto');
@@ -626,7 +636,7 @@ const CalibrationLab=(()=>{
 
 freezeBtn.addEventListener('click',()=>{if(state?.won||autoSolveActive||freezeBtn.disabled)return;if(freezeArmed){cancelFreezeSelection();return}freezeArmed=true;freezeId=null;stopHold();MotionControl.pause();render({preservePieces:true});});
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();clearSolverCache();resetWinState();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();MotionControl.resume();});
-document.querySelector('#new').addEventListener('click',()=>{hideVictory();if(inMultiBallTest()){state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();}else newLevel();MotionControl.resume();});
+document.querySelector('#new').addEventListener('click',()=>{hideVictory();newLevel();MotionControl.resume();});
 victoryRestart.addEventListener('click',()=>document.querySelector('#restart').click());
 victoryChoose.addEventListener('click',()=>{hideVictory();AppUI?.openFreeSetup?.()});
 victoryNext.addEventListener('click',async()=>{

@@ -1,0 +1,31 @@
+{
+  "format": "ggrid-level-catalog",
+  "formatVersion": 1,
+  "description": "Two-ball library v1: solver-verified, provisional puzzle-v3-multiball D1-D10 calibration.",
+  "packs": [
+    {
+      "id": "multiball-v1-3x3",
+      "src": "packs/multiball-v1-3x3.json"
+    },
+    {
+      "id": "multiball-v1-4x4",
+      "src": "packs/multiball-v1-4x4.json"
+    },
+    {
+      "id": "multiball-v1-5x5",
+      "src": "packs/multiball-v1-5x5.json"
+    },
+    {
+      "id": "multiball-v1-5x6",
+      "src": "packs/multiball-v1-5x6.json"
+    },
+    {
+      "id": "multiball-v1-5x7",
+      "src": "packs/multiball-v1-5x7.json"
+    },
+    {
+      "id": "multiball-v1-5x8",
+      "src": "packs/multiball-v1-5x8.json"
+    }
+  ]
+}
