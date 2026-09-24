@@ -18,6 +18,8 @@ for(const id of shapes)assert.ok(theme.artwork?.pieces?.rigidShapes?.[id]?.asset
 
 for(const dir of ['up','right','down','left'])assert.ok(theme.artwork?.pieces?.exit?.directions?.[dir],'missing directional exit '+dir);
 
+assert.equal(theme.artwork?.board?.fitMode?.portrait,'expand-height','portrait artwork must expand vertically for tall boards');
+assert.equal(theme.artwork?.board?.fitMode?.landscape,'contain','landscape artwork keeps contain behavior');
 assert.ok(theme.artwork?.board?.frame?.asset,'missing board frame artwork');
 assert.ok((theme.artwork?.board?.cellVariants||[]).length>=4,'need at least four cell artwork variants');
 assert.equal(ref.portrait?.hud?.hintCounter,false);
