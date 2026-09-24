@@ -28,6 +28,31 @@ assert.equal(zones.up.y,landscapeFit.board.y-70);
 assert.equal(zones.left.width,60);
 assert.equal(zones.right.x,landscapeFit.board.x+landscapeFit.board.width+10);
 
+const expandTheme={artwork:{
+ landscapeMinAspect:1.2,
+ board:{fitMode:{portrait:'expand-height',landscape:'contain'}},
+ layouts:{
+  portrait:{designSize:[540,610],boxes:{boardSafe:[70,82,400,400]},controls:{band:52,gap:4}},
+  landscape:{designSize:[900,520],boxes:{boardSafe:[165,70,570,360]},controls:{band:54,gap:5}}
+ }
+}};
+const square=L.fitBoard(expandTheme,5,5,390,800);
+const tall=L.fitBoard(expandTheme,5,8,390,800);
+assert.equal(square.mode,'portrait');
+assert.equal(square.board.width,400);
+assert.equal(square.board.height,400);
+assert.equal(tall.board.width,400,'5x8 must keep the same portrait board width');
+assert.equal(tall.board.height,640,'5x8 height must grow from square cells');
+assert.equal(tall.boardProfile,'expanded-height');
+assert.equal(tall.design.height,850,'scene height must grow instead of squeezing the board');
+assert.equal(tall.boxes.boardSafe.height,640);
+const tallZones=L.applyGameplay?L.controlZones(expandTheme,tall.board,390,800).zones:null;
+assert.ok(tallZones,'control zone API remains available');
+
+const landscapeTall=L.fitBoard(expandTheme,5,8,900,520);
+assert.equal(landscapeTall.mode,'landscape');
+assert.ok(landscapeTall.board.width<570,'landscape contain mode must retain its existing behavior');
+
 const portraitOnly={artwork:{layouts:{portrait:{designSize:{width:300,height:500},board:{x:10,y:20,w:280,h:420}}}}};
 assert.equal(L.modeFor(portraitOnly,1000,500),'portrait');
 assert.equal(L.resolve(portraitOnly,1000,500).boxes.board.height,420);
