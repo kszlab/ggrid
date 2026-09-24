@@ -1,0 +1,102 @@
+{
+  "format": "ggrid-level",
+  "formatVersion": 1,
+  "id": "test-multiball-01",
+  "version": 1,
+  "name": "Kétgolyós motorteszt",
+  "board": {
+    "width": 5,
+    "height": 5
+  },
+  "exit": {
+    "x": 4,
+    "y": 2,
+    "direction": "right"
+  },
+  "objects": [
+    {
+      "id": "ball1",
+      "type": "ball",
+      "x": 2,
+      "y": 2,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "ball2",
+      "type": "ball",
+      "x": 2,
+      "y": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "type": "brick",
+      "x": 0,
+      "y": 1,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "glueEdges": []
+    },
+    {
+      "id": "b2",
+      "type": "brick",
+      "x": 1,
+      "y": 4,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "glueEdges": [
+        [
+          0,
+          1
+        ]
+      ],
+      "glued": true
+    },
+    {
+      "id": "w1",
+      "type": "wall",
+      "x": 4,
+      "y": 3,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "w2",
+      "type": "wall",
+      "x": 0,
+      "y": 0,
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}

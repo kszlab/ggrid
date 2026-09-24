@@ -16,17 +16,17 @@ const AppUI=(()=>{
  settings.addEventListener('click',e=>{if(!e.target.closest('.settings-info'))closeInfos()});
  settings.addEventListener('keydown',e=>{if(e.key==='Escape')closeInfos()});
 
- function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
+ function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext'),test=!!globalThis.inMultiBallTest?.();if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active||test}
  function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
  function showHome(){cancelAutoSolve();cancelFreezeSelection();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
   cancelAutoSolve();
   cancelFreezeSelection();
   menu.hidden=false;MotionControl?.pause?.();
-  const active=!!ScenarioMode?.active;
-  document.querySelector('#menuTitle').textContent=active?'Játék':'Szabad játék';
-  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):'Aktuális pálya';
-  document.querySelector('#menuNew').hidden=active;
+  const active=!!ScenarioMode?.active,test=!!globalThis.inMultiBallTest?.();
+  document.querySelector('#menuTitle').textContent=active?'Játék':test?'Kétgolyós teszt':'Szabad játék';
+  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):test?'Fix 5×5 prototípus · pontozás nélkül':'Aktuális pálya';
+  document.querySelector('#menuNew').hidden=active||test;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
  function openSettings(){cancelFreezeSelection();document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
@@ -85,13 +85,18 @@ const AppUI=(()=>{
  async function launchFreePlay(){
   document.body.classList.remove('scenario-mode');await ScenarioMode?.loadFreeTheme?.(themeEl.value);changeLevelProfile();enterGame();
  }
+ async function launchMultiBallTest(){
+  document.body.classList.remove('scenario-mode');
+  await ScenarioMode?.loadFreeTheme?.(themeEl.value);
+  if(await globalThis.startMultiBallTest?.())enterGame();
+ }
  document.querySelector('#playHint').addEventListener('click',()=>document.querySelector('#hint').click());
  document.querySelector('#playRestart').addEventListener('click',()=>document.querySelector('#restart').click());
  document.querySelector('#playNext').addEventListener('click',()=>document.querySelector('#new').click());
  document.querySelector('#playChoose').addEventListener('click',openFreeSetup);
  document.querySelector('#themePrev').addEventListener('click',()=>selectTheme(-1));document.querySelector('#themeNext').addEventListener('click',()=>selectTheme(1));
  preview.addEventListener('pointerdown',e=>{touchX=e.clientX});preview.addEventListener('pointerup',e=>{if(touchX==null)return;const dx=e.clientX-touchX;touchX=null;if(Math.abs(dx)>42)selectTheme(dx<0?1:-1)});
- document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);
+ document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);document.querySelector('#freeSetupMultiBall').addEventListener('click',launchMultiBallTest);
  document.querySelector('#homeFreePlay').addEventListener('click',openFreeSetup);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
  document.querySelector('#homeHelp').addEventListener('click',()=>openHelp());

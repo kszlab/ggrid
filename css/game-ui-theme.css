@@ -218,3 +218,6 @@ body[data-scene="sunlit-greenhouse"] .victory-card{border-color:color-mix(in srg
  .victory-actions button{font-size:.72rem;padding-inline:3px}
 }
 @media(prefers-reduced-motion:reduce){.victory-overlay,.victory-card{animation:none!important}}
+
+/* v0.12.95 – victory layout for the unscored two-ball prototype */
+body.multiball-test-mode .victory-actions{grid-template-columns:1fr 1fr}
