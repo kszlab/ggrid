@@ -1,0 +1,23 @@
+name: Rigid shape checks
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+  pull_request:
+
+jobs:
+  rigid-shapes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test classifier
+        run: node tools/test-rigid-shapes.mjs
+      - name: Verify shape catalog
+        run: node tools/scan-rigid-shapes.mjs --check
+      - name: Verify theme coverage audit
+        run: node tools/audit-theme-shapes.mjs --check
