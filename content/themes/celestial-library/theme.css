@@ -1,0 +1,358 @@
+/* CSILLAGKÖNYVTÁR // Az égi archívum
+   Full showcase skin: brass, dark wood, parchment glass and celestial instruments. */
+
+body.full-ui-skin[data-scene="celestial-library"]{
+ background:#07111f url("library-scene.svg") center 36% / cover fixed no-repeat;
+ color:#fff3d3
+}
+body.full-ui-skin[data-scene="celestial-library"]:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+ background:
+  radial-gradient(circle at 50% 15%,#718cc626,transparent 25%),
+  linear-gradient(90deg,#020713b5,transparent 20% 80%,#020713b5),
+  linear-gradient(0deg,#030712bf,transparent 28% 75%,#07101ba8)
+}
+body.full-ui-skin[data-scene="celestial-library"] #game{position:relative;z-index:1}
+body.full-ui-skin[data-scene="celestial-library"] main{max-width:630px;padding-top:5px}
+
+body.full-ui-skin[data-scene="celestial-library"] .game-head{
+ height:39px;margin-bottom:2px;padding:2px 7px;position:relative;z-index:30;
+ border:2px solid #d0aa63;border-radius:13px 13px 5px 5px;
+ background:linear-gradient(120deg,#071522f4,#172b42f2 56%,#08131ff0);
+ box-shadow:inset 0 0 0 2px #344c5c,0 5px 11px #020711aa
+}
+body.full-ui-skin[data-scene="celestial-library"] .game-head .scenario-info{
+ color:#fff0c9;text-shadow:0 1px 4px #000;font-family:Georgia,serif;
+ font-size:clamp(12px,3.7vw,17px)
+}
+body.full-ui-skin[data-scene="celestial-library"] .game-head .play-level-id{color:#c7c7c0}
+
+body.full-ui-skin[data-scene="celestial-library"] .board-wrap{
+ --skin-side:49px;--skin-top:101px;--skin-bottom:61px;
+ padding:var(--skin-top) var(--skin-side) var(--skin-bottom);
+ margin-top:0;position:relative;overflow:hidden;
+ border:5px ridge #d5b36f;border-radius:34px 34px 23px 23px;
+ background:
+  linear-gradient(90deg,#07111ff2,#18304db2 13%,transparent 26% 74%,#18304db2 87%,#07111ff2),
+  linear-gradient(180deg,#0c1b2be8,#13294483 21%,#182b4285 80%,#081420ed),
+  url("library-scene.svg") center 47% / cover;
+ box-shadow:0 18px 30px #020711c9,inset 0 0 0 3px #17283a,inset 0 0 0 6px #dfc27e,inset 0 0 0 10px #17283ae0
+}
+body.full-ui-skin[data-scene="celestial-library"] .board-wrap:before{
+ content:"";position:absolute;inset:9px;border-radius:25px;
+ border:2px solid #dfbf7ca3;pointer-events:none;z-index:2;
+ background:
+  radial-gradient(circle at 8% 12%,#efcb7a99 0 2px,transparent 3px),
+  radial-gradient(circle at 91% 18%,#efcb7a99 0 2px,transparent 3px),
+  repeating-linear-gradient(135deg,#f4d8970a 0 3px,transparent 4px 11px);
+ box-shadow:inset 0 0 15px #8ebcff22
+}
+body.full-ui-skin[data-scene="celestial-library"] .board{
+ position:relative;z-index:4;width:100%;height:auto;
+ border:4px ridge #d7b46c;border-radius:9px;
+ background:linear-gradient(#d5d0c3cc,#aeb7b5cc);
+ box-shadow:0 10px 22px #010713cc,inset 0 0 0 2px #263d54,inset 0 0 25px #fff7d04a
+}
+body.full-ui-skin[data-scene="celestial-library"] .cell{
+ border:2px ridge #9b8a6b;border-radius:5px;
+ background:
+  url("constellation-tile.svg") center / 91% 91% no-repeat,
+  radial-gradient(circle at 65% 26%,#fff9e7ed 0,#ded8c7e8 45%,#b9b6ade4 83%,#8d989ce0);
+ box-shadow:inset 0 0 0 2px #fff8df78,inset 0 0 15px #ffffff74,0 1px 3px #1b253166
+}
+body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(4n+2){
+ background-position:32% 70%,center;filter:brightness(1.025)
+}
+body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(5n+4){
+ background-size:72% 72%,cover;background-position:76% 32%,center
+}
+
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title{
+ display:flex;position:absolute;z-index:18;top:12px;left:13%;right:13%;
+ align-items:center;flex-direction:column;padding:8px 4px 11px;pointer-events:none;text-align:center;
+ border:3px ridge #e4c579;border-radius:50% 50% 22px 22px / 45% 45% 18px 18px;
+ background:radial-gradient(ellipse at 50% -20%,#4b6591c9,#0a1c31f4 67%);
+ box-shadow:inset 0 0 0 2px #28425d,0 5px 9px #010712c7;text-shadow:0 2px 8px #01050b
+}
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title:before{
+ content:"✦  ◌  ✦";position:absolute;top:-14px;left:0;right:0;
+ color:#f1d18b;font:15px Georgia,serif;letter-spacing:.68em;text-shadow:0 1px 5px #020711
+}
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title strong{
+ color:#fff0bd;font:600 clamp(14px,4.9vw,23px)/1.1 Georgia,serif;letter-spacing:.075em
+}
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title span{display:none}
+
+/* Library depth around the active board. */
+.cl-arch-window{
+ position:absolute;left:20%;right:20%;top:7%;height:29%;border:5px double #c9a25d;border-bottom:0;
+ border-radius:50% 50% 0 0 / 76% 76% 0 0;
+ background:
+  radial-gradient(circle at 30% 29%,#fff 0 1px,transparent 2px),
+  radial-gradient(circle at 69% 18%,#badbff 0 1px,transparent 2px),
+  radial-gradient(circle at 54% 57%,#fff0b7 0 1px,transparent 2px),
+  linear-gradient(#19375e90,#0813289e);
+ opacity:.58;box-shadow:inset 0 0 30px #6ea2e42a,0 -7px 22px #e3bd7130
+}
+.cl-arch-window:before,.cl-arch-window:after{content:"";position:absolute;background:#d4ae66aa}
+.cl-arch-window:before{left:50%;top:0;bottom:0;width:2px}
+.cl-arch-window:after{left:0;right:0;top:57%;height:2px}
+.cl-shelf{position:absolute;top:20%;bottom:12%;width:12%;opacity:.55;
+ background:
+  repeating-linear-gradient(0deg,transparent 0 12%,#b3884f 12.5% 13.3%,transparent 14% 24%),
+  repeating-linear-gradient(90deg,#6c2634 0 10%,#263f68 10% 21%,#365b48 21% 31%,#6a4a2c 31% 39%,#243851 39% 50%);
+ border:3px solid #9d713b;box-shadow:inset 0 0 0 3px #20140d
+}
+.cl-shelf-left{left:3%;transform:perspective(220px) rotateY(12deg)}
+.cl-shelf-right{right:3%;transform:perspective(220px) rotateY(-12deg)}
+.cl-orrery{position:absolute;right:2%;bottom:9%;width:94px;height:94px;border:3px solid #d1aa60;border-radius:50%;opacity:.62;transform:rotate(-13deg)}
+.cl-orrery:before,.cl-orrery:after{content:"";position:absolute;inset:11px;border:2px solid #d1aa60;border-radius:50%}
+.cl-orrery:before{transform:rotate(57deg)}.cl-orrery:after{transform:rotate(-57deg)}
+.cl-lamp{position:absolute;top:34%;width:11px;height:54px;border-radius:7px;background:linear-gradient(#e8c36f,#60411f);box-shadow:0 0 18px 8px #ffd27c42}
+.cl-lamp:after{content:"";position:absolute;left:-11px;top:7px;width:33px;height:28px;border-radius:50%;background:radial-gradient(circle,#fff3bb,#e4aa4f88 45%,transparent 70%)}
+.cl-lamp-left{left:4.5%}.cl-lamp-right{right:4.5%}
+.cl-dust{position:absolute;inset:8%;opacity:.85;
+ background:radial-gradient(circle at 13% 26%,#ffe8a4 0 1px,transparent 3px),radial-gradient(circle at 82% 19%,#b9d8ff 0 1px,transparent 3px),radial-gradient(circle at 48% 72%,#ffe8a4 0 1px,transparent 3px),radial-gradient(circle at 74% 82%,#fff 0 1px,transparent 3px);
+ animation:clFloat 7s ease-in-out infinite alternate
+}
+.cl-chart{position:absolute;right:8%;bottom:5%;width:70px;height:52px;opacity:.36;transform:rotate(-9deg);
+ border:1px solid #d5bb7b;background:radial-gradient(circle at 50% 50%,transparent 0 17%,#d5bb7b 18% 19%,transparent 20% 28%,#d5bb7b 29% 30%,transparent 31%),#ead8a433
+}
+.cl-caption{color:#e8c577}.cl-caption b{color:#a9d6ff}
+@keyframes clFloat{to{transform:translateY(-10px);opacity:.5}}
+
+/* Direction controls become engraved celestial levers. */
+body.full-ui-skin[data-scene="celestial-library"] .edge-control{
+ z-index:20;opacity:1;border:4px ridge #e4c176;
+ background:
+  radial-gradient(circle at 50% 18%,#4d6380,#142a42 58%,#091827),
+  url("constellation-tile.svg") center / 54px 54px repeat;
+ box-shadow:inset 0 0 0 2px #253c55,inset 0 0 0 4px #d2b46b35,inset 0 0 14px #92bffc28,0 5px 10px #020711bf
+}
+body.full-ui-skin[data-scene="celestial-library"] .edge-control:active,
+body.full-ui-skin[data-scene="celestial-library"] .edge-control.pressed{filter:brightness(1.24);background-color:#304b69}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left,
+body.full-ui-skin[data-scene="celestial-library"] .edge-right{top:var(--skin-top);bottom:var(--skin-bottom);height:auto;width:39px;border-radius:46% 46% 46% 46% / 10% 10% 10% 10%}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left{left:5px}
+body.full-ui-skin[data-scene="celestial-library"] .edge-right{right:5px}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up,
+body.full-ui-skin[data-scene="celestial-library"] .edge-down{left:15%;width:70%;height:42px;border-radius:48%}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 50px)}
+body.full-ui-skin[data-scene="celestial-library"] .edge-down{bottom:7px}
+body.full-ui-skin[data-scene="celestial-library"] .edge-control:before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-control:after{
+ content:"✦ ◌";position:absolute;color:#d9bb75;font:14px Georgia,serif;opacity:.65;pointer-events:none
+}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left:before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-right:before{top:8%;writing-mode:vertical-rl}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left:after,
+body.full-ui-skin[data-scene="celestial-library"] .edge-right:after{bottom:8%;writing-mode:vertical-rl}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up:before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-down:before{left:8%;top:28%}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up:after,
+body.full-ui-skin[data-scene="celestial-library"] .edge-down:after{right:8%;top:28%}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow{filter:drop-shadow(1px 2px 1px #020711)}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow:before{background:linear-gradient(#fff0b8,#ba8c43)}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow:after{border-bottom-color:#f1cf82}
+
+/* HUD / menu chrome. */
+body.full-ui-skin[data-scene="celestial-library"] .hud-row{
+ margin-top:9px;padding:7px;gap:7px;min-width:0;
+ border:4px ridge #d8b36d;border-radius:15px;
+ background:linear-gradient(#203851f2,#0b1d30f0);
+ box-shadow:inset 0 0 0 2px #34506a,0 7px 17px #020711bb
+}
+body.full-ui-skin[data-scene="celestial-library"] .play-action,
+body.full-ui-skin[data-scene="celestial-library"] #freeze.play-action,
+body.full-ui-skin[data-scene="celestial-library"] .icon-menu{
+ border:3px ridge #dfbd73;border-radius:10px;
+ background:radial-gradient(circle at 40% -5%,#3f5670,#10273d 80%);
+ box-shadow:inset 0 0 0 2px #38506a,0 3px 7px #020711;
+ color:#f4d389;text-shadow:0 1px #09111d
+}
+body.full-ui-skin[data-scene="celestial-library"] .score-box{
+ border:3px ridge #e0bd72;border-radius:20px;
+ background:radial-gradient(#273f5a,#091a2b);
+ box-shadow:inset 0 0 0 2px #3a536d,0 2px 6px #020711
+}
+body.full-ui-skin[data-scene="celestial-library"] .score-box strong{color:#f2cf80}
+body.full-ui-skin[data-scene="celestial-library"] .ui-panel .ui-card{
+ border:2px solid #d8b46e;border-radius:20px;background:#0d2034;
+ box-shadow:0 18px 48px #020711,inset 0 0 0 4px #304a64
+}
+body.full-ui-skin[data-scene="celestial-library"] .ui-panel button{
+ border-color:#d4b16c;border-radius:11px;background:linear-gradient(#304b67,#11283e)
+}
+
+/* Ball: a miniature luminous sky held in brass orbital rings. */
+body.full-ui-skin[data-scene="celestial-library"] .ball.cl-orb{
+ overflow:visible;border-radius:50%;border:2px solid #fff3bd;
+ background:
+  radial-gradient(circle at 34% 25%,#fffef3 0 8%,#d7ecff 17%,#8fc8f3 30%,#6a64c9 54%,#292b72 72%,#11172c 88%);
+ box-shadow:inset 3px 3px 6px #fff9df,0 0 14px #9bd9ff,0 0 25px #6b69d066
+}
+.cl-orb-ring{position:absolute;inset:-12%;border:2px solid #e8c16f;border-radius:50%;border-left-color:transparent;animation:clSpin 5s linear infinite}
+.cl-orb-ring.r2{inset:-22%;border-color:#9fdcff transparent #e6bd68 #9fdcff;animation-direction:reverse;animation-duration:7s}
+.cl-orb-core{position:absolute;inset:0;display:grid;place-items:center;color:#fff6c8;text-shadow:0 0 7px #fff,0 0 14px #88cfff}
+@keyframes clSpin{to{transform:rotate(360deg)}}
+
+/* Single-cell movable archive volume. */
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume{
+ overflow:visible;border:0;border-radius:5px;
+ background:linear-gradient(90deg,#51212b 0 12%,#8c3943 13% 75%,#3d1722 76% 100%);
+ box-shadow:inset 0 0 0 2px #d4a75c,inset 5px 0 #2b1720,0 5px 7px #17202d99
+}
+.cl-book-band{position:absolute;left:10%;right:10%;top:15%;height:7%;background:#d7b369;box-shadow:0 60% #6d4b27}
+.cl-page-edge{position:absolute;right:4%;top:8%;bottom:8%;width:8%;background:repeating-linear-gradient(0deg,#f2dfae 0 2px,#ab9a7e 2px 3px);opacity:.75}
+.cl-book-sigil{position:absolute;inset:0;display:grid;place-items:center;color:#efcf85;font:22px Georgia,serif;text-shadow:0 1px #2b1118}
+
+/* Fixed obstacle: stone archive pedestal with brass celestial dial. */
+body.full-ui-skin[data-scene="celestial-library"] .wall.cl-pedestal{
+ border:2px solid #e0c17e;border-radius:8px;
+ background:linear-gradient(135deg,#c4bda9,#747984 56%,#424955);
+ box-shadow:inset 0 0 0 3px #59606b,0 5px 8px #111925aa
+}
+.cl-stone-inlay{position:absolute;inset:12%;border:2px solid #9b783e;border-radius:50%;box-shadow:inset 0 0 0 3px #d3b76c55}
+.cl-stone-inlay:before,.cl-stone-inlay:after{content:"";position:absolute;background:#a5854e;left:49%;top:8%;bottom:8%;width:2px}
+.cl-stone-inlay:after{transform:rotate(90deg)}
+.cl-pedestal b{position:absolute;inset:0;display:grid;place-items:center;color:#f2d792;text-shadow:0 1px 3px #333}
+
+/* Exit: small glowing astrolabe door. */
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate{
+ width:36px!important;height:36px!important;border:3px solid #dfba68!important;border-radius:50%!important;
+ background:radial-gradient(circle,#fff9d8 0 10%,#a7dcff 11% 24%,#4c548a 26% 39%,#17182b 41%)!important;
+ box-shadow:0 0 13px #bfe6ff,0 0 0 4px #5c3d1f!important;overflow:visible
+}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-right{justify-self:end;transform:translateX(58%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-left{justify-self:start;transform:translateX(-58%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-up{align-self:start;transform:translateY(-58%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-down{align-self:end;transform:translateY(58%)}
+.cl-gate-ring{position:absolute;inset:-10px;border:2px solid #d8b566;border-radius:50%;border-top-color:transparent;animation:clSpin 6s linear infinite}
+.cl-gate-ring.r2{inset:-17px;border-style:dashed;border-color:#8fcdf5 #d7b369 #8fcdf5 #d7b369;animation-direction:reverse;animation-duration:9s}
+.cl-astrogate b{position:absolute;inset:0;display:grid;place-items:center;color:#fff6c8;text-shadow:0 0 8px #fff}
+.cl-astrogate:after{display:none!important}
+
+/* Shape-aware multicell archive furniture. */
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive{
+ overflow:visible;border:3px solid #d8ad60;border-radius:8px;
+ background:
+  linear-gradient(90deg,#281725 0 4%,transparent 4% 96%,#281725 96%),
+  linear-gradient(180deg,#6e2a36 0 48%,#263f68 49% 100%);
+ box-shadow:inset 0 0 0 2px #2b1d26,inset 0 3px #f0ce815c,0 6px 10px #07101a99;
+ filter:drop-shadow(0 4px 4px #02071188)
+}
+.cl-archive-spine{position:absolute;left:5%;right:5%;top:10%;bottom:10%;
+ background:
+  repeating-linear-gradient(90deg,transparent 0 21%,#d8b66f 21.5% 23%,transparent 23.5% 47%),
+  linear-gradient(180deg,transparent 0 16%,#d7b66b 17% 20%,transparent 21% 79%,#d7b66b 80% 83%,transparent 84%);
+ opacity:.75
+}
+.cl-archive-chart{position:absolute;right:8%;top:20%;width:25%;aspect-ratio:1;border:1px solid #e1c173;border-radius:50%;opacity:.66}
+.cl-archive-chart:before,.cl-archive-chart:after{content:"";position:absolute;left:49%;top:7%;bottom:7%;width:1px;background:#e1c173}
+.cl-archive-chart:after{transform:rotate(60deg)}
+.cl-archive b{position:absolute;left:8%;right:8%;bottom:8%;font:700 clamp(6px,1.8vw,10px)/1 ui-monospace,monospace;text-align:center;letter-spacing:.13em;color:#f2d58e;text-shadow:0 1px 3px #120812}
+
+/* Horizontal atlases are wide display cases. */
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2h{background:linear-gradient(180deg,#742c37,#391a29 48%,#223d68 49%,#182b4b)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3h{background:linear-gradient(180deg,#264b60,#193548 45%,#6b2934 46%,#3b1b28)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3h .cl-archive-chart{width:16%;right:7%}
+
+/* Vertical codices get a tall central spine and stacked brass bands. */
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v{
+ background:linear-gradient(90deg,#152f50 0 23%,#375d7f 24% 52%,#54232e 53% 82%,#271620 83%);
+ border-radius:9px
+}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v .cl-archive-spine,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v .cl-archive-spine{
+ background:
+  repeating-linear-gradient(0deg,transparent 0 21%,#d8b66f 21.5% 23%,transparent 23.5% 47%),
+  linear-gradient(90deg,transparent 0 17%,#d7b66b 18% 22%,transparent 23% 78%,#d7b66b 79% 83%,transparent 84%)
+}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v .cl-archive-chart,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v .cl-archive-chart{width:46%;right:27%;top:10%}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v b,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v b{
+ writing-mode:vertical-rl;transform:rotate(180deg);left:10%;right:auto;top:30%;bottom:10%
+}
+
+/* The four L-shaped archive desks use a transparent missing quadrant. */
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br{
+ border:0;border-radius:0;box-shadow:none;
+ background:
+  radial-gradient(circle at 26% 26%,#e2bd6f 0 2px,transparent 3px),
+  linear-gradient(135deg,#6a2a35,#263f68 54%,#172b49);
+ filter:drop-shadow(0 5px 5px #020711aa)
+}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl{clip-path:polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr{clip-path:polygon(0 0,100% 0,100% 100%,50% 100%,50% 50%,0 50%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl{clip-path:polygon(0 0,50% 0,50% 50%,100% 50%,100% 100%,0 100%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br{clip-path:polygon(50% 0,100% 0,100% 100%,0 100%,0 50%,50% 50%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl:before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr:before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl:before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br:before{
+ content:"";position:absolute;inset:4%;border:2px solid #dfbb6e;opacity:.7;pointer-events:none
+}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl .cl-archive-chart{right:56%;top:56%;width:31%}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr .cl-archive-chart{right:12%;top:56%;width:31%}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl .cl-archive-chart{right:12%;top:12%;width:31%}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br .cl-archive-chart{right:56%;top:12%;width:31%}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl b,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr b,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl b,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br b{font-size:6px;letter-spacing:.08em}
+
+/* Cell fallback stays coherent if future level generators introduce a new shape. */
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component:not(.sr-composite-source){
+ background:linear-gradient(95deg,#612833,#8a3942 47%,#263f68 48%);border:2px solid #d5ae63;border-radius:0;box-shadow:inset 0 2px #eccb83;overflow:visible
+}
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-l:not(.sr-composite-source){border-left:0}
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-r:not(.sr-composite-source){border-right:0}
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-t:not(.sr-composite-source){border-top:0}
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-b:not(.sr-composite-source){border-bottom:0}
+body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component:not(.sr-composite-source) .cl-book-sigil{opacity:.55}
+
+/* Free Play carousel preview. */
+.theme-preview[data-theme="celestial-library"] .theme-preview-art{
+ background:
+  radial-gradient(circle at 50% 21%,#668bd45c 0 9%,transparent 23%),
+  linear-gradient(90deg,#26170f 0 17%,transparent 18% 82%,#26170f 83%),
+  url("library-scene.svg") center 42% / cover
+}
+.theme-preview[data-theme="celestial-library"] .mini-board{
+ border:6px double #d7b46c;background:#b8b5a8;box-shadow:0 16px 30px #020711bd,inset 0 0 16px #fff0b85c
+}
+.theme-preview[data-theme="celestial-library"] .mini-cell{
+ background:url("constellation-tile.svg") center/85% 85% no-repeat,#d4d0c4;border-color:#776b58
+}
+.theme-preview[data-theme="celestial-library"] .mini-cell.block{
+ background:linear-gradient(#7a303a,#263f68);border-color:#d8b66e;color:#f3d487
+}
+.theme-preview[data-theme="celestial-library"] .mini-cell.target{
+ background:radial-gradient(circle,#fff,#bde4ff 23%,#645ac2 56%,#171a3b 75%);box-shadow:0 0 14px #bde6ff
+}
+.theme-preview[data-theme="celestial-library"] .mini-cell.gate{
+ border:3px double #ddb86b;border-radius:50%;background:#24385b;color:#fff1b8
+}
+
+@media(max-width:430px){
+ body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-side:42px;--skin-top:98px}
+ body.full-ui-skin[data-scene="celestial-library"] .edge-left,
+ body.full-ui-skin[data-scene="celestial-library"] .edge-right{width:34px}
+ body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title strong{font-size:clamp(13px,4.7vw,19px)}
+ body.full-ui-skin[data-scene="celestial-library"] .play-actions{gap:4px}
+ body.full-ui-skin[data-scene="celestial-library"] .play-action{width:46px}
+ body.full-ui-skin[data-scene="celestial-library"] #freeze.play-action{width:42px;min-width:42px;padding:0}
+ body.full-ui-skin[data-scene="celestial-library"] .score-box{min-width:62px;padding:5px}
+}
+@media(max-height:760px){
+ body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-top:88px;--skin-bottom:52px}
+ body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 47px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .cl-dust,.cl-orb-ring,.cl-gate-ring{animation:none!important}
+}
