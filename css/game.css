@@ -467,3 +467,31 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
   margin-top:7px;
  }
 }
+
+
+/* v0.15.8 – one silhouette-aware Freeze marker for each rigid body */
+.freeze-selection-marker.freeze-selection-composite{
+ border:0;
+ border-radius:0;
+ background:none;
+ box-shadow:none;
+ filter:none;
+}
+.freeze-selection-marker.freeze-selection-composite::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ border-radius:10px;
+ background:linear-gradient(135deg,#b6f6ff70,#45c9ee52);
+ clip-path:var(--freeze-clip,inset(0 round 10px));
+ box-shadow:inset 0 0 0 3px var(--freeze-edge,#078bb6);
+ filter:drop-shadow(0 0 3px #f4feff) drop-shadow(0 0 9px var(--freeze-glow,#9bf4ff));
+}
+.freeze-selection-marker.freeze-selection-composite::after{
+ top:6px;
+ right:6px;
+}
+.freeze-selection-marker.freeze-selection-composite.sr-shape-l3-tl::after{left:6px;right:auto;top:6px;bottom:auto}
+.freeze-selection-marker.freeze-selection-composite.sr-shape-l3-tr::after{right:6px;left:auto;top:6px;bottom:auto}
+.freeze-selection-marker.freeze-selection-composite.sr-shape-l3-bl::after{left:6px;right:auto;bottom:6px;top:auto}
+.freeze-selection-marker.freeze-selection-composite.sr-shape-l3-br::after{right:6px;left:auto;bottom:6px;top:auto}
