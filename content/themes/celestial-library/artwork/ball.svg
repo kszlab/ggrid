@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs>
+<linearGradient id="gold" x1="0" x2="1"><stop stop-color="#6b3e12"/><stop offset=".18" stop-color="#d79a3d"/><stop offset=".48" stop-color="#fff0ad"/><stop offset=".72" stop-color="#c27b26"/><stop offset="1" stop-color="#4c2a0c"/></linearGradient>
+<linearGradient id="navy" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#173d70"/><stop offset=".45" stop-color="#0b2b54"/><stop offset="1" stop-color="#041426"/></linearGradient>
+<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff8dc"/><stop offset=".42" stop-color="#eadfbd"/><stop offset="1" stop-color="#cdbb8e"/></linearGradient>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".65"/></filter>
+<filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+ <defs><radialGradient id="orb" cx=".36" cy=".28" r=".68"><stop stop-color="#fffbdc"/><stop offset=".16" stop-color="#76e8ff"/><stop offset=".42" stop-color="#5479ff"/><stop offset=".72" stop-color="#743ecf"/><stop offset="1" stop-color="#17144b"/></radialGradient></defs>
+ <circle cx="60" cy="60" r="50" fill="#63cfff" opacity=".34" filter="url(#glow)"/>
+ <circle cx="60" cy="60" r="43" fill="url(#orb)" stroke="url(#gold)" stroke-width="4" filter="url(#shadow)"/>
+ <ellipse cx="60" cy="60" rx="48" ry="19" fill="none" stroke="#f4d47f" stroke-width="2.5" transform="rotate(-24 60 60)"/>
+ <ellipse cx="60" cy="60" rx="46" ry="17" fill="none" stroke="#9ee9ff" stroke-opacity=".85" stroke-width="1.8" transform="rotate(56 60 60)"/>
+ <path d="M60 37l5 14 14 5-14 5-5 14-5-14-14-5 14-5Z" fill="#fff4a8"/>
+ <g fill="#fff9d4"><circle cx="34" cy="41" r="2"/><circle cx="78" cy="31" r="2"/><circle cx="83" cy="76" r="2.3"/><circle cx="42" cy="82" r="1.7"/></g></svg>
