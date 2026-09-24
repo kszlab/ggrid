@@ -1,4 +1,4 @@
-/* GGrid v0.12.97 - separate two-ball Level Library */
+/* GGrid v0.12.98 - separate two-ball Level Library */
 const MultiBallLibrary=(()=>{
  let levels=null,cursor=new Map(),catalogLoaded=false,loadPromise=null;
  const SUPPORTED_FEATURES=new Set(['core.movement','core.exit','object.ball','object.rigid-body','object.wall','ability.freeze','rule.multi-ball']);

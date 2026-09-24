@@ -139,7 +139,7 @@ function render(opts={}){
  board.querySelectorAll('.freeze-selection-marker').forEach(el=>el.remove());
  if(freezeArmed&&freezeId!=null){const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);if(selected)for(const c of selected.cells){const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker)}}
 }
-/* ===== v0.12.97 TWO-BALL LEVEL LIBRARY =====
+/* ===== v0.12.98 TWO-BALL LEVEL LIBRARY =====
    Separate, pre-generated and solver-verified library. It uses the same size,
    D1-D10 and theme selectors as Free Play, but remains unscored while the
    multi-ball difficulty calibration is being play-tested. */
@@ -640,7 +640,6 @@ document.querySelector('#new').addEventListener('click',()=>{hideVictory();newLe
 victoryRestart.addEventListener('click',()=>document.querySelector('#restart').click());
 victoryChoose.addEventListener('click',()=>{hideVictory();AppUI?.openFreeSetup?.()});
 victoryNext.addEventListener('click',async()=>{
- if(inMultiBallTest())return;
  if(ScenarioMode?.active){
   hideVictory();await ScenarioMode.advanceAfterWin();MotionControl.resume();return;
  }
