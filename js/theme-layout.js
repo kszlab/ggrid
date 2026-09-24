@@ -1,4 +1,4 @@
-/* GGrid Artwork Theme Layout – v0.15.9
+/* GGrid Artwork Theme Layout – v0.15.10
    Converts approved artwork coordinates into responsive geometry.
    Board cells stay square; directional hit zones are independent from their visual cue.
    Artwork themes may opt into portrait height expansion so tall boards keep their width. */
@@ -94,7 +94,9 @@
    band:Math.max(36,finite(v.band??v.thickness,52)),
    gap:Math.max(0,finite(v.gap,6)),
    extend:Math.max(0,finite(v.extend,0)),
-   cueInset:Math.max(0,finite(v.cueInset,0))
+   /* Signed design-space offset: positive pulls the cue toward the board,
+      negative moves it outward into the surrounding control gutter. */
+   cueInset:finite(v.cueInset,0)
   };
  }
  function zonesForResolved(r,theme,boardBox){
