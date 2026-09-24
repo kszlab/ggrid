@@ -21,3 +21,5 @@ jobs:
         run: node tools/scan-rigid-shapes.mjs --check
       - name: Verify theme coverage audit
         run: node tools/audit-theme-shapes.mjs --check
+      - name: Theme asset integrity
+        run: node tools/test-theme-assets.mjs
