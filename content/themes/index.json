@@ -308,6 +308,26 @@
       },
       "src": "sunlit-greenhouse/theme.json",
       "css": "sunlit-greenhouse/theme.css?v=0.12.65"
+    },
+    {
+      "id": "celestial-library",
+      "version": 1,
+      "name": "CSILLAGKÖNYVTÁR // Az égi archívum",
+      "description": "SHOWCASE: csillagvizsgálóval egybeépített égi könyvtár, asztrálgyönggyel, csillagatlaszokkal és asztrolábium-kapuval.",
+      "showcase": true,
+      "preview": {
+        "shortName": "CSILLAGKÖNYVTÁR",
+        "tag": "CELESTIAL ARCHIVE",
+        "symbols": [
+          "✦",
+          "ATLAS",
+          "◌",
+          "✧"
+        ]
+      },
+      "src": "celestial-library/theme.json",
+      "css": "celestial-library/theme.css?v=0.13.0",
+      "previewCss": "celestial-library/preview.css?v=0.13.0"
     }
   ]
 }

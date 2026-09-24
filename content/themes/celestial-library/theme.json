@@ -1,0 +1,140 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "celestial-library",
+  "version": 1,
+  "name": "CSILLAGKÖNYVTÁR // Az égi archívum",
+  "description": "SHOWCASE: csillagvizsgálóval egybeépített égi könyvtár, fénylő asztrálgyönggyel, csillagatlaszokkal és asztrolábium-kapuval.",
+  "semantic": {
+    "ball": "Asztrálgyöngy",
+    "brick": "Archívumkötet",
+    "wall": "Csillagtérkép-talapzat",
+    "exit": "Asztrolábium-kapu",
+    "freeze": "Időpecsét"
+  },
+  "colors": {
+    "background": "#07111f",
+    "wrap": "#13263b",
+    "board": "#25364a",
+    "cell1": "#d9d0b9",
+    "cell2": "#b9b5aa",
+    "accent": "#e3b96a",
+    "ball1": "#fffbe8",
+    "ball2": "#b8dfff",
+    "ball3": "#6550b4",
+    "brick1": "#6e2630",
+    "brick2": "#263e68",
+    "brickEdge": "#d7b36a",
+    "wall1": "#b4a88e",
+    "wall2": "#4f5360"
+  },
+  "scene": {
+    "type": "celestial-library",
+    "tier": "showcase",
+    "tagline": "CELESTIAL ARCHIVE // ORRERY HALL",
+    "layers": ["library","arched-window","starfield","orrery","lamps","dust","charts"],
+    "exitStyle": "astrolabe-door",
+    "markup": {
+      "back": "<i class=\"cl-arch-window\"></i><i class=\"cl-shelf cl-shelf-left\"></i><i class=\"cl-shelf cl-shelf-right\"></i><i class=\"cl-orrery\"></i><i class=\"cl-lamp cl-lamp-left\"></i><i class=\"cl-lamp cl-lamp-right\"></i>",
+      "front": "<i class=\"cl-dust\"></i><i class=\"cl-chart\"></i><span class=\"sr-caption cl-caption\">CELESTIAL ARCHIVE <b>ORRERY HALL</b></span>"
+    }
+  },
+  "ui": {
+    "skin": "full",
+    "frame": "brass-library-console",
+    "controls": "celestial-inlay",
+    "hud": "navy-brass",
+    "sceneChrome": true,
+    "tokens": {
+      "surface": "#071525",
+      "surfaceRaised": "#1d3147",
+      "control": "#162b40",
+      "controlRaised": "#334a63",
+      "controlPressed": "#74582e",
+      "accent": "#edc879",
+      "text": "#fff3d3",
+      "muted": "#c8c9c4",
+      "border": "#d8b26788",
+      "shadow": "#020711cc",
+      "focus": "#f7da94",
+      "scrim": "#050d18ee"
+    }
+  },
+  "pieces": {
+    "ball": {
+      "name": "Asztrálgyöngy",
+      "className": "sr-piece cl-orb",
+      "markup": "<i class=\"cl-orb-ring r1\"></i><i class=\"cl-orb-ring r2\"></i><b class=\"cl-orb-core\">✦</b>"
+    },
+    "brick": {
+      "name": "Archívumkötet",
+      "className": "sr-piece cl-volume",
+      "markup": "<i class=\"cl-book-band\"></i><i class=\"cl-page-edge\"></i><b class=\"cl-book-sigil\">✦</b>"
+    },
+    "wall": {
+      "name": "Csillagtérkép-talapzat",
+      "className": "sr-piece cl-pedestal",
+      "markup": "<i class=\"cl-stone-inlay\"></i><b>✧</b>"
+    },
+    "rigidBody": {
+      "className": "sr-composite cl-archive",
+      "markup": "<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>ASTRA</b>"
+    },
+    "rigidBodyVariants": {
+      "2H": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>ASTRA II</b>"},
+      "2V": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CODEX II</b>"},
+      "3H": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>ATLAS III</b>"},
+      "3V": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CODEX III</b>"},
+      "L3-TL": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CORNER A</b>"},
+      "L3-TR": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CORNER B</b>"},
+      "L3-BL": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CORNER C</b>"},
+      "L3-BR": {"className":"sr-composite cl-archive","markup":"<i class=\"cl-archive-spine\"></i><i class=\"cl-archive-chart\"></i><b>CORNER D</b>"}
+    },
+    "exit": {
+      "name": "Asztrolábium-kapu",
+      "className": "sr-exit cl-astrogate",
+      "markup": "<i class=\"cl-gate-ring r1\"></i><i class=\"cl-gate-ring r2\"></i><b>✦</b>"
+    }
+  },
+  "abilities": {
+    "freeze": {"name": "Időpecsét"}
+  },
+  "audio": {
+    "profile": "clockwork",
+    "ambient": {
+      "type": "procedural",
+      "name": "Halk hárfa, üvegharang és csillagvizsgáló-drón",
+      "enabled": true,
+      "volume": 0.026
+    },
+    "music": {
+      "loopSeconds": 14,
+      "notes": [
+        {"freq":130.81,"dur":5.8,"gain":0.009,"at":0},
+        {"freq":196,"dur":4.8,"gain":0.005,"at":4.4},
+        {"freq":261.63,"dur":1.1,"gain":0.015,"at":0.5,"instrument":"harp"},
+        {"freq":329.63,"dur":1.0,"gain":0.012,"at":2.1,"instrument":"harp"},
+        {"freq":392,"dur":1.25,"gain":0.013,"at":4.1,"instrument":"harp"},
+        {"freq":523.25,"dur":1.5,"gain":0.006,"at":7.2,"instrument":"bell"},
+        {"freq":440,"dur":1.0,"gain":0.01,"at":9.5,"instrument":"harp"},
+        {"freq":659.25,"dur":1.8,"gain":0.005,"at":11.7,"instrument":"bell"}
+      ]
+    },
+    "synthesis": {
+      "events": {
+        "move": [{"freq":294,"dur":0.17,"gain":0.017,"instrument":"harp"}],
+        "blocked": [{"freq":147,"dur":0.18,"gain":0.018,"wave":"triangle","endFreq":118}],
+        "freeze": [{"freq":880,"dur":0.6,"gain":0.02,"instrument":"bell"},{"freq":1174.66,"dur":0.8,"gain":0.009,"at":0.12,"instrument":"bell"}],
+        "exit": [{"freq":392,"dur":0.42,"gain":0.02,"instrument":"harp"},{"freq":783.99,"dur":0.65,"gain":0.016,"at":0.12,"instrument":"bell"}],
+        "win": [{"freq":392,"dur":0.45,"gain":0.02,"instrument":"harp"},{"freq":523.25,"dur":0.55,"gain":0.018,"at":0.14,"instrument":"harp"},{"freq":783.99,"dur":0.9,"gain":0.018,"at":0.3,"instrument":"bell"}]
+      }
+    },
+    "events": {"move":"page-glide","blocked":"book-stop","freeze":"time-seal","exit":"astrolabe-open","win":"archive-chime"}
+  },
+  "preview": {
+    "markup": "<div class=\"cl-preview-window\"></div><div class=\"cl-preview-shelf ps-left\"></div><div class=\"cl-preview-shelf ps-right\"></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero cl-preview-orb\"></i><i class=\"piece object cl-preview-book b1\"></i><i class=\"piece object cl-preview-book b2\"></i><i class=\"piece object cl-preview-stone s1\"></i><i class=\"piece object long-machine cl-preview-atlas\"></i><i class=\"exit cl-preview-gate\">✦</i></div><div class=\"cl-preview-orrery\"></div><div class=\"scene-label\">CELESTIAL ARCHIVE <b>ORRERY HALL</b></div>"
+  },
+  "assets": {
+    "css": "theme.css?v=0.13.0"
+  }
+}

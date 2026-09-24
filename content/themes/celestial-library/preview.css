@@ -1,0 +1,75 @@
+/* Theme Lab preview for CSILLAGKÖNYVTÁR */
+.scene[data-scene="celestial-library"]{
+ background:
+  radial-gradient(circle at 50% 18%,#6284c455 0 8%,transparent 24%),
+  linear-gradient(90deg,#2b190f 0 18%,transparent 19% 81%,#2b190f 82%),
+  linear-gradient(#07111f,#18304b 58%,#0a111b);
+ overflow:hidden
+}
+.scene[data-scene="celestial-library"]:before{
+ content:"";position:absolute;left:24%;right:24%;top:5%;height:58%;
+ border:4px double #cba85f;border-bottom:0;border-radius:50% 50% 0 0/70% 70% 0 0;
+ background:
+  radial-gradient(circle at 28% 26%,#fff 0 1px,transparent 2px),
+  radial-gradient(circle at 72% 18%,#bcdfff 0 1px,transparent 2px),
+  radial-gradient(circle at 51% 47%,#fff0bd 0 1px,transparent 2px),
+  linear-gradient(#203e6a88,#08152a88)
+}
+.scene[data-scene="celestial-library"]:after{
+ content:"";position:absolute;inset:auto 0 0;height:27%;
+ background:linear-gradient(#422b1d,#1b110c);border-top:3px solid #a4773e
+}
+.cl-preview-window{position:absolute;inset:7% 29% 41%;border:1px solid #91b9e877;border-radius:50% 50% 0 0;z-index:1}
+.cl-preview-shelf{position:absolute;top:10%;bottom:12%;width:17%;z-index:2;border:3px solid #8c6435;
+ background:
+  repeating-linear-gradient(0deg,transparent 0 18%,#b58950 18.5% 20%,transparent 21% 36%),
+  repeating-linear-gradient(90deg,#6a2632 0 13%,#284269 13% 27%,#355d48 27% 42%,#78512e 42% 54%)
+}
+.ps-left{left:1.5%}.ps-right{right:1.5%}
+.scene[data-scene="celestial-library"] .showcase-board{
+ z-index:5;top:10%;background:#c3c0b4;border-color:#d6b26a;box-shadow:0 15px 28px #020711cc,inset 0 0 20px #fff2ba55
+}
+.scene[data-scene="celestial-library"] .showcase-board .cell{
+ background:
+  radial-gradient(circle at 50% 50%,transparent 0 26%,#695f4c22 27% 28%,transparent 29%),
+  linear-gradient(145deg,#e4dfd2,#aaa9a2);
+ border:1px solid #7e725d
+}
+.scene[data-scene="celestial-library"] .cl-preview-orb{
+ left:20%;top:20%;border-radius:50%;
+ background:radial-gradient(circle at 35% 25%,#fff,#c7e8ff 22%,#6b65c7 55%,#1d214b 77%);
+ box-shadow:0 0 12px #bfe5ff
+}
+.scene[data-scene="celestial-library"] .cl-preview-book{
+ background:linear-gradient(90deg,#742d38,#2a4169);border:2px solid #d5ae63;border-radius:3px
+}
+.scene[data-scene="celestial-library"] .cl-preview-book:after{
+ content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#e9cb84;font-size:11px
+}
+.scene[data-scene="celestial-library"] .cl-preview-book.b1{left:40%;top:20%}
+.scene[data-scene="celestial-library"] .cl-preview-book.b2{left:20%;top:60%;background:linear-gradient(#274d62,#6b2934)}
+.scene[data-scene="celestial-library"] .cl-preview-stone{
+ left:60%;top:40%;background:linear-gradient(135deg,#c5bda8,#5a6270);border:2px solid #d8b978;border-radius:6px
+}
+.scene[data-scene="celestial-library"] .cl-preview-stone:after{
+ content:"✧";position:absolute;inset:0;display:grid;place-items:center;color:#efd38e
+}
+.scene[data-scene="celestial-library"] .cl-preview-atlas{
+ background:linear-gradient(#244663,#17324e 46%,#6f2b35 47%);border:2px solid #d5ae63;border-radius:4px
+}
+.scene[data-scene="celestial-library"] .cl-preview-atlas:after{
+ content:"ATLAS";position:absolute;left:0;right:0;bottom:10%;font:700 6px monospace;text-align:center;color:#e9ca82;letter-spacing:.1em
+}
+.scene[data-scene="celestial-library"] .cl-preview-gate{
+ right:-12px;top:23%;width:30px;height:30px;border:3px double #e0bb6c;border-radius:50%;
+ background:radial-gradient(circle,#fff,#aee1ff 22%,#5f5db0 48%,#16203d 70%);
+ color:#fff2b8;display:grid;place-items:center;box-shadow:0 0 9px #aeddff
+}
+.cl-preview-orrery{
+ position:absolute;z-index:6;right:4%;bottom:6%;width:66px;height:66px;border:3px solid #d0a75f;border-radius:50%;opacity:.75;transform:rotate(-14deg)
+}
+.cl-preview-orrery:before,.cl-preview-orrery:after{
+ content:"";position:absolute;inset:8px;border:2px solid #d0a75f;border-radius:50%
+}
+.cl-preview-orrery:before{transform:rotate(55deg)}.cl-preview-orrery:after{transform:rotate(-55deg)}
+.scene[data-scene="celestial-library"] .scene-label{color:#edc979}.scene[data-scene="celestial-library"] .scene-label b{color:#b6dcff}

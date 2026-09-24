@@ -132,3 +132,44 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.join-b:not(.sr-composite-source)::after{display:block;content:"";background:inherit}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component.sr-open-top:not(.sr-composite-source) .sg-planter-rim{display:block;left:0;right:0;top:-6%;height:41%;border:0;border-radius:0;background:url("planter-v3.webp") center top / 100% auto no-repeat;pointer-events:none}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .brick.sg-planter.sr-component:not(.sr-composite-source) b{display:none}
+
+
+/* Shape-aware rigid bodies.
+   Each currently generated rigid-body orientation has a dedicated composite
+   variant. Unknown future shapes still fall back in SceneRenderer without
+   affecting gameplay. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-2h:after{content:"❧   ❧"}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-3h:after{content:"❧   ❧   ❧"}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-2v:after{content:"❧";inset:20% 0 8%}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-3v:after{content:"❧";inset:18% 0 8%}
+
+/* L-planters are one transparent composite over a 2x2 bounding box. The
+   missing quadrant remains fully transparent, so the board cell below stays
+   visible while the three occupied cells read as one physical planter. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tl,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tr,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-bl,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-br{
+ border:0;border-radius:0;
+ filter:drop-shadow(0 5px 5px #1b3628aa);
+ box-shadow:none;
+}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tl{clip-path:polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tr{clip-path:polygon(0 0,100% 0,100% 100%,50% 100%,50% 50%,0 50%)}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-bl{clip-path:polygon(0 0,50% 0,50% 50%,100% 50%,100% 100%,0 100%)}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-br{clip-path:polygon(50% 0,100% 0,100% 100%,0 100%,0 50%,50% 50%)}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tl:after,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-tr:after{content:"❧   ❧";inset:22% 0 8%}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-bl:after,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-br:after{content:"❧";inset:17% 0 8%}
+
+/* Bottom-heavy L variants have a second exposed soil edge at mid-height.
+   Reuse the real markup node for that local detail instead of painting into
+   the transparent quadrant. */
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-bl .sg-co-leaves,
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-br .sg-co-leaves{
+ display:block;position:absolute;top:43%;width:50%;height:18%;font-size:0!important;
+ background:url("glass-leaves.svg") center / 34px 34px repeat-x;opacity:.9;pointer-events:none
+}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-bl .sg-co-leaves{right:0}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-composite.sr-shape-l3-br .sg-co-leaves{left:0}
