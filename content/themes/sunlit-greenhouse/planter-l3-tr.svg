@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+<defs><linearGradient id="p" x1="1" x2="0" y2="1"><stop stop-color="#d99a62"/><stop offset=".45" stop-color="#ae673f"/><stop offset="1" stop-color="#704029"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#173424" flood-opacity=".58"/></filter></defs>
+<g filter="url(#s)">
+ <path d="M12 27Q12 17 22 17H178Q188 17 188 27V178Q188 188 178 188H113Q104 188 104 179V95H21Q12 95 12 86Z" fill="url(#p)" stroke="#e6ad70" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M8 15H192V192H108V42H8Z" fill="none" stroke="#efc187" stroke-width="5" stroke-linejoin="round"/>
+ <path d="M18 24H182V181H115V35H18Z" fill="#314e2f" opacity=".95"/>
+ <g fill="#72a059" stroke="#31522e"><ellipse cx="45" cy="18" rx="8" ry="18" transform="rotate(-24 45 18)"/><ellipse cx="76" cy="17" rx="8" ry="18" transform="rotate(25 76 17)"/><ellipse cx="145" cy="18" rx="8" ry="18" transform="rotate(-24 145 18)"/><ellipse cx="159" cy="91" rx="8" ry="18" transform="rotate(22 159 91)"/><ellipse cx="154" cy="144" rx="8" ry="18" transform="rotate(-25 154 144)"/></g>
+ <path d="M104 47v39M114 96h39" stroke="#e5ac69" stroke-width="3" opacity=".65"/>
+</g></svg>
