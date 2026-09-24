@@ -1,75 +1,72 @@
-/* Theme Lab preview for CSILLAGKÖNYVTÁR */
+/* Theme Lab / Free Play preview for CSILLAGKÖNYVTÁR V2 */
 .scene[data-scene="celestial-library"]{
  background:
-  radial-gradient(circle at 50% 18%,#6284c455 0 8%,transparent 24%),
-  linear-gradient(90deg,#2b190f 0 18%,transparent 19% 81%,#2b190f 82%),
-  linear-gradient(#07111f,#18304b 58%,#0a111b);
+  radial-gradient(circle at 50% 16%,#7198da52 0 9%,transparent 25%),
+  linear-gradient(90deg,#1a0e08 0 18%,transparent 19% 81%,#1a0e08 82%),
+  url("library-scene.svg") center 43% / cover;
  overflow:hidden
 }
-.scene[data-scene="celestial-library"]:before{
- content:"";position:absolute;left:24%;right:24%;top:5%;height:58%;
- border:4px double #cba85f;border-bottom:0;border-radius:50% 50% 0 0/70% 70% 0 0;
+.scene[data-scene="celestial-library"]::before{
+ content:"";position:absolute;left:22%;right:22%;top:4%;height:56%;border:5px double #d7b267;border-bottom:0;border-radius:50% 50% 0 0/74% 74% 0 0;
+ background:linear-gradient(#1d47769c,#07152aaa);box-shadow:inset 0 0 26px #8ab9ef26,0 0 17px #d6ad6133
+}
+.scene[data-scene="celestial-library"]::after{
+ content:"";position:absolute;left:8%;right:8%;top:5%;height:56%;pointer-events:none;
+ background:url("celestial-ornament.svg") center top/86% 58px no-repeat;opacity:.65
+}
+.cl-preview-window{position:absolute;inset:7% 28% 39%;border:1px solid #95c0eb66;border-radius:50% 50% 0 0;z-index:1}
+.cl-preview-shelf{position:absolute;top:8%;bottom:10%;width:18%;z-index:2;border:4px solid #8f612c;border-radius:7px;
  background:
-  radial-gradient(circle at 28% 26%,#fff 0 1px,transparent 2px),
-  radial-gradient(circle at 72% 18%,#bcdfff 0 1px,transparent 2px),
-  radial-gradient(circle at 51% 47%,#fff0bd 0 1px,transparent 2px),
-  linear-gradient(#203e6a88,#08152a88)
+  repeating-linear-gradient(0deg,transparent 0 17%,#c79c53 17.5% 19%,transparent 20% 34%),
+  repeating-linear-gradient(90deg,#762a36 0 11%,#26476f 11% 23%,#315b49 23% 36%,#714824 36% 49%);
+ box-shadow:inset 0 0 0 3px #24140d,inset 0 0 14px #0009
 }
-.scene[data-scene="celestial-library"]:after{
- content:"";position:absolute;inset:auto 0 0;height:27%;
- background:linear-gradient(#422b1d,#1b110c);border-top:3px solid #a4773e
-}
-.cl-preview-window{position:absolute;inset:7% 29% 41%;border:1px solid #91b9e877;border-radius:50% 50% 0 0;z-index:1}
-.cl-preview-shelf{position:absolute;top:10%;bottom:12%;width:17%;z-index:2;border:3px solid #8c6435;
- background:
-  repeating-linear-gradient(0deg,transparent 0 18%,#b58950 18.5% 20%,transparent 21% 36%),
-  repeating-linear-gradient(90deg,#6a2632 0 13%,#284269 13% 27%,#355d48 27% 42%,#78512e 42% 54%)
-}
-.ps-left{left:1.5%}.ps-right{right:1.5%}
+.ps-left{left:1.5%;transform:perspective(300px) rotateY(10deg)}.ps-right{right:1.5%;transform:perspective(300px) rotateY(-10deg)}
+.cl-preview-lamp{position:absolute;z-index:3;width:10px;height:42px;border-radius:5px;background:linear-gradient(#efcc7b,#69431d);box-shadow:0 0 17px 7px #ffcb7547}
+.cl-preview-lamp::after{content:"";position:absolute;left:-12px;top:6px;width:34px;height:27px;border-radius:50%;background:radial-gradient(circle,#fff9d8,#eeb45092 40%,transparent 72%)}
+.pl-a{left:12%;top:26%}.pl-b{right:12%;top:26%}
+
 .scene[data-scene="celestial-library"] .showcase-board{
- z-index:5;top:10%;background:#c3c0b4;border-color:#d6b26a;box-shadow:0 15px 28px #020711cc,inset 0 0 20px #fff2ba55
+ z-index:6;top:12%;width:55%;background:#08172a;border:7px double #d9b568;border-radius:8px;
+ box-shadow:0 16px 31px #000d,0 0 0 3px #513317,inset 0 0 18px #96bde92c
 }
 .scene[data-scene="celestial-library"] .showcase-board .cell{
- background:
-  radial-gradient(circle at 50% 50%,transparent 0 26%,#695f4c22 27% 28%,transparent 29%),
-  linear-gradient(145deg,#e4dfd2,#aaa9a2);
- border:1px solid #7e725d
+ margin:1px;background:url("constellation-tile.svg") center/cover;border:1px solid #76674b;border-radius:3px;
+ box-shadow:inset 0 0 0 1px #fff2c44a
 }
 .scene[data-scene="celestial-library"] .cl-preview-orb{
- left:20%;top:20%;border-radius:50%;
- background:radial-gradient(circle at 35% 25%,#fff,#c7e8ff 22%,#6b65c7 55%,#1d214b 77%);
- box-shadow:0 0 12px #bfe5ff
+ left:20%;top:20%;border:2px solid #ffe2a0;border-radius:50%;
+ background:radial-gradient(circle at 34% 26%,#fff 0 8%,#d6f4ff 15%,#8bd6ff 28%,#9576e8 48%,#31549a 66%,#21184a 83%);
+ box-shadow:0 0 10px #fff7ce,0 0 18px #98dcff
 }
+.scene[data-scene="celestial-library"] .cl-preview-orb::after{content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#fff1a6;font-size:12px;text-shadow:0 0 6px #fff}
 .scene[data-scene="celestial-library"] .cl-preview-book{
- background:linear-gradient(90deg,#742d38,#2a4169);border:2px solid #d5ae63;border-radius:3px
+ background:linear-gradient(90deg,#4a1622 0 13%,#8b3340 14% 69%,#2d1119 70%);border:2px solid #e5bd67;border-radius:3px;
+ box-shadow:inset 0 0 0 1px #542014
 }
-.scene[data-scene="celestial-library"] .cl-preview-book:after{
- content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#e9cb84;font-size:11px
-}
+.scene[data-scene="celestial-library"] .cl-preview-book::after{content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#e9ca7d;font-size:10px}
 .scene[data-scene="celestial-library"] .cl-preview-book.b1{left:40%;top:20%}
-.scene[data-scene="celestial-library"] .cl-preview-book.b2{left:20%;top:60%;background:linear-gradient(#274d62,#6b2934)}
+.scene[data-scene="celestial-library"] .cl-preview-book.b2{left:20%;top:60%;background:linear-gradient(#1a5a49,#0f3028)}
 .scene[data-scene="celestial-library"] .cl-preview-stone{
- left:60%;top:40%;background:linear-gradient(135deg,#c5bda8,#5a6270);border:2px solid #d8b978;border-radius:6px
+ left:60%;top:40%;background:linear-gradient(135deg,#d6c8aa,#6b6f75);border:2px solid #ddb86d;border-radius:4px
 }
-.scene[data-scene="celestial-library"] .cl-preview-stone:after{
- content:"✧";position:absolute;inset:0;display:grid;place-items:center;color:#efd38e
-}
+.scene[data-scene="celestial-library"] .cl-preview-stone::after{content:"✧";position:absolute;inset:0;display:grid;place-items:center;color:#f0d188}
 .scene[data-scene="celestial-library"] .cl-preview-atlas{
- background:linear-gradient(#244663,#17324e 46%,#6f2b35 47%);border:2px solid #d5ae63;border-radius:4px
+ background:
+  radial-gradient(circle at 78% 50%,transparent 0 14%,#dfb866 15% 17%,transparent 18%),
+  linear-gradient(180deg,#214e7b,#0d2a51 48%,#183e70 49%);
+ border:2px solid #e4bf6b;border-radius:4px
 }
-.scene[data-scene="celestial-library"] .cl-preview-atlas:after{
- content:"ATLAS";position:absolute;left:0;right:0;bottom:10%;font:700 6px monospace;text-align:center;color:#e9ca82;letter-spacing:.1em
-}
+.scene[data-scene="celestial-library"] .cl-preview-atlas::before{content:"☾";position:absolute;inset:0;display:grid;place-items:center;color:#efd17e;font-size:14px}
 .scene[data-scene="celestial-library"] .cl-preview-gate{
- right:-12px;top:23%;width:30px;height:30px;border:3px double #e0bb6c;border-radius:50%;
- background:radial-gradient(circle,#fff,#aee1ff 22%,#5f5db0 48%,#16203d 70%);
- color:#fff2b8;display:grid;place-items:center;box-shadow:0 0 9px #aeddff
+ right:-13px;top:23%;width:31px;height:31px;border:3px double #e6c172;border-radius:50%;
+ background:radial-gradient(circle,#fff,#aee1ff 22%,#625ec0 48%,#141b32 71%);color:#fff2b8;display:grid;place-items:center;box-shadow:0 0 11px #aeddff
 }
-.cl-preview-orrery{
- position:absolute;z-index:6;right:4%;bottom:6%;width:66px;height:66px;border:3px solid #d0a75f;border-radius:50%;opacity:.75;transform:rotate(-14deg)
+.cl-preview-orrery{position:absolute;z-index:7;right:4%;bottom:5%;width:70px;height:70px;border:3px solid #d2a95f;border-radius:50%;opacity:.84;transform:rotate(-13deg)}
+.cl-preview-orrery::before,.cl-preview-orrery::after{content:"";position:absolute;inset:8px;border:2px solid #d2a95f;border-radius:50%}
+.cl-preview-orrery::before{transform:rotate(56deg)}.cl-preview-orrery::after{transform:rotate(-56deg)}
+.scene[data-scene="celestial-library"] .scene-label{
+ bottom:4%;padding:5px 10px;border:1px solid #d7b269;border-radius:10px;background:#071827c9;color:#f0cc7b;
+ font-family:Georgia,serif;letter-spacing:.08em;box-shadow:inset 0 0 0 2px #5c3d1c
 }
-.cl-preview-orrery:before,.cl-preview-orrery:after{
- content:"";position:absolute;inset:8px;border:2px solid #d0a75f;border-radius:50%
-}
-.cl-preview-orrery:before{transform:rotate(55deg)}.cl-preview-orrery:after{transform:rotate(-55deg)}
-.scene[data-scene="celestial-library"] .scene-label{color:#edc979}.scene[data-scene="celestial-library"] .scene-label b{color:#b6dcff}
+.scene[data-scene="celestial-library"] .scene-label b{display:block;margin-top:2px;color:#c4e2ff;font-size:.7em;letter-spacing:.12em}
