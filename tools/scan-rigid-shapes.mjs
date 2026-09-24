@@ -32,7 +32,6 @@ function scanLevel(level,source,shapes){
    rec={id,cells:norm,bounds:{width:b.width,height:b.height},rectangular:RigidShapes.isRectangular(cells)};
    shapes.set(id,rec);
   }
-  if(!rec.sources.includes(source))rec.sources.push(source);
  }
 }
 function visit(node,source,shapes){
