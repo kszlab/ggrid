@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.12
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.13
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -122,15 +122,27 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zo
  filter:drop-shadow(0 4px 6px #0009);
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone::before{display:none!important}
-body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone .emboss-arrow{
- opacity:0!important;
- width:0!important;
- height:0!important;
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone .emboss-arrow.sr-asset-visual{
+ opacity:1!important;
+ width:32px!important;
+ height:32px!important;
+ background-size:contain!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ transform:none!important;
+ filter:drop-shadow(0 2px 2px #0009);
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone.pressed,
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone:active{
+ background-image:var(--sr-asset-image)!important;
  background-color:transparent!important;
- filter:brightness(1.22) drop-shadow(0 4px 8px #000a) drop-shadow(0 0 7px #e8c66966);
+ box-shadow:none!important;
+ filter:drop-shadow(0 4px 6px #0009);
+}
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone.pressed .emboss-arrow.sr-asset-visual,
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone:active .emboss-arrow.sr-asset-visual{
+ transform:translateY(1px) scale(.9)!important;
+ filter:brightness(1.35) drop-shadow(0 1px 1px #000a) drop-shadow(0 0 7px #ffe08a99);
 }
 
 /* Compact HUD: Freeze may show count; Hint remains icon-only. */
@@ -181,5 +193,6 @@ body[data-theme="celestial-library"] .victory-actions button{
 
 /* Keep scene legible on small phones. */
 @media(max-width:430px){
+ body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone .emboss-arrow.sr-asset-visual{width:27px!important;height:27px!important}
  body[data-theme="celestial-library"] .hud-row{padding:5px}
 }
