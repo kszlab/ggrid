@@ -1,7 +1,7 @@
 /* GGrid Scene Renderer 2 – v0.12.52
    Presentation-only layer. Never changes Game State or physics. */
 const SceneRenderer=(()=>{
- let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[];
+ let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[],warnedMissingShapes=new Set();
  function ensure(){
   wrap=document.querySelector('.board-wrap');if(!wrap)return;
   if(!back){back=document.createElement('div');back.className='scene-layer scene-back';wrap.prepend(back)}
@@ -12,7 +12,7 @@ const SceneRenderer=(()=>{
   /* A restart re-applies the same theme while the board DOM has already been
      rebuilt. Composite overlays belong to that old board, so discard the
      cached nodes before rendering the restarted state. */
-  clearComponentOverlays();boardRef=null;
+  clearComponentOverlays();boardRef=null;warnedMissingShapes.clear();
   theme=t||null;ensure();const type=t?.scene?.type||'';
   document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');const st=wrap.querySelector('.skin-scene-title');if(st){st.querySelector('strong').textContent=(t?.name||'GGrid').split('//')[0].trim();st.querySelector('span').textContent=document.body.classList.contains('scenario-mode')?'Forgatókönyv':'Szabad játék'}
   const m=t?.scene?.markup||{};back.innerHTML=m.back||'';front.innerHTML=m.front||'';frame.innerHTML='';
@@ -48,24 +48,43 @@ const SceneRenderer=(()=>{
  }
  function clearComponentOverlays(){componentOverlays.forEach(el=>el.remove());componentOverlays=[]}
  function buildComponentOverlays(board){
-  const spec=theme?.pieces?.rigidBody;if(!spec?.markup&&!spec?.className)return;
+  const baseSpec=theme?.pieces?.rigidBody,variants=theme?.pieces?.rigidBodyVariants||{},hasVariants=Object.keys(variants).length>0;
+  if(!baseSpec&&!hasVariants)return;
   const live=new Set(),w=state?.width||1,h=state?.height||w,cellX=100/w,cellY=100/h,inset=1.8;
   for(const o of (state?.objects||[])){
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
-   const id=String(o.id);live.add(id);
+   const id=String(o.id),shapeId=globalThis.RigidShapes?.identify?.(o.cells)||'';
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-   /* A single rectangular composite may only cover a completely filled footprint.
-      L/U/sparse rigid bodies have legal empty cells inside their bounding box; a
-      bounding-box overlay would visually cover balls or other pieces in those cells. */
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
-   /* Rectangular bodies use one showcase overlay. Irregular polyominoes stay
-      cell-composed; their joined-edge classes fuse them into one uniformly
-      themed body without painting over logical holes. */
-   const rectangular=o.cells.length===boxArea;
-   board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>el.classList.toggle('sr-composite-source',rectangular));
-   if(!rectangular)continue;
+   const rectangular=globalThis.RigidShapes?.isRectangular?.(o.cells)??(o.cells.length===boxArea);
+   const variant=shapeId?variants[shapeId]:null,useComposite=!!variant||!!baseSpec&&rectangular,spec=variant||baseSpec;
+   board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>el.classList.toggle('sr-composite-source',useComposite));
+   if(!useComposite){
+    if(hasVariants&&shapeId){
+     const warnKey=(theme?.id||'theme')+':'+shapeId;
+     if(!warnedMissingShapes.has(warnKey)){
+      warnedMissingShapes.add(warnKey);
+      console.warn('[GGrid Theme] Missing rigid-body variant:',theme?.id||'unknown',shapeId,'-> cell fallback');
+     }
+    }
+    continue;
+   }
+   live.add(id);
+   if(hasVariants&&!variant&&shapeId){
+    const warnKey=(theme?.id||'theme')+':'+shapeId;
+    if(!warnedMissingShapes.has(warnKey)){
+     warnedMissingShapes.add(warnKey);
+     console.warn('[GGrid Theme] Missing rigid-body variant:',theme?.id||'unknown',shapeId,'-> generic composite fallback');
+    }
+   }
    let ov=componentOverlays.find(el=>el.isConnected&&el.parentElement===board&&el.dataset.objectId===id);
-   if(!ov){ov=document.createElement('div');ov.className=spec.className||'sr-composite';ov.dataset.objectId=id;ov.innerHTML=spec.markup||'';board.append(ov);componentOverlays.push(ov);}
+   if(!ov){ov=document.createElement('div');ov.dataset.objectId=id;board.append(ov);componentOverlays.push(ov);}
+   ov.className=spec?.className||'sr-composite';
+   if(shapeId){
+    ov.dataset.shapeId=shapeId;
+    const shapeClass=globalThis.RigidShapes?.cssClass?.(shapeId);if(shapeClass)ov.classList.add(shapeClass);
+   }else delete ov.dataset.shapeId;
+   ov.innerHTML=spec?.markup??'';
    ov.classList.toggle('sr-wide',maxX-minX>maxY-minY);
    ov.classList.toggle('sr-tall',maxY-minY>maxX-minX);
    ov.classList.toggle('sr-square',maxX-minX===maxY-minY);
@@ -75,6 +94,8 @@ const SceneRenderer=(()=>{
    ov.style.height=`calc(${(maxY-minY+1)*cellY}% - ${inset*2}px)`;
    ov.style.setProperty('--sg-tile-w',`${100/(maxX-minX+1)}%`);
    ov.style.setProperty('--sg-tile-h',`${100/(maxY-minY+1)}%`);
+   ov.style.setProperty('--sr-shape-cols',String(maxX-minX+1));
+   ov.style.setProperty('--sr-shape-rows',String(maxY-minY+1));
   }
   componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }
@@ -90,6 +111,6 @@ const SceneRenderer=(()=>{
   wrap.classList.remove('fx-move','fx-blocked','fx-freeze','fx-exit','fx-win');void wrap.offsetWidth;
   wrap.classList.add('fx-'+kind);setTimeout(()=>wrap?.classList.remove('fx-'+kind),kind==='win'?900:420);
  }
- function clear(){clearComponentOverlays();theme=null;ensure();document.body.dataset.scene='';document.body.dataset.uiSkin='';document.body.classList.remove('full-ui-skin');wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
+ function clear(){clearComponentOverlays();warnedMissingShapes.clear();theme=null;ensure();document.body.dataset.scene='';document.body.dataset.uiSkin='';document.body.classList.remove('full-ui-skin');wrap.dataset.scene='';wrap.classList.remove('scene-showcase');back.innerHTML='';front.innerHTML='';frame.innerHTML=''}
  return{apply,afterBoardRender,event,setDirection,clear,get theme(){return theme}};
 })();
