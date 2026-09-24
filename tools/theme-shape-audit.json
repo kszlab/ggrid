@@ -1,0 +1,374 @@
+{
+  "format": "ggrid-theme-shape-audit",
+  "formatVersion": 1,
+  "shapeCatalog": "content/shapes/rigid-shapes.json",
+  "shapes": [
+    "2H",
+    "2V",
+    "3H",
+    "3V",
+    "L3-BL",
+    "L3-BR",
+    "L3-TL",
+    "L3-TR"
+  ],
+  "themes": [
+    {
+      "id": "classic",
+      "theme": "content/themes/classic/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "mine",
+      "theme": "content/themes/mine/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "space-station",
+      "theme": "content/themes/space-station/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "ancient-temple",
+      "theme": "content/themes/ancient-temple/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "ice-cavern",
+      "theme": "content/themes/ice-cavern/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "cybergrid",
+      "theme": "content/themes/cybergrid/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "pirate-ship",
+      "theme": "content/themes/pirate-ship/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "ghost-manor",
+      "theme": "content/themes/ghost-manor/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "traffic-rescue",
+      "theme": "content/themes/traffic-rescue/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "orbital-breach",
+      "theme": "content/themes/orbital-breach/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "abyssal-lab",
+      "theme": "content/themes/abyssal-lab/theme.json",
+      "showcase": false,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "clockwork-sanctum",
+      "theme": "content/themes/clockwork-sanctum/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "neon-noir",
+      "theme": "content/themes/neon-noir/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "microchip-lab",
+      "theme": "content/themes/microchip-lab/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "moonlit-zen",
+      "theme": "content/themes/moonlit-zen/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "generic-composite",
+        "2V": "generic-composite",
+        "3H": "generic-composite",
+        "3V": "generic-composite",
+        "L3-BL": "cell-fallback",
+        "L3-BR": "cell-fallback",
+        "L3-TL": "cell-fallback",
+        "L3-TR": "cell-fallback"
+      },
+      "summary": {
+        "custom": 0,
+        "genericComposite": 4,
+        "cellFallback": 4,
+        "total": 8
+      }
+    },
+    {
+      "id": "sunlit-greenhouse",
+      "theme": "content/themes/sunlit-greenhouse/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "custom",
+        "2V": "custom",
+        "3H": "custom",
+        "3V": "custom",
+        "L3-BL": "custom",
+        "L3-BR": "custom",
+        "L3-TL": "custom",
+        "L3-TR": "custom"
+      },
+      "summary": {
+        "custom": 8,
+        "genericComposite": 0,
+        "cellFallback": 0,
+        "total": 8
+      }
+    },
+    {
+      "id": "celestial-library",
+      "theme": "content/themes/celestial-library/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "custom",
+        "2V": "custom",
+        "3H": "custom",
+        "3V": "custom",
+        "L3-BL": "custom",
+        "L3-BR": "custom",
+        "L3-TL": "custom",
+        "L3-TR": "custom"
+      },
+      "summary": {
+        "custom": 8,
+        "genericComposite": 0,
+        "cellFallback": 0,
+        "total": 8
+      }
+    }
+  ]
+}
