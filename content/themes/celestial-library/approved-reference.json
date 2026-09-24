@@ -15,11 +15,19 @@
     }
   },
   "portrait": {
-    "designSize": [540, 748],
-    "boardSafe": [70, 132, 400, 390],
+    "designSize": [
+      540,
+      610
+    ],
+    "boardSafe": [
+      46,
+      68,
+      448,
+      448
+    ],
     "controls": {
-      "band": 52,
-      "gap": 6,
+      "band": 36,
+      "gap": 2,
       "visualMode": "sparse-ornament-plus-central-arrow",
       "fullBandHitTarget": true
     },
@@ -27,7 +35,8 @@
       "position": "below-scene",
       "hintCounter": false,
       "freezeCounter": true
-    }
+    },
+    "boardPriority": "dominant"
   },
   "textPolicy": {
     "themeTitleInGameplay": false,
@@ -39,6 +48,11 @@
     "visualRole": "boundary-breaking-portal",
     "directionIsPrimary": true,
     "textRequiredForRecognition": false,
-    "directions": ["up", "right", "down", "left"]
+    "directions": [
+      "up",
+      "right",
+      "down",
+      "left"
+    ]
   }
 }
