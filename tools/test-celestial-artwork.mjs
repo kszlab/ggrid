@@ -38,6 +38,8 @@ assert.ok(renderer.includes("(spec.target||spec.renderTarget)==='zone'"),'scene 
 assert.ok(!css.includes('.edge-control .emboss-arrow.sr-asset-visual'),'celestial controls must not fall back to floating arrow artwork');
 assert.match(css,/\.scene-artwork \.edge-control\s*\{[^}]*z-index:10!important;/s,'artwork controls must render above board frame');
 assert.match(css,/\.edge-control\.art-control-zone\s*\{[^}]*background-size:100% 100%!important;/s,'full artwork control zones must fill their hit geometry');
+assert.match(css,/\.edge-control\.art-control-zone\.pressed,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.edge-control\.art-control-zone:active\s*\{[^}]*background-image:var\(--sr-asset-image\)!important;/s,'pressed state must preserve the zone artwork');
+assert.match(css,/\.edge-control\.art-control-zone\.pressed \.emboss-arrow\.sr-asset-visual,/s,'pressed state must affect the arrow cue, not the whole zone');
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
 assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s,'ball must remain above the exit portal');
 assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:118%;height:76%\}/s,'horizontal exit portal must use compact boundary footprint');
@@ -48,9 +50,13 @@ for(const dir of directions){
  const spec=theme.artwork.controls[dir];
  assert.equal(spec?.target,'zone','control must render as full zone '+dir);
  assert.ok(spec?.asset?.includes('control-zone-'),'control must use zone artwork '+dir);
+ assert.ok(spec?.cue?.asset?.includes(`control-${dir}.svg`),'control must use a separate pressed cue '+dir);
  const svg=fs.readFileSync('content/themes/celestial-library/'+spec.asset,'utf8');
+ const cue=fs.readFileSync('content/themes/celestial-library/'+spec.cue.asset,'utf8');
  assert.ok(svg.includes(`data-direction="${dir}"`),'direction metadata mismatch for '+dir);
  assert.ok(svg.includes('data-role="control-zone"'),'missing control-zone role '+dir);
+ assert.ok(cue.includes(`data-direction="${dir}"`),'cue direction metadata mismatch for '+dir);
+ assert.ok(!svg.includes('fill="url(#gold2)"'),'zone artwork must not contain the pressed arrow glyph '+dir);
 }
 assert.ok(theme.artwork.layers?.environment?.portrait?.includes('scene-lighting.svg'),'missing cinematic lighting layer');
 assert.equal(theme.artwork.pieces?.brickSingle?.variants?.length,3,'single-cell codices need three visual variants');
