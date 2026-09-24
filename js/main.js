@@ -137,7 +137,24 @@ function render(opts={}){
  syncSoundControls();
  SceneRenderer?.afterBoardRender?.(board);
  board.querySelectorAll('.freeze-selection-marker').forEach(el=>el.remove());
- if(freezeArmed&&freezeId!=null){const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);if(selected)for(const c of selected.cells){const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker)}}
+ if(freezeArmed&&freezeId!=null){
+  const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);
+  if(selected){
+   const cells=selected.cells||[];
+   if(cells.length>1){
+    const xs=cells.map(c=>c.x),ys=cells.map(c=>c.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+    const marker=document.createElement('div'),p=pctPos(selected.x+minX,selected.y+minY,state.width,state.height);
+    const shapeId=RigidShapes?.identify?.(cells)||'',clip=RigidShapes?.clipPath?.(shapeId)||'';
+    marker.className='freeze-selection-marker freeze-selection-composite '+(RigidShapes?.cssClass?.(shapeId)||'');
+    marker.dataset.shapeId=shapeId;marker.style.left=p.left;marker.style.top=p.top;
+    marker.style.width=((maxX-minX+1)*100/state.width)+'%';marker.style.height=((maxY-minY+1)*100/state.height)+'%';
+    if(clip)marker.style.clipPath=clip;marker.setAttribute('aria-hidden','true');board.append(marker);
+   }else for(const c of cells){
+    const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);
+    marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker);
+   }
+  }
+ }
 }
 /* ===== v0.12.98 TWO-BALL LEVEL LIBRARY =====
    Separate, pre-generated and solver-verified library. It uses the same size,
