@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" type="image/x-icon" href="favicon.ico?v=0.12.99">
-<link rel="icon" type="image/svg+xml" href="favicon.svg?v=0.12.99" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=0.12.99">
-<title>GGrid – v0.12.99 letisztult UI</title>
-<link rel="stylesheet" href="css/game.css?v=0.12.99">
-<link rel="stylesheet" href="css/game-ui-theme.css?v=0.12.99"></head>
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=0.13.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg?v=0.13.0" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=0.13.0">
+<title>GGrid – v0.13.0 letisztult UI</title>
+<link rel="stylesheet" href="css/game.css?v=0.13.0">
+<link rel="stylesheet" href="css/game-ui-theme.css?v=0.13.0"></head>
 <body data-ui-context="shell">
 <div id="startup" class="startup" aria-live="polite"><div class="startup-card"><div class="startup-title">GGrid</div><div class="startup-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="startup-ball"></i><i></i><i></i><i class="startup-brick"></i><i></i></div><div class="startup-text">A játék töltődik…</div></div></div>
 
 <div id="homeScreen" class="home-screen">
  <div class="home-card">
   <div class="home-logo">GGrid</div>
-  <div class="home-version">v0.12.99</div>
+  <div class="home-version">v0.13.0</div>
   <button type="button" id="scenarioOpen" hidden></button>
   <button type="button" id="homeFreePlay" class="primary-home">▶ Szabad játék <span id="homeLevelId" class="home-level-id">—</span></button>
   <button type="button" id="homeSettings">⚙ Beállítások</button>
@@ -86,7 +86,7 @@
   <button type="button" id="freeSetupPlay" class="free-play-launch">▶ JÁTÉK INDÍTÁSA</button>
   <button type="button" id="freeSetupMultiBall" class="multiball-test-launch">●● 2 GOLYÓS JÁTÉK</button>
   <div class="multiball-test-note">A fenti méret, D1–D10 nehézség és téma szerint · egyelőre pontozás nélkül</div>
-  <div class="panel-version">GGrid v0.12.99</div>
+  <div class="panel-version">GGrid v0.13.0</div>
  </div>
 </div>
 
@@ -98,7 +98,7 @@
  <button type="button" id="menuHelp">❔ Játékleírás</button>
  <button type="button" id="menuSettings">⚙ Beállítások</button>
  <button type="button" id="menuHome">⌂ Kilépés a főmenübe</button>
- <div class="panel-version">GGrid v0.12.99</div>
+ <div class="panel-version">GGrid v0.13.0</div>
 </div></div>
 
 <div id="settingsPanel" class="ui-panel" hidden><div class="ui-card settings-card">
@@ -121,7 +121,7 @@
   <section id="shellThemeSection"><h3>Főképernyő és menük</h3><label for="shellThemeSelect">Megjelenés</label> <select id="shellThemeSelect"><option value="classic">Klasszikus</option><option value="warm">Meleg üveg</option></select></section>
   <section id="freeSettings"><h3>Szabad játék</h3><div id="settingsFree"></div></section>
  <div id="settingsCode" hidden></div>
- <div class="panel-version">GGrid v0.12.99</div>
+ <div class="panel-version">GGrid v0.13.0</div>
 </div></div>
 
 <div id="helpPanel" class="ui-panel" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden><div class="ui-card help-card">
@@ -133,22 +133,22 @@
   <section><h3>Segítségek</h3><p>A <strong>💡</strong> rövid megnyomása 1 pontért megmutatja a következő optimális irányt. A játék közbeni 💡 gombot <strong>3 másodpercig nyomva tartva</strong> a motor szemmel követhető lépésekkel bemutatja a Freeze nélküli megoldást az aktuális állásból. Ez ingyenes, de az adott menetért nem jár pont; újrakezdés után újra szerezhetsz pontot. Ha abból az állásból nincs megtalálható megoldás, a játék jelzi.</p><p>A <strong>❄ Freeze</strong> gombbal lépj kijelölési módba. Érintsd meg a helyben tartandó golyót vagy mozgatható blokkot. Ugyanarra újra bökve törölheted a kijelölést; másik elemet megérintve átteheted rá. A Freeze gomb újabb megnyomásával pontlevonás nélkül kiléphetsz. Kijelölt elem mellett az első irányparancs 10 pontba kerül akkor is, ha semmi nem mozdul; ezután a Freeze-mód megszűnik. 10 pont alatt a gomb nem érhető el.</p></section>
   <section><h3>Hang és menü</h3><p>A Beállításokban a játék akcióhangjai és a téma háttérhangja külön kapcsolhatók. A ☰ menüből újrakezdhetsz, új pályát kérhetsz, megnyithatod a beállításokat vagy visszatérhetsz a főképernyőre.</p></section>
  </div>
- <div class="panel-version">GGrid v0.12.99</div>
+ <div class="panel-version">GGrid v0.13.0</div>
 </div></div>
 
 <div id="scenarioPanel" class="scenario-panel" hidden><div class="scenario-card"><div class="scenario-head"><strong id="scenarioTitle">Játékmód</strong><button type="button" id="scenarioClose">✕</button></div><div id="scenarioDesc" class="scenario-desc">Válassz forgatókönyvet, vagy térj vissza a szabad játékhoz.</div><div id="scenarioList" class="scenario-list"></div><div class="scenario-actions"><button type="button" id="playScenario" disabled>Indítás</button><button type="button" id="freePlay">Szabad játék</button></div></div></div>
 
 <div id="calibration" class="calibration" hidden><div class="cal-card"><div class="cal-head"><strong>GGrid · mozdulatmérés</strong><button type="button" id="calClose" aria-label="Mérés bezárása">✕</button></div><div id="calPhase" class="cal-phase">Előkészítés</div><div id="calArrow" class="cal-arrow">•</div><div id="calInstruction" class="cal-instruction">Tartsd a képernyőt magad felé, a telefont kényelmes helyzetben.</div><div class="cal-progress"><i id="calProgress"></i></div><div id="calStats" class="cal-stats"></div><div class="cal-actions"><button type="button" id="calStart">Mérés indítása</button><button type="button" id="calExport" disabled>JSON-fájl letöltése</button></div><div class="cal-small">A nyilaknál röviden billents az adott irányba. A CSÚSZTASD feliratoknál mozgasd a telefont a kijelző síkjában, billentés nélkül; végig nézzen feléd a képernyő. Emelés és süllyesztés közben is nézzen feléd. A csúsztatás, emelés és süllyesztés nem játékirány. A mentés kizárólag az érzékelők mérési adatait tartalmazza.</div></div></div>
 
-<script src="js/game-core.js?v=0.12.99"></script>
-<script src="js/solver.js?v=0.12.99"></script>
-<script src="js/level-library.js?v=0.12.99"></script>
-<script src="js/multiball-library.js?v=0.12.99"></script>
-<script src="js/audio.js?v=0.12.99"></script>
-<script src="js/scene-renderer.js?v=0.12.99"></script>
-<script src="js/motion-model.js?v=0.12.99"></script>
-<script src="js/motion-gesture.js?v=0.12.99"></script>
-<script src="js/main.js?v=0.12.99"></script>
-<script src="js/scenario-loader.js?v=0.12.99"></script>
-<script src="js/ui-shell.js?v=0.12.99"></script>
+<script src="js/game-core.js?v=0.13.0"></script>
+<script src="js/solver.js?v=0.13.0"></script>
+<script src="js/level-library.js?v=0.13.0"></script>
+<script src="js/multiball-library.js?v=0.13.0"></script>
+<script src="js/audio.js?v=0.13.0"></script>
+<script src="js/rigid-shapes.js?v=0.13.0"></script>\n<script src="js/scene-renderer.js?v=0.13.0"></script>
+<script src="js/motion-model.js?v=0.13.0"></script>
+<script src="js/motion-gesture.js?v=0.13.0"></script>
+<script src="js/main.js?v=0.13.0"></script>
+<script src="js/scenario-loader.js?v=0.13.0"></script>
+<script src="js/ui-shell.js?v=0.13.0"></script>
 </body></html>
