@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.7
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.8
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -27,18 +27,19 @@ body[data-theme="celestial-library"] .board-wrap.scene-artwork{
 }
 body[data-theme="celestial-library"] .scene-artwork-background>img{
  object-fit:cover;
- filter:saturate(1.05) brightness(.82);
+ filter:saturate(1.03) brightness(.72);
 }
 body[data-theme="celestial-library"] .scene-artwork-environment{
- background:radial-gradient(circle at 50% 42%,transparent 0 32%,#02050aa8 82%),
- linear-gradient(90deg,#02050a66,transparent 22% 78%,#02050a66);
+ background:
+  radial-gradient(ellipse at 50% 46%,transparent 0 37%,#02050a78 72%,#02050acc 100%),
+  linear-gradient(90deg,#02050a8f,transparent 19% 81%,#02050a8f);
  z-index:2;
 }
 body[data-theme="celestial-library"] .scene-artwork .board{
  border:0!important;
  border-radius:9px;
  background:#bda97c;
- box-shadow:0 12px 24px #000b,inset 0 0 0 2px #6e5124;
+ box-shadow:0 14px 30px #000c,0 0 24px #e7bf5a26,inset 0 0 0 2px #6e5124;
  overflow:visible;
 }
 body[data-theme="celestial-library"] .scene-artwork .cell{
@@ -113,9 +114,14 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control:active{
  background:radial-gradient(circle at center,#f2c96b2b,transparent 68%);
  filter:brightness(1.25);
 }
-body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{
+body[data-theme="celestial-library"] .scene-artwork .edge-control .emboss-arrow.sr-asset-visual{
  background-size:contain!important;
  width:38px;height:38px;
+ transform:none!important;
+}
+body[data-theme="celestial-library"] .scene-artwork .edge-control:active .emboss-arrow.sr-asset-visual,
+body[data-theme="celestial-library"] .scene-artwork .edge-control.pressed .emboss-arrow.sr-asset-visual{
+ transform:translateY(1px)!important;
 }
 
 /* Compact HUD: Freeze may show count; Hint remains icon-only. */
