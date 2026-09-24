@@ -2,13 +2,21 @@
 const ScenarioMode=(()=>{
  const ROOT='content/',progressKey='ggrid.scenario.progress.v1',localStore='ggrid.local.scenarios.v1';
  let active=false,scenario=null,chapterIndex=0,stageIndex=0,effective=null,timerId=null,timeLeft=null;
- const freeThemeEl=document.querySelector('#freeTheme');let freeThemeIndex=null,themeCssLink=null;
+ const freeThemeEl=document.querySelector('#freeTheme');let freeThemeIndex=null,themeCssLink=null;const preloadedThemeAssets=new Set();
  async function applyThemeAssetCss(t,base){
   const src=t?.assets?.css||t?.css||null;
-  if(themeCssLink){themeCssLink.remove();themeCssLink=null}
-  if(!src||String(base).startsWith('local:'))return;
-  themeCssLink=document.createElement('link');themeCssLink.rel='stylesheet';themeCssLink.dataset.ggridThemeCss='1';themeCssLink.href=refUrl(base,src);document.head.append(themeCssLink);
-  await new Promise(resolve=>{themeCssLink.onload=resolve;themeCssLink.onerror=resolve});
+  if(!src||String(base).startsWith('local:')){if(themeCssLink){themeCssLink.remove();themeCssLink=null}return}
+  const next=document.createElement('link');next.rel='stylesheet';next.dataset.ggridThemeCss='1';next.href=refUrl(base,src);document.head.append(next);
+  await new Promise(resolve=>{next.onload=resolve;next.onerror=resolve});
+  const old=themeCssLink;themeCssLink=next;if(old&&old!==next)old.remove();
+ }
+ async function preloadThemeAssets(t,base){
+  const items=t?.assets?.preload;if(!Array.isArray(items)||!items.length||String(base).startsWith('local:'))return;
+  await Promise.allSettled(items.filter(src=>typeof src==='string'&&src.trim()).map(src=>new Promise(resolve=>{
+   const url=refUrl(base,src);if(preloadedThemeAssets.has(url)){resolve();return}
+   const img=new Image();let done=false;const finish=()=>{if(done)return;done=true;preloadedThemeAssets.add(url);resolve()};
+   img.onload=finish;img.onerror=finish;img.src=url;if(img.complete)finish();
+  })));
  }
  const panel=document.querySelector('#scenarioPanel'),list=document.querySelector('#scenarioList'),title=document.querySelector('#scenarioTitle'),desc=document.querySelector('#scenarioDesc'),info=document.querySelector('#scenarioInfo');
  const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
@@ -65,7 +73,7 @@ const ScenarioMode=(()=>{
    if(!freeThemeIndex){freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index')}
    const entry=(freeThemeIndex.themes||[]).find(t=>t.id===id)||(freeThemeIndex.themes||[]).find(t=>t.id==='classic');
    if(!entry)throw Error('INVALID_REFERENCE theme '+id);
-   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');t.__index=entry;await applyThemeAssetCss(t,url);applyTheme(t);
+   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');t.__index=entry;await preloadThemeAssets(t,url);await applyThemeAssetCss(t,url);applyTheme(t);
    try{localStorage.setItem('ggrid.freeplay.theme.v1',entry.id)}catch(_){}
    return t;
   }catch(e){console.error(e);SceneRenderer?.clear?.();AudioManager?.setThemeAudio?.(null)}
@@ -108,7 +116,7 @@ const ScenarioMode=(()=>{
  async function loadStage(ci,si){
   chapterIndex=ci;stageIndex=si;effective=resolveStage();
   if(effective.completion?.type&&effective.completion.type!=='allBallsExited')throw Error('UNSUPPORTED_COMPLETION');
-  const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');await applyThemeAssetCss(theme,theme.__url);applyTheme(theme);
+  const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');await preloadThemeAssets(theme,theme.__url);await applyThemeAssetCss(theme,theme.__url);applyTheme(theme);
   const lvl=await loadRef(effective.stage.level,effective.base,'ggrid-level'),s=toState(lvl);
   resetWinState();state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentLevelId='Scenario: '+scenario.id+' / '+effective.stage.id;
   active=true;document.body.classList.add('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();MotionControl?.onNewLevel?.();

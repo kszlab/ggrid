@@ -287,6 +287,16 @@
     "markup": "<div class=\"cl-preview-window\"></div><div class=\"cl-preview-shelf ps-left\"></div><div class=\"cl-preview-shelf ps-right\"></div><div class=\"cl-preview-lamp pl-a\"></div><div class=\"cl-preview-lamp pl-b\"></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero cl-preview-orb\"></i><i class=\"piece object cl-preview-book b1\"></i><i class=\"piece object cl-preview-book b2\"></i><i class=\"piece object cl-preview-stone s1\"></i><i class=\"piece object long-machine cl-preview-atlas\"></i><i class=\"exit cl-preview-gate\">✦</i></div><div class=\"cl-preview-orrery\"></div><div class=\"scene-label\">CSILLAGKÖNYVTÁR <b>AZ ÉGI ARCHÍVUM</b></div>"
   },
   "assets": {
-    "css": "theme.css?v=0.13.1"
+    "css": "theme.css?v=0.13.1",
+    "preload": [
+      "library-scene.svg",
+      "constellation-tile.svg",
+      "celestial-ornament.svg"
+    ]
+  },
+  "render": {
+    "pieceInsetPx": 1.8,
+    "rigidInsetPx": 1.8,
+    "moveMs": 190
   }
 }
