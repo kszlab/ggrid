@@ -1,40 +1,125 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1800" preserveAspectRatio="xMidYMid slice">
 <defs>
- <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#06101d"/><stop offset=".52" stop-color="#10233a"/><stop offset="1" stop-color="#090f18"/></linearGradient>
- <radialGradient id="win"><stop stop-color="#5273a9"/><stop offset=".42" stop-color="#182d52"/><stop offset="1" stop-color="#08101e"/></radialGradient>
- <linearGradient id="wood" x1="0" x2="1"><stop stop-color="#25170f"/><stop offset=".5" stop-color="#5a3620"/><stop offset="1" stop-color="#21130e"/></linearGradient>
- <linearGradient id="brass" x1="0" x2="1"><stop stop-color="#7c5727"/><stop offset=".46" stop-color="#e2bd72"/><stop offset=".7" stop-color="#9b6b31"/><stop offset="1" stop-color="#4d3219"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+  <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+    <stop stop-color="#030711"/><stop offset=".34" stop-color="#0b1e39"/><stop offset=".7" stop-color="#17395f"/><stop offset="1" stop-color="#080b12"/>
+  </linearGradient>
+  <radialGradient id="windowSky" cx=".52" cy=".34" r=".72">
+    <stop stop-color="#31598b"/><stop offset=".46" stop-color="#102b52"/><stop offset="1" stop-color="#050915"/>
+  </radialGradient>
+  <linearGradient id="wood" x1="0" x2="1">
+    <stop stop-color="#1a0e09"/><stop offset=".23" stop-color="#4c2917"/><stop offset=".5" stop-color="#7a4a27"/><stop offset=".72" stop-color="#3c2114"/><stop offset="1" stop-color="#120907"/>
+  </linearGradient>
+  <linearGradient id="brass" x1="0" x2="1">
+    <stop stop-color="#4a2e12"/><stop offset=".18" stop-color="#aa7734"/><stop offset=".42" stop-color="#f6d992"/><stop offset=".62" stop-color="#b67b35"/><stop offset=".84" stop-color="#76501f"/><stop offset="1" stop-color="#2c1b0d"/>
+  </linearGradient>
+  <linearGradient id="blueMetal" x1="0" y1="0" x2="1" y2="1">
+    <stop stop-color="#0b1628"/><stop offset=".42" stop-color="#17365b"/><stop offset=".7" stop-color="#0a2442"/><stop offset="1" stop-color="#050d18"/>
+  </linearGradient>
+  <radialGradient id="lamp" cx=".5" cy=".5" r=".5">
+    <stop stop-color="#fff8d8" stop-opacity=".98"/><stop offset=".16" stop-color="#ffd580" stop-opacity=".9"/><stop offset=".52" stop-color="#f0a83f" stop-opacity=".34"/><stop offset="1" stop-color="#ed9a26" stop-opacity="0"/>
+  </radialGradient>
+  <pattern id="booksA" width="96" height="210" patternUnits="userSpaceOnUse">
+    <rect width="96" height="210" fill="#25130d"/>
+    <rect x="2" y="52" width="15" height="145" rx="2" fill="#762934"/><rect x="18" y="36" width="13" height="161" fill="#24446d"/>
+    <rect x="32" y="65" width="19" height="132" fill="#2f5d48"/><rect x="52" y="28" width="16" height="169" fill="#6e4424"/>
+    <rect x="69" y="48" width="11" height="149" fill="#1e3556"/><rect x="81" y="60" width="13" height="137" fill="#7b3036"/>
+    <g stroke="#d8af62" stroke-opacity=".68" stroke-width="2">
+      <path d="M5 75h9M5 175h9M21 63h7M21 170h7M36 90h11M36 173h11M55 55h10M55 164h10M71 72h7M71 174h7M84 88h7M84 170h7"/>
+    </g>
+  </pattern>
+  <pattern id="stars" width="150" height="150" patternUnits="userSpaceOnUse">
+    <circle cx="18" cy="31" r="2.3" fill="#fff6cf"/><circle cx="84" cy="18" r="1.4" fill="#b9dcff"/>
+    <circle cx="127" cy="76" r="2" fill="#fff4bb"/><circle cx="46" cy="111" r="1.7" fill="#e5efff"/>
+    <path d="M18 31L84 18L127 76M46 111L84 18" fill="none" stroke="#9bc9ff" stroke-opacity=".17" stroke-width="1"/>
+  </pattern>
+  <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+    <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".6"/>
+  </filter>
 </defs>
-<rect width="1200" height="1600" fill="url(#bg)"/>
-<ellipse cx="600" cy="350" rx="310" ry="390" fill="url(#win)" stroke="url(#brass)" stroke-width="20"/>
-<ellipse cx="600" cy="360" rx="270" ry="350" fill="none" stroke="#d8b56a" stroke-opacity=".55" stroke-width="4"/>
-<g fill="#fff7d0">
- <circle cx="470" cy="180" r="4"/><circle cx="690" cy="160" r="3"/><circle cx="780" cy="290" r="5"/><circle cx="530" cy="430" r="3"/><circle cx="385" cy="335" r="3"/><circle cx="660" cy="525" r="4"/><circle cx="840" cy="480" r="2.5"/>
+
+<rect width="1200" height="1800" fill="url(#night)"/>
+<rect width="1200" height="1800" fill="url(#stars)" opacity=".72"/>
+
+<!-- monumental observatory window -->
+<path d="M278 0H922V770C922 908 800 1010 600 1010S278 908 278 770Z" fill="url(#windowSky)" stroke="url(#brass)" stroke-width="18"/>
+<path d="M314 8H886V760C886 870 784 960 600 960S314 870 314 760Z" fill="none" stroke="#f0d18b" stroke-opacity=".46" stroke-width="4"/>
+<path d="M600 5V955M315 414H886" stroke="#caa15b" stroke-opacity=".52" stroke-width="5"/>
+<path d="M360 840Q600 610 840 840M360 790Q600 560 840 790M390 725Q600 530 810 725" fill="none" stroke="#8db9ed" stroke-opacity=".18" stroke-width="3"/>
+<circle cx="600" cy="320" r="120" fill="none" stroke="#d7b86b" stroke-opacity=".22" stroke-width="4"/>
+<circle cx="600" cy="320" r="78" fill="none" stroke="#91b8e6" stroke-opacity=".2" stroke-width="2"/>
+
+<!-- side library architecture -->
+<g filter="url(#shadow)">
+  <path d="M0 0H290V1420H0Z" fill="url(#wood)" stroke="#5c351c" stroke-width="12"/>
+  <path d="M910 0H1200V1420H910Z" fill="url(#wood)" stroke="#5c351c" stroke-width="12"/>
+  <rect x="18" y="56" width="252" height="1322" rx="24" fill="url(#booksA)" stroke="url(#brass)" stroke-width="8"/>
+  <rect x="930" y="56" width="252" height="1322" rx="24" fill="url(#booksA)" stroke="url(#brass)" stroke-width="8"/>
 </g>
-<g stroke="#8db7eb" stroke-opacity=".35" fill="none" stroke-width="2">
- <path d="M470 180L530 240L610 210L690 160"/><path d="M530 430L610 480L660 525L755 470"/><path d="M385 335L455 300L530 330"/>
+
+<!-- shelf beams -->
+<g fill="url(#brass)" opacity=".95">
+  <rect x="8" y="260" width="272" height="18" rx="8"/><rect x="8" y="503" width="272" height="18" rx="8"/><rect x="8" y="746" width="272" height="18" rx="8"/>
+  <rect x="8" y="989" width="272" height="18" rx="8"/><rect x="8" y="1232" width="272" height="18" rx="8"/>
+  <rect x="920" y="260" width="272" height="18" rx="8"/><rect x="920" y="503" width="272" height="18" rx="8"/><rect x="920" y="746" width="272" height="18" rx="8"/>
+  <rect x="920" y="989" width="272" height="18" rx="8"/><rect x="920" y="1232" width="272" height="18" rx="8"/>
 </g>
-<g fill="url(#wood)" stroke="#9b6b31" stroke-width="8">
- <rect x="0" y="120" width="260" height="1110" rx="28"/><rect x="940" y="120" width="260" height="1110" rx="28"/>
+
+<!-- twisted brass columns -->
+<g fill="none" stroke="url(#brass)" stroke-width="16" opacity=".95">
+  <path d="M286 30C246 170 330 260 286 395S330 630 286 770S330 1010 286 1160S330 1360 286 1490"/>
+  <path d="M914 30C954 170 870 260 914 395S870 630 914 770S870 1010 914 1160S870 1360 914 1490"/>
 </g>
-<g stroke="#c69d5c" stroke-width="5" opacity=".7">
- <path d="M20 320H245M20 520H245M20 720H245M20 920H245M955 320H1180M955 520H1180M955 720H1180M955 920H1180"/>
+<g fill="#e7c77e"><circle cx="286" cy="30" r="17"/><circle cx="286" cy="1490" r="17"/><circle cx="914" cy="30" r="17"/><circle cx="914" cy="1490" r="17"/></g>
+
+<!-- lamps and warm pools -->
+<g opacity=".95">
+  <circle cx="210" cy="300" r="125" fill="url(#lamp)" filter="url(#soft)"/><circle cx="990" cy="300" r="125" fill="url(#lamp)" filter="url(#soft)"/>
+  <circle cx="160" cy="1050" r="150" fill="url(#lamp)" filter="url(#soft)"/><circle cx="1040" cy="1050" r="150" fill="url(#lamp)" filter="url(#soft)"/>
+  <g fill="url(#brass)" stroke="#e8c980" stroke-width="3">
+    <path d="M184 210h52l18 54-44 38-44-38Z"/><path d="M964 210h52l18 54-44 38-44-38Z"/>
+    <path d="M134 965h52l18 54-44 38-44-38Z"/><path d="M1014 965h52l18 54-44 38-44-38Z"/>
+  </g>
+  <g fill="#fff3bd"><circle cx="210" cy="257" r="16"/><circle cx="990" cy="257" r="16"/><circle cx="160" cy="1012" r="16"/><circle cx="1040" cy="1012" r="16"/></g>
 </g>
-<g>
- <g fill="#7c2735"><rect x="30" y="190" width="28" height="118"/><rect x="92" y="171" width="34" height="137"/><rect x="1020" y="185" width="35" height="123"/></g>
- <g fill="#29436e"><rect x="62" y="205" width="27" height="103"/><rect x="130" y="182" width="31" height="126"/><rect x="1060" y="165" width="30" height="143"/><rect x="1100" y="200" width="34" height="108"/></g>
- <g fill="#355c49"><rect x="165" y="198" width="26" height="110"/><rect x="198" y="175" width="35" height="133"/><rect x="970" y="195" width="38" height="113"/><rect x="1138" y="180" width="29" height="128"/></g>
+
+<!-- observatory instruments -->
+<g transform="translate(1015 720)" fill="none" stroke="url(#brass)" stroke-width="9" opacity=".9">
+  <ellipse rx="120" ry="61"/><ellipse rx="120" ry="61" transform="rotate(57)"/><ellipse rx="120" ry="61" transform="rotate(-57)"/>
+  <circle r="20" fill="#e7c579"/><path d="M0 80v190M-48 270h96"/>
 </g>
-<g transform="translate(935 1000)" fill="none" stroke="url(#brass)" stroke-width="10">
- <ellipse rx="150" ry="80"/><ellipse rx="150" ry="80" transform="rotate(55)"/><ellipse rx="150" ry="80" transform="rotate(-55)"/><circle r="20" fill="#d7b56f"/>
+<g transform="translate(170 780)" opacity=".82">
+  <circle r="82" fill="#214665" stroke="url(#brass)" stroke-width="8"/>
+  <path d="M-65 0Q0-54 65 0M-65 20Q0-25 65 20M0-78V78M-75-25H75" fill="none" stroke="#9dd2e5" stroke-opacity=".5" stroke-width="3"/>
+  <path d="M0 82v125M-55 207h110" stroke="url(#brass)" stroke-width="9"/>
 </g>
-<g transform="translate(112 1110)" fill="none" stroke="#c9a360" stroke-width="7">
- <circle r="78"/><circle r="55"/><path d="M-82 0H82M0-82V82M-58-58L58 58M58-58L-58 58"/>
+
+<!-- telescope -->
+<g transform="translate(960 1185) rotate(-23)" filter="url(#shadow)">
+  <rect x="-18" y="-250" width="36" height="285" rx="17" fill="url(#brass)"/>
+  <rect x="-32" y="-235" width="64" height="120" rx="20" fill="url(#blueMetal)" stroke="#e0bd70" stroke-width="6"/>
+  <ellipse cy="-240" rx="38" ry="22" fill="#0c1626" stroke="#f0ce82" stroke-width="5"/>
+  <path d="M0 30L-82 205M0 30L82 205M0 30V225" stroke="url(#brass)" stroke-width="11"/>
 </g>
-<g fill="#f6d58e" opacity=".22" filter="url(#glow)">
- <circle cx="170" cy="1035" r="60"/><circle cx="1030" cy="980" r="65"/>
+
+<!-- lower reading hall / desks -->
+<rect y="1415" width="1200" height="385" fill="url(#wood)"/>
+<path d="M0 1460Q300 1390 600 1460T1200 1460" fill="none" stroke="url(#brass)" stroke-width="11"/>
+<path d="M0 1540Q300 1470 600 1540T1200 1540" fill="none" stroke="#d0a45c" stroke-opacity=".45" stroke-width="4"/>
+<ellipse cx="600" cy="1670" rx="310" ry="95" fill="#0a1422" stroke="url(#brass)" stroke-width="14"/>
+<ellipse cx="600" cy="1670" rx="250" ry="58" fill="none" stroke="#e2c57e" stroke-opacity=".55" stroke-width="3"/>
+<circle cx="600" cy="1670" r="24" fill="#e0bc6d"/>
+
+<!-- floating warm haze -->
+<ellipse cx="600" cy="1020" rx="310" ry="420" fill="#e2b767" opacity=".05" filter="url(#glow)"/>
+<ellipse cx="600" cy="540" rx="280" ry="380" fill="#75aaf0" opacity=".07" filter="url(#glow)"/>
+
+<!-- foreground filigree corners -->
+<g fill="none" stroke="url(#brass)" stroke-width="7" opacity=".78">
+  <path d="M22 1510c95-10 122 40 152 102-64-34-109-20-143 48 20-71 0-111-9-150Z"/>
+  <path d="M1178 1510c-95-10-122 40-152 102 64-34 109-20 143 48-20-71 0-111 9-150Z"/>
+  <path d="M20 65c74 0 120 32 154 102-67-39-111-30-144 30 18-62 5-99-10-132Z"/>
+  <path d="M1180 65c-74 0-120 32-154 102 67-39 111-30 144 30-18-62-5-99 10-132Z"/>
 </g>
-<rect x="0" y="1230" width="1200" height="370" fill="url(#wood)"/>
-<path d="M0 1280 Q300 1200 600 1260 T1200 1280" fill="none" stroke="#c39655" stroke-width="8" opacity=".65"/>
 </svg>
