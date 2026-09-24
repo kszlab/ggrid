@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.10
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.11
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -101,6 +101,7 @@ body[data-theme="celestial-library"] .scene-artwork .exit-beacon{
 
 /* Large invisible interaction bands; artwork cue remains compact and central. */
 body[data-theme="celestial-library"] .scene-artwork .edge-control{
+ z-index:10!important;
  color:#f2cf79;
  border:0;
  background:transparent;
