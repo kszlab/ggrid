@@ -42,10 +42,10 @@ function updateScore(){
    scoreValue.dataset.size=digits<=3?'lg':digits===4?'md':digits===5?'sm':digits===6?'xs':'xxs';
   }
  }
- const hintDisabled=won||test;
- if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=test?'A megoldási segítség a kétgolyós tesztben még nem aktív.':won?'A pálya már kész.':isScoredFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
+ const hintDisabled=won;
+ if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?'Kétgolyós teszt: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':isScoredFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
  const visibleHint=document.querySelector('#playHint');
- if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=test?'A megoldási segítség a kétgolyós tesztben még nem aktív.':won?'A pálya már kész.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
+ if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?'Kétgolyós teszt: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
  freezeBtn.disabled=won||!canUseFreeze()||(isScoredFreePlay()&&scoreData.balance<10);
  freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
  freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':test?'Freeze teszt: pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
@@ -139,13 +139,13 @@ function render(opts={}){
  board.querySelectorAll('.freeze-selection-marker').forEach(el=>el.remove());
  if(freezeArmed&&freezeId!=null){const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);if(selected)for(const c of selected.cells){const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker)}}
 }
-/* ===== v0.12.95 MULTI-BALL ENGINE TEST =====
+/* ===== v0.12.96 MULTI-BALL ENGINE + SOLVER TEST =====
    Isolated from the scored Level Library: fixed geometry, selected free-play
-   theme, no difficulty class, no points and no solver assistance. */
+   theme, no difficulty class and no points. Solver assistance is bounded. */
 async function startMultiBallTest(){
- cancelAutoSolve();resetWinState();
+ cancelAutoSolve();clearSolverCache();resetWinState();
  try{
-  const r=await fetch('content/levels/test-multiball-01.json?v=0.12.95',{cache:'no-cache'});
+  const r=await fetch('content/levels/test-multiball-01.json?v=0.12.96',{cache:'no-cache'});
   if(!r.ok)throw Error('MULTIBALL_TEST_FETCH');
   const l=await r.json();
   if(l.format!=='ggrid-level'||l.formatVersion!==1)throw Error('INVALID_MULTIBALL_TEST_FORMAT');
@@ -172,7 +172,7 @@ globalThis.inMultiBallTest=inMultiBallTest;
    A pályagenerálás a fejlesztői/content pipeline feladata, nem runtime funkció. */
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
- cancelAutoSolve();leaveMultiBallTest();
+ cancelAutoSolve();clearSolverCache();leaveMultiBallTest();
  resetWinState();state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
  freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';
@@ -212,18 +212,46 @@ function move(dir,automatic=false){
  setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);
 }
 let autoSolveActive=false,autoSolveTimer=null,autoSolveToken=0;
+const solverRouteCache=new Map();
+function clearSolverCache(){solverRouteCache.clear()}
+function rememberSolverRoute(start,path){
+ let cur=cloneState(start);
+ for(let i=0;i<=path.length;i++){
+  solverRouteCache.set(stateKey(cur),path.slice(i));
+  if(i<path.length)cur=step(cur,path[i],null).state;
+ }
+}
+function solveForPlay(s,mode='hint'){
+ const cached=solverRouteCache.get(stateKey(s));
+ if(cached)return{status:'solved',path:[...cached],states:0,elapsedMs:0,cached:true};
+ const multi=totalBalls(s)>1;
+ const options=mode==='auto'
+  ?{maxDepth:multi?60:40,maxStates:multi?120000:80000,timeBudgetMs:multi?1600:1200}
+  :{maxDepth:multi?50:30,maxStates:multi?60000:50000,timeBudgetMs:multi?700:600};
+ const result=solveDetailed(s,options);
+ if(result.status==='solved')rememberSolverRoute(s,result.path);
+ return result;
+}
+function solverFailureText(result){
+ if(result?.status==='unsolvable')return'Innen Freeze nélkül nincs megoldás.';
+ if(result?.status==='limit')return'A keresés elérte a számítási korlátot; ettől még lehet megoldás.';
+ return'Nem sikerült megoldást számolni.';
+}
 function cancelAutoSolve(){autoSolveToken++;if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;if(autoSolveActive){autoSolveActive=false;MotionControl?.resume?.()}}
 function startAutoSolve(){
- if(inMultiBallTest()){toast.textContent='Az automatikus megoldás a kétgolyós tesztben még nem aktív.';return}
  if(!state||state.won||autoSolveActive)return;
  stopHold();cancelFreezeSelection();hintVisible=false;
  const token=++autoSolveToken;toast.textContent='Automatikus megoldás számítása…';
  setTimeout(()=>{
   if(token!==autoSolveToken||!state)return;
-  const route=state.moves===0?optimal:solve(state,40);
+  let result;
+  if(state.moves===0&&optimal.length&&!inMultiBallTest()){
+   result={status:'solved',path:[...optimal],states:0,elapsedMs:0,cached:true};
+   rememberSolverRoute(state,result.path);
+  }else result=solveForPlay(state,'auto');
   if(token!==autoSolveToken)return;
-  if(!route?.length){toast.textContent='Innen Freeze nélkül nincs megoldás.';return}
-  // A demonstration cannot earn points, even if it is interrupted before victory.
+  if(result.status!=='solved'||!result.path?.length){toast.textContent=solverFailureText(result);return}
+  const route=result.path;
   solverUsedThisRun=true;rewardedThisRun=true;autoSolveActive=true;MotionControl?.pause?.();render({preservePieces:true});
   let index=0;
   function next(){
@@ -238,15 +266,23 @@ function startAutoSolve(){
  },0);
 }
 function hint(){
- if(inMultiBallTest()){toast.textContent='A megoldási javaslat a kétgolyós tesztben még nem aktív.';return}
  if(!state||state.won||autoSolveActive)return;
  cancelFreezeSelection();
- if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return;}
+ if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return}
  if(isScoredFreePlay()&&scoreData.balance<1)return;
  hintVisible=true;
- if(state.won){toast.textContent='A pálya már kész.';return}
  toast.textContent='Solver számol…';
- setTimeout(()=>{if(!hintVisible)return;const sol=solve(state,30);if(!sol)toast.textContent='Innen Freeze nélkül nincs megoldás.';else{if(isScoredFreePlay()&&!spendScore(1)){hintVisible=false;return}const arrows={up:'↑',down:'↓',left:'←',right:'→'};toast.textContent=`Innen minimum ${sol.length} lépés. Következő optimális irány: ${arrows[sol[0]]}`;}updateScore()},0);
+ setTimeout(()=>{
+  if(!hintVisible||!state)return;
+  const result=solveForPlay(state,'hint');
+  if(!hintVisible)return;
+  if(result.status!=='solved'||!result.path?.length){toast.textContent=solverFailureText(result);updateScore();return}
+  if(isScoredFreePlay()&&!spendScore(1)){hintVisible=false;return}
+  const arrows={up:'↑',down:'↓',left:'←',right:'→'};
+  const cacheNote=result.cached?'':'';
+  toast.textContent=`Innen minimum ${result.path.length} lépés. Következő optimális irány: ${arrows[result.path[0]]}${cacheNote}`;
+  updateScore();
+ },0);
 }
 
 /* ===== v0.5 PRESS / HOLD INPUT =====
@@ -589,7 +625,7 @@ const CalibrationLab=(()=>{
 })();
 
 freezeBtn.addEventListener('click',()=>{if(state?.won||autoSolveActive||freezeBtn.disabled)return;if(freezeArmed){cancelFreezeSelection();return}freezeArmed=true;freezeId=null;stopHold();MotionControl.pause();render({preservePieces:true});});
-document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();resetWinState();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();MotionControl.resume();});
+document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();clearSolverCache();resetWinState();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();MotionControl.resume();});
 document.querySelector('#new').addEventListener('click',()=>{hideVictory();if(inMultiBallTest()){state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();}else newLevel();MotionControl.resume();});
 victoryRestart.addEventListener('click',()=>document.querySelector('#restart').click());
 victoryChoose.addEventListener('click',()=>{hideVictory();AppUI?.openFreeSetup?.()});
@@ -620,7 +656,7 @@ soundBtn.addEventListener('click',async()=>{await AudioManager.toggleEffects();s
 ambientBtn.addEventListener('click',async()=>{await AudioManager.toggleAmbient();syncSoundControls()});
 syncSoundControls();
 function changeLevelProfile(){
- cancelAutoSolve();leaveMultiBallTest();
+ cancelAutoSolve();clearSolverCache();leaveMultiBallTest();
  
  /* A régi pálya ne maradjon látható, miközben az új méret készül. */
  state=null;initial=null;optimal=[];currentLevelId='';

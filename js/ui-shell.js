@@ -25,7 +25,7 @@ const AppUI=(()=>{
   menu.hidden=false;MotionControl?.pause?.();
   const active=!!ScenarioMode?.active,test=!!globalThis.inMultiBallTest?.();
   document.querySelector('#menuTitle').textContent=active?'Játék':test?'Kétgolyós teszt':'Szabad játék';
-  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):test?'Fix 5×5 prototípus · pontozás nélkül':'Aktuális pálya';
+  document.querySelector('#menuStage').textContent=active?(document.querySelector('#scenarioInfo').textContent||'Forgatókönyv'):test?'Fix 5×8 prototípus · pontozás nélkül':'Aktuális pálya';
   document.querySelector('#menuNew').hidden=active||test;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}

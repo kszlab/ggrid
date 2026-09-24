@@ -1,11 +1,44 @@
-/* ===== SOLVER ===== */
-function stateKey(s){return s.objects.map(o=>`${o.id}:${o.exited?'X':o.x+','+o.y}`).join('|');}
+/* ===== SOLVER =====
+   v0.12.96: bounded detailed search + interchangeable-ball state keys.
+   solve() remains backward compatible for offline tools and Freeze analysis. */
+function solverNow(){return globalThis.performance?.now?.()??Date.now()}
+function stateKey(s){
+ const balls=s.objects.filter(o=>o.type==='ball');
+ const activeBalls=balls.filter(o=>!o.exited).map(o=>{
+  const shape=(o.cells||[{x:0,y:0}]).map(c=>c.x+','+c.y).sort().join(';');
+  return o.x+','+o.y+'@'+shape;
+ }).sort();
+ const exitedBalls=balls.length-activeBalls.length;
+ const others=s.objects.filter(o=>o.type!=='ball').map(o=>`${o.id}:${o.exited?'X':o.x+','+o.y}`).join('|');
+ return `${s.width}x${s.height}@${s.exit.x},${s.exit.y},${s.exit.dir}|B:${exitedBalls}:${activeBalls.join('/')}${others?'|'+others:''}`;
+}
+function solverPath(node){
+ const out=[];for(let n=node;n?.parent;n=n.parent)out.push(n.dir);
+ return out.reverse();
+}
+function solveDetailed(initial,{maxDepth=30,maxStates=Infinity,timeBudgetMs=0}={}){
+ const started=solverNow(),start=cloneState(initial);start.moves=0;
+ if(start.objects.every(o=>o.type!=='ball'||o.exited))return{status:'solved',path:[],states:1,elapsedMs:0};
+ const startKey=stateKey(start),q=[{s:start,key:startKey,parent:null,dir:null,depth:0}],seen=new Set([startKey]);
+ let qi=0,depthLimited=false;
+ while(qi<q.length){
+  if(timeBudgetMs>0&&solverNow()-started>=timeBudgetMs)return{status:'limit',reason:'time',path:null,states:seen.size,elapsedMs:Math.round(solverNow()-started)};
+  const n=q[qi++];
+  if(n.depth>=maxDepth){depthLimited=true;continue}
+  for(const dir of DIR_NAMES){
+   const ns=step(n.s,dir,null).state,k=stateKey(ns);
+   if(k===n.key||seen.has(k))continue;
+   const child={s:ns,key:k,parent:n,dir,depth:n.depth+1};
+   if(ns.won)return{status:'solved',path:solverPath(child),states:seen.size+1,elapsedMs:Math.round(solverNow()-started)};
+   if(seen.size>=maxStates)return{status:'limit',reason:'states',path:null,states:seen.size,elapsedMs:Math.round(solverNow()-started)};
+   seen.add(k);q.push(child);
+  }
+ }
+ return{status:depthLimited?'limit':'unsolvable',reason:depthLimited?'depth':null,path:null,states:seen.size,elapsedMs:Math.round(solverNow()-started)};
+}
 function solve(initial,maxDepth=30){
- const start=cloneState(initial);start.moves=0;if(start.objects.every(o=>o.type!=='ball'||o.exited))return[];
- const q=[{s:start,path:[]}],seen=new Set([stateKey(start)]);let qi=0;
- while(qi<q.length){const n=q[qi++];if(n.path.length>=maxDepth)continue;
-  for(const dir of DIR_NAMES){const r=step(n.s,dir,null),ns=r.state,k=stateKey(ns);if(k===stateKey(n.s)||seen.has(k))continue;const p=[...n.path,dir];if(ns.won)return p;seen.add(k);q.push({s:ns,path:p});}
- }return null;
+ const result=solveDetailed(initial,{maxDepth});
+ return result.status==='solved'?result.path:null;
 }
 
 /* ===== FREEZE ANALYZER =====
