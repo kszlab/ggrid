@@ -257,3 +257,25 @@ The visible directional cue must never be hidden by the board or its 9-slice fra
 - 9-slice frame: below the control cue;
 - directional hit zones remain outside the logical board;
 - visible control cues render at artwork z-index 10 so they stay fully readable at every viewport size.
+
+
+## 19. Fidelity pass v0.15.12
+
+This pass moves the implementation from isolated artwork cues toward the approved composition.
+
+### Full control-zone artwork
+The four directional controls are complete navy/brass panels, not floating arrow icons. The artwork fills the same geometry as the touch/hold zone. Each panel contains the central directional arrow, celestial stars, fine brass rails and inner filigree.
+
+### Exit portal
+The exit is an ornate illuminated astrolabe portal anchored to the board boundary. Its main mass remains outside the logical board, overlaps only a small part of the exit cell and renders behind moving pieces so the astral ball remains legible.
+
+### Codices
+Single-cell books use deterministic blue/moon, red/sun and green/astrolabe variants. Multi-cell and L-shaped rigid bodies use dedicated codex artwork with gilt corners, book ribs and celestial motifs while preserving the exact rigid-body silhouette.
+
+### Fixed wall
+The fixed obstacle is a dark brass/stone astrolabe pedestal with a strong circular instrument silhouette, visually heavier than traversable parchment cells.
+
+### Frame and lighting
+The 9-slice frame uses layered brass rails, corner astrolabes and celestial ornaments. A transparent scene-lighting overlay adds warm candle glows at the sides and cool observatory light at the top without reducing board readability.
+
+The board remains the dominant visual element. Environment detail supports the composition but must never compete with gameplay geometry.
