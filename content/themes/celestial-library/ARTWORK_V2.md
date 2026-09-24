@@ -247,3 +247,13 @@ The exit remains a boundary-breaking portal, but it must not visually cover the 
 - vertical portals use a reduced 82% × 125% footprint;
 - the exit renders behind moving pieces;
 - the astral ball renders above the portal and remains fully legible.
+
+
+## 18. Control layering policy
+
+The visible directional cue must never be hidden by the board or its 9-slice frame.
+
+- artwork board layer: below the control cue;
+- 9-slice frame: below the control cue;
+- directional hit zones remain outside the logical board;
+- visible control cues render at artwork z-index 10 so they stay fully readable at every viewport size.
