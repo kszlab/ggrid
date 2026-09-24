@@ -92,6 +92,20 @@
    const values=[...keys.map(k=>g.peaks[k]),...keys.map(k=>g.exc[k]),g.first.right/n,g.first.up/n,g.first.az/n,g.azPeak,g.xyPeak,g.count,g.firstCount];
    const predicted=root.MotionGestureModel?.classify(values);
    if(qualified.some(c=>c.dir===predicted))return{direction:predicted,kind:'tilt'};
+   // Conservative fallback for small tilts: the ensemble intentionally
+   // abstains often, especially on weaker vertical gestures.  Only recover an
+   // abstained direction when the sensor geometry still looks like a tilt,
+   // not a translation or lift/lower movement.
+   if(qualified.length){
+    const nFirst=Math.max(1,g.firstCount),firstAz=g.first.az/nFirst;
+    if(g.xyPeak<=3&&Math.abs(firstAz)<=1.3){
+     const fallback=qualified.map(c=>({
+      ...c,first:g.first[c.dir]/nFirst,energy:c.rate*c.exc
+     })).sort((a,b)=>(b.first-a.first)||(b.energy-a.energy))[0];
+     if(fallback&&fallback.energy>=700&&(fallback.first>=10||fallback.energy>=1200))
+      return{direction:fallback.dir,kind:'tilt'};
+    }
+   }
    if(!this.allowSlides)return null;
    // Translations have strong in-plane acceleration, little depth motion and
    // almost no change of screen angle. Lifting/lowering fails the depth gate.
