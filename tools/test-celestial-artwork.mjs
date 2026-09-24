@@ -29,23 +29,32 @@ assert.equal(ref.portrait?.controls?.fullBandHitTarget,true);
 assert.equal(ref.exit?.textRequiredForRecognition,false);
 assert.equal(ref.portrait?.boardPriority,'dominant');
 assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440,'portrait board must remain visually dominant');
-assert.equal(theme.artwork.layouts.portrait.controls.cueInset,0,'direction cues must stay centered in the surrounding control gutters');
+assert.equal(theme.artwork.layouts.portrait.controls.band,42,'full artwork control zones require the approved 42-unit gutter');
+assert.equal(theme.artwork.layouts.portrait.controls.cueInset,0,'zone artwork does not need an extra cue offset');
 
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
 const arrowRule=css.match(/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{([^}]*)\}/s)?.[1]||'';
 assert.ok(arrowRule.includes('transform:translate('),'artwork arrows must use explicit cue positioning');
 assert.ok(!arrowRule.includes('rotate('),'artwork arrows must not receive legacy direction rotation');
 assert.match(css,/\.scene-artwork \.edge-control\s*\{[^}]*z-index:10!important;/s,'artwork controls must render above board frame');
+assert.match(css,/\.edge-control\.art-control-zone\s*\{[^}]*background-size:100% 100%!important;/s,'full artwork control zones must fill their hit geometry');
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
 assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s,'ball must remain above the exit portal');
-assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:125%;height:82%\}/s,'horizontal exit portal must use reduced footprint');
-assert.match(css,/\.exit-up,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-down\{width:82%;height:125%\}/s,'vertical exit portal must use reduced footprint');
+assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:118%;height:76%\}/s,'horizontal exit portal must use compact boundary footprint');
+assert.match(css,/\.exit-up,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-down\{width:76%;height:118%\}/s,'vertical exit portal must use compact boundary footprint');
 
 const directions=['up','right','down','left'];
 for(const dir of directions){
- const svg=fs.readFileSync(`content/themes/celestial-library/artwork/control-${dir}.svg`,'utf8');
+ const spec=theme.artwork.controls[dir];
+ assert.equal(spec?.target,'zone','control must render as full zone '+dir);
+ assert.ok(spec?.asset?.includes('control-zone-'),'control must use zone artwork '+dir);
+ const svg=fs.readFileSync('content/themes/celestial-library/'+spec.asset,'utf8');
  assert.ok(svg.includes(`data-direction="${dir}"`),'direction metadata mismatch for '+dir);
+ assert.ok(svg.includes('data-role="control-zone"'),'missing control-zone role '+dir);
 }
+assert.ok(theme.artwork.layers?.environment?.portrait?.includes('scene-lighting.svg'),'missing cinematic lighting layer');
+assert.equal(theme.artwork.pieces?.brickSingle?.variants?.length,3,'single-cell codices need three visual variants');
+for(const id of shapes)assert.ok(theme.artwork.pieces.rigidShapes[id].asset.includes('codex-'),'rigid shapes must use refined codex artwork '+id);
 
 const missingByShape={'L3-TL':'BR','L3-TR':'BL','L3-BL':'TR','L3-BR':'TL'};
 for(const [shape,missing] of Object.entries(missingByShape)){
