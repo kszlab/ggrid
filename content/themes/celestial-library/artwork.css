@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.9
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.10
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -78,21 +78,22 @@ body[data-theme="celestial-library"] .scene-artwork .wall.sr-asset-visual{
 
 /* The portal visibly breaks the board edge; direction is conveyed by artwork, not text. */
 body[data-theme="celestial-library"] .scene-artwork .exit{
- z-index:12;
+ z-index:2;
  border:0!important;
  background-color:transparent!important;
  box-shadow:none!important;
  overflow:visible;
 }
+body[data-theme="celestial-library"] .scene-artwork .ball{z-index:9!important}
 body[data-theme="celestial-library"] .scene-artwork .exit::after{display:none!important}
 body[data-theme="celestial-library"] .scene-artwork .exit-right,
-body[data-theme="celestial-library"] .scene-artwork .exit-left{width:165%;height:98%}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{width:125%;height:82%}
 body[data-theme="celestial-library"] .scene-artwork .exit-up,
-body[data-theme="celestial-library"] .scene-artwork .exit-down{width:98%;height:165%}
-body[data-theme="celestial-library"] .scene-artwork .exit-right{transform:translateX(49%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-49%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-49%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-down{transform:translateY(49%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{width:82%;height:125%}
+body[data-theme="celestial-library"] .scene-artwork .exit-right{transform:translateX(64%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-64%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-64%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{transform:translateY(64%)}
 body[data-theme="celestial-library"] .scene-artwork .exit-beacon{
  opacity:0!important;
  pointer-events:none!important;
@@ -172,6 +173,6 @@ body[data-theme="celestial-library"] .victory-actions button{
 
 /* Keep scene legible on small phones. */
 @media(max-width:430px){
- body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{width:32px;height:32px}
+ body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{width:26px;height:26px}
  body[data-theme="celestial-library"] .hud-row{padding:5px}
 }
