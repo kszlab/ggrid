@@ -21,8 +21,9 @@ const SceneRenderer=(()=>{
  }
  function decorateExit(el){
   if(!el||!theme)return;
+  const prev=String(el.dataset.srExitClasses||'').split(/\s+/).filter(Boolean);if(prev.length)el.classList.remove(...prev);delete el.dataset.srExitClasses;el.innerHTML='';
   const raw=theme.pieces?.exit,spec=resolvedSpec(raw,`${theme?.id||'theme'}:exit:${state?.exit?.x??0},${state?.exit?.y??0}:${state?.exit?.dir||''}`);if(!spec)return;
-  if(spec.className)el.classList.add(...String(spec.className).split(/\s+/).filter(Boolean));
+  const cl=String(spec.className||'').split(/\s+/).filter(Boolean);if(cl.length){el.classList.add(...cl);el.dataset.srExitClasses=cl.join(' ')}
   if(spec.markup!=null)el.innerHTML=spec.markup;
  }
  function componentInfo(o,ci){
