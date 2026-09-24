@@ -35,6 +35,8 @@ jobs:
         run: node tools/test-theme-layout.mjs
       - name: Artwork Theme Frame
         run: node tools/test-theme-frame.mjs
+      - name: Celestial Library artwork contract
+        run: node tools/test-celestial-artwork.mjs
       - name: Verify shape catalog
         run: node tools/scan-rigid-shapes.mjs --check
       - name: Verify theme coverage audit
