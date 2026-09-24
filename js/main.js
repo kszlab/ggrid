@@ -338,6 +338,11 @@ const MotionControl=(()=>{
  function note(t=''){motionNote.textContent=t}
  function apiPresent(){return 'DeviceMotionEvent' in window&&'DeviceOrientationEvent' in window}
  function permissionPromptNeeded(){return typeof window.DeviceMotionEvent?.requestPermission==='function'||typeof window.DeviceOrientationEvent?.requestPermission==='function'}
+ function mobileSensorPlatform(){
+  const ua=navigator.userAgent||'',uaDataMobile=navigator.userAgentData?.mobile===true;
+  const iPadOS=/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1;
+  return uaDataMobile||/Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(ua)||iPadOS;
+ }
  function uiAllowsMotion(){
   if(document.body.dataset.uiContext!=='game'||state?.won)return false;
   return ['settingsPanel','gameMenuPanel','helpPanel','freePlaySetup','calibration','scenarioPanel'].every(id=>{const el=document.getElementById(id);return !el||el.hidden});
@@ -438,7 +443,7 @@ const MotionControl=(()=>{
  }
  async function enable(setPreference=true,allowPrompt=true){
   if(setPreference){wanted=true;saveSettings()}
-  if(!apiPresent()){setAvailability('unavailable');return}
+  if(!apiPresent()||!mobileSensorPlatform()){setAvailability('unavailable');return}
   if(capability!=='available')return;
   try{
    if(permissionPromptNeeded()){
@@ -470,7 +475,7 @@ const MotionControl=(()=>{
  function adjustSettle(delta){settle=Math.max(1,Math.min(10,settle+delta));settleValue.textContent=settle+'/10';saveSettings();if(enabled)newRecognizer()}
  function setSlides(value){allowSlides=value;saveSettings();if(enabled)newRecognizer()}
  function probeCapability(){
-  if(!apiPresent()){setAvailability('unavailable');return}
+  if(!apiPresent()||!mobileSensorPlatform()){setAvailability('unavailable');return}
   if(permissionPromptNeeded()){setAvailability('available');return}
   if(document.hidden){probeTimer=setTimeout(probeCapability,1000);return}
   let gotMotion=false,gotOrientation=false,done=false;
