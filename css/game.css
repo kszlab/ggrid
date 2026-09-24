@@ -367,3 +367,31 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
  text-transform:none;
  opacity:.82;
 }
+
+
+/* v0.15.1 – artwork safe-area geometry */
+.scene-artwork{
+ padding:0!important;
+ width:100%;
+ aspect-ratio:var(--art-design-width,1) / var(--art-design-height,1);
+ overflow:hidden;
+}
+.scene-artwork .board{
+ position:absolute!important;
+ margin:0!important;
+ transform-origin:center;
+}
+.scene-artwork .edge-control{
+ position:absolute!important;
+ margin:0!important;
+ right:auto!important;
+ bottom:auto!important;
+ display:grid;
+ place-items:center;
+ cursor:pointer;
+}
+.scene-artwork .edge-control .emboss-arrow{
+ position:relative;
+ z-index:2;
+ pointer-events:none;
+}
