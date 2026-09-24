@@ -1,15 +1,38 @@
-name: Rigid shape checks
+name: GGrid validation
 
 on:
+  # Direct main development creates several small technical commits. Run the
+  # full suite only when the application version is finalized in index.html,
+  # instead of emailing for every intermediate commit.
   push:
     branches:
       - main
-      - "feature/**"
-      - "release/**"
+    paths:
+      - "index.html"
+      - ".github/workflows/rigid-shapes.yml"
+
+  # Pull requests still get full automatic validation when relevant code,
+  # content, tests or styles change.
   pull_request:
+    paths:
+      - "js/**"
+      - "content/**"
+      - "tools/**"
+      - "css/**"
+      - "index.html"
+      - ".github/workflows/rigid-shapes.yml"
+
+  # Allows an explicit full check from GitHub Actions when needed.
+  workflow_dispatch:
+
+# If a newer validation starts for the same branch/PR, do not keep an obsolete
+# run alive. This prevents duplicate failure notifications during rapid edits.
+concurrency:
+  group: ggrid-validation-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  rigid-shapes:
+  validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
