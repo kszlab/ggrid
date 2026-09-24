@@ -26,5 +26,26 @@ assert.equal(ref.portrait?.hud?.hintCounter,false);
 assert.equal(ref.portrait?.hud?.freezeCounter,true);
 assert.equal(ref.portrait?.controls?.fullBandHitTarget,true);
 assert.equal(ref.exit?.textRequiredForRecognition,false);
+assert.equal(ref.portrait?.boardPriority,'dominant');
+assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440,'portrait board must remain visually dominant');
+
+const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
+assert.match(css,/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{[^}]*transform:none!important/s,'artwork arrows must not receive legacy direction rotation');
+
+const directions=['up','right','down','left'];
+for(const dir of directions){
+ const svg=fs.readFileSync(`content/themes/celestial-library/artwork/control-${dir}.svg`,'utf8');
+ assert.ok(svg.includes(`data-direction="${dir}"`),'direction metadata mismatch for '+dir);
+}
+
+const missingByShape={'L3-TL':'BR','L3-TR':'BL','L3-BL':'TR','L3-BR':'TL'};
+for(const [shape,missing] of Object.entries(missingByShape)){
+ const file=theme.artwork.pieces.rigidShapes[shape].asset;
+ const svg=fs.readFileSync('content/themes/celestial-library/'+file,'utf8');
+ assert.ok(svg.includes(`data-shape="${shape}"`),'L artwork shape metadata mismatch '+shape);
+ assert.ok(svg.includes(`data-missing="${missing}"`),'L artwork missing-corner mismatch '+shape);
+ assert.ok(!svg.includes('<mask'),'L artwork must use a real silhouette, not a rectangular mask '+shape);
+ assert.ok(svg.includes('<clipPath'),'L artwork decorations must be clipped to the silhouette '+shape);
+}
 
 console.log('Celestial Library artwork contract passed.');
