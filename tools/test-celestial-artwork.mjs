@@ -33,9 +33,9 @@ assert.equal(theme.artwork.layouts.portrait.controls.band,42,'full artwork contr
 assert.equal(theme.artwork.layouts.portrait.controls.cueInset,0,'zone artwork does not need an extra cue offset');
 
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
-const arrowRule=css.match(/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{([^}]*)\}/s)?.[1]||'';
-assert.ok(arrowRule.includes('transform:translate('),'artwork arrows must use explicit cue positioning');
-assert.ok(!arrowRule.includes('rotate('),'artwork arrows must not receive legacy direction rotation');
+const renderer=fs.readFileSync('js/scene-renderer.js','utf8');
+assert.ok(renderer.includes("(spec.target||spec.renderTarget)==='zone'"),'scene renderer must support full-zone control artwork');
+assert.ok(!css.includes('.edge-control .emboss-arrow.sr-asset-visual'),'celestial controls must not fall back to floating arrow artwork');
 assert.match(css,/\.scene-artwork \.edge-control\s*\{[^}]*z-index:10!important;/s,'artwork controls must render above board frame');
 assert.match(css,/\.edge-control\.art-control-zone\s*\{[^}]*background-size:100% 100%!important;/s,'full artwork control zones must fill their hit geometry');
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
@@ -54,6 +54,9 @@ for(const dir of directions){
 }
 assert.ok(theme.artwork.layers?.environment?.portrait?.includes('scene-lighting.svg'),'missing cinematic lighting layer');
 assert.equal(theme.artwork.pieces?.brickSingle?.variants?.length,3,'single-cell codices need three visual variants');
+assert.ok(theme.artwork.ui?.header?.asset?.includes('header-frame.svg'),'missing celestial header artwork');
+assert.ok(theme.artwork.ui?.hud?.asset?.includes('hud-frame.svg'),'missing celestial HUD artwork');
+assert.ok(theme.artwork.board?.frame?.width?.[0]>=22,'ornate frame must keep substantial visual weight');
 for(const id of shapes)assert.ok(theme.artwork.pieces.rigidShapes[id].asset.includes('codex-'),'rigid shapes must use refined codex artwork '+id);
 
 const missingByShape={'L3-TL':'BR','L3-TR':'BL','L3-BL':'TR','L3-BR':'TL'};
