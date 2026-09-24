@@ -18,9 +18,10 @@ const AppUI=(()=>{
 
  function syncPlayActions(){const choose=document.querySelector('#playChoose'),next=document.querySelector('#playNext');if(choose)choose.hidden=!!ScenarioMode?.active;if(next)next.hidden=!!ScenarioMode?.active}
  function enterGame(){document.body.dataset.uiContext='game';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;syncPlayActions();AudioManager?.setThemeAudio?.(SceneRenderer?.theme?.audio||null);MotionControl?.resume?.()}
- function showHome(){cancelAutoSolve();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
+ function showHome(){cancelAutoSolve();cancelFreezeSelection();document.body.dataset.uiContext='shell';menu.hidden=true;settings.hidden=true;freeSetup.hidden=true;help.hidden=true;home.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.()}
  function openMenu(){
   cancelAutoSolve();
+  cancelFreezeSelection();
   menu.hidden=false;MotionControl?.pause?.();
   const active=!!ScenarioMode?.active;
   document.querySelector('#menuTitle').textContent=active?'Játék':'Szabad játék';
@@ -28,7 +29,7 @@ const AppUI=(()=>{
   document.querySelector('#menuNew').hidden=active;
  }
  function closeMenu(){menu.hidden=true;MotionControl?.resume?.()}
- function openSettings(){document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
+ function openSettings(){cancelFreezeSelection();document.body.dataset.uiContext=home.hidden?'game':'shell';shellSection.hidden=home.hidden;menu.hidden=true;settings.hidden=false;closeInfos();MotionControl?.pause?.()}
  function closeSettings(){closeInfos();settings.hidden=true;if(home.hidden)MotionControl?.resume?.()}
  let helpOpenedFromMenu=false;
  function openHelp(fromMenu=false){
@@ -74,6 +75,7 @@ const AppUI=(()=>{
  }
  const paintSize=bindSegments('#quickSize',sizeEl,syncLevelAvailability),paintDiff=bindSegments('#quickDifficulty',difficultyEl,syncLevelAvailability);
  async function openFreeSetup(){
+  cancelFreezeSelection();
   await LevelLibrary.init();
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   document.body.dataset.uiContext='shell';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.();

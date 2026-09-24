@@ -26,12 +26,13 @@ function updateLevelScore(){
  const label=`${done?'✓ ':''}${currentLevelId} · D${levelClass} · ${best}/${scoreBase()} pont`;
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
-function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=false;hintBtn.title=inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}const visibleHint=document.querySelector('#playHint');if(visibleHint)visibleHint.title='Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.';if(inFreePlay()){freezeBtn.title='Freeze: 10 pont, felhasználáskor levonva';freezeBtn.disabled=scoreData.balance<10||!canUseFreeze()}else freezeBtn.title='';}
+function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=false;hintBtn.title=inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}const visibleHint=document.querySelector('#playHint');if(visibleHint)visibleHint.title='Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.';freezeBtn.disabled=!canUseFreeze()||(inFreePlay()&&scoreData.balance<10);freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';freezeBtn.title=freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':inFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';}
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
 function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore();updateLevelScore()}
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
+function cancelFreezeSelection(){if(!freezeArmed&&!freezeId)return;freezeArmed=false;freezeId=null;MotionControl?.resume?.();render({preservePieces:true});}
 function syncSoundControls(){soundBtn.setAttribute('aria-checked',String(AudioManager.effectsEnabled));ambientBtn.setAttribute('aria-checked',String(AudioManager.ambientEnabled))}
 function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [w,h]=v.split('x').map(Number);return{w,h}}const n=+v;return{w:n,h:n}}
 function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
@@ -60,10 +61,11 @@ function render(opts={}){
    const ck=`${o.id}:${ci}`;wanted.add(ck);let el=existing.get(ck);
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
    if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.dataset.bodyid=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
-    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=o.id;freezeArmed=false;AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();render({preservePieces:true});}});board.append(el);}
+    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=freezeId===o.id?null:o.id;if(freezeId){AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();}else MotionControl.pause();render({preservePieces:true});}});board.append(el);}
    const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width,state.height);
    el.style.left=p.left;el.style.top=p.top;el.style.width=p.width;el.style.height=p.height;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
+   el.setAttribute('aria-pressed',String(freezeArmed&&freezeId===o.id));
   }
  }
  for(const [ck,el] of existing)if(!wanted.has(ck))el.remove();
@@ -72,10 +74,13 @@ function render(opts={}){
  meta.textContent=`${diff} · modell: ${currentLevelRecord?.analysis?.rawDifficulty??'-'} · optimum: ${optimal.length} · fix: ${walls}`;
  codeEl.textContent=`Pálya: ${currentLevelId}`;
  const left=freezesLeft();
- freezeBtn.classList.toggle('active',freezeArmed);freezeBtn.disabled=!canUseFreeze();
- freezeBtn.setAttribute('aria-label',freezeArmed?'Freeze: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}${inFreePlay()?' · 10 pont':''}`);updateScore();
+ freezeBtn.classList.toggle('active',freezeArmed);
+ freezeBtn.setAttribute('aria-pressed',String(freezeArmed));
+ freezeBtn.setAttribute('aria-label',freezeArmed?freezeId?'Freeze aktív, elem kijelölve; ismételt nyomásra kilép':'Freeze aktív: válassz elemet':`Freeze, hátralévő: ${left===Infinity?'korlátlan':left}${inFreePlay()?' · 10 pont':''}`);updateScore();
  syncSoundControls();
  SceneRenderer?.afterBoardRender?.(board);
+ board.querySelectorAll('.freeze-selection-marker').forEach(el=>el.remove());
+ if(freezeArmed&&freezeId!=null){const selected=state.objects.find(o=>o.id===freezeId&&!o.exited);if(selected)for(const c of selected.cells){const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker)}}
 }
 /* ===== PRE-GENERATED LEVEL LIBRARY =====
    A player kizárólag előre generált, elemzett pályákat tölt a Level Libraryból.
@@ -105,12 +110,12 @@ function playEvents(events){
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
-function move(dir,automatic=false){if(!state||state.won||busy||freezeArmed||(autoSolveActive&&!automatic))return;SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const usedFreeze=!!freezeId,r=step(state,dir,freezeId),meaningful=r.events.some(e=>e.type==='move'||e.type==='exit');if(usedFreeze&&meaningful&&inFreePlay()&&!spendScore(10)){freezeId=null;freezeArmed=false;setBusy(false);render({preservePieces:true});return}state=r.state;lastEvents=r.events;if(usedFreeze&&meaningful)freezeUsed++;freezeArmed=false;freezeId=null;render({preservePieces:true});playEvents(r.events);if(automatic&&state.won)toast.textContent='Automatikus megoldás kész · 0 pont';else awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+function move(dir,automatic=false){if(!state||state.won||busy||(autoSolveActive&&!automatic))return;const usedFreeze=freezeArmed&&freezeId!=null,wasArmed=freezeArmed;if(usedFreeze&&inFreePlay()&&scoreData.balance<10){cancelFreezeSelection();return}SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const r=step(state,dir,usedFreeze?freezeId:null);if(usedFreeze){stopHold();if(inFreePlay())spendScore(10);freezeUsed++;}state=r.state;lastEvents=r.events;freezeArmed=false;freezeId=null;if(wasArmed)MotionControl.resume();render({preservePieces:true});playEvents(r.events);if(usedFreeze&&!state.won)toast.textContent=inFreePlay()?'Freeze felhasználva · −10 pont':'Freeze felhasználva';if(automatic&&state.won)toast.textContent='Automatikus megoldás kész · 0 pont';else awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
 let autoSolveActive=false,autoSolveTimer=null,autoSolveToken=0;
 function cancelAutoSolve(){autoSolveToken++;if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;if(autoSolveActive){autoSolveActive=false;MotionControl?.resume?.()}}
 function startAutoSolve(){
  if(!state||state.won||autoSolveActive)return;
- stopHold();freezeArmed=false;freezeId=null;hintVisible=false;
+ stopHold();cancelFreezeSelection();hintVisible=false;
  const token=++autoSolveToken;toast.textContent='Automatikus megoldás számítása…';
  setTimeout(()=>{
   if(token!==autoSolveToken||!state)return;
@@ -133,6 +138,7 @@ function startAutoSolve(){
 }
 function hint(){
  if(autoSolveActive)return;
+ cancelFreezeSelection();
  if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return;}
  if(inFreePlay()&&scoreData.balance<1)return;
  hintVisible=true;
@@ -163,7 +169,8 @@ function holdTick(token){
 function startHold(dir,source,e){
  if(e){e.preventDefault();try{source.setPointerCapture?.(e.pointerId)}catch(_){}}
  stopHold();holdDir=dir;holdSource=source;source.classList.add('pressed');setBoardTilt(dir,true);
- move(dir);const token=++holdToken;holdTimer=setTimeout(()=>holdTick(token),HOLD_FIRST_DELAY);
+ const oneShotFreeze=freezeArmed&&freezeId!=null;
+ move(dir);if(oneShotFreeze){stopHold();return}const token=++holdToken;holdTimer=setTimeout(()=>holdTick(token),HOLD_FIRST_DELAY);
 }
 document.querySelectorAll('[data-hold-dir]').forEach(b=>{
  b.addEventListener('pointerdown',e=>startHold(b.dataset.holdDir,b,e));
@@ -243,7 +250,7 @@ const MotionControl=(()=>{
  function tryTiltStep(dir){
   if(paused||busy||!state||state.won)return;
   const probe=step(state,dir,freezeId),meaningful=probe.events.some(e=>e.type==='move'||e.type==='exit');
-  if(!meaningful){snapshotReference();lastStep=performance.now();note('Véghelyzet · új referencia');return}
+  if(!meaningful&&!(freezeArmed&&freezeId!=null)){snapshotReference();lastStep=performance.now();note('Véghelyzet · új referencia');return}
   move(dir);
  }
  function process(){
@@ -397,7 +404,7 @@ const CalibrationLab=(()=>{
  return{open};
 })();
 
-freezeBtn.addEventListener('click',()=>{if(autoSolveActive||!canUseFreeze())return;freezeArmed=!freezeArmed;if(freezeArmed){stopHold();MotionControl.pause();}else{freezeId=null;MotionControl.resume();}render({preservePieces:true});});
+freezeBtn.addEventListener('click',()=>{if(autoSolveActive||freezeBtn.disabled)return;if(freezeArmed){cancelFreezeSelection();return}freezeArmed=true;freezeId=null;stopHold();MotionControl.pause();render({preservePieces:true});});
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
 document.querySelector('#new').addEventListener('click',()=>newLevel());
 document.querySelector('#hint').addEventListener('click',hint);
