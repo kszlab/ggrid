@@ -306,3 +306,64 @@ body[data-ui-context="game"] main #freeze.freeze-action[data-freeze-state="unava
 .multiball-test-note{text-align:center;font-size:.67rem;line-height:1.3;color:#c9dce7;opacity:.72;padding:0 8px}
 body.multiball-test-mode .score-box{border-color:#78d8ef55;background:#102b38d6}
 body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spacing:.06em}
+
+
+/* v0.15.0 – Artwork Theme Renderer foundation */
+.scene-artwork{isolation:isolate;position:relative}
+.scene-artwork-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.scene-artwork-layer[hidden]{display:none!important}
+.scene-artwork-layer>img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.scene-artwork-background{z-index:0}
+.scene-artwork-environment{z-index:1}
+.scene-artwork-board-back{z-index:3}
+.scene-artwork .board{z-index:6}
+.scene-artwork-board-front{z-index:8}
+.scene-artwork-foreground{z-index:12}
+.scene-artwork-effects{z-index:14}
+.scene-artwork .skin-scene-title{display:none!important}
+
+/* Artwork pieces are image assets; CSS is responsible only for geometry/state. */
+.sr-asset-visual{
+ background-image:var(--sr-asset-image)!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ background-size:contain!important;
+}
+.cell.sr-asset-visual{background-size:cover!important}
+
+/* The whole perimeter zone remains interactive, while the artwork may show only
+   sparse ornaments and a central direction cue instead of a long solid button. */
+.scene-artwork .edge-control{
+ background:transparent;
+ border-color:transparent;
+ box-shadow:none;
+ opacity:1;
+}
+.scene-artwork .edge-control::before{
+ content:"";
+ position:absolute;
+ inset:5px;
+ pointer-events:none;
+ opacity:.62;
+ border:1px solid color-mix(in srgb,currentColor 38%,transparent);
+ border-radius:inherit;
+ mask-image:linear-gradient(90deg,transparent 0,black 13%,black 38%,transparent 46% 54%,black 62%,black 87%,transparent 100%);
+}
+.scene-artwork .edge-left::before,.scene-artwork .edge-right::before{
+ mask-image:linear-gradient(180deg,transparent 0,black 13%,black 38%,transparent 46% 54%,black 62%,black 87%,transparent 100%);
+}
+.scene-artwork .edge-control:hover,.scene-artwork .edge-control.pressed,.scene-artwork .edge-control:active{
+ background:radial-gradient(circle at center,#ffffff13,transparent 65%);
+ box-shadow:none;
+}
+
+/* Theme selector may carry localized descriptive copy; gameplay carries no theme title. */
+.theme-preview-label p{
+ margin:8px 0 0;
+ max-width:34em;
+ font-size:clamp(11px,2.6vw,14px);
+ line-height:1.3;
+ letter-spacing:0;
+ text-transform:none;
+ opacity:.82;
+}
