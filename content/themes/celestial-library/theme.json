@@ -482,6 +482,10 @@
       "victory": {
         "asset": "artwork/victory-frame.svg",
         "fit": "100% 100%"
+      },
+      "header": {
+        "asset": "artwork/header-frame.svg",
+        "fit": "100% 100%"
       }
     },
     "layoutMode": "portrait"
