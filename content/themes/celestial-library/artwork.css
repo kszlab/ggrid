@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.8
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.9
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -117,11 +117,11 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control:active{
 body[data-theme="celestial-library"] .scene-artwork .edge-control .emboss-arrow.sr-asset-visual{
  background-size:contain!important;
  width:38px;height:38px;
- transform:none!important;
+ transform:translate(var(--art-cue-x,0),var(--art-cue-y,0))!important;
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control:active .emboss-arrow.sr-asset-visual,
 body[data-theme="celestial-library"] .scene-artwork .edge-control.pressed .emboss-arrow.sr-asset-visual{
- transform:translateY(1px)!important;
+ transform:translate(var(--art-cue-x,0),calc(var(--art-cue-y,0) + 1px))!important;
 }
 
 /* Compact HUD: Freeze may show count; Hint remains icon-only. */
