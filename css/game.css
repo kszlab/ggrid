@@ -325,9 +325,9 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 /* Artwork pieces are image assets; CSS is responsible only for geometry/state. */
 .sr-asset-visual{
  background-image:var(--sr-asset-image)!important;
- background-position:center!important;
+ background-position:var(--sr-asset-position,center)!important;
  background-repeat:no-repeat!important;
- background-size:contain!important;
+ background-size:var(--sr-asset-size,contain)!important;
 }
 .cell.sr-asset-visual{background-size:cover!important}
 

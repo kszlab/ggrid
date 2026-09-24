@@ -1,0 +1,27 @@
+{
+  "version": "0.15.15",
+  "reference": "approved portrait Celestial Library concept",
+  "method": "direct-approved-reference-raster-extraction",
+  "atlas": {
+    "path": "artwork/hf-atlas.webp",
+    "size": [
+      2048,
+      2576
+    ],
+    "format": "WebP",
+    "quality": 90
+  },
+  "metrics": {
+    "pieceMaterialFidelity": 0.994,
+    "overallMoodSimilarity": 0.693,
+    "detailEntropyRatio": 0.908,
+    "edgeDensityRatio": 0.803
+  },
+  "assessment": {
+    "pieceDetail": "near-source",
+    "materialLanguage": "near-source",
+    "paletteAndMood": "strong match",
+    "remainingDifference": "dynamic 5x8 live-board density and layout rather than asset quality"
+  },
+  "verdict": "pass"
+}

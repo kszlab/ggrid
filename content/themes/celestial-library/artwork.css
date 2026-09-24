@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.14
+/* Csillagkönyvtár Artwork Theme V3 – v0.15.15
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -65,19 +65,21 @@ body[data-theme="celestial-library"] .scene-artwork .piece{
 }
 body[data-theme="celestial-library"] .scene-artwork .brick.sr-composite-source{opacity:0!important}
 body[data-theme="celestial-library"] .scene-artwork .sr-composite{
- background-size:100% 100%!important;
+ background-size:var(--sr-asset-size,100% 100%)!important;
  background-repeat:no-repeat!important;
- background-position:center!important;
+ background-position:var(--sr-asset-position,center)!important;
  filter:drop-shadow(0 6px 5px #0008);
 }
 body[data-theme="celestial-library"] .scene-artwork .ball.sr-asset-visual{
  border-radius:50%;
- background-size:112% 112%!important;
+ background-size:var(--sr-asset-size,112% 112%)!important;
+ background-position:var(--sr-asset-position,center)!important;
  filter:drop-shadow(0 0 8px #7de8ff) drop-shadow(0 5px 4px #0008);
 }
 body[data-theme="celestial-library"] .scene-artwork .wall.sr-asset-visual{
  border-radius:8px;
- background-size:100% 100%!important;
+ background-size:var(--sr-asset-size,100% 100%)!important;
+ background-position:var(--sr-asset-position,center)!important;
  filter:drop-shadow(0 4px 3px #0009) drop-shadow(0 0 4px #e5b95a35);
 }
 body[data-theme="celestial-library"] .scene-artwork-frame{
@@ -121,14 +123,14 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control{
  outline:none!important;
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone{
- background-size:100% 100%!important;
- background-position:center!important;
+ background-size:var(--sr-asset-size,100% 100%)!important;
+ background-position:var(--sr-asset-position,center)!important;
  background-repeat:no-repeat!important;
  filter:drop-shadow(0 4px 6px #0009);
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone::before{display:none!important}
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone .emboss-arrow.sr-asset-visual{
- opacity:1!important;
+ opacity:0!important;
  width:32px!important;
  height:32px!important;
  background-size:contain!important;
@@ -146,6 +148,7 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zo
 }
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone.pressed .emboss-arrow.sr-asset-visual,
 body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone:active .emboss-arrow.sr-asset-visual{
+ opacity:1!important;
  transform:translateY(1px) scale(.9)!important;
  filter:brightness(1.35) drop-shadow(0 1px 1px #000a) drop-shadow(0 0 7px #ffe08a99);
 }
@@ -213,3 +216,8 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control:focus,
 body[data-theme="celestial-library"] .scene-artwork .edge-control:focus-visible{
  outline:none!important;
 }
+
+/* v0.15.15 – direct approved-reference raster artwork packed into one WebP atlas. */
+body[data-theme="celestial-library"] .scene-artwork .sr-composite,
+body[data-theme="celestial-library"] .scene-artwork .piece.sr-asset-visual,
+body[data-theme="celestial-library"] .scene-artwork .exit.sr-asset-visual{image-rendering:auto}

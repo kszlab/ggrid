@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 2,
   "id": "celestial-library",
-  "version": 11,
+  "version": 12,
   "name": "Csillagkönyvtár",
   "description": "Ősi könyvtár és csillagvizsgáló, ahol díszes kódexek és asztrolábiumok között vezetjük ki az asztrálgömböt.",
   "semantic": {
@@ -290,14 +290,15 @@
     "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal."
   },
   "assets": {
-    "css": "artwork.css?v=0.15.14",
+    "css": "artwork.css?v=0.15.15",
     "preload": [
-      "library-scene.svg"
+      "library-scene.svg",
+      "artwork/hf-atlas.webp"
     ]
   },
   "render": {
-    "pieceInsetPx": 1.6,
-    "rigidInsetPx": 1.2,
+    "pieceInsetPx": 1,
+    "rigidInsetPx": 0.5,
     "moveMs": 190
   },
   "renderMode": "artwork",
@@ -307,7 +308,7 @@
     "diegeticText": "artwork-allowed"
   },
   "artwork": {
-    "version": 2,
+    "version": 3,
     "landscapeMinAspect": 1.18,
     "layouts": {
       "portrait": {
@@ -403,83 +404,354 @@
     },
     "pieces": {
       "ball": {
-        "asset": "artwork/ball.svg"
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            960,
+            1460,
+            356,
+            352
+          ]
+        }
       },
       "wall": {
-        "asset": "artwork/wall.svg"
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            1624,
+            1848,
+            272,
+            280
+          ]
+        }
       },
       "brickSingle": {
         "variants": [
           {
-            "asset": "artwork/book-single-blue.svg"
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                736,
+                1848,
+                280,
+                280
+              ]
+            },
+            "variant": "blue-moon"
           },
           {
-            "asset": "artwork/book-single-red.svg"
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                1032,
+                1848,
+                280,
+                280
+              ]
+            },
+            "variant": "red-sun"
           },
           {
-            "asset": "artwork/book-single-green.svg"
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                1328,
+                1848,
+                280,
+                280
+              ]
+            },
+            "variant": "green-star"
           }
         ]
       },
       "rigidShapes": {
         "2H": {
-          "asset": "artwork/codex-2h.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              16,
+              1848,
+              704,
+              296
+            ]
+          },
+          "motif": "green-astrolabe"
         },
         "2V": {
-          "asset": "artwork/codex-2v.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              572,
+              16,
+              264,
+              556
+            ]
+          },
+          "motif": "red-sun"
         },
         "3H": {
-          "asset": "artwork/codex-3h.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              16,
+              2160,
+              696,
+              256
+            ]
+          },
+          "motif": "blue-moon-stars"
         },
         "3V": {
-          "asset": "artwork/codex-3v.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              300,
+              16,
+              256,
+              860
+            ]
+          },
+          "motif": "blue-moon-stars"
         },
         "L3-TL": {
-          "asset": "artwork/codex-l3-tl.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              852,
+              16,
+              512,
+              512
+            ]
+          },
+          "missingCorner": "BR"
         },
         "L3-TR": {
-          "asset": "artwork/codex-l3-tr.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              1380,
+              16,
+              512,
+              512
+            ]
+          },
+          "missingCorner": "BL"
         },
         "L3-BL": {
-          "asset": "artwork/codex-l3-bl.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              16,
+              932,
+              512,
+              512
+            ]
+          },
+          "missingCorner": "TR"
         },
         "L3-BR": {
-          "asset": "artwork/codex-l3-br.svg"
+          "asset": "artwork/hf-atlas.webp",
+          "atlas": {
+            "size": [
+              2048,
+              2576
+            ],
+            "rect": [
+              544,
+              932,
+              512,
+              512
+            ]
+          },
+          "missingCorner": "TL"
         }
       },
       "exit": {
         "directions": {
-          "up": "artwork/exit-up.svg",
-          "right": "artwork/exit-right.svg",
-          "down": "artwork/exit-down.svg",
-          "left": "artwork/exit-left.svg"
+          "up": {
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                16,
+                1460,
+                456,
+                372
+              ]
+            }
+          },
+          "right": {
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                1072,
+                932,
+                372,
+                456
+              ]
+            }
+          },
+          "down": {
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                488,
+                1460,
+                456,
+                372
+              ]
+            }
+          },
+          "left": {
+            "asset": "artwork/hf-atlas.webp",
+            "atlas": {
+              "size": [
+                2048,
+                2576
+              ],
+              "rect": [
+                1460,
+                932,
+                372,
+                456
+              ]
+            }
+          }
         }
       }
     },
     "controls": {
       "up": {
-        "asset": "artwork/control-zone-up.svg",
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            728,
+            2160,
+            900,
+            119
+          ]
+        },
         "target": "zone",
         "cue": {
           "asset": "artwork/control-up.svg"
         }
       },
       "right": {
-        "asset": "artwork/control-zone-right.svg",
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            16,
+            16,
+            131,
+            900
+          ]
+        },
         "target": "zone",
         "cue": {
           "asset": "artwork/control-right.svg"
         }
       },
       "down": {
-        "asset": "artwork/control-zone-down.svg",
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            16,
+            2432,
+            900,
+            119
+          ]
+        },
         "target": "zone",
         "cue": {
           "asset": "artwork/control-down.svg"
         }
       },
       "left": {
-        "asset": "artwork/control-zone-left.svg",
+        "asset": "artwork/hf-atlas.webp",
+        "atlas": {
+          "size": [
+            2048,
+            2576
+          ],
+          "rect": [
+            163,
+            16,
+            121,
+            900
+          ]
+        },
         "target": "zone",
         "cue": {
           "asset": "artwork/control-left.svg"
@@ -500,6 +772,16 @@
         "fit": "100% 100%"
       }
     },
-    "layoutMode": "portrait"
+    "layoutMode": "portrait",
+    "fidelity": "approved-reference-raster",
+    "atlas": {
+      "asset": "artwork/hf-atlas.webp",
+      "size": [
+        2048,
+        2576
+      ],
+      "format": "webp",
+      "source": "approved-portrait-concept"
+    }
   }
 }
