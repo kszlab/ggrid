@@ -35,6 +35,7 @@ const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8')
 const arrowRule=css.match(/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{([^}]*)\}/s)?.[1]||'';
 assert.ok(arrowRule.includes('transform:translate('),'artwork arrows must use explicit cue positioning');
 assert.ok(!arrowRule.includes('rotate('),'artwork arrows must not receive legacy direction rotation');
+assert.match(css,/\.scene-artwork \.edge-control\s*\{[^}]*z-index:10!important;/s,'artwork controls must render above board frame');
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
 assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s,'ball must remain above the exit portal');
 assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:125%;height:82%\}/s,'horizontal exit portal must use reduced footprint');
