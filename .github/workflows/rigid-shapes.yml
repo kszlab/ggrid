@@ -19,6 +19,8 @@ jobs:
       - name: JavaScript syntax
         run: |
           node --check js/theme-visuals.js
+          node --check js/theme-assets.js
+          node --check js/theme-layout.js
           node --check js/scene-renderer.js
           node --check js/main.js
           node --check js/scenario-loader.js
@@ -26,6 +28,10 @@ jobs:
         run: node tools/test-rigid-shapes.mjs
       - name: Theme Visuals V3
         run: node tools/test-theme-visuals.mjs
+      - name: Artwork Theme Assets
+        run: node tools/test-theme-assets-v2.mjs
+      - name: Artwork Theme Layout
+        run: node tools/test-theme-layout.mjs
       - name: Verify shape catalog
         run: node tools/scan-rigid-shapes.mjs --check
       - name: Verify theme coverage audit
