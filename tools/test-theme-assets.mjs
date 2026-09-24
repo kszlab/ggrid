@@ -19,6 +19,16 @@ for(const entry of index.themes||[]){
   const clean=p.split('?')[0];
   if(!exists(clean))errors.push(entry.id+': missing '+kind+' '+clean);
  }
+ const preload=theme.assets?.preload;
+ if(preload!=null){
+  if(!Array.isArray(preload))errors.push(entry.id+': assets.preload must be an array');
+  else for(const rel of preload){
+   if(typeof rel!=='string'||!rel.trim()){errors.push(entry.id+': invalid assets.preload entry');continue}
+   if(/^(data:|https?:|#)/.test(rel))continue;
+   const clean=path.posix.normalize(path.posix.join(base,rel.split('?')[0]));
+   if(!exists(clean))errors.push(entry.id+': missing preload asset '+clean);
+  }
+ }
  const cssRel=theme.assets?.css||theme.css;
  if(cssRel){
   const cssPath=path.posix.join(base,String(cssRel).split('?')[0]);
