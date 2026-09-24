@@ -32,7 +32,9 @@ assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440,'portrait board
 assert.equal(theme.artwork.layouts.portrait.controls.cueInset,8,'direction cues must be pulled toward the board frame');
 
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
-assert.match(css,/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{[^}]*transform:none!important/s,'artwork arrows must not receive legacy direction rotation');
+const arrowRule=css.match(/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{([^}]*)\}/s)?.[1]||'';
+assert.ok(arrowRule.includes('transform:translate('),'artwork arrows must use explicit cue positioning');
+assert.ok(!arrowRule.includes('rotate('),'artwork arrows must not receive legacy direction rotation');
 
 const directions=['up','right','down','left'];
 for(const dir of directions){
