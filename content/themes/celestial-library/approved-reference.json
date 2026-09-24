@@ -32,7 +32,9 @@
       "fullBandHitTarget": true,
       "cueInset": 0,
       "cuePlacement": "integrated-in-zone-artwork",
-      "zoneArtwork": true
+      "zoneArtwork": true,
+      "pressedState": "arrow-cue-only",
+      "zoneRemainsStatic": true
     },
     "hud": {
       "position": "below-scene",
