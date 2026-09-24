@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 3 – v0.15.4
+/* GGrid Scene Renderer 3 – v0.15.12
    Presentation-only layer. Never changes Game State or physics.
    Legacy CSS themes remain supported; artwork themes use explicit asset/layout layers. */
 const SceneRenderer=(()=>{
@@ -102,13 +102,20 @@ const SceneRenderer=(()=>{
   clearChromeAsset(el);if(!spec)return false;const src=globalThis.ThemeAssets?.source?.(spec,{layout:wrap?.dataset?.artLayout||'',...context})||'';if(!src)return false;
   const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;el.classList.add('art-chrome-asset');el.style.setProperty('--art-chrome-image',`url("${String(url).replace(/"/g,'\\\"')}")`);el.style.setProperty('--art-chrome-fit',spec?.fit||'100% 100%');return true;
  }
+ function clearAsset(el){if(!el)return;el.classList.remove('sr-asset-visual','art-control-zone');el.style.removeProperty('--sr-asset-image')}
  function renderArtworkChrome(mode){
   const controls=theme?.artwork?.controls||{};
-  for(const dir of ['up','down','left','right']){const cue=wrap?.querySelector('.edge-'+dir+' .emboss-arrow');if(cue)applyAsset(cue,controls[dir]||controls.cue,{layout:mode,direction:dir})}
+  for(const dir of ['up','down','left','right']){
+   const zone=wrap?.querySelector('.edge-'+dir),cue=zone?.querySelector('.emboss-arrow'),spec=controls[dir]||controls.cue;
+   clearAsset(zone);clearAsset(cue);
+   if(!spec)continue;
+   if((spec.target||spec.renderTarget)==='zone'){applyAsset(zone,spec,{layout:mode,direction:dir});zone.classList.add('art-control-zone')}
+   else if(cue)applyAsset(cue,spec,{layout:mode,direction:dir});
+  }
   const ui=theme?.artwork?.ui||{};applyChromeAsset(document.querySelector('.game-head'),ui.header,{layout:mode});applyChromeAsset(document.querySelector('.hud-row'),ui.hud,{layout:mode});applyChromeAsset(document.querySelector('.victory-card'),ui.victory,{layout:mode});
  }
  function clearArtworkChrome(){
-  for(const dir of ['up','down','left','right']){const cue=wrap?.querySelector('.edge-'+dir+' .emboss-arrow');if(cue){cue.classList.remove('sr-asset-visual');cue.style.removeProperty('--sr-asset-image')}}
+  for(const dir of ['up','down','left','right']){const zone=wrap?.querySelector('.edge-'+dir),cue=zone?.querySelector('.emboss-arrow');clearAsset(zone);clearAsset(cue)}
   clearChromeAsset(document.querySelector('.game-head'));clearChromeAsset(document.querySelector('.hud-row'));clearChromeAsset(document.querySelector('.victory-card'));
  }
  function decorateExit(el){
