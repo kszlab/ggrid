@@ -343,16 +343,17 @@ const MotionControl=(()=>{
   return ['settingsPanel','gameMenuPanel','helpPanel','freePlaySetup','calibration','scenarioPanel'].every(id=>{const el=document.getElementById(id);return !el||el.hidden});
  }
  function label(){
-  motionBtn.setAttribute('aria-checked',String(wanted&&capability!=='unavailable'));
-  motionBtn.dataset.motionState=capability==='unavailable'?'unavailable':!wanted?'off':paused?'paused':sensorReady?'active':'waiting';
+  const available=capability==='available';
+  motionBtn.setAttribute('aria-checked',String(wanted&&available));
+  motionBtn.dataset.motionState=!available?capability:!wanted?'off':paused?'paused':sensorReady?'active':'waiting';
  }
  function setAvailability(value){
   capability=value;
-  const unavailable=value==='unavailable';
-  motionBtn.disabled=unavailable;
-  dependentControls.forEach(el=>el.disabled=unavailable);
+  const unavailable=value==='unavailable',checking=value==='checking',blocked=unavailable||checking;
+  motionBtn.disabled=blocked;
+  dependentControls.forEach(el=>el.disabled=blocked);
   motionSection?.classList.toggle('motion-unavailable',unavailable);
-  if(availabilityEl)availabilityEl.textContent=unavailable?'Ezen az eszközön nincs elérhető mozgásérzékelés':value==='checking'?'Mozgásérzékelő ellenőrzése…':'Mozgásos irányítás be / ki';
+  if(availabilityEl)availabilityEl.textContent=unavailable?'Ezen az eszközön nincs elérhető mozgásérzékelés':checking?'Mozgásérzékelő ellenőrzése…':'Mozgásos irányítás be / ki';
   label();
  }
  function nearestIndex(values,target){let best=0,diff=Infinity;for(let i=0;i<values.length;i++){const d=Math.abs(values[i]-target);if(d<diff){best=i;diff=d}}return best+1}
@@ -420,7 +421,7 @@ const MotionControl=(()=>{
   }
  }
  function startRuntime(){
-  if(enabled||capability==='unavailable')return;
+  if(enabled||capability!=='available')return;
   newRecognizer();enabled=true;paused=!uiAllowsMotion();sensorReady=false;lastSensorAt=lastOrientationAt=0;graceUntil=performance.now()+START_GRACE_MS;
   addEventListener('deviceorientation',onOrientation,true);addEventListener('devicemotion',onMotion,true);
   clearInterval(healthTimer);healthTimer=setInterval(health,1200);
@@ -438,7 +439,7 @@ const MotionControl=(()=>{
  async function enable(setPreference=true,allowPrompt=true){
   if(setPreference){wanted=true;saveSettings()}
   if(!apiPresent()){setAvailability('unavailable');return}
-  if(capability==='unavailable')return;
+  if(capability!=='available')return;
   try{
    if(permissionPromptNeeded()){
     if(!allowPrompt){label();note('Mozgásvezérlés bekapcsolva · játék közben érintésre aktiválódik.');return}
@@ -457,7 +458,7 @@ const MotionControl=(()=>{
  async function toggle(){if(wanted)disable();else await enable(true,true)}
  function pause(){if(enabled){paused=true;sensorReady=false;reset();label();note('Mozgás szünetel')}}
  function resume(){
-  if(!wanted||capability==='unavailable')return;
+  if(!wanted||capability!=='available')return;
   if(!enabled){
    if(!permissionPromptNeeded())startRuntime();
    else{label();note('Mozgásvezérlés bekapcsolva · játék közben érintésre aktiválódik.');return}
@@ -477,14 +478,16 @@ const MotionControl=(()=>{
   const pm=e=>{const a=e.acceleration||{},r=e.rotationRate||{};if([a.x,a.y,a.z,r.alpha,r.beta,r.gamma].every(Number.isFinite))gotMotion=true};
   const finish=()=>{
    if(done)return;done=true;removeEventListener('deviceorientation',po,true);removeEventListener('devicemotion',pm,true);probeTimer=null;
-   if(gotMotion&&gotOrientation)setAvailability('available');
-   else{setAvailability('unavailable');if(enabled)stopRuntime();if(wanted)note('Ezen az eszközön nem érkezik használható mozgásérzékelő adat.');}
+   if(gotMotion&&gotOrientation){
+    setAvailability('available');
+    if(wanted){startRuntime();if(uiAllowsMotion())resume()}
+   }else{setAvailability('unavailable');if(enabled)stopRuntime();if(wanted)note('Ezen az eszközön nem érkezik használható mozgásérzékelő adat.');}
   };
   addEventListener('deviceorientation',po,true);addEventListener('devicemotion',pm,true);
   probeTimer=setTimeout(finish,3500);
  }
  async function userGesture(){
-  if(!wanted||enabled||capability==='unavailable'||document.body.dataset.uiContext!=='game')return;
+  if(!wanted||enabled||capability!=='available'||document.body.dataset.uiContext!=='game')return;
   await enable(false,true);
  }
  function onVisibility(){
@@ -494,8 +497,7 @@ const MotionControl=(()=>{
   lastSensorAt=lastOrientationAt=0;graceUntil=performance.now()+START_GRACE_MS;
   if(!paused)note('Mozgásérzékelő újraindítása…');
  }
- loadSettings();label();probeCapability();
- if(wanted&&!permissionPromptNeeded()&&apiPresent())startRuntime();
+ loadSettings();setAvailability('checking');probeCapability();
  document.addEventListener('visibilitychange',onVisibility);
  return{toggle,pause,resume,userGesture,adjustAngle,adjustSettle,setSlides,recalibrate:reset,onNewLevel:reset,get enabled(){return enabled},get wanted(){return wanted}};
 })();
