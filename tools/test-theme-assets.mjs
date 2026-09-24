@@ -1,5 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const ThemeAssets=require('../js/theme-assets.js');
 
 const ROOT=process.cwd();
 const exists=p=>fs.existsSync(path.join(ROOT,p));
@@ -19,6 +22,8 @@ for(const entry of index.themes||[]){
   const clean=p.split('?')[0];
   if(!exists(clean))errors.push(entry.id+': missing '+kind+' '+clean);
  }
+ if(theme.formatVersion>2)errors.push(entry.id+': unsupported theme formatVersion '+theme.formatVersion);
+ if(theme.renderMode==='artwork'&&theme.formatVersion<2)errors.push(entry.id+': artwork themes require formatVersion 2');
  const preload=theme.assets?.preload;
  if(preload!=null){
   if(!Array.isArray(preload))errors.push(entry.id+': assets.preload must be an array');
@@ -28,6 +33,12 @@ for(const entry of index.themes||[]){
    const clean=path.posix.normalize(path.posix.join(base,rel.split('?')[0]));
    if(!exists(clean))errors.push(entry.id+': missing preload asset '+clean);
   }
+ }
+ const explicitPreload=new Set(Array.isArray(preload)?preload:[]);
+ for(const rel of ThemeAssets.collect(theme)){
+  if(explicitPreload.has(rel)||/^(data:|https?:|#)/.test(rel))continue;
+  const clean=path.posix.normalize(path.posix.join(base,rel.split('?')[0]));
+  if(!exists(clean))errors.push(entry.id+': missing artwork asset '+clean);
  }
  const cssRel=theme.assets?.css||theme.css;
  if(cssRel){
