@@ -1,4 +1,4 @@
-# GGrid – mozdulatfelismerés és helyi kalibráció, v0.12.88
+# GGrid – mozdulatfelismerés és helyi kalibráció, v0.12.89
 
 ## A beépített felismerés
 
@@ -25,8 +25,8 @@ a telefont. Csúsztatás esetén a kezdeti 160 ms képernyő síkjába forgatott
 `x,y` gyorsulását és a kezdeti 220 ms két ellenkező gyorsulási csúcsát
 vizsgáljuk; a függőleges gyorsulási és forgási csúcsok kiszűrik az emelést,
 süllyesztést és a billentést. Ellentmondó iránynál nincs parancs.
-A mozdulat végét a beállított, alaphelyzetben 180 ms-os nyugalom vagy
-1700 ms időkorlát jelöli. Ezután 260 ms alatt nem indul új jelölt, hogy a visszaállítás ne
+A mozdulat végét a beállított, alaphelyzetben 140 ms-os nyugalom vagy
+1700 ms időkorlát jelöli. Ezután 130 ms alatt nem indul új jelölt, hogy a visszaállítás ne
 számítson újabb lépésnek.
 
 **Döntés:** a `motion-model.js` helyi osztályozója jobb/bal/fel/le vagy
@@ -35,8 +35,10 @@ profilban szereplő minimális forgási sebesség, szögkitérés és tengelydom
 is teljesül. Ha a billentés nem igazolható, az engedélyezett csúsztatás
 külön gyorsulási feltételeit vizsgáljuk; máskülönben nincs parancs.
 Az 1–10-es „Mozdulat érzékenysége” skála a billentési és csúsztatási
-küszöböket együtt skálázza: **10 az érzékenyebb**, alapértéke 5. A külön
-1–10-es „Lépés késleltetése” a nyugalmi várakozást 100–280 ms között
+küszöbökkel együtt a **mozdulat indítását** is hangolja: **10 az
+érzékenyebb**, alapértéke 5. Az indításnak külön alsó határa van, hogy a
+legérzékenyebb fokozat se induljon el egy tétova előmozdulatra. A külön
+1–10-es „Lépés késleltetése” a nyugalmi várakozást 60–240 ms között
 állítja. A „Csúsztatás is léptet” jelölőnégyzet alaphelyzetben kikapcsolt.
 Mindhárom beállítás ezen a böngészőn marad meg a `ggrid.motion.gesture.v2`
 kulcs alatt.
@@ -46,7 +48,8 @@ a mozgásvezérlést. A képernyő és billentyűzet nyilai működnek tovább.
 
 **Mérés:** `node tools/replay-motion-gesture.js --slides /útvonal/GGrid-calibration-*.json`.
 A hat fájl 112 jelzett mozdulatából az alapbeállításoknál 68/72 billentés és
-14/16 csúsztatás adta az elvárt nyilat, míg két csúsztatás kimaradt.
+16/16 csúsztatás adta az elvárt nyilat. A leggyorsabb késleltetésnél és
+közepes érzékenységnél 69/72 billentés sikerült.
 Az emelés/süllyesztés 0/24 esetben adott parancsot. Kikapcsolt
 csúsztatásnál mind a 16 csúsztatás figyelmen kívül maradt. A próbák során
 egy mozdulat sem adott egynél több lépést. Ez fejlesztési visszajátszás:

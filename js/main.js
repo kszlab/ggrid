@@ -193,8 +193,13 @@ const MotionControl=(()=>{
   // PROFILE_KEY. Unknown or malformed profiles never override safe defaults.
   let p=MotionGestureDefaultProfile;
   try{const saved=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');if(isMotionGestureProfile(saved))p=saved}catch(_){}
-  const factor=1.2-(sensitivity-1)*.065;
-  return {...p,minimumRate:p.minimumRate*factor,minimumExcursion:p.minimumExcursion*factor,slideAcceleration:p.slideAcceleration*factor,quietMs:80+settle*20};
+  // Triggering, classification gates and slide gates must track one another.
+  // The earlier fixed trigger prevented small gestures at high sensitivity.
+  const factor=.85-(sensitivity-1)*.05;
+  const triggerFactor=Math.max(.6,factor);
+  return {...p,minimumRate:p.minimumRate*factor,minimumExcursion:p.minimumExcursion*factor,
+   slideAcceleration:p.slideAcceleration*factor,triggerRate:p.triggerRate*triggerFactor,
+   triggerAcceleration:p.triggerAcceleration*triggerFactor,quietMs:40+settle*20};
  }
  function newRecognizer(){recognizer=new MotionGestureRecognizer(profile(),stepOnce,{allowSlides})}
  function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}

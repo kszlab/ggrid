@@ -26,7 +26,7 @@
    if(!p[name]?.[axis])return false;
    for(const k of (name==='gyroAxes'?['alpha','beta','gamma']:['beta','gamma']))if(p[name][axis][k]!==DEFAULT_PROFILE[name][axis][k])return false;
   }
-  for(const [k,lo,hi] of [['minimumRate',forStorage?70:35,forStorage?140:260],['minimumExcursion',forStorage?7:3,forStorage?18:35],['slideAcceleration',forStorage?.4:.25,forStorage?1.2:2],['dominance',1.2,1.8],['triggerAcceleration',1.5,3.2],['triggerRate',45,85],['quietAcceleration',.5,1.3],['quietRate',15,33],['quietMs',forStorage?130:80,forStorage?230:320],['maxGestureMs',1300,2100],['minSamples',4,9]])if(!finite(p[k])||p[k]<lo||p[k]>hi)return false;
+  for(const [k,lo,hi] of [['minimumRate',forStorage?70:25,forStorage?140:260],['minimumExcursion',forStorage?7:2,forStorage?18:35],['slideAcceleration',forStorage?.4:.1,forStorage?1.2:2],['dominance',1.2,1.8],['triggerAcceleration',forStorage?1.5:.7,3.2],['triggerRate',forStorage?45:20,85],['quietAcceleration',.5,1.3],['quietRate',15,33],['quietMs',forStorage?130:50,forStorage?230:320],['maxGestureMs',1300,2100],['minSamples',4,9]])if(!finite(p[k])||p[k]<lo||p[k]>hi)return false;
   return p.orientationRequired===true;
  }
  class MotionGestureRecognizer{
@@ -78,7 +78,7 @@
    const quiet=accel<p.quietAcceleration&&rate<p.quietRate;
    if(!quiet)g.quietAt=null;else if(g.quietAt===null)g.quietAt=t;
    if(t-g.start>=p.maxGestureMs||g.quietAt!==null&&t-g.quietAt>=p.quietMs&&t-g.start>=180){
-    this.gesture=null;this.suppressUntil=t+260;const result=this.classify(g);
+    this.gesture=null;this.suppressUntil=t+130;const result=this.classify(g);
     if(result)this.onDirection(result.direction,result.kind);
    }
   }
