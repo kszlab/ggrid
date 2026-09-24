@@ -1,0 +1,44 @@
+{
+  "format": "ggrid-approved-visual-reference",
+  "formatVersion": 1,
+  "theme": "celestial-library",
+  "status": "approved",
+  "approvedDate": "2026-09-24",
+  "sourceConcept": {
+    "width": 1122,
+    "height": 1402,
+    "portraitGameplayCrop": {
+      "x": 8,
+      "y": 186,
+      "width": 540,
+      "height": 748
+    }
+  },
+  "portrait": {
+    "designSize": [540, 748],
+    "boardSafe": [70, 132, 400, 390],
+    "controls": {
+      "band": 52,
+      "gap": 6,
+      "visualMode": "sparse-ornament-plus-central-arrow",
+      "fullBandHitTarget": true
+    },
+    "hud": {
+      "position": "below-scene",
+      "hintCounter": false,
+      "freezeCounter": true
+    }
+  },
+  "textPolicy": {
+    "themeTitleInGameplay": false,
+    "themeIdentityLocation": "theme-selector",
+    "functionalText": "localized-live-text",
+    "diegeticText": "artwork-allowed"
+  },
+  "exit": {
+    "visualRole": "boundary-breaking-portal",
+    "directionIsPrimary": true,
+    "textRequiredForRecognition": false,
+    "directions": ["up", "right", "down", "left"]
+  }
+}
