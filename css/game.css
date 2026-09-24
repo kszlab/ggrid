@@ -111,6 +111,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 .calibration.is-measuring .cal-instruction,.calibration.is-measuring .cal-stats,.calibration.is-measuring .cal-small{display:none}
 .calibration.is-measuring .cal-arrow{display:grid;place-items:center;min-height:125px;font-size:92px}
 .calibration.is-measuring .cal-arrow.cal-word{font-size:clamp(29px,9vw,52px);letter-spacing:.03em}
+.calibration.is-measuring .cal-arrow.cal-slide{font-size:clamp(21px,6vw,34px);text-align:center;line-height:1.2}
 
 /* v0.11.0 Scenario / Theme prototype */
 .scenario-info{min-height:20px;font-size:.78rem;font-weight:800;color:#ffd98a;margin:3px 0}

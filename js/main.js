@@ -318,10 +318,11 @@ const CalibrationLab=(()=>{
  const panel=document.querySelector('#calibration'),phaseEl=document.querySelector('#calPhase'),arrowEl=document.querySelector('#calArrow'),
  instructionEl=document.querySelector('#calInstruction'),progressEl=document.querySelector('#calProgress'),statsEl=document.querySelector('#calStats'),
  startBtn=document.querySelector('#calStart'),exportBtn=document.querySelector('#calExport');
- const arrows={up:'↑',down:'↓',left:'←',right:'→',lift:'EMEL',lower:'SÜLLYESZT'},names={up:'FEL',down:'LE',left:'BALRA',right:'JOBBRA',lift:'EMEL',lower:'SÜLLYESZT'};
- /* Three short tilts per direction plus two vertical translations of each kind.
-    Lift/lower are explicit negative examples: they must never become arrows. */
- const sequence=['right','left','lift','up','down','lower','left','right','up','down','lift','right','left','lower','down','up'];
+ const prompts={up:'↑',down:'↓',left:'←',right:'→',lift:'EMEL',lower:'SÜLLYESZT',slideRight:'CSÚSZTASD JOBBRA',slideLeft:'CSÚSZTASD BALRA',slideUp:'CSÚSZTASD FEL',slideDown:'CSÚSZTASD LE'};
+ const negativeTargets=new Set(['lift','lower','slideRight','slideLeft','slideUp','slideDown']);
+ /* Three tilts per direction, two vertical translations and two straight slides
+    per axis and direction. Slide the screen in its own plane, facing the player. */
+ const sequence=['right','slideLeft','left','lift','up','slideUp','down','lower','slideRight','left','right','slideDown','up','down','lift','slideUp','right','slideRight','slideDown','slideLeft','left','lower','down','up'];
  const BASELINE_MS=500,POST_MS=450,PAUSE_MS=650,QUIET_MS=170,WAIT_LIMIT_MS=15000,ACTIVE_LIMIT_MS=4500;
  const START_ACCEL=2.2,START_RATE=75,START_ORIENTATION_RATE=75,QUIET_ACCEL=.85,QUIET_RATE=23;
  let running=false,samples=[],segments=[],currentTarget=null,currentFrom='neutral',phase='idle',phaseStarted=0,timer=null,watchdog=null;
@@ -360,14 +361,14 @@ const CalibrationLab=(()=>{
    if(await DeviceMotionEvent.requestPermission()!=='granted')throw Error('DeviceMotion engedély megtagadva');
   }
  }
- function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 rövid billentés és 4 emelés/süllyesztés rögzítése. A mérés után töltsd le a JSON-fájlt.'}
+ function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 rövid billentés, 4 emelés/süllyesztés és 8 csúsztatás rögzítése. A mérés után töltsd le a JSON-fájlt.'}
  function close(){if(running)finish(false);panel.hidden=true;if(document.querySelector('#settingsPanel').hidden)MotionControl.resume();document.querySelector('#calibrate').focus()}
  function setProgress(i,f=0){progressEl.style.width=Math.min(100,Math.max(0,((i+f)/sequence.length)*100))+'%'}
  function fail(reason){finish(false,reason)}
  function beginWaiting(i){
   phase='waiting';currentTarget=sequence[i];currentFrom=i?sequence[i-1]:'neutral';phaseStarted=performance.now();
   candidateAt=null;quietSince=null;peakAccel=0;peakRate=0;
-  arrowEl.textContent=arrows[currentTarget];arrowEl.classList.toggle('cal-word',currentTarget==='lift'||currentTarget==='lower');
+  arrowEl.textContent=prompts[currentTarget];arrowEl.classList.toggle('cal-word',negativeTargets.has(currentTarget));arrowEl.classList.toggle('cal-slide',currentTarget.startsWith('slide'));
   phaseEl.textContent='Mozdulat '+(i+1)+' / '+sequence.length;setProgress(i);
   clearTimeout(watchdog);watchdog=setTimeout(()=>fail('Nem érkezett felismerhető mozdulat. Indíts új mérést, és engedélyezd a mozgásérzékelőt.'),WAIT_LIMIT_MS);
  }
@@ -382,9 +383,9 @@ const CalibrationLab=(()=>{
  function beginPost(now){
   clearTimeout(watchdog);watchdog=null;
   phase='post';phaseStarted=movementEndT=now;movementEndSample=samples.length;
-  arrowEl.textContent='';arrowEl.classList.remove('cal-word');setProgress(segments.length,.7);
+  arrowEl.textContent='';arrowEl.classList.remove('cal-word','cal-slide');setProgress(segments.length,.7);
   timer=setTimeout(()=>{
-   segments.push({to:currentTarget,expectedDirection:['lift','lower'].includes(currentTarget)?null:currentTarget,detectedBy:candidateSource,peakAcceleration:peakAccel,peakRotationRate:peakRate,baselineStartSample,movementStartSample,movementEndSample,endSample:samples.length,baselineStartT,movementStartT,movementEndT,endT:performance.now()});
+   segments.push({to:currentTarget,expectedDirection:negativeTargets.has(currentTarget)?null:currentTarget,detectedBy:candidateSource,peakAcceleration:peakAccel,peakRotationRate:peakRate,baselineStartSample,movementStartSample,movementEndSample,endSample:samples.length,baselineStartT,movementStartT,movementEndT,endT:performance.now()});
    const i=segments.length;if(i<sequence.length){phase='pause';timer=setTimeout(()=>beginWaiting(i),PAUSE_MS)}else finish(true);
   },POST_MS);
  }
@@ -410,12 +411,12 @@ const CalibrationLab=(()=>{
  }
  function profilePreview(){
   /* Raw measurements are for offline research; this is not a gameplay profile. */
-  return{version:3,created:new Date().toISOString(),summary:summarize()};
+  return{version:4,created:new Date().toISOString(),summary:summarize()};
  }
  function finish(ok,reason='A mérés megszakítva.'){
-  clearTimeout(timer);clearTimeout(watchdog);watchdog=null;running=false;removeListeners();phase=ok?'done':'cancelled';currentTarget=null;panel.classList.remove('is-measuring');arrowEl.classList.remove('cal-word');
+  clearTimeout(timer);clearTimeout(watchdog);watchdog=null;running=false;removeListeners();phase=ok?'done':'cancelled';currentTarget=null;panel.classList.remove('is-measuring');arrowEl.classList.remove('cal-word','cal-slide');
   if(ok){setProgress(sequence.length);arrowEl.textContent='✓';instructionEl.textContent='Mérés elkészült';const s=summarize();
-   statsEl.textContent='Nyers minták: '+s.samples+'\nMozgás: '+s.motionSamples+' · tájolás: '+s.orientationSamples+' · forgási sebesség: '+s.rotationRateSamples+'\nRögzített mozdulatok: '+s.completedMovements+'/'+sequence.length+' · ebből emelés/süllyesztés: '+s.negativeExamples;
+   statsEl.textContent='Nyers minták: '+s.samples+'\nMozgás: '+s.motionSamples+' · tájolás: '+s.orientationSamples+' · forgási sebesség: '+s.rotationRateSamples+'\nRögzített mozdulatok: '+s.completedMovements+'/'+sequence.length+' · ebből elutasítandó: '+s.negativeExamples+' (4 emelés/süllyesztés, 8 csúsztatás)';
    exportBtn.disabled=!s.motionSamples&&!s.orientationSamples;startBtn.textContent='Új mérés';
   }else{arrowEl.textContent='•';instructionEl.textContent=reason;statsEl.textContent=reason;startBtn.textContent='Mérés újraindítása'}
  }
@@ -426,7 +427,7 @@ const CalibrationLab=(()=>{
   timer=setTimeout(()=>beginWaiting(0),1000);
  }
  function exportData(){
-  if(!samples.length)return;const payload={format:'GGrid Motion Calibration Raw',version:3,created:new Date().toISOString(),
+  if(!samples.length)return;const payload={format:'GGrid Motion Calibration Raw',version:4,created:new Date().toISOString(),
    userAgent:navigator.userAgent,sequence,parameters:{baselineMs:BASELINE_MS,postMs:POST_MS,pauseMs:PAUSE_MS,quietMs:QUIET_MS,startAcceleration:START_ACCEL,startRotationRate:START_RATE,startOrientationRate:START_ORIENTATION_RATE,quietAcceleration:QUIET_ACCEL,quietRotationRate:QUIET_RATE,waitLimitMs:WAIT_LIMIT_MS,activeLimitMs:ACTIVE_LIMIT_MS},summary:summarize(),profilePreview:profilePreview(),segments,samples};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='GGrid-calibration-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
