@@ -188,3 +188,16 @@ The theme is complete only when:
 - no gameplay theme title consumes board space;
 - Hint has no counter and Freeze may have one;
 - exit direction is unmistakable without reading text.
+
+
+## 13. Tall-board sizing policy
+
+Portrait artwork uses adaptive scene height. A 5×6, 5×7 or 5×8 board must not be made narrower merely to fit the original square-board safe-area height.
+
+- square cell geometry is preserved;
+- the preferred portrait board width is preserved;
+- when additional rows require more height, the artwork scene grows vertically;
+- the upper board anchor remains stable and the lower directional zone moves down with the board;
+- the library background fills the expanded scene without geometric distortion.
+
+Landscape currently retains contain-mode behavior because the available horizontal composition is substantially wider.
