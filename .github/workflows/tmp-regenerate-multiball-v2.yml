@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: multiball-v2-regeneration
+  group: multiball-v2-regeneration-fast
   cancel-in-progress: true
 jobs:
   build:
