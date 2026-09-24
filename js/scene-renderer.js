@@ -21,7 +21,7 @@ const SceneRenderer=(()=>{
  }
  function decorateExit(el){
   if(!el||!theme)return;
-  const spec=theme.pieces?.exit;if(!spec)return;
+  const raw=theme.pieces?.exit,spec=resolvedSpec(raw,`${theme?.id||'theme'}:exit:${state?.exit?.x??0},${state?.exit?.y??0}:${state?.exit?.dir||''}`);if(!spec)return;
   if(spec.className)el.classList.add(...String(spec.className).split(/\s+/).filter(Boolean));
   if(spec.markup!=null)el.innerHTML=spec.markup;
  }
