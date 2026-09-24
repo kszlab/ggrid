@@ -318,12 +318,13 @@ const CalibrationLab=(()=>{
  const panel=document.querySelector('#calibration'),phaseEl=document.querySelector('#calPhase'),arrowEl=document.querySelector('#calArrow'),
  instructionEl=document.querySelector('#calInstruction'),progressEl=document.querySelector('#calProgress'),statsEl=document.querySelector('#calStats'),
  startBtn=document.querySelector('#calStart'),exportBtn=document.querySelector('#calExport');
- const arrows={up:'↑',down:'↓',left:'←',right:'→'},names={up:'FEL',down:'LE',left:'BALRA',right:'JOBBRA'};
- /* Euler trail over the complete directed graph of four directions:
-    every ordered direction→different direction transition occurs exactly once. */
- const sequence=['right','down','up','left','down','right','up','down','left','up','right','left','right'];
- const SETTLE_MS=650,HOLD_MS=850,COUNTDOWN_MS=1800;
+ const arrows={up:'↑',down:'↓',left:'←',right:'→',lift:'⇧',lower:'⇩'},names={up:'FEL',down:'LE',left:'BALRA',right:'JOBBRA',lift:'EMELÉS',lower:'SÜLLYESZTÉS'};
+ /* Three short tilts per direction plus two vertical translations of each kind.
+    Lift/lower are explicit negative examples: they must never become arrows. */
+ const sequence=['right','left','lift','up','down','lower','left','right','up','down','lift','right','left','lower','down','up'];
+ const BASELINE_MS=500,MOVE_MS=850,POST_MS=450,COUNTDOWN_MS=1500;
  let running=false,samples=[],segments=[],currentTarget=null,currentFrom='neutral',phase='idle',phaseStarted=0,timer=null;
+ let baselineStartSample=0,movementStartSample=0,movementEndSample=0,baselineStartT=0,movementStartT=0,movementEndT=0;
  let lastO={alpha:null,beta:null,gamma:null,absolute:null},lastM={gx:null,gy:null,gz:null,ax:null,ay:null,az:null,rrAlpha:null,rrBeta:null,rrGamma:null};
  function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}
  function sample(source){
@@ -345,57 +346,55 @@ const CalibrationLab=(()=>{
    if(await DeviceMotionEvent.requestPermission()!=='granted')throw Error('DeviceMotion engedély megtagadva');
   }
  }
- function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 különböző irány→irány átmenetet fogunk megmérni.'}
- function close(){if(running)finish(false);panel.hidden=true;MotionControl.resume()}
+ function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 rövid billentés és 4 emelés/süllyesztés rögzítése. A mérés után töltsd le a JSON-fájlt.'}
+ function close(){if(running)finish(false);panel.hidden=true;if(document.querySelector('#settingsPanel').hidden)MotionControl.resume();document.querySelector('#calibrate').focus()}
  function setProgress(i,f=0){progressEl.style.width=Math.min(100,Math.max(0,((i+f)/sequence.length)*100))+'%'}
  function countdown(i){
   phase='countdown';currentTarget=sequence[i];currentFrom=i?sequence[i-1]:'neutral';phaseStarted=performance.now();
-  arrowEl.textContent=arrows[currentTarget];instructionEl.textContent=(i?'A jelenlegi helyzetből ':'Kezdő helyzetből ')+names[currentTarget]+' döntés következik…';
-  phaseEl.textContent='Mozdulat '+(i+1)+' / '+sequence.length;setProgress(i);
-  let left=3;statsEl.textContent='Indulás: '+left;
-  const tick=()=>{left--;if(left>0){statsEl.textContent='Indulás: '+left;timer=setTimeout(tick,COUNTDOWN_MS/3)}else beginMove(i)};
-  timer=setTimeout(tick,COUNTDOWN_MS/3);
+  arrowEl.textContent=arrows[currentTarget];instructionEl.textContent=names[currentTarget]+' következik · készülj a rövid mozdulatra';
+  phaseEl.textContent='Mozdulat '+(i+1)+' / '+sequence.length;statsEl.textContent='Tartsd nyugalomban a telefont a jelzésig.';setProgress(i);
+  timer=setTimeout(()=>beginBaseline(i),COUNTDOWN_MS-BASELINE_MS);
+ }
+ function beginBaseline(i){
+  phase='baseline';phaseStarted=baselineStartT=performance.now();baselineStartSample=samples.length;
+  statsEl.textContent='Kezdőhelyzet rögzítése…';timer=setTimeout(()=>beginMove(i),BASELINE_MS);
  }
  function beginMove(i){
-  phase='transition';phaseStarted=performance.now();instructionEl.textContent=names[currentTarget]+' – döntsd át most';statsEl.textContent='Mozgás rögzítése…';
-  timer=setTimeout(()=>beginHold(i),SETTLE_MS);
+  phase='transition';phaseStarted=movementStartT=performance.now();movementStartSample=samples.length;
+  instructionEl.textContent=currentTarget==='lift'?'EMELD meg gyorsan a telefont; a képernyő nézzen feléd':currentTarget==='lower'?'SÜLLYESZD le gyorsan a telefont; a képernyő nézzen feléd':names[currentTarget]+' – most pöccintsd gyorsan ebbe az irányba';
+  statsEl.textContent='Mozdulat rögzítése…';timer=setTimeout(()=>beginPost(i),MOVE_MS);
  }
- function beginHold(i){
-  phase='hold';phaseStarted=performance.now();instructionEl.textContent=names[currentTarget]+' – tartsd ebben a helyzetben';statsEl.textContent='Véghelyzet mintavétele…';setProgress(i,.55);
-  timer=setTimeout(()=>{segments.push({from:currentFrom,to:currentTarget,endSample:samples.length});if(i+1<sequence.length)countdown(i+1);else finish(true)},HOLD_MS);
+ function beginPost(i){
+  phase='post';phaseStarted=movementEndT=performance.now();movementEndSample=samples.length;
+  instructionEl.textContent='Állítsd meg a mozdulatot, tartsd röviden nyugalomban';statsEl.textContent='Véghelyzet rögzítése…';setProgress(i,.7);
+  timer=setTimeout(()=>{segments.push({to:currentTarget,expectedDirection:['lift','lower'].includes(currentTarget)?null:currentTarget,baselineStartSample,movementStartSample,movementEndSample,endSample:samples.length,baselineStartT,movementStartT,movementEndT,endT:performance.now()});if(i+1<sequence.length)countdown(i+1);else finish(true)},POST_MS);
  }
  function summarize(){
   const motion=samples.filter(s=>s.source==='motion'&&[s.gx,s.gy,s.gz].every(v=>Number.isFinite(v))).length;
   const orient=samples.filter(s=>s.source==='orientation'&&Number.isFinite(s.beta)&&Number.isFinite(s.gamma)).length;
-  const transitions=new Set(segments.filter(s=>s.from!=='neutral').map(s=>s.from+'>'+s.to)).size;
-  return{samples:samples.length,motionSamples:motion,orientationSamples:orient,transitionTypes:transitions,screenAngles:[...new Set(samples.map(s=>s.screenAngle))]};
+  const rates=samples.filter(s=>s.source==='motion'&&[s.rrBeta,s.rrGamma].every(Number.isFinite)).length;
+  return{samples:samples.length,motionSamples:motion,orientationSamples:orient,rotationRateSamples:rates,completedMovements:segments.length,negativeExamples:segments.filter(s=>s.expectedDirection===null).length,screenAngles:[...new Set(samples.map(s=>s.screenAngle))]};
  }
  function profilePreview(){
-  /* Compact descriptive profile only. The raw export remains authoritative for
-     offline analysis before this profile is allowed to drive gameplay. */
-  const holds={};
-  for(const d of ['up','down','left','right']){
-   const a=samples.filter(s=>s.phase==='hold'&&s.to===d&&[s.gx,s.gy,s.gz].every(v=>Number.isFinite(v)));
-   if(a.length)holds[d]={n:a.length,gravityMean:['gx','gy','gz'].map(k=>a.reduce((q,s)=>q+s[k],0)/a.length)};
-  }
-  return{version:1,created:new Date().toISOString(),holds,summary:summarize()};
+  /* Raw measurements are for offline research; this is not a gameplay profile. */
+  return{version:2,created:new Date().toISOString(),summary:summarize()};
  }
  function finish(ok){
   clearTimeout(timer);running=false;removeListeners();phase=ok?'done':'cancelled';currentTarget=null;
   if(ok){setProgress(sequence.length);arrowEl.textContent='✓';instructionEl.textContent='Mérés elkészült';const s=summarize();
-   statsEl.textContent='Nyers minták: '+s.samples+'\nDeviceMotion: '+s.motionSamples+' · DeviceOrientation: '+s.orientationSamples+'\nMért irányátmenetek: '+s.transitionTypes+'/12';
-   exportBtn.disabled=false;startBtn.textContent='Új mérés';try{localStorage.setItem('ggrid.calibration.preview.v1',JSON.stringify(profilePreview()))}catch(_){}
+   statsEl.textContent='Nyers minták: '+s.samples+'\nMozgás: '+s.motionSamples+' · tájolás: '+s.orientationSamples+' · forgási sebesség: '+s.rotationRateSamples+'\nRögzített mozdulatok: '+s.completedMovements+'/'+sequence.length+' · ebből emelés/süllyesztés: '+s.negativeExamples;
+   exportBtn.disabled=!s.motionSamples&&!s.orientationSamples;startBtn.textContent='Új mérés';
   }else{arrowEl.textContent='•';instructionEl.textContent='A mérés megszakítva.'}
  }
  async function start(){
   if(running)return;try{await permissions()}catch(e){statsEl.textContent='Nem indítható: '+e.message;return}
   MotionControl.pause();samples=[];segments=[];running=true;exportBtn.disabled=true;startBtn.textContent='Mérés folyamatban…';ensureListeners();
-  phase='prepare';arrowEl.textContent='•';instructionEl.textContent='Tartsd a telefont a játék közbeni természetes kezdőhelyzetben.';statsEl.textContent='2 másodperc múlva indul.';progressEl.style.width='0%';
+  phase='prepare';arrowEl.textContent='•';instructionEl.textContent='Tartsd a képernyőt magad felé. Minden mozdulatot külön jelzésre végezz.';statsEl.textContent='2 másodperc múlva indul.';progressEl.style.width='0%';
   timer=setTimeout(()=>countdown(0),2000);
  }
  function exportData(){
-  if(!samples.length)return;const payload={format:'GGrid Motion Calibration Raw',version:1,created:new Date().toISOString(),
-   userAgent:navigator.userAgent,sequence,parameters:{settleMs:SETTLE_MS,holdMs:HOLD_MS,countdownMs:COUNTDOWN_MS},summary:summarize(),profilePreview:profilePreview(),segments,samples};
+  if(!samples.length)return;const payload={format:'GGrid Motion Calibration Raw',version:2,created:new Date().toISOString(),
+   userAgent:navigator.userAgent,sequence,parameters:{baselineMs:BASELINE_MS,moveMs:MOVE_MS,postMs:POST_MS,countdownMs:COUNTDOWN_MS},summary:summarize(),profilePreview:profilePreview(),segments,samples};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='GGrid-calibration-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
