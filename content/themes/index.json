@@ -311,23 +311,23 @@
     },
     {
       "id": "celestial-library",
-      "version": 1,
+      "version": 2,
       "name": "CSILLAGKÖNYVTÁR // Az égi archívum",
-      "description": "SHOWCASE: csillagvizsgálóval egybeépített égi könyvtár, asztrálgyönggyel, csillagatlaszokkal és asztrolábium-kapuval.",
+      "description": "SHOWCASE V2: részletgazdag csillagvizsgáló-könyvtár, pergamen táblával, díszkódexekkel és asztrolábium-kapuval.",
       "showcase": true,
       "preview": {
         "shortName": "CSILLAGKÖNYVTÁR",
-        "tag": "CELESTIAL ARCHIVE",
+        "tag": "AZ ÉGI ARCHÍVUM",
         "symbols": [
           "✦",
-          "ATLAS",
+          "☾",
           "◌",
           "✧"
         ]
       },
       "src": "celestial-library/theme.json",
-      "css": "celestial-library/theme.css?v=0.13.0",
-      "previewCss": "celestial-library/preview.css?v=0.13.0"
+      "css": "celestial-library/theme.css?v=0.13.1",
+      "previewCss": "celestial-library/preview.css?v=0.13.1"
     }
   ]
 }
