@@ -421,3 +421,19 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 }
 .scene-artwork .emboss-arrow.sr-asset-visual::before,
 .scene-artwork .emboss-arrow.sr-asset-visual::after{display:none!important}
+
+
+/* v0.15.6 – theme selector artwork previews */
+.theme-preview-art.has-theme-image{
+ background-size:cover;
+ background-position:center;
+ background-repeat:no-repeat;
+}
+.theme-preview-art.has-theme-image::after{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:linear-gradient(180deg,#02060b05 35%,#02060b9a 100%);
+ pointer-events:none;
+}
+.theme-preview-art.has-theme-image .mini-board{background:#06111bc4}
