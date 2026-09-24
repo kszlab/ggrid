@@ -1,10 +1,10 @@
 {
   "format": "ggrid-theme",
-  "formatVersion": 1,
+  "formatVersion": 2,
   "id": "celestial-library",
-  "version": 2,
-  "name": "CSILLAGKÖNYVTÁR // Az égi archívum",
-  "description": "SHOWCASE V2: részletgazdag, arany-bronz égi könyvtár és csillagvizsgáló, pergamen játéktérrel, díszkódexekkel és asztrolábium-kapuval.",
+  "version": 3,
+  "name": "Csillagkönyvtár",
+  "description": "Ősi könyvtár és csillagvizsgáló, ahol díszes kódexek és asztrolábiumok között vezetjük ki az asztrálgömböt.",
   "semantic": {
     "ball": "Asztrálgyöngy",
     "brick": "Archívumkötet",
@@ -284,19 +284,182 @@
     }
   },
   "preview": {
-    "markup": "<div class=\"cl-preview-window\"></div><div class=\"cl-preview-shelf ps-left\"></div><div class=\"cl-preview-shelf ps-right\"></div><div class=\"cl-preview-lamp pl-a\"></div><div class=\"cl-preview-lamp pl-b\"></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero cl-preview-orb\"></i><i class=\"piece object cl-preview-book b1\"></i><i class=\"piece object cl-preview-book b2\"></i><i class=\"piece object cl-preview-stone s1\"></i><i class=\"piece object long-machine cl-preview-atlas\"></i><i class=\"exit cl-preview-gate\">✦</i></div><div class=\"cl-preview-orrery\"></div><div class=\"scene-label\">CSILLAGKÖNYVTÁR <b>AZ ÉGI ARCHÍVUM</b></div>"
+    "markup": "<div class=\"cl-preview-window\"></div><div class=\"cl-preview-shelf ps-left\"></div><div class=\"cl-preview-shelf ps-right\"></div><div class=\"cl-preview-lamp pl-a\"></div><div class=\"cl-preview-lamp pl-b\"></div><div class=\"board showcase-board\">{{cells25}}<i class=\"piece hero cl-preview-orb\"></i><i class=\"piece object cl-preview-book b1\"></i><i class=\"piece object cl-preview-book b2\"></i><i class=\"piece object cl-preview-stone s1\"></i><i class=\"piece object long-machine cl-preview-atlas\"></i><i class=\"exit cl-preview-gate\">✦</i></div><div class=\"cl-preview-orrery\"></div><div class=\"scene-label\">CSILLAGKÖNYVTÁR <b>AZ ÉGI ARCHÍVUM</b></div>",
+    "shortName": "Csillagkönyvtár",
+    "tag": "Az égi archívum",
+    "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal."
   },
   "assets": {
-    "css": "theme.css?v=0.13.1",
+    "css": "artwork.css?v=0.15.5",
     "preload": [
-      "library-scene.svg",
-      "constellation-tile.svg",
-      "celestial-ornament.svg"
+      "library-scene.svg"
     ]
   },
   "render": {
-    "pieceInsetPx": 1.8,
-    "rigidInsetPx": 1.8,
+    "pieceInsetPx": 1.6,
+    "rigidInsetPx": 1.2,
     "moveMs": 190
+  },
+  "renderMode": "artwork",
+  "textPolicy": {
+    "functionalText": "localized",
+    "themeIdentity": "theme-selector-only",
+    "diegeticText": "artwork-allowed"
+  },
+  "artwork": {
+    "version": 1,
+    "landscapeMinAspect": 1.18,
+    "layouts": {
+      "portrait": {
+        "designSize": [
+          540,
+          610
+        ],
+        "boxes": {
+          "boardSafe": [
+            70,
+            82,
+            400,
+            390
+          ]
+        },
+        "controls": {
+          "band": 52,
+          "gap": 4,
+          "extend": 4
+        }
+      },
+      "landscape": {
+        "designSize": [
+          900,
+          520
+        ],
+        "boxes": {
+          "boardSafe": [
+            165,
+            70,
+            570,
+            360
+          ]
+        },
+        "controls": {
+          "band": 54,
+          "gap": 5,
+          "extend": 5
+        }
+      }
+    },
+    "layers": {
+      "background": {
+        "portrait": "library-scene.svg",
+        "landscape": "library-scene.svg"
+      }
+    },
+    "board": {
+      "frame": {
+        "asset": "artwork/board-frame.svg",
+        "slice": [
+          88,
+          88,
+          88,
+          88
+        ],
+        "width": [
+          22,
+          22,
+          22,
+          22
+        ],
+        "expand": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "cellVariants": [
+        {
+          "asset": "artwork/cell-star.svg"
+        },
+        {
+          "asset": "artwork/cell-moon.svg"
+        },
+        {
+          "asset": "artwork/cell-rosette.svg"
+        },
+        {
+          "asset": "artwork/cell-constellation.svg"
+        }
+      ]
+    },
+    "pieces": {
+      "ball": {
+        "asset": "artwork/ball.svg"
+      },
+      "wall": {
+        "asset": "artwork/wall.svg"
+      },
+      "brickSingle": {
+        "asset": "artwork/book-single.svg"
+      },
+      "rigidShapes": {
+        "2H": {
+          "asset": "artwork/book-2h.svg"
+        },
+        "2V": {
+          "asset": "artwork/book-2v.svg"
+        },
+        "3H": {
+          "asset": "artwork/book-3h.svg"
+        },
+        "3V": {
+          "asset": "artwork/book-3v.svg"
+        },
+        "L3-TL": {
+          "asset": "artwork/book-l3-tl.svg"
+        },
+        "L3-TR": {
+          "asset": "artwork/book-l3-tr.svg"
+        },
+        "L3-BL": {
+          "asset": "artwork/book-l3-bl.svg"
+        },
+        "L3-BR": {
+          "asset": "artwork/book-l3-br.svg"
+        }
+      },
+      "exit": {
+        "directions": {
+          "up": "artwork/exit-up.svg",
+          "right": "artwork/exit-right.svg",
+          "down": "artwork/exit-down.svg",
+          "left": "artwork/exit-left.svg"
+        }
+      }
+    },
+    "controls": {
+      "up": {
+        "asset": "artwork/control-up.svg"
+      },
+      "right": {
+        "asset": "artwork/control-right.svg"
+      },
+      "down": {
+        "asset": "artwork/control-down.svg"
+      },
+      "left": {
+        "asset": "artwork/control-left.svg"
+      }
+    },
+    "ui": {
+      "hud": {
+        "asset": "artwork/hud-frame.svg",
+        "fit": "100% 100%"
+      },
+      "victory": {
+        "asset": "artwork/victory-frame.svg",
+        "fit": "100% 100%"
+      }
+    }
   }
 }
