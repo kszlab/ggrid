@@ -59,7 +59,7 @@ const AppUI=(()=>{
  }
  function paintTheme(){
   const a=themes();if(!a.length)return;themeIndex=(themeIndex+a.length)%a.length;const t=a[themeIndex];
-  themeEl.value=t.id;preview.dataset.theme=t.id;previewName.textContent=t.preview?.shortName||t.name;previewTag.textContent=t.preview?.tag||(t.showcase?'SHOWCASE WORLD':'GGRID WORLD');if(previewDesc)previewDesc.textContent=t.preview?.description||t.description||'';preview.querySelector('.theme-preview-art').innerHTML=previewBoard(t.id);
+  themeEl.value=t.id;preview.dataset.theme=t.id;previewName.textContent=t.preview?.shortName||t.name;previewTag.textContent=t.preview?.tag||(t.showcase?'SHOWCASE WORLD':'GGRID WORLD');if(previewDesc)previewDesc.textContent=t.preview?.description||t.description||'';const art=preview.querySelector('.theme-preview-art');art.style.backgroundImage=t.preview?.image?`url("${t.preview.image}")`:'';art.classList.toggle('has-theme-image',!!t.preview?.image);art.innerHTML=previewBoard(t.id);
   dots.innerHTML='';a.forEach((_,i)=>{const d=document.createElement('i');if(i===themeIndex)d.className='active';dots.append(d)});
  }
  function selectTheme(delta){themeIndex+=delta;paintTheme()}
