@@ -224,3 +224,15 @@ The rigid shape ID names describe the occupied junction corner, not the missing 
 - L3-BR occupies TR/BL/BR and therefore has TL missing.
 
 Each L artwork must use a real transparent missing quadrant. Decorative lines, highlights and emblems must be clipped to the actual L silhouette.
+
+
+## 16. Orientation policy
+
+Celestial Library uses the approved portrait composition on every viewport.
+
+- desktop browser width must not switch the theme to the landscape artwork layout;
+- rotating a phone to landscape must not switch the theme to the landscape artwork layout;
+- the game may become vertically scrollable on a short landscape viewport, but the visual composition remains portrait;
+- the deprecated landscape layout data remains only as a compatibility/future-design fallback and is not selected while `artwork.layoutMode` is `portrait`.
+
+Direction cue centers are pulled inward toward the board frame by the theme's `cueInset`, while the full surrounding hit bands remain unchanged.
