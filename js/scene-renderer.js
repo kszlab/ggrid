@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 3 – v0.15.0
+/* GGrid Scene Renderer 3 – v0.15.4
    Presentation-only layer. Never changes Game State or physics.
    Legacy CSS themes remain supported; artwork themes use explicit asset/layout layers. */
 const SceneRenderer=(()=>{
@@ -56,12 +56,12 @@ const SceneRenderer=(()=>{
   const r=artworkLayout(),mode=r?.mode||'portrait';
   let geometry=null;if(boardRef&&typeof state!=='undefined'&&state)geometry=globalThis.ThemeLayout?.applyGameplay?.(wrap,boardRef,theme,state.width||1,state.height||1,innerWidth,innerHeight)||null;
   if(geometry)globalThis.ThemeFrame?.apply?.(artworkFrame,wrap,theme,theme?.artwork?.board?.frame,geometry);else globalThis.ThemeFrame?.clear?.(artworkFrame);
-  for(const key of artworkLayers.keys())renderArtworkLayer(key,mode);
+  for(const key of artworkLayers.keys())renderArtworkLayer(key,mode);renderArtworkChrome(mode);
  }
  function clearArtwork(){
   for(const el of artworkLayers.values()){el.innerHTML='';el.hidden=true}
-  globalThis.ThemeFrame?.clear?.(artworkFrame);
-  if(wrap){delete wrap.dataset.artLayout;wrap.classList.remove('scene-artwork')}
+  globalThis.ThemeFrame?.clear?.(artworkFrame);clearArtworkChrome();
+  if(wrap){globalThis.ThemeLayout?.clearGameplay?.(wrap,wrap.querySelector('.board'));delete wrap.dataset.artLayout;wrap.classList.remove('scene-artwork')}
  }
  function apply(t){
   /* A restart re-applies the same theme while the board DOM has already been
@@ -96,6 +96,20 @@ const SceneRenderer=(()=>{
   if(!src)return false;
   const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;
   el.classList.add('sr-asset-visual');el.style.setProperty('--sr-asset-image',`url("${String(url).replace(/"/g,'\\\"')}")`);return true;
+ }
+ function clearChromeAsset(el){if(!el)return;el.classList.remove('art-chrome-asset');el.style.removeProperty('--art-chrome-image');el.style.removeProperty('--art-chrome-fit')}
+ function applyChromeAsset(el,spec,context={}){
+  clearChromeAsset(el);if(!spec)return false;const src=globalThis.ThemeAssets?.source?.(spec,{layout:wrap?.dataset?.artLayout||'',...context})||'';if(!src)return false;
+  const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;el.classList.add('art-chrome-asset');el.style.setProperty('--art-chrome-image',`url("${String(url).replace(/"/g,'\\\"')}")`);el.style.setProperty('--art-chrome-fit',spec?.fit||'100% 100%');return true;
+ }
+ function renderArtworkChrome(mode){
+  const controls=theme?.artwork?.controls||{};
+  for(const dir of ['up','down','left','right']){const cue=wrap?.querySelector('.edge-'+dir+' .emboss-arrow');if(cue)applyAsset(cue,controls[dir]||controls.cue,{layout:mode,direction:dir})}
+  const ui=theme?.artwork?.ui||{};applyChromeAsset(document.querySelector('.game-head'),ui.header,{layout:mode});applyChromeAsset(document.querySelector('.hud-row'),ui.hud,{layout:mode});applyChromeAsset(document.querySelector('.victory-card'),ui.victory,{layout:mode});
+ }
+ function clearArtworkChrome(){
+  for(const dir of ['up','down','left','right']){const cue=wrap?.querySelector('.edge-'+dir+' .emboss-arrow');if(cue){cue.classList.remove('sr-asset-visual');cue.style.removeProperty('--sr-asset-image')}}
+  clearChromeAsset(document.querySelector('.game-head'));clearChromeAsset(document.querySelector('.hud-row'));clearChromeAsset(document.querySelector('.victory-card'));
  }
  function decorateExit(el){
   if(!el||!theme)return;
