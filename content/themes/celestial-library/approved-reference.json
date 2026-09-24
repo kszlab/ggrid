@@ -29,14 +29,17 @@
       "band": 36,
       "gap": 2,
       "visualMode": "sparse-ornament-plus-central-arrow",
-      "fullBandHitTarget": true
+      "fullBandHitTarget": true,
+      "cueInset": 8
     },
     "hud": {
       "position": "below-scene",
       "hintCounter": false,
       "freezeCounter": true
     },
-    "boardPriority": "dominant"
+    "boardPriority": "dominant",
+    "layoutMode": "forced",
+    "orientationPolicy": "portrait-composition-on-all-viewports"
   },
   "textPolicy": {
     "themeTitleInGameplay": false,
