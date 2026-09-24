@@ -8,6 +8,7 @@ const entry=index.themes.find(t=>t.id==='celestial-library');
 
 assert.equal(theme.formatVersion,2);
 assert.equal(theme.renderMode,'artwork');
+assert.equal(theme.artwork?.layoutMode,'portrait','celestial library must keep portrait composition on desktop and rotated mobile');
 assert.equal(theme.textPolicy?.themeIdentity,'theme-selector-only');
 assert.equal(ref.textPolicy?.themeTitleInGameplay,false);
 assert.ok(entry?.preview?.description,'theme selector must contain a short description');
@@ -28,6 +29,7 @@ assert.equal(ref.portrait?.controls?.fullBandHitTarget,true);
 assert.equal(ref.exit?.textRequiredForRecognition,false);
 assert.equal(ref.portrait?.boardPriority,'dominant');
 assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440,'portrait board must remain visually dominant');
+assert.equal(theme.artwork.layouts.portrait.controls.cueInset,8,'direction cues must be pulled toward the board frame');
 
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
 assert.match(css,/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{[^}]*transform:none!important/s,'artwork arrows must not receive legacy direction rotation');
