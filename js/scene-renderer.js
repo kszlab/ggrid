@@ -53,6 +53,7 @@ const SceneRenderer=(()=>{
  function refreshArtworkLayout(){
   if(!theme||renderMode()!=='artwork'||!wrap)return;
   const r=artworkLayout(),mode=r?.mode||'portrait';
+  if(boardRef&&typeof state!=='undefined'&&state)globalThis.ThemeLayout?.applyGameplay?.(wrap,boardRef,theme,state.width||1,state.height||1,innerWidth,innerHeight);
   for(const key of artworkLayers.keys())renderArtworkLayer(key,mode);
  }
  function clearArtwork(){
@@ -175,7 +176,7 @@ const SceneRenderer=(()=>{
   componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }
  function afterBoardRender(board){
-  boardRef=board;if(!theme)return;decorateCells(board);decorateExit(board.querySelector('.exit'));
+  boardRef=board;if(!theme)return;if(renderMode()==='artwork')globalThis.ThemeLayout?.applyGameplay?.(wrap,board,theme,state?.width||1,state?.height||1,innerWidth,innerHeight);decorateCells(board);decorateExit(board.querySelector('.exit'));
   const byId=new Map((state?.objects||[]).map(o=>[String(o.id),o]));
   board.querySelectorAll('.piece').forEach(el=>{const o=byId.get(String(el.dataset.id));if(o)decoratePiece(el,o,+(el.dataset.cellkey?.split(':')[1]||0))});
   buildComponentOverlays(board);
