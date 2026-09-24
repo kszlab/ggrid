@@ -2,7 +2,7 @@
 let state,initial,optimal=[],freezeArmed=false,freezeId=null,currentLevelId='',busy=false,lastEvents=[],hintVisible=false,freezeUsed=0;
 const board=document.querySelector('#board'),status=document.querySelector('#status'),meta=document.querySelector('#meta'),codeEl=document.querySelector('#code'),toast=document.querySelector('#toast');
 const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),ambientBtn=document.querySelector('#ambientSound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
-const victoryOverlay=document.querySelector('#victoryOverlay'),victoryMoves=document.querySelector('#victoryMoves'),victoryScore=document.querySelector('#victoryScore'),victoryNext=document.querySelector('#victoryNext'),victoryRestart=document.querySelector('#victoryRestart');
+const victoryOverlay=document.querySelector('#victoryOverlay'),victoryMoves=document.querySelector('#victoryMoves'),victoryScore=document.querySelector('#victoryScore'),victoryNext=document.querySelector('#victoryNext'),victoryRestart=document.querySelector('#victoryRestart'),victoryChoose=document.querySelector('#victoryChoose');
 let victoryTimer=null,victoryPending=false,solverUsedThisRun=false;
 
 /* Browsers suspend Web Audio until a genuine user gesture. Capture the first
@@ -30,7 +30,11 @@ function updateLevelScore(){
 }
 function updateScore(){
  const won=!!state?.won;
- if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');
+ if(scoreValue){
+  scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');
+  const digits=String(Math.abs(scoreData.balance)).length;
+  scoreValue.dataset.size=digits<=3?'lg':digits===4?'md':digits===5?'sm':digits===6?'xs':'xxs';
+ }
  if(hintBtn){hintBtn.disabled=won;hintBtn.title=won?'A pálya már kész.':inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
  const visibleHint=document.querySelector('#playHint');
  if(visibleHint){visibleHint.disabled=won;visibleHint.title=won?'A pálya már kész.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
@@ -62,6 +66,7 @@ function enterVictory(automatic=false,rewardInfo=null){
  if(solverUsedThisRun||automatic)victoryScore.textContent='Automatikus megoldás · 0 pont';
  else if(inFreePlay()&&rewardInfo)victoryScore.textContent=rewardInfo.earned?`+${rewardInfo.earned} pont · Egyenleg: ${rewardInfo.balance}`:`Korábbi legjobb eredmény: ${rewardInfo.previous} pont`;
  else victoryScore.textContent='Pálya teljesítve';
+ victoryChoose.hidden=!!ScenarioMode?.active;
  victoryNext.textContent=(ScenarioMode?.active&&!ScenarioMode?.hasNext)?'Befejezés':'Következő →';
  victoryTimer=setTimeout(()=>{victoryTimer=null;victoryPending=false;victoryOverlay.hidden=false;victoryNext.focus();},380);
 }
@@ -105,7 +110,7 @@ function render(opts={}){
   }
  }
  for(const [ck,el] of existing)if(!wanted.has(ck))el.remove();
- status.textContent=state.won?`Siker! ${state.moves} lépésből.`:'';
+ status.textContent='';
  const diff='D'+difficultyEl.value,glues=state.glueCount||0,walls=state.wallCount||0;
  meta.textContent=`${diff} · modell: ${currentLevelRecord?.analysis?.rawDifficulty??'-'} · optimum: ${optimal.length} · fix: ${walls}`;
  codeEl.textContent=`Pálya: ${currentLevelId}`;
@@ -232,13 +237,32 @@ document.querySelectorAll('[data-hold-dir]').forEach(b=>{
 
 /* ===== Discrete screen-direction gestures: tilt and optional slide ===== */
 const MotionControl=(()=>{
- const SETTINGS_KEY='ggrid.motion.gesture.v3',LEGACY_SETTINGS_KEY='ggrid.motion.gesture.v2',PROFILE_KEY='ggrid.motion.profile.v1';
+ const SETTINGS_KEY='ggrid.motion.gesture.v4',LEGACY_SETTINGS_KEY='ggrid.motion.gesture.v3',LEGACY_V2_KEY='ggrid.motion.gesture.v2',PROFILE_KEY='ggrid.motion.profile.v1';
  const SENSITIVITY_FACTORS=[.85,.70,.58,.48,.40,.36,.33,.30,.27,.24];
- const SETTLE_MS=[50,80,115,150,180,200,220,240,270,300];
- let enabled=false,paused=false,sensitivity=5,settle=5,allowSlides=false,recognizer=null,lastSensorAt=0,lastOrientationAt=0,healthTimer=null;
- const settleValue=document.querySelector('#settleValue'),slideMotion=document.querySelector('#slideMotion');
+ const SETTLE_MS=[50,80,115,150,180,200,220,240,270,300],SENSOR_STALE_MS=3000,START_GRACE_MS=4000;
+ let enabled=false,wanted=false,paused=true,sensorReady=false,capability='checking',sensitivity=5,settle=5,allowSlides=false,recognizer=null,lastSensorAt=0,lastOrientationAt=0,healthTimer=null,graceUntil=0,probeTimer=null;
+ const settleValue=document.querySelector('#settleValue'),slideMotion=document.querySelector('#slideMotion'),availabilityEl=document.querySelector('#motionAvailability'),motionSection=document.querySelector('#motionSettingsSection');
+ const dependentControls=['angleMinus','anglePlus','slideMotion','settleMinus','settlePlus','calibrate'].map(id=>document.querySelector('#'+id)).filter(Boolean);
  function note(t=''){motionNote.textContent=t}
- function label(){motionBtn.setAttribute('aria-checked',String(enabled))}
+ function apiPresent(){return 'DeviceMotionEvent' in window&&'DeviceOrientationEvent' in window}
+ function permissionPromptNeeded(){return typeof window.DeviceMotionEvent?.requestPermission==='function'||typeof window.DeviceOrientationEvent?.requestPermission==='function'}
+ function uiAllowsMotion(){
+  if(document.body.dataset.uiContext!=='game'||state?.won)return false;
+  return ['settingsPanel','gameMenuPanel','helpPanel','freePlaySetup','calibration','scenarioPanel'].every(id=>{const el=document.getElementById(id);return !el||el.hidden});
+ }
+ function label(){
+  motionBtn.setAttribute('aria-checked',String(wanted&&capability!=='unavailable'));
+  motionBtn.dataset.motionState=capability==='unavailable'?'unavailable':!wanted?'off':paused?'paused':sensorReady?'active':'waiting';
+ }
+ function setAvailability(value){
+  capability=value;
+  const unavailable=value==='unavailable';
+  motionBtn.disabled=unavailable;
+  dependentControls.forEach(el=>el.disabled=unavailable);
+  motionSection?.classList.toggle('motion-unavailable',unavailable);
+  if(availabilityEl)availabilityEl.textContent=unavailable?'Ezen az eszközön nincs elérhető mozgásérzékelés':value==='checking'?'Mozgásérzékelő ellenőrzése…':'Mozgásos irányítás be / ki';
+  label();
+ }
  function nearestIndex(values,target){let best=0,diff=Infinity;for(let i=0;i<values.length;i++){const d=Math.abs(values[i]-target);if(d<diff){best=i;diff=d}}return best+1}
  function migrateSensitivity(v){const oldFactor=.85-(Math.max(1,Math.min(10,v))-1)*.05;return nearestIndex(SENSITIVITY_FACTORS,oldFactor)}
  function migrateSettle(v){const oldMs=40+Math.max(1,Math.min(10,v))*20;return nearestIndex(SETTLE_MS,oldMs)}
@@ -249,25 +273,23 @@ const MotionControl=(()=>{
    if(saved)s=saved;
    else{
     const legacy=JSON.parse(localStorage.getItem(LEGACY_SETTINGS_KEY)||'null');
-    if(legacy){s={sensitivity:Number.isInteger(legacy.sensitivity)?migrateSensitivity(legacy.sensitivity):5,settle:Number.isInteger(legacy.settle)?migrateSettle(legacy.settle):5,allowSlides:legacy.allowSlides===true};migrated=true}
+    if(legacy){s={sensitivity:legacy.sensitivity,settle:legacy.settle,allowSlides:legacy.allowSlides===true,motionWanted:false};migrated=true}
+    else{
+     const legacy2=JSON.parse(localStorage.getItem(LEGACY_V2_KEY)||'null');
+     if(legacy2){s={sensitivity:Number.isInteger(legacy2.sensitivity)?migrateSensitivity(legacy2.sensitivity):5,settle:Number.isInteger(legacy2.settle)?migrateSettle(legacy2.settle):5,allowSlides:legacy2.allowSlides===true,motionWanted:false};migrated=true}
+    }
    }
    if(Number.isInteger(s.sensitivity))sensitivity=Math.max(1,Math.min(10,s.sensitivity));
    if(Number.isInteger(s.settle))settle=Math.max(1,Math.min(10,s.settle));
-   allowSlides=s.allowSlides===true;
+   allowSlides=s.allowSlides===true;wanted=s.motionWanted===true;
    if(migrated)saveSettings();
   }catch(_){}
   angleValue.textContent=sensitivity+'/10';settleValue.textContent=settle+'/10';slideMotion.checked=allowSlides;
  }
- function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({sensitivity,settle,allowSlides}))}catch(_){}}
+ function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({sensitivity,settle,allowSlides,motionWanted:wanted}))}catch(_){}}
  function profile(){
-  // Calibration contract: a future on-device flow must validate the profile
-  // against held-out tilts and negative gestures BEFORE storing it under
-  // PROFILE_KEY. Unknown or malformed profiles never override safe defaults.
   let p=MotionGestureDefaultProfile;
   try{const saved=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');if(isMotionGestureProfile(saved))p=saved}catch(_){}
-  // 5/10 now matches the former 10/10 feel. Higher values intentionally extend
-  // the useful range for smaller gestures, while recognizer validation floors
-  // prevent thresholds from becoming unsafe.
   const factor=SENSITIVITY_FACTORS[sensitivity-1];
   return {...p,minimumRate:Math.max(25,p.minimumRate*factor),minimumExcursion:Math.max(2,p.minimumExcursion*factor),
    slideAcceleration:Math.max(.1,p.slideAcceleration*factor),triggerRate:Math.max(20,p.triggerRate*factor),
@@ -275,40 +297,126 @@ const MotionControl=(()=>{
  }
  function newRecognizer(){recognizer=new MotionGestureRecognizer(profile(),stepOnce,{allowSlides})}
  function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}
- function stepOnce(dir){if(paused||busy||!state||state.won)return;setBoardTilt(dir,true);move(dir);setTimeout(()=>setBoardTilt(null,false),180)}
- function onOrientation(e){if(!enabled||paused||!recognizer||![e.beta,e.gamma].every(Number.isFinite))return;lastOrientationAt=performance.now();recognizer.orientation(e,lastOrientationAt,screenAngle())}
- function onMotion(e){if(!enabled||paused||!recognizer)return;
+ function reset(){recognizer?.reset();setBoardTilt(null,false)}
+ function refreshSensorReady(now){
+  if(paused||document.hidden||!enabled)return;
+  const ready=lastSensorAt>0&&lastOrientationAt>0&&now-lastSensorAt<SENSOR_STALE_MS&&now-lastOrientationAt<SENSOR_STALE_MS;
+  if(ready&&!sensorReady){sensorReady=true;reset();label();note('Mozgás aktív · egy billentés, egy lépés')}
+ }
+ function stepOnce(dir){if(paused||!sensorReady||busy||!state||state.won)return;setBoardTilt(dir,true);move(dir);setTimeout(()=>setBoardTilt(null,false),180)}
+ function onOrientation(e){
+  if(!enabled||document.hidden||![e.beta,e.gamma].every(Number.isFinite))return;
+  const now=performance.now();lastOrientationAt=now;refreshSensorReady(now);
+  if(paused||!sensorReady||!recognizer)return;
+  recognizer.orientation(e,now,screenAngle());
+ }
+ function onMotion(e){
+  if(!enabled||document.hidden)return;
   const a=e.acceleration||{},r=e.rotationRate||{};
   if(![a.x,a.y,a.z,r.alpha,r.beta,r.gamma].every(Number.isFinite))return;
-  lastSensorAt=performance.now();recognizer.motion({ax:a.x,ay:a.y,az:a.z,alpha:r.alpha,beta:r.beta,gamma:r.gamma},lastSensorAt,screenAngle());
+  const now=performance.now();lastSensorAt=now;refreshSensorReady(now);
+  if(paused||!sensorReady||!recognizer)return;
+  recognizer.motion({ax:a.x,ay:a.y,az:a.z,alpha:r.alpha,beta:r.beta,gamma:r.gamma},now,screenAngle());
  }
- function reset(){recognizer?.reset();setBoardTilt(null,false)}
- function health(){if(!enabled||paused)return;if(performance.now()-lastSensorAt>2500||performance.now()-lastOrientationAt>2500){disable();note('Hiányzik a használható mozgás- vagy tájolásérzékelő adat. A mozgásvezérlés kikapcsolt; a nyílgombok működnek.')}}
- async function enable(){
-  if(!('DeviceMotionEvent' in window)||!('DeviceOrientationEvent' in window)){note('A mozgásvezérléshez mozgás- és tájolásérzékelő szükséges.');return}
+ function health(){
+  if(!enabled||paused||document.hidden||performance.now()<graceUntil)return;
+  const now=performance.now();
+  if(now-lastSensorAt>SENSOR_STALE_MS||now-lastOrientationAt>SENSOR_STALE_MS){
+   if(sensorReady)reset();
+   sensorReady=false;label();
+   note('A szenzoradat átmenetileg szünetel; a vezérlés automatikusan visszatér, ha újra érkezik adat.');
+  }
+ }
+ function startRuntime(){
+  if(enabled||capability==='unavailable')return;
+  newRecognizer();enabled=true;paused=!uiAllowsMotion();sensorReady=false;lastSensorAt=lastOrientationAt=0;graceUntil=performance.now()+START_GRACE_MS;
+  addEventListener('deviceorientation',onOrientation,true);addEventListener('devicemotion',onMotion,true);
+  clearInterval(healthTimer);healthTimer=setInterval(health,1200);
+  label();note(paused?'Mozgás szünetel':'Mozgásérzékelő indítása…');
+ }
+ function stopRuntime(){
+  enabled=false;paused=true;sensorReady=false;removeEventListener('deviceorientation',onOrientation,true);removeEventListener('devicemotion',onMotion,true);
+  clearInterval(healthTimer);healthTimer=null;lastSensorAt=lastOrientationAt=0;reset();recognizer=null;label();
+ }
+ async function requestPermissions(){
+  if(typeof window.DeviceOrientationEvent?.requestPermission==='function'&&await window.DeviceOrientationEvent.requestPermission()!=='granted')return false;
+  if(typeof window.DeviceMotionEvent?.requestPermission==='function'&&await window.DeviceMotionEvent.requestPermission()!=='granted')return false;
+  return true;
+ }
+ async function enable(setPreference=true,allowPrompt=true){
+  if(setPreference){wanted=true;saveSettings()}
+  if(!apiPresent()){setAvailability('unavailable');return}
+  if(capability==='unavailable')return;
   try{
-   if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted'){note('A tájolásérzékelő engedélye hiányzik.');return}
-   if(typeof DeviceMotionEvent.requestPermission==='function'&&await DeviceMotionEvent.requestPermission()!=='granted'){note('A mozgásérzékelő engedélye hiányzik.');return}
-   newRecognizer();enabled=true;paused=false;lastSensorAt=lastOrientationAt=performance.now();
-   addEventListener('deviceorientation',onOrientation,true);addEventListener('devicemotion',onMotion,true);
-   healthTimer=setInterval(health,1200);label();note('Rövid mozdulat: egy lépés. A csúsztatás külön kapcsolható.')
-  }catch(err){disable();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}
+   if(permissionPromptNeeded()){
+    if(!allowPrompt){label();note('Mozgásvezérlés bekapcsolva · játék közben érintésre aktiválódik.');return}
+    if(!await requestPermissions()){wanted=false;saveSettings();label();note('A mozgásérzékelő engedélye hiányzik.');return}
+   }
+   setAvailability('available');startRuntime();
+   if(uiAllowsMotion())resume();
+  }catch(err){
+   if(setPreference){wanted=false;saveSettings()}
+   stopRuntime();label();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'));
+  }
  }
- function disable(){enabled=false;paused=false;removeEventListener('deviceorientation',onOrientation,true);removeEventListener('devicemotion',onMotion,true);clearInterval(healthTimer);healthTimer=null;reset();recognizer=null;label();note('')}
- async function toggle(){if(enabled)disable();else await enable()}
- function pause(){if(enabled){paused=true;reset();note('Mozgás szünetel')}}
- function resume(){if(!enabled)return;if(state?.won){paused=true;reset();return}paused=false;reset();lastSensorAt=lastOrientationAt=performance.now();note('Mozgás aktív · egy billentés, egy lépés')}
+ function disable(){
+  wanted=false;saveSettings();stopRuntime();note('');
+ }
+ async function toggle(){if(wanted)disable();else await enable(true,true)}
+ function pause(){if(enabled){paused=true;sensorReady=false;reset();label();note('Mozgás szünetel')}}
+ function resume(){
+  if(!wanted||capability==='unavailable')return;
+  if(!enabled){
+   if(!permissionPromptNeeded())startRuntime();
+   else{label();note('Mozgásvezérlés bekapcsolva · játék közben érintésre aktiválódik.');return}
+  }
+  if(!uiAllowsMotion()){paused=true;label();return}
+  paused=false;sensorReady=false;lastSensorAt=lastOrientationAt=0;graceUntil=performance.now()+START_GRACE_MS;reset();label();note('Mozgásérzékelő újraindítása…');
+ }
  function adjustAngle(delta){sensitivity=Math.max(1,Math.min(10,sensitivity+delta));angleValue.textContent=sensitivity+'/10';saveSettings();if(enabled)newRecognizer()}
  function adjustSettle(delta){settle=Math.max(1,Math.min(10,settle+delta));settleValue.textContent=settle+'/10';saveSettings();if(enabled)newRecognizer()}
  function setSlides(value){allowSlides=value;saveSettings();if(enabled)newRecognizer()}
- loadSettings();return{toggle,pause,resume,adjustAngle,adjustSettle,setSlides,recalibrate:reset,onNewLevel:reset,get enabled(){return enabled}};
+ function probeCapability(){
+  if(!apiPresent()){setAvailability('unavailable');return}
+  if(permissionPromptNeeded()){setAvailability('available');return}
+  if(document.hidden){probeTimer=setTimeout(probeCapability,1000);return}
+  let gotMotion=false,gotOrientation=false,done=false;
+  const po=e=>{if([e.beta,e.gamma].every(Number.isFinite))gotOrientation=true};
+  const pm=e=>{const a=e.acceleration||{},r=e.rotationRate||{};if([a.x,a.y,a.z,r.alpha,r.beta,r.gamma].every(Number.isFinite))gotMotion=true};
+  const finish=()=>{
+   if(done)return;done=true;removeEventListener('deviceorientation',po,true);removeEventListener('devicemotion',pm,true);probeTimer=null;
+   if(gotMotion&&gotOrientation)setAvailability('available');
+   else{setAvailability('unavailable');if(enabled)stopRuntime();if(wanted)note('Ezen az eszközön nem érkezik használható mozgásérzékelő adat.');}
+  };
+  addEventListener('deviceorientation',po,true);addEventListener('devicemotion',pm,true);
+  probeTimer=setTimeout(finish,3500);
+ }
+ async function userGesture(){
+  if(!wanted||enabled||capability==='unavailable'||document.body.dataset.uiContext!=='game')return;
+  await enable(false,true);
+ }
+ function onVisibility(){
+  if(!enabled)return;
+  sensorReady=false;reset();label();
+  if(document.hidden)return;
+  lastSensorAt=lastOrientationAt=0;graceUntil=performance.now()+START_GRACE_MS;
+  if(!paused)note('Mozgásérzékelő újraindítása…');
+ }
+ loadSettings();label();probeCapability();
+ if(wanted&&!permissionPromptNeeded()&&apiPresent())startRuntime();
+ document.addEventListener('visibilitychange',onVisibility);
+ return{toggle,pause,resume,userGesture,adjustAngle,adjustSettle,setSlides,recalibrate:reset,onNewLevel:reset,get enabled(){return enabled},get wanted(){return wanted}};
 })();
 motionBtn.addEventListener('click',()=>MotionControl.toggle());
+const restoreMotionFromGesture=()=>MotionControl.userGesture();
+addEventListener('pointerdown',restoreMotionFromGesture,{capture:true,passive:true});
+addEventListener('keydown',restoreMotionFromGesture,{capture:true});
 document.querySelector('#angleMinus').addEventListener('click',()=>MotionControl.adjustAngle(-1));
 document.querySelector('#anglePlus').addEventListener('click',()=>MotionControl.adjustAngle(1));
 document.querySelector('#settleMinus').addEventListener('click',()=>MotionControl.adjustSettle(-1));
 document.querySelector('#settlePlus').addEventListener('click',()=>MotionControl.adjustSettle(1));
 document.querySelector('#slideMotion').addEventListener('change',e=>MotionControl.setSlides(e.target.checked));
+
 
 /* ===== v0.10.4 MOTION CALIBRATION LAB ===== */
 const CalibrationLab=(()=>{
@@ -352,10 +460,10 @@ const CalibrationLab=(()=>{
  function removeListeners(){removeEventListener('deviceorientation',onO,true);removeEventListener('devicemotion',onM,true)}
  async function permissions(){
   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
-   if(await DeviceOrientationEvent.requestPermission()!=='granted')throw Error('DeviceOrientation engedély megtagadva');
+   if(await window.DeviceOrientationEvent.requestPermission()!=='granted')throw Error('DeviceOrientation engedély megtagadva');
   }
   if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
-   if(await DeviceMotionEvent.requestPermission()!=='granted')throw Error('DeviceMotion engedély megtagadva');
+   if(await window.DeviceMotionEvent.requestPermission()!=='granted')throw Error('DeviceMotion engedély megtagadva');
   }
  }
  function open(){panel.hidden=false;MotionControl.pause();statsEl.textContent='12 rövid billentés, 4 emelés/süllyesztés és 8 csúsztatás rögzítése. A mérés után töltsd le a JSON-fájlt.'}
@@ -438,6 +546,7 @@ freezeBtn.addEventListener('click',()=>{if(state?.won||autoSolveActive||freezeBt
 document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();resetWinState();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();MotionControl.resume();});
 document.querySelector('#new').addEventListener('click',()=>{hideVictory();newLevel();MotionControl.resume();});
 victoryRestart.addEventListener('click',()=>document.querySelector('#restart').click());
+victoryChoose.addEventListener('click',()=>{hideVictory();AppUI?.openFreeSetup?.()});
 victoryNext.addEventListener('click',async()=>{
  if(ScenarioMode?.active){
   hideVictory();await ScenarioMode.advanceAfterWin();MotionControl.resume();return;

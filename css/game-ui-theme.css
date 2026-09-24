@@ -160,31 +160,33 @@ body[data-ui-context="game"] .board .exit-beacon-up span{top:calc(100% + 4px);bo
 body[data-ui-context="game"] .board .exit-beacon-down span{bottom:calc(100% + 4px);top:auto;right:50%;transform:translateX(50%)}
 
 
-/* v0.12.93 – compact victory card attached to the solved board */
+/* v0.12.94 – lower, clearer board-attached victory state */
 .victory-overlay[hidden]{display:none!important}
 .victory-overlay{
  position:absolute;inset:0;z-index:60;display:grid;place-items:center;
- padding:12px 12px 15%;
- background:linear-gradient(#03070c14,#03070c2b);
+ padding:28% 12px 0;
+ background:#02070d38;
+ backdrop-filter:blur(2px) brightness(.74) saturate(.82);
+ -webkit-backdrop-filter:blur(2px) brightness(.74) saturate(.82);
  animation:victoryScrimIn .24s ease-out both;
 }
 body.victory-state .game-head{position:relative;z-index:80}
-body.victory-state .hud-row{pointer-events:none;opacity:.42;transition:opacity .24s ease}
+body.victory-state .hud-row{pointer-events:none;opacity:.40;transition:opacity .24s ease}
 .victory-card{
- width:clamp(238px,68%,300px);max-width:calc(100% - 24px);
+ width:clamp(246px,72%,310px);max-width:calc(100% - 22px);
  padding:12px;border-radius:19px;text-align:center;color:var(--ui-text,#f4f7fa);
  background:
-  radial-gradient(circle at 50% -28%,color-mix(in srgb,var(--ui-accent,#7ac9ff) 25%,transparent),transparent 48%),
-  linear-gradient(155deg,color-mix(in srgb,var(--ui-surface-raised,#213748) 94%,transparent),color-mix(in srgb,var(--ui-surface,#101d29) 96%,transparent));
- border:1px solid color-mix(in srgb,var(--ui-border,#ffffff44) 78%,var(--ui-accent,#7ac9ff) 22%);
- box-shadow:0 12px 32px var(--ui-shadow,#0009),inset 0 1px 0 #ffffff24;
+  radial-gradient(circle at 50% -28%,color-mix(in srgb,var(--ui-accent,#7ac9ff) 34%,transparent),transparent 48%),
+  linear-gradient(155deg,color-mix(in srgb,var(--ui-surface-raised,#213748) 98%,#ffffff05),color-mix(in srgb,var(--ui-surface,#101d29) 99%,#000));
+ border:2px solid color-mix(in srgb,var(--ui-accent,#7ac9ff) 62%,var(--ui-border,#ffffff44) 38%);
+ box-shadow:0 16px 42px #000d,0 0 20px color-mix(in srgb,var(--ui-accent,#7ac9ff) 18%,transparent),inset 0 1px 0 #ffffff2e;
  animation:victoryCardIn .3s cubic-bezier(.2,.9,.2,1.08) both;
 }
 .victory-result{
  display:grid;gap:1px;padding:10px 9px 9px;border-radius:14px;
- border:1px solid color-mix(in srgb,var(--ui-accent,#7ac9ff) 48%,transparent);
- background:linear-gradient(145deg,color-mix(in srgb,var(--ui-accent,#7ac9ff) 10%,transparent),#00000012);
- box-shadow:inset 0 0 18px color-mix(in srgb,var(--ui-accent,#7ac9ff) 8%,transparent);
+ border:1px solid color-mix(in srgb,var(--ui-accent,#7ac9ff) 58%,transparent);
+ background:linear-gradient(145deg,color-mix(in srgb,var(--ui-accent,#7ac9ff) 14%,transparent),#00000018);
+ box-shadow:inset 0 0 19px color-mix(in srgb,var(--ui-accent,#7ac9ff) 10%,transparent);
 }
 .victory-result strong{
  font-size:clamp(1.7rem,8vw,2.25rem);line-height:1;letter-spacing:.07em;
@@ -193,26 +195,26 @@ body.victory-state .hud-row{pointer-events:none;opacity:.42;transition:opacity .
 .victory-result span{font-size:.98rem;font-weight:760;color:var(--ui-text,#f4f7fa)}
 .victory-result b{font-size:1.34em}
 .victory-score{min-height:20px;margin:8px 3px 7px;color:var(--ui-muted,#c9d2d9);font-size:.84rem;font-weight:700}
-.victory-actions{display:grid;grid-template-columns:.82fr 1.18fr;gap:7px}
+.victory-actions{display:grid;grid-template-columns:.72fr .92fr 1.18fr;gap:6px}
+body.scenario-mode .victory-actions{grid-template-columns:.82fr 1.18fr}
 .victory-actions button{
- min-height:43px;padding:6px 8px;border-radius:12px;font:inherit;font-size:.84rem;font-weight:850;
+ min-width:0;min-height:43px;padding:6px 6px;border-radius:12px;font:inherit;font-size:.78rem;font-weight:850;
  color:var(--ui-text,#f4f7fa);border:1px solid var(--ui-border,#ffffff44);
  box-shadow:inset 0 1px 1px #ffffff26,0 3px 9px var(--ui-shadow,#0006);
+ white-space:nowrap;
 }
 .victory-primary{background:linear-gradient(145deg,var(--ui-control-pressed,var(--ui-accent,#7ac9ff)),var(--ui-control-raised,#385064))}
 .victory-secondary{background:linear-gradient(145deg,var(--ui-control-raised,#385064),var(--ui-control,#162737))}
 .victory-actions button:active{transform:translateY(1px);filter:brightness(1.08)}
 .victory-actions button:focus-visible{outline:3px solid var(--ui-focus,var(--ui-accent,#7ac9ff));outline-offset:2px}
-
-/* A few showcase worlds add only a light material cue; layout stays shared. */
-body[data-scene="moonlit-zen"] .victory-card{box-shadow:0 12px 34px #020a10c7,0 0 18px color-mix(in srgb,var(--ui-accent) 12%,transparent),inset 0 1px 0 #ffffff24}
-body[data-scene="neon-noir"] .victory-card{border-color:color-mix(in srgb,var(--ui-accent) 72%,#00f7ff 28%);box-shadow:0 12px 34px #000c,0 0 16px color-mix(in srgb,var(--ui-accent) 22%,transparent)}
-body[data-scene="sunlit-greenhouse"] .victory-card{border-color:color-mix(in srgb,var(--ui-accent) 68%,#b87942 32%);box-shadow:0 12px 30px #10251dc2,0 0 15px color-mix(in srgb,var(--ui-accent) 14%,transparent)}
-
+body[data-scene="moonlit-zen"] .victory-card{border-color:color-mix(in srgb,var(--ui-accent) 70%,#f5d7ad 30%);box-shadow:0 16px 42px #020a10e0,0 0 22px color-mix(in srgb,var(--ui-accent) 24%,transparent),inset 0 1px 0 #ffffff30}
+body[data-scene="neon-noir"] .victory-card{border-color:color-mix(in srgb,var(--ui-accent) 72%,#00f7ff 28%);box-shadow:0 16px 42px #000e,0 0 24px color-mix(in srgb,var(--ui-accent) 31%,transparent)}
+body[data-scene="sunlit-greenhouse"] .victory-card{border-color:color-mix(in srgb,var(--ui-accent) 68%,#b87942 32%);box-shadow:0 16px 38px #10251de0,0 0 20px color-mix(in srgb,var(--ui-accent) 24%,transparent)}
 @keyframes victoryScrimIn{from{opacity:0}to{opacity:1}}
 @keyframes victoryCardIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
 @media(max-width:360px){
- .victory-card{width:min(86%,270px);padding:10px}
- .victory-actions button{font-size:.78rem;padding-inline:5px}
+ .victory-card{width:min(90%,285px);padding:10px}
+ .victory-actions{gap:4px}
+ .victory-actions button{font-size:.72rem;padding-inline:3px}
 }
 @media(prefers-reduced-motion:reduce){.victory-overlay,.victory-card{animation:none!important}}
