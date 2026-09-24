@@ -11,9 +11,11 @@ const ScenarioMode=(()=>{
   const old=themeCssLink;themeCssLink=next;if(old&&old!==next)old.remove();
  }
  async function preloadThemeAssets(t,base){
-  const items=t?.assets?.preload;if(!Array.isArray(items)||!items.length||String(base).startsWith('local:'))return;
+  if(String(base).startsWith('local:'))return;
+  const discovered=globalThis.ThemeAssets?.collect?.(t)||[],legacy=Array.isArray(t?.assets?.preload)?t.assets.preload:[];
+  const items=[...new Set([...legacy,...discovered])];if(!items.length)return;
   await Promise.allSettled(items.filter(src=>typeof src==='string'&&src.trim()).map(src=>new Promise(resolve=>{
-   const url=refUrl(base,src);if(preloadedThemeAssets.has(url)){resolve();return}
+   const url=globalThis.ThemeAssets?.resolveUrl?.(t,src,base)||refUrl(base,src);if(preloadedThemeAssets.has(url)){resolve();return}
    const img=new Image();let done=false;const finish=()=>{if(done)return;done=true;preloadedThemeAssets.add(url);resolve()};
    img.onload=finish;img.onerror=finish;img.src=url;if(img.complete)finish();
   })));
@@ -22,7 +24,7 @@ const ScenarioMode=(()=>{
  const playBtn=document.querySelector('#playScenario'),closeBtn=document.querySelector('#scenarioClose'),freeBtn=document.querySelector('#freePlay'),newBtn=document.querySelector('#new'),topbar=document.querySelector('.topbar'),loadrow=document.querySelector('.loadrow'),scenarioOpenBtn=document.querySelector('#scenarioOpen'),exitScenarioBtn=document.querySelector('#exitScenario');
  const fetchJson=async src=>{const r=await fetch(src,{cache:'no-cache'});if(!r.ok)throw Error('CONTENT_FETCH_FAILED '+src);return r.json()};
  const refUrl=(base,src)=>new URL(src,new URL(base,location.href)).href;
- function checkDoc(d,format){if(!d||d.format!==format||d.formatVersion!==1)throw Error('INVALID_CONTENT_FORMAT');}
+ function checkDoc(d,format){const maxVersion=format==='ggrid-theme'?2:1;if(!d||d.format!==format||!Number.isInteger(d.formatVersion)||d.formatVersion<1||d.formatVersion>maxVersion)throw Error('INVALID_CONTENT_FORMAT');}
  function merge(parent,obj){
   const r={...parent};
   for(const k of ['theme','abilities','timer','completion'])if(Object.prototype.hasOwnProperty.call(obj,k))r[k]=obj[k];
@@ -73,7 +75,7 @@ const ScenarioMode=(()=>{
    if(!freeThemeIndex){freeThemeIndex=await fetchJson(ROOT+'themes/index.json');checkDoc(freeThemeIndex,'ggrid-theme-index')}
    const entry=(freeThemeIndex.themes||[]).find(t=>t.id===id)||(freeThemeIndex.themes||[]).find(t=>t.id==='classic');
    if(!entry)throw Error('INVALID_REFERENCE theme '+id);
-   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');t.__index=entry;await preloadThemeAssets(t,url);await applyThemeAssetCss(t,url);applyTheme(t);
+   const url=refUrl(ROOT+'themes/index.json',entry.src),t=await fetchJson(url);checkDoc(t,'ggrid-theme');t.__index=entry;t.__url=url;await preloadThemeAssets(t,url);await applyThemeAssetCss(t,url);applyTheme(t);
    try{localStorage.setItem('ggrid.freeplay.theme.v1',entry.id)}catch(_){}
    return t;
   }catch(e){console.error(e);SceneRenderer?.clear?.();AudioManager?.setThemeAudio?.(null)}
