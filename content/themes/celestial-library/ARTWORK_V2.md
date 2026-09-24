@@ -235,4 +235,15 @@ Celestial Library uses the approved portrait composition on every viewport.
 - the game may become vertically scrollable on a short landscape viewport, but the visual composition remains portrait;
 - the deprecated landscape layout data remains only as a compatibility/future-design fallback and is not selected while `artwork.layoutMode` is `portrait`.
 
-Direction cue centers are pulled inward toward the board frame by the theme's `cueInset`, while the full surrounding hit bands remain unchanged.
+Direction cue centers sit in the geometric center of the surrounding control gutters (`cueInset: 0`); the full hit bands remain unchanged. The cue icon is intentionally smaller than the gutter on mobile so it is neither clipped by the scene edge nor laid over the board frame.
+
+
+## 17. Exit overlap policy
+
+The exit remains a boundary-breaking portal, but it must not visually cover the ball standing on the exit cell.
+
+- the portal overlaps less than half of the target cell;
+- horizontal portals use a reduced 125% × 82% footprint;
+- vertical portals use a reduced 82% × 125% footprint;
+- the exit renders behind moving pieces;
+- the astral ball renders above the portal and remains fully legible.
