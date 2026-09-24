@@ -3,7 +3,7 @@
    Legacy CSS themes remain supported; artwork themes use explicit asset/layout layers. */
 const SceneRenderer=(()=>{
  let theme=null,wrap=null,back=null,front=null,frame=null,boardRef=null,componentOverlays=[],warnedMissingShapes=new Set();
- let artworkLayers=new Map(),resizeBound=false;
+ let artworkLayers=new Map(),artworkFrame=null,resizeBound=false;
 
  function ensure(){
   wrap=document.querySelector('.board-wrap');if(!wrap)return;
@@ -11,6 +11,7 @@ const SceneRenderer=(()=>{
   if(!frame){frame=document.createElement('div');frame.className='scene-frame';wrap.append(frame)}
   if(!front){front=document.createElement('div');front.className='scene-layer scene-front';wrap.append(front)}
   ensureArtworkLayers();
+  if(!artworkFrame){artworkFrame=document.createElement('div');artworkFrame.className='scene-artwork-frame';artworkFrame.hidden=true;wrap.append(artworkFrame)}
   if(!resizeBound&&typeof addEventListener==='function'){addEventListener('resize',refreshArtworkLayout,{passive:true});resizeBound=true}
  }
  function ensureArtworkLayers(){
@@ -53,11 +54,13 @@ const SceneRenderer=(()=>{
  function refreshArtworkLayout(){
   if(!theme||renderMode()!=='artwork'||!wrap)return;
   const r=artworkLayout(),mode=r?.mode||'portrait';
-  if(boardRef&&typeof state!=='undefined'&&state)globalThis.ThemeLayout?.applyGameplay?.(wrap,boardRef,theme,state.width||1,state.height||1,innerWidth,innerHeight);
+  let geometry=null;if(boardRef&&typeof state!=='undefined'&&state)geometry=globalThis.ThemeLayout?.applyGameplay?.(wrap,boardRef,theme,state.width||1,state.height||1,innerWidth,innerHeight)||null;
+  if(geometry)globalThis.ThemeFrame?.apply?.(artworkFrame,wrap,theme,theme?.artwork?.board?.frame,geometry);else globalThis.ThemeFrame?.clear?.(artworkFrame);
   for(const key of artworkLayers.keys())renderArtworkLayer(key,mode);
  }
  function clearArtwork(){
   for(const el of artworkLayers.values()){el.innerHTML='';el.hidden=true}
+  globalThis.ThemeFrame?.clear?.(artworkFrame);
   if(wrap){delete wrap.dataset.artLayout;wrap.classList.remove('scene-artwork')}
  }
  function apply(t){
@@ -176,7 +179,7 @@ const SceneRenderer=(()=>{
   componentOverlays=componentOverlays.filter(el=>{if(live.has(el.dataset.objectId))return true;el.remove();return false});
  }
  function afterBoardRender(board){
-  boardRef=board;if(!theme)return;if(renderMode()==='artwork')globalThis.ThemeLayout?.applyGameplay?.(wrap,board,theme,state?.width||1,state?.height||1,innerWidth,innerHeight);decorateCells(board);decorateExit(board.querySelector('.exit'));
+  boardRef=board;if(!theme)return;if(renderMode()==='artwork'){const geometry=globalThis.ThemeLayout?.applyGameplay?.(wrap,board,theme,state?.width||1,state?.height||1,innerWidth,innerHeight);globalThis.ThemeFrame?.apply?.(artworkFrame,wrap,theme,theme?.artwork?.board?.frame,geometry)}decorateCells(board);decorateExit(board.querySelector('.exit'));
   const byId=new Map((state?.objects||[]).map(o=>[String(o.id),o]));
   board.querySelectorAll('.piece').forEach(el=>{const o=byId.get(String(el.dataset.id));if(o)decoratePiece(el,o,+(el.dataset.cellkey?.split(':')[1]||0))});
   buildComponentOverlays(board);
