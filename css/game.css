@@ -102,8 +102,8 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 @media(prefers-reduced-motion:reduce){.startup-grid,.startup-grid .startup-ball{animation:none!important}}
 
 /* v0.10.4 Motion Calibration Lab */
-.calibration{position:fixed;inset:0;z-index:900;background:#07131ddd;display:grid;place-items:center;padding:14px}
-.calibration[hidden]{display:none}.cal-card{width:min(94vw,500px);background:#173a58;border:1px solid #ffffff33;border-radius:18px;padding:16px;box-shadow:0 18px 50px #000b}
+.calibration{position:fixed;inset:0;z-index:940;background:#07131ddd;display:grid;place-items:center;padding:14px}
+.calibration[hidden]{display:none}.cal-card{width:min(94vw,500px);max-height:94dvh;overflow:auto;background:#173a58;border:1px solid #ffffff33;border-radius:18px;padding:16px;box-shadow:0 18px 50px #000b}
 .cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.cal-head strong{font-size:1.05rem}.cal-head button,.cal-actions button{border:0;border-radius:10px;background:#315c7e;color:#fff;padding:9px 12px;font-weight:800}
 .cal-phase{margin-top:12px;font-size:.78rem;opacity:.72}.cal-arrow{font-size:72px;line-height:1.1;font-weight:900;color:#ffd98a;margin:7px 0}.cal-instruction{font-size:1.05rem;font-weight:800;min-height:52px}
 .cal-progress{height:9px;background:#0b2234;border-radius:99px;overflow:hidden;margin:13px 0}.cal-progress i{display:block;height:100%;width:0;background:#8fd7f4;transition:width .15s linear}
