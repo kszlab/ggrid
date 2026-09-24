@@ -195,12 +195,12 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-v4::after{display:
 
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-2h{background-image:url("planter-2h.svg")!important}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-3h{background-image:url("planter-3h.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-2v{background-image:url("planter-2v.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-3v{background-image:url("planter-3v.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-tl{background-image:url("planter-l3-tl.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-tr{background-image:url("planter-l3-tr.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-bl{background-image:url("planter-l3-bl.svg")!important}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-br{background-image:url("planter-l3-br.svg")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-2v{background-image:url("planter-2v.svg?v=0.14.2")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-3v{background-image:url("planter-3v.svg?v=0.14.2")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-tl{background-image:url("planter-l3-tl.svg?v=0.14.2")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-tr{background-image:url("planter-l3-tr.svg?v=0.14.2")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-bl{background-image:url("planter-l3-bl.svg?v=0.14.2")!important}
+body.full-ui-skin[data-scene="sunlit-greenhouse"] .sg-planter-l3-br{background-image:url("planter-l3-br.svg?v=0.14.2")!important}
 
 /* Keep the artwork visually close to the logical footprint even on compact
    mobile grids. The renderer supplies the physical bbox; the SVG preserves

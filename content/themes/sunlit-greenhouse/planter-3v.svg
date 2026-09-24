@@ -1,22 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300">
 <defs>
- <linearGradient id="pot" x1="0" x2="1"><stop stop-color="#754127"/><stop offset=".25" stop-color="#c27849"/><stop offset=".65" stop-color="#9f5a37"/><stop offset="1" stop-color="#60331f"/></linearGradient>
- <linearGradient id="br" x1="0" x2="1"><stop stop-color="#62401f"/><stop offset=".5" stop-color="#e8bd73"/><stop offset="1" stop-color="#62401f"/></linearGradient>
- <filter id="sh"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#173424" flood-opacity=".58"/></filter>
+  <linearGradient id="body" x1="0" x2="1"><stop offset="0" stop-color="#87482b"/><stop offset="0.18" stop-color="#c77b4d"/><stop offset="0.52" stop-color="#b66840"/><stop offset="0.82" stop-color="#995633"/><stop offset="1" stop-color="#673522"/></linearGradient>
+  <linearGradient id="rim" x1="0" x2="1"><stop offset="0" stop-color="#6b3e22"/><stop offset="0.18" stop-color="#e7b878"/><stop offset="0.5" stop-color="#c47849"/><stop offset="0.82" stop-color="#e1ac71"/><stop offset="1" stop-color="#6d4024"/></linearGradient>
+  <linearGradient id="soil" x1="0" x2="0" y2="1"><stop offset="0" stop-color="#405736"/><stop offset="1" stop-color="#253523"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#173425" flood-opacity="0.55"/></filter>
 </defs>
-<g filter="url(#sh)">
- <path d="M20 20Q20 13 28 13H72Q80 13 80 20L76 284Q76 291 69 291H31Q24 291 24 284Z" fill="url(#pot)" stroke="#e5ad6e" stroke-width="3"/>
- <rect x="13" y="9" width="74" height="22" rx="9" fill="url(#br)" stroke="#f0c889" stroke-width="3"/>
- <ellipse cx="50" cy="20" rx="29" ry="8" fill="#304d2e" stroke="#6b4327" stroke-width="2"/>
- <g>
-   <rect x="15" y="99" width="70" height="15" rx="6" fill="url(#br)" stroke="#e9b871" stroke-width="2"/><ellipse cx="50" cy="101" rx="25" ry="6" fill="#355333"/>
-   <rect x="15" y="196" width="70" height="15" rx="6" fill="url(#br)" stroke="#e9b871" stroke-width="2"/><ellipse cx="50" cy="198" rx="25" ry="6" fill="#355333"/>
- </g>
- <g fill="#709f58" stroke="#31522e" stroke-width="1.2">
-   <ellipse cx="39" cy="10" rx="8" ry="18" transform="rotate(-24 39 10)"/><ellipse cx="58" cy="10" rx="8" ry="18" transform="rotate(26 58 10)"/>
-   <ellipse cx="39" cy="94" rx="7" ry="17" transform="rotate(-28 39 94)"/><ellipse cx="59" cy="95" rx="7" ry="17" transform="rotate(27 59 95)"/>
-   <ellipse cx="39" cy="191" rx="7" ry="17" transform="rotate(-26 39 191)"/><ellipse cx="59" cy="192" rx="7" ry="17" transform="rotate(28 59 192)"/>
- </g>
- <path d="M50 34v59M50 116v74M50 213v68" stroke="#e0aa67" stroke-width="2" opacity=".45"/>
- <path d="M33 292h12M56 292h12" stroke="#58311e" stroke-width="7" stroke-linecap="round"/>
-</g></svg>
+<g filter="url(#shadow)">
+  <path d="M18 24 Q18 14 30 14 H70 Q82 14 82 24 L78 278 Q78 288 68 288 H32 Q22 288 22 278 Z" fill="url(#body)" stroke="#efbc80" stroke-width="3"/>
+  <path d="M12 12 H88 Q91 12 91 15 V28 Q91 31 88 31 H12 Q9 31 9 28 V15 Q9 12 12 12 Z" fill="url(#rim)" stroke="#f4cb93" stroke-width="3"/>
+  <path d="M20 18 H80 Q83 18 83 20 V25 Q83 28 80 28 H20 Q17 28 17 25 V20 Q17 18 20 18 Z" fill="url(#soil)" stroke="#6d4528" stroke-width="2"/>
+  <path d="M26 35 C32 46 68 46 74 35" fill="none" stroke="#e5af6d" stroke-width="2.5" opacity="0.75"/>
+  <path d="M32 45 V270" stroke="#e6ae6c" stroke-width="2" opacity="0.42"/>
+  <path d="M50 40 V274" stroke="#efbb7e" stroke-width="2.4" opacity="0.6"/>
+  <path d="M68 45 V270" stroke="#e6ae6c" stroke-width="2" opacity="0.42"/>
+  <path d="M27 284 h12 M61 284 h12" stroke="#5d331f" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#6ea659" stroke="#35552e" stroke-width="1.4">
+    <ellipse cx="34" cy="12" rx="8" ry="18" transform="rotate(-24 34 12)"/>
+    <ellipse cx="50" cy="9" rx="8" ry="19" transform="rotate(2 50 9)"/>
+    <ellipse cx="66" cy="12" rx="8" ry="18" transform="rotate(24 66 12)"/>
+    <ellipse cx="42" cy="15" rx="7" ry="15" transform="rotate(-6 42 15)"/>
+    <ellipse cx="58" cy="15" rx="7" ry="15" transform="rotate(6 58 15)"/>
+  </g>
+  <g fill="#c2dc93" opacity="0.95"><circle cx="38" cy="8" r="3.2"/><circle cx="50" cy="6" r="3.4"/><circle cx="62" cy="8" r="3.2"/></g>
+</g>
+</svg>

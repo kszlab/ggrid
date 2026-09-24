@@ -292,7 +292,7 @@
     },
     {
       "id": "sunlit-greenhouse",
-      "version": 2,
+      "version": 3,
       "name": "NAPÜVEGHÁZ // Az aranymag kertje",
       "description": "SHOWCASE V2: napfényes üvegház, aranymag és alakzatonként egybefüggő terrakotta növénytartók.",
       "showcase": true,
@@ -307,7 +307,7 @@
         ]
       },
       "src": "sunlit-greenhouse/theme.json",
-      "css": "sunlit-greenhouse/theme.css?v=0.14.1"
+      "css": "sunlit-greenhouse/theme.css?v=0.14.2"
     },
     {
       "id": "celestial-library",
