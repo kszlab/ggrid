@@ -1,0 +1,211 @@
+{
+  "model": "puzzle-v3-multiball-anchored-v2",
+  "total": 240,
+  "verified": true,
+  "productionEquivalentTransitions": 10740,
+  "runtimeLibraryHealth": {
+    "total": 240,
+    "duplicates": [],
+    "invalid": [],
+    "unsupported": [],
+    "coverage": {
+      "3x3": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "4x4": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "5x5": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "5x6": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "5x7": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "5x8": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "missing": [],
+    "ok": true
+  },
+  "summary": [
+    {
+      "size": "3x3",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 4,
+      "maxMoves": 13,
+      "polyominoLevels": 0,
+      "sha256": "b7717348a15964723ae3500f10403430fe0e4356ad2f9b8a0c2fe7cf05d26673"
+    },
+    {
+      "size": "4x4",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 5,
+      "maxMoves": 17,
+      "polyominoLevels": 27,
+      "sha256": "9b33c3695a2732e21c22029f7637dda4cb262d5e52835ab7efbde41d79623b4e"
+    },
+    {
+      "size": "5x5",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 5,
+      "maxMoves": 19,
+      "polyominoLevels": 40,
+      "sha256": "22cba4e003d7f4ee1890e5eac1675ac66315bbdbe716b6afd7cd52db63adec34"
+    },
+    {
+      "size": "5x6",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 6,
+      "maxMoves": 32,
+      "polyominoLevels": 40,
+      "sha256": "e2ce2f70e37e9839a7d21e50975f6e2afc5044c2c81a7e22348f2c41a55cf154"
+    },
+    {
+      "size": "5x7",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 6,
+      "maxMoves": 29,
+      "polyominoLevels": 40,
+      "sha256": "e622afc09374714800cbf97082a172ab4052cc0ceadc0015d4f0b7ac8bdae459"
+    },
+    {
+      "size": "5x8",
+      "levels": 40,
+      "coverage": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "minMoves": 4,
+      "maxMoves": 45,
+      "polyominoLevels": 40,
+      "sha256": "d03c21d93b01864175ad1ab4302038e37473c3a6d7d71c1744177512e2409b8d"
+    }
+  ],
+  "calibrationSha256": "87dbda2a6adbc191ca3ea9c1c9ad2307544cadf88f14b2b13bdcdfdc103d16a5"
+}
