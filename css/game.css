@@ -406,3 +406,18 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
  pointer-events:none;
 }
 .scene-artwork-frame[hidden]{display:none!important}
+
+
+/* v0.15.4 – artwork UI chrome and directional cue assets */
+.art-chrome-asset{
+ background-image:var(--art-chrome-image)!important;
+ background-size:var(--art-chrome-fit,100% 100%)!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+}
+.scene-artwork .emboss-arrow.sr-asset-visual{
+ width:clamp(26px,7vw,42px);
+ height:clamp(26px,7vw,42px);
+}
+.scene-artwork .emboss-arrow.sr-asset-visual::before,
+.scene-artwork .emboss-arrow.sr-asset-visual::after{display:none!important}
