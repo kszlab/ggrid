@@ -26,12 +26,13 @@
       448
     ],
     "controls": {
-      "band": 36,
+      "band": 42,
       "gap": 2,
-      "visualMode": "sparse-ornament-plus-central-arrow",
+      "visualMode": "full-ornate-zone",
       "fullBandHitTarget": true,
       "cueInset": 0,
-      "cuePlacement": "centered-in-control-gutter"
+      "cuePlacement": "integrated-in-zone-artwork",
+      "zoneArtwork": true
     },
     "hud": {
       "position": "below-scene",
@@ -58,7 +59,15 @@
       "down",
       "left"
     ],
-    "maxCellOverlap": "less-than-half-cell",
+    "maxCellOverlap": "about-one-third-cell",
     "layering": "behind-moving-pieces"
+  },
+  "artworkFidelity": {
+    "controlZones": "full-panel-artwork",
+    "portal": "ornate-boundary-portal",
+    "codices": "multi-variant-celestial-books",
+    "fixedWall": "brass-astrolabe-pedestal",
+    "frame": "multi-line-filigree-nine-slice",
+    "lighting": "warm-candle-plus-blue-observatory-overlay"
   }
 }
