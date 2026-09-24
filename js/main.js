@@ -2,6 +2,8 @@
 let state,initial,optimal=[],freezeArmed=false,freezeId=null,currentLevelId='',busy=false,lastEvents=[],hintVisible=false,freezeUsed=0;
 const board=document.querySelector('#board'),status=document.querySelector('#status'),meta=document.querySelector('#meta'),codeEl=document.querySelector('#code'),toast=document.querySelector('#toast');
 const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySelector('#difficulty'),sizeEl=document.querySelector('#size'),freezeLimitEl=document.querySelector('#freezeLimit'),soundBtn=document.querySelector('#sound'),ambientBtn=document.querySelector('#ambientSound'),motionBtn=document.querySelector('#motion'),motionNote=document.querySelector('#motionNote');
+const victoryOverlay=document.querySelector('#victoryOverlay'),victoryMoves=document.querySelector('#victoryMoves'),victoryScore=document.querySelector('#victoryScore'),victoryNext=document.querySelector('#victoryNext'),victoryRestart=document.querySelector('#victoryRestart');
+let victoryTimer=null,victoryPending=false,solverUsedThisRun=false;
 
 /* Browsers suspend Web Audio until a genuine user gesture. Capture the first
    pointer/key gesture and let AudioManager start the selected theme ambient. */
@@ -26,9 +28,43 @@ function updateLevelScore(){
  const label=`${done?'✓ ':''}${currentLevelId} · D${levelClass} · ${best}/${scoreBase()} pont`;
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
-function updateScore(){if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');if(hintBtn){hintBtn.disabled=false;hintBtn.title=inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}const visibleHint=document.querySelector('#playHint');if(visibleHint)visibleHint.title='Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.';freezeBtn.disabled=!canUseFreeze()||(inFreePlay()&&scoreData.balance<10);freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';freezeBtn.title=freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':inFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';}
+function updateScore(){
+ const won=!!state?.won;
+ if(scoreValue)scoreValue.textContent=scoreData.balance.toLocaleString('hu-HU');
+ if(hintBtn){hintBtn.disabled=won;hintBtn.title=won?'A pálya már kész.':inFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
+ const visibleHint=document.querySelector('#playHint');
+ if(visibleHint){visibleHint.disabled=won;visibleHint.title=won?'A pálya már kész.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
+ freezeBtn.disabled=won||!canUseFreeze()||(inFreePlay()&&scoreData.balance<10);
+ freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
+ freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':inFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
+}
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
-function awardWin(){if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return;rewardedThisRun=true;const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);if(reward>previous)scoreData.best[currentLevelId]=reward;scoreData.balance+=earned;saveScore();toast.textContent=earned?`Pálya kész! +${earned} pont · egyenleg: ${scoreData.balance}`:`Pálya kész! Korábbi legjobb: ${previous} pont`;updateScore();updateLevelScore()}
+function awardWin(){
+ if(!inFreePlay()||rewardedThisRun||!state?.won||!currentLevelId)return null;
+ rewardedThisRun=true;
+ const reward=scoreReward(),previous=Math.max(0,Number(scoreData.best[currentLevelId])||0),earned=Math.max(0,reward-previous);
+ if(reward>previous)scoreData.best[currentLevelId]=reward;
+ scoreData.balance+=earned;saveScore();updateScore();updateLevelScore();
+ return{reward,previous,earned,balance:scoreData.balance};
+}
+function hideVictory(){
+ if(victoryTimer)clearTimeout(victoryTimer);victoryTimer=null;victoryPending=false;
+ victoryOverlay.hidden=true;document.body.classList.remove('victory-state');
+}
+function resetWinState(){hideVictory();solverUsedThisRun=false;rewardedThisRun=false;}
+function enterVictory(automatic=false,rewardInfo=null){
+ if(!state?.won||victoryPending||!victoryOverlay.hidden)return;
+ victoryPending=true;freezeArmed=false;freezeId=null;hintVisible=false;toast.textContent='';
+ stopHold();clearHintHold();MotionControl?.pause?.();
+ if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;autoSolveToken++;autoSolveActive=false;
+ document.body.classList.add('victory-state');updateScore();
+ victoryMoves.textContent=String(state.moves);
+ if(solverUsedThisRun||automatic)victoryScore.textContent='Automatikus megoldás · 0 pont';
+ else if(inFreePlay()&&rewardInfo)victoryScore.textContent=rewardInfo.earned?`+${rewardInfo.earned} pont · Egyenleg: ${rewardInfo.balance}`:`Korábbi legjobb eredmény: ${rewardInfo.previous} pont`;
+ else victoryScore.textContent='Pálya teljesítve';
+ victoryNext.textContent=(ScenarioMode?.active&&!ScenarioMode?.hasNext)?'Befejezés':'Következő pálya';
+ victoryTimer=setTimeout(()=>{victoryTimer=null;victoryPending=false;victoryOverlay.hidden=false;victoryNext.focus();},380);
+}
 function freezeLimit(){return Infinity;}
 function freezesLeft(){const lim=freezeLimit();return lim===Infinity?Infinity:Math.max(0,lim-freezeUsed);}
 function canUseFreeze(){return freezesLeft()>0;}
@@ -61,7 +97,7 @@ function render(opts={}){
    const ck=`${o.id}:${ci}`;wanted.add(ck);let el=existing.get(ck);
    if(o.exited){if(el){el.style.opacity='0';el.style.transform='scale(.45)';setTimeout(()=>el.remove(),180)}continue;}
    if(!el){el=document.createElement('button');el.type='button';el.dataset.cellkey=ck;el.dataset.id=o.id;el.dataset.bodyid=o.id;el.ariaLabel=o.type==='ball'?'Golyó':o.type==='wall'?'Fix blokk':(o.cells.length>1?'Ragasztott tégla':'Tégla');
-    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy){freezeId=freezeId===o.id?null:o.id;if(freezeId){AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();}else MotionControl.pause();render({preservePieces:true});}});board.append(el);}
+    el.addEventListener('click',()=>{if(o.type!=='wall'&&freezeArmed&&!busy&&!state.won){freezeId=freezeId===o.id?null:o.id;if(freezeId){AudioManager.freeze();SceneRenderer?.event?.('freeze');MotionControl.resume();}else MotionControl.pause();render({preservePieces:true});}});board.append(el);}
    const c=o.cells[ci],p=pctPos(o.x+c.x,o.y+c.y,state.width,state.height);
    el.style.left=p.left;el.style.top=p.top;el.style.width=p.width;el.style.height=p.height;
    el.className=`piece ${o.type} ${o.cells.length>1?'glued '+outerEdgeClasses(o,ci):''} ${freezeId===o.id?'selected':''}`;
@@ -88,9 +124,9 @@ function render(opts={}){
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
  cancelAutoSolve();
- state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
+ resetWinState();state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
  freezeLimitEl.value='inf';
- freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';
+ freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';
  render();MotionControl?.onNewLevel?.();
 }
 function requestLibraryLevel(){
@@ -110,7 +146,22 @@ function playEvents(events){
  if(blocked){board.classList.remove('blocked');void board.offsetWidth;board.classList.add('blocked');setTimeout(()=>board.classList.remove('blocked'),190)}
  if(won){board.classList.add('winner');setTimeout(()=>board.classList.remove('winner'),600)}
 }
-function move(dir,automatic=false){if(!state||state.won||busy||(autoSolveActive&&!automatic))return;const usedFreeze=freezeArmed&&freezeId!=null,wasArmed=freezeArmed;if(usedFreeze&&inFreePlay()&&scoreData.balance<10){cancelFreezeSelection();return}SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}setBusy(true);const r=step(state,dir,usedFreeze?freezeId:null);if(usedFreeze){stopHold();if(inFreePlay())spendScore(10);freezeUsed++;}state=r.state;lastEvents=r.events;freezeArmed=false;freezeId=null;if(wasArmed)MotionControl.resume();render({preservePieces:true});playEvents(r.events);if(usedFreeze&&!state.won)toast.textContent=inFreePlay()?'Freeze felhasználva · −10 pont':'Freeze felhasználva';if(automatic&&state.won)toast.textContent='Automatikus megoldás kész · 0 pont';else awardWin();setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);}
+function move(dir,automatic=false){
+ if(!state||state.won||busy||(autoSolveActive&&!automatic))return;
+ const usedFreeze=freezeArmed&&freezeId!=null,wasArmed=freezeArmed;
+ if(usedFreeze&&inFreePlay()&&scoreData.balance<10){cancelFreezeSelection();return}
+ SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}
+ setBusy(true);const r=step(state,dir,usedFreeze?freezeId:null);
+ if(usedFreeze){stopHold();if(inFreePlay())spendScore(10);freezeUsed++;}
+ state=r.state;lastEvents=r.events;freezeArmed=false;freezeId=null;
+ if(wasArmed&&!state.won)MotionControl.resume();
+ render({preservePieces:true});playEvents(r.events);
+ if(state.won){
+  const rewardInfo=automatic||solverUsedThisRun?null:awardWin();
+  enterVictory(automatic,rewardInfo);
+ }else if(usedFreeze)toast.textContent=inFreePlay()?'Freeze felhasználva · −10 pont':'Freeze felhasználva';
+ setTimeout(()=>{setBusy(false);render({preservePieces:true});},155);
+}
 let autoSolveActive=false,autoSolveTimer=null,autoSolveToken=0;
 function cancelAutoSolve(){autoSolveToken++;if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;if(autoSolveActive){autoSolveActive=false;MotionControl?.resume?.()}}
 function startAutoSolve(){
@@ -123,11 +174,11 @@ function startAutoSolve(){
   if(token!==autoSolveToken)return;
   if(!route?.length){toast.textContent='Innen Freeze nélkül nincs megoldás.';return}
   // A demonstration cannot earn points, even if it is interrupted before victory.
-  rewardedThisRun=true;autoSolveActive=true;MotionControl?.pause?.();render({preservePieces:true});
+  solverUsedThisRun=true;rewardedThisRun=true;autoSolveActive=true;MotionControl?.pause?.();render({preservePieces:true});
   let index=0;
   function next(){
    if(token!==autoSolveToken)return;
-   if(index>=route.length||state.won){autoSolveActive=false;MotionControl?.resume?.();return}
+   if(index>=route.length||state.won){autoSolveActive=false;if(!state.won)MotionControl?.resume?.();return}
    if(busy){autoSolveTimer=setTimeout(next,80);return}
    toast.textContent=`Automatikus megoldás: ${index+1}/${route.length} · 0 pont`;
    move(route[index++],true);
@@ -137,7 +188,7 @@ function startAutoSolve(){
  },0);
 }
 function hint(){
- if(autoSolveActive)return;
+ if(!state||state.won||autoSolveActive)return;
  cancelFreezeSelection();
  if(hintVisible){hintVisible=false;toast.textContent='';updateScore();return;}
  if(inFreePlay()&&scoreData.balance<1)return;
@@ -167,6 +218,7 @@ function holdTick(token){
  holdTimer=setTimeout(()=>holdTick(token),HOLD_REPEAT);
 }
 function startHold(dir,source,e){
+ if(!state||state.won)return;
  if(e){e.preventDefault();try{source.setPointerCapture?.(e.pointerId)}catch(_){}}
  stopHold();holdDir=dir;holdSource=source;source.classList.add('pressed');setBoardTilt(dir,true);
  const oneShotFreeze=freezeArmed&&freezeId!=null;
@@ -245,7 +297,7 @@ const MotionControl=(()=>{
  function disable(){enabled=false;paused=false;removeEventListener('deviceorientation',onOrientation,true);removeEventListener('devicemotion',onMotion,true);clearInterval(healthTimer);healthTimer=null;reset();recognizer=null;label();note('')}
  async function toggle(){if(enabled)disable();else await enable()}
  function pause(){if(enabled){paused=true;reset();note('Mozgás szünetel')}}
- function resume(){if(!enabled)return;paused=false;reset();lastSensorAt=lastOrientationAt=performance.now();note('Mozgás aktív · egy billentés, egy lépés')}
+ function resume(){if(!enabled)return;if(state?.won){paused=true;reset();return}paused=false;reset();lastSensorAt=lastOrientationAt=performance.now();note('Mozgás aktív · egy billentés, egy lépés')}
  function adjustAngle(delta){sensitivity=Math.max(1,Math.min(10,sensitivity+delta));angleValue.textContent=sensitivity+'/10';saveSettings();if(enabled)newRecognizer()}
  function adjustSettle(delta){settle=Math.max(1,Math.min(10,settle+delta));settleValue.textContent=settle+'/10';saveSettings();if(enabled)newRecognizer()}
  function setSlides(value){allowSlides=value;saveSettings();if(enabled)newRecognizer()}
@@ -382,15 +434,22 @@ const CalibrationLab=(()=>{
  return{open};
 })();
 
-freezeBtn.addEventListener('click',()=>{if(autoSolveActive||freezeBtn.disabled)return;if(freezeArmed){cancelFreezeSelection();return}freezeArmed=true;freezeId=null;stopHold();MotionControl.pause();render({preservePieces:true});});
-document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=false;toast.textContent='';render();MotionControl.onNewLevel();});
-document.querySelector('#new').addEventListener('click',()=>newLevel());
+freezeBtn.addEventListener('click',()=>{if(state?.won||autoSolveActive||freezeBtn.disabled)return;if(freezeArmed){cancelFreezeSelection();return}freezeArmed=true;freezeId=null;stopHold();MotionControl.pause();render({preservePieces:true});});
+document.querySelector('#restart').addEventListener('click',()=>{if(busy)return;cancelAutoSolve();resetWinState();state=cloneState(initial);freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';render();MotionControl.onNewLevel();MotionControl.resume();});
+document.querySelector('#new').addEventListener('click',()=>{hideVictory();newLevel();MotionControl.resume();});
+victoryRestart.addEventListener('click',()=>document.querySelector('#restart').click());
+victoryNext.addEventListener('click',async()=>{
+ if(ScenarioMode?.active){
+  hideVictory();await ScenarioMode.advanceAfterWin();MotionControl.resume();return;
+ }
+ hideVictory();newLevel();MotionControl.resume();
+});
 document.querySelector('#hint').addEventListener('click',hint);
 // Short click still requests a hint; a three-second pointer hold runs the demo.
 const playHintBtn=document.querySelector('#playHint');let hintHoldTimer=null,hintHoldFired=false,hintHoldPointer=null;
 function clearHintHold(){if(hintHoldTimer)clearTimeout(hintHoldTimer);hintHoldTimer=null;hintHoldPointer=null;playHintBtn.classList.remove('pressed')}
 playHintBtn.addEventListener('pointerdown',e=>{
- if(e.button!==0||hintHoldPointer!==null)return;
+ if(state?.won||e.button!==0||hintHoldPointer!==null)return;
  clearHintHold();hintHoldFired=false;hintHoldPointer=e.pointerId;
  // Keep receiving the release even if the finger drifts off this small button.
  try{playHintBtn.setPointerCapture(e.pointerId)}catch(_){}
@@ -426,7 +485,7 @@ function refreshKeyboardTilt(){
 addEventListener('keydown',e=>{
  if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;
  const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];
- if(m){e.preventDefault();keyboardDirs.delete(m);keyboardDirs.add(m);refreshKeyboardTilt();move(m);}
+ if(m){e.preventDefault();if(state?.won)return;keyboardDirs.delete(m);keyboardDirs.add(m);refreshKeyboardTilt();move(m);}
 });
 addEventListener('keyup',e=>{
  const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];

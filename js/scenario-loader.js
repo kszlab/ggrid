@@ -110,17 +110,28 @@ const ScenarioMode=(()=>{
   if(effective.completion?.type&&effective.completion.type!=='allBallsExited')throw Error('UNSUPPORTED_COMPLETION');
   const theme=await loadRef(effective.theme,effective.base,'ggrid-theme');await applyThemeAssetCss(theme,theme.__url);applyTheme(theme);
   const lvl=await loadRef(effective.stage.level,effective.base,'ggrid-level'),s=toState(lvl);
-  state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentLevelId='Scenario: '+scenario.id+' / '+effective.stage.id;
+  resetWinState();state=s;initial=cloneState(s);optimal=solve(s,30)||[];currentLevelId='Scenario: '+scenario.id+' / '+effective.stage.id;
   active=true;document.body.classList.add('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=true;topbar.hidden=true;loadrow.hidden=true;scenarioOpenBtn.hidden=true;exitScenarioBtn.hidden=false;applyAbilities();hintVisible=false;toast.textContent='';render();paintInfo();startTimer();MotionControl?.onNewLevel?.();
   try{localStorage.setItem(progressKey,JSON.stringify({scenarioId:scenario.id,version:scenario.version,chapterIndex,stageIndex}))}catch(_){}
+ }
+ function hasNextStage(){
+  if(!scenario)return false;
+  let ci=chapterIndex,si=stageIndex+1;
+  if(si>=scenario.chapters[ci].stages.length){ci++;si=0}
+  return ci<scenario.chapters.length;
  }
  async function nextStage(){
   let ci=chapterIndex,si=stageIndex+1;
   if(si>=scenario.chapters[ci].stages.length){ci++;si=0}
-  if(ci>=scenario.chapters.length){stopTimer();toast.textContent='Forgatókönyv teljesítve: '+scenario.name;return}
-  await loadStage(ci,si);
+  if(ci>=scenario.chapters.length){stopTimer();return false}
+  await loadStage(ci,si);return true;
  }
- function onWin(){if(!active||!state?.won)return;stopTimer();setTimeout(()=>nextStage().catch(showError),700)}
+ async function advanceAfterWin(){
+  if(await nextStage())return;
+  const finished=scenario?.name||'Forgatókönyv';
+  await freePlay();toast.textContent='Forgatókönyv teljesítve: '+finished;AppUI?.showHome?.();
+ }
+ function onWin(){if(!active||!state?.won)return;stopTimer()}
  function showError(e){console.error(e);toast.textContent='Forgatókönyv-hiba: '+(e.message||e)}
  function localPackages(){try{const a=JSON.parse(localStorage.getItem(localStore)||'[]');return Array.isArray(a)?a:[]}catch(_){return[]}}
  function saveLocalPackage(p){
@@ -157,5 +168,5 @@ const ScenarioMode=(()=>{
  initFreeThemes();
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir,automatic=false){const wasWon=!!state?.won;baseMove(dir,automatic);if(active&&!wasWon)setTimeout(onWin,180)};
- return{open,loadFreeTheme,get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
+ return{open,loadFreeTheme,advanceAfterWin,get hasNext(){return hasNextStage()},get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
 })();
