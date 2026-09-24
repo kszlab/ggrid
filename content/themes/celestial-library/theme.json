@@ -327,7 +327,7 @@
           "band": 36,
           "gap": 2,
           "extend": 4,
-          "cueInset": -10
+          "cueInset": 0
         }
       },
       "landscape": {
