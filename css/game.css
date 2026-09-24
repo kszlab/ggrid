@@ -6,7 +6,7 @@ select,.codeinput,button{font:inherit}.topbar select,.codeinput{background:#e8f1
 .board-wrap{padding:12px;background:#6f4a2b;border-radius:22px;box-shadow:0 12px 30px #0007}
 .board{--cols:4;--rows:4;position:relative;display:grid;grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr);aspect-ratio:var(--cols)/var(--rows);background:#2b3034;border:3px solid #b17b45;border-radius:12px;overflow:visible}
 .cell{border:1px solid #ffffff22;background:linear-gradient(145deg,#60676b,#383e42);margin:2px;border-radius:8px}
-.piece{position:absolute;z-index:3;border:0;padding:0;transition:left .19s ease,top .19s ease,opacity .17s ease,transform .17s ease;will-change:left,top,transform,opacity}
+.piece{position:absolute;z-index:3;border:0;padding:0;transition:left var(--ggrid-piece-move,190ms) ease,top var(--ggrid-piece-move,190ms) ease,opacity .17s ease,transform .17s ease;will-change:left,top,transform,opacity}
 .ball{border-radius:50%;background:radial-gradient(circle at 32% 27%,#fff,#aab3ba 25%,#4c555d 68%,#1b2228);box-shadow:3px 5px 7px #0007}
 .brick{border-radius:7px;background:repeating-linear-gradient(90deg,#b9783e 0 5px,#c98a49 5px 11px);box-shadow:inset 0 0 0 2px #e0a866,3px 5px 7px #0007}/* Rigid body = one visual object. Each occupied cell keeps its own DOM hit area,
    but joined edges are visually fused and only the true polyomino perimeter is strong. */
@@ -182,14 +182,14 @@ body:not(.scenario-mode) #scenarioInfo:empty:before{content:'Szabad játék';opa
 @keyframes srScan{to{transform:translateY(8px)}}
 
 /* v0.12.14 – true unified polyomino overlays + richer scene depth */
-.sr-composite{position:absolute;z-index:7;pointer-events:none;box-sizing:border-box;transition:left .14s ease,top .14s ease;overflow:visible}
+.sr-composite{position:absolute;z-index:7;pointer-events:none;box-sizing:border-box;transition:left var(--ggrid-piece-move,190ms) ease,top var(--ggrid-piece-move,190ms) ease;overflow:visible}
 .scene-showcase .brick.sr-component{opacity:.16}
 .scene-showcase.fx-freeze .sr-composite{filter:brightness(1.5) saturate(.45);box-shadow:0 0 22px #aef}
 @keyframes srBreathe{to{opacity:.45;transform:scale(1.03)}}@keyframes srPulse{50%{opacity:.2}}@keyframes srHolo{0%,91%,100%{opacity:1;transform:skewY(-4deg)}92%{opacity:.35;transform:skewY(-4deg) translateX(2px)}94%{opacity:.8;transform:skewY(-4deg) translateX(-1px)}}
 
 /* v0.12.15 – rigid composite synchronization
    Same 140 ms positional interpolation as the underlying logical cells. */
-.sr-composite{transition:left .14s ease,top .14s ease!important;will-change:left,top}
+.sr-composite{transition:left var(--ggrid-piece-move,190ms) ease,top var(--ggrid-piece-move,190ms) ease!important;will-change:left,top}
 .scene-showcase .piece{will-change:left,top}.sr-caption.circuit{color:#62ff91}.sr-caption.circuit b{color:#f0c36a}
 @keyframes srSignal{0%{left:4%;top:12%}45%{left:82%;top:12%}50%{left:82%;top:78%}95%,100%{left:4%;top:78%}}@keyframes srMist{to{transform:translateX(45px);opacity:.35}}
 
