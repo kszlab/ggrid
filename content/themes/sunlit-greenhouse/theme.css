@@ -34,7 +34,6 @@ body.full-ui-skin[data-scene="sunlit-greenhouse"] .emboss-arrow:after{border-bot
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .hud-row{margin-top:9px;padding:8px 7px;min-width:0;gap:7px;border:1px solid #d9ba77aa;border-radius:16px;background:linear-gradient(145deg,#456f58,#213f38);box-shadow:0 7px 17px #0a261fad,inset 0 1px #f9e8b144}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .play-actions{gap:6px}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .play-action,body.full-ui-skin[data-scene="sunlit-greenhouse"] #freeze.play-action,body.full-ui-skin[data-scene="sunlit-greenhouse"] .icon-menu{background:linear-gradient(145deg,#749267,#315946 68%,#193f39);border:1px solid #e7cb82;border-radius:12px;box-shadow:inset 0 1px #fff5,inset 0 0 0 2px #315744,0 3px 6px #102c24;color:#ffe6a5;text-shadow:0 1px #123a32}
-body.full-ui-skin[data-scene="sunlit-greenhouse"] #freeze.freeze-action{color:#d6f9e9}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .score-box{border:1px solid #e4cb88;border-radius:12px;background:linear-gradient(#315a47,#173d35);box-shadow:inset 0 0 0 2px #496c4f,0 3px 7px #102c24}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .score-box strong{color:#ffe2a0}
 body.full-ui-skin[data-scene="sunlit-greenhouse"] .ui-panel .ui-card{border:2px solid #dcc17e;border-radius:20px;box-shadow:0 18px 48px #071b17,inset 0 0 0 4px #41614b}

@@ -23,7 +23,7 @@ body[data-ui-context="game"] main [data-ui-role="ability"]{
  box-shadow:inset 0 1px 1px #ffffff2b,0 3px 9px var(--ui-shadow,#0008);
 }
 body[data-ui-context="game"] main #freeze.freeze-action{
- color:var(--ui-accent,#b9ddff);
+ color:var(--ui-text,#f4f7fa);
  background:linear-gradient(145deg,var(--ui-control-raised,#385064),var(--ui-control,#162737));
 }
 body[data-ui-context="game"] main .play-action:active,
