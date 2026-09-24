@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 2,
   "id": "celestial-library",
-  "version": 3,
+  "version": 4,
   "name": "Csillagkönyvtár",
   "description": "Ősi könyvtár és csillagvizsgáló, ahol díszes kódexek és asztrolábiumok között vezetjük ki az asztrálgömböt.",
   "semantic": {
@@ -290,7 +290,7 @@
     "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal."
   },
   "assets": {
-    "css": "artwork.css?v=0.15.5",
+    "css": "artwork.css?v=0.15.7",
     "preload": [
       "library-scene.svg"
     ]
@@ -320,7 +320,7 @@
             70,
             82,
             400,
-            390
+            400
           ]
         },
         "controls": {
@@ -390,7 +390,11 @@
         {
           "asset": "artwork/cell-constellation.svg"
         }
-      ]
+      ],
+      "fitMode": {
+        "portrait": "expand-height",
+        "landscape": "contain"
+      }
     },
     "pieces": {
       "ball": {
