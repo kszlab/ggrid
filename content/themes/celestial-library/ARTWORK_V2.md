@@ -279,3 +279,13 @@ The fixed obstacle is a dark brass/stone astrolabe pedestal with a strong circul
 The 9-slice frame uses layered brass rails, corner astrolabes and celestial ornaments. A transparent scene-lighting overlay adds warm candle glows at the sides and cool observatory light at the top without reducing board readability.
 
 The board remains the dominant visual element. Environment detail supports the composition but must never compete with gameplay geometry.
+
+
+## 20. Pressed control state
+
+The ornate control-zone panel remains visually stable during input. The direction arrow is a separate artwork cue layered above the zone.
+
+- pressed/active must not add a rectangular blue background over the full hit zone;
+- the zone artwork remains unchanged;
+- only the central arrow cue receives the pressed transform, brightness and glow;
+- this preserves the same interaction convention used by the older themes while retaining the full Celestial Library control-zone artwork.
