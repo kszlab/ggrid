@@ -29,12 +29,16 @@ assert.equal(ref.portrait?.controls?.fullBandHitTarget,true);
 assert.equal(ref.exit?.textRequiredForRecognition,false);
 assert.equal(ref.portrait?.boardPriority,'dominant');
 assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440,'portrait board must remain visually dominant');
-assert.equal(theme.artwork.layouts.portrait.controls.cueInset,8,'direction cues must be pulled toward the board frame');
+assert.equal(theme.artwork.layouts.portrait.controls.cueInset,0,'direction cues must stay centered in the surrounding control gutters');
 
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
 const arrowRule=css.match(/\.edge-control \.emboss-arrow\.sr-asset-visual\s*\{([^}]*)\}/s)?.[1]||'';
 assert.ok(arrowRule.includes('transform:translate('),'artwork arrows must use explicit cue positioning');
 assert.ok(!arrowRule.includes('rotate('),'artwork arrows must not receive legacy direction rotation');
+assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
+assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s,'ball must remain above the exit portal');
+assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:125%;height:82%\}/s,'horizontal exit portal must use reduced footprint');
+assert.match(css,/\.exit-up,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-down\{width:82%;height:125%\}/s,'vertical exit portal must use reduced footprint');
 
 const directions=['up','right','down','left'];
 for(const dir of directions){
