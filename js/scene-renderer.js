@@ -109,8 +109,10 @@ const SceneRenderer=(()=>{
    const zone=wrap?.querySelector('.edge-'+dir),cue=zone?.querySelector('.emboss-arrow'),spec=controls[dir]||controls.cue;
    clearAsset(zone);clearAsset(cue);
    if(!spec)continue;
-   if((spec.target||spec.renderTarget)==='zone'){applyAsset(zone,spec,{layout:mode,direction:dir});zone.classList.add('art-control-zone')}
-   else if(cue)applyAsset(cue,spec,{layout:mode,direction:dir});
+   if((spec.target||spec.renderTarget)==='zone'){
+    applyAsset(zone,spec,{layout:mode,direction:dir});zone.classList.add('art-control-zone');
+    if(cue&&spec.cue)applyAsset(cue,spec.cue,{layout:mode,direction:dir});
+   }else if(cue)applyAsset(cue,spec,{layout:mode,direction:dir});
   }
   const ui=theme?.artwork?.ui||{};applyChromeAsset(document.querySelector('.game-head'),ui.header,{layout:mode});applyChromeAsset(document.querySelector('.hud-row'),ui.hud,{layout:mode});applyChromeAsset(document.querySelector('.victory-card'),ui.victory,{layout:mode});
  }
