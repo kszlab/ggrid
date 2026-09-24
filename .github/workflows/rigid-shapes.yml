@@ -18,6 +18,8 @@ jobs:
           node-version: "22"
       - name: Test classifier
         run: node tools/test-rigid-shapes.mjs
+      - name: Theme Visuals V3
+        run: node tools/test-theme-visuals.mjs
       - name: Verify shape catalog
         run: node tools/scan-rigid-shapes.mjs --check
       - name: Verify theme coverage audit
