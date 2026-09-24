@@ -148,7 +148,7 @@ function render(opts={}){
     marker.className='freeze-selection-marker freeze-selection-composite '+(RigidShapes?.cssClass?.(shapeId)||'');
     marker.dataset.shapeId=shapeId;marker.style.left=p.left;marker.style.top=p.top;
     marker.style.width=((maxX-minX+1)*100/state.width)+'%';marker.style.height=((maxY-minY+1)*100/state.height)+'%';
-    if(clip)marker.style.clipPath=clip;marker.setAttribute('aria-hidden','true');board.append(marker);
+    if(clip)marker.style.setProperty('--freeze-clip',clip);marker.setAttribute('aria-hidden','true');board.append(marker);
    }else for(const c of cells){
     const marker=document.createElement('div'),p=pctPos(selected.x+c.x,selected.y+c.y,state.width,state.height);
     marker.className='freeze-selection-marker';marker.style.left=p.left;marker.style.top=p.top;marker.style.width=p.width;marker.style.height=p.height;marker.setAttribute('aria-hidden','true');board.append(marker);
