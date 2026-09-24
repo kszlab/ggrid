@@ -10,6 +10,8 @@ const theme={artwork:{landscapeMinAspect:1.1,layouts:{
 
 assert.equal(L.modeFor(theme,400,800),'portrait');
 assert.equal(L.modeFor(theme,1200,700),'landscape');
+const forcedPortrait={artwork:{...theme.artwork,layoutMode:'portrait'}};
+assert.equal(L.modeFor(forcedPortrait,1600,600),'portrait','forced portrait must ignore wide viewport aspect');
 const p=L.resolve(theme,400,800);
 assert.deepEqual(p.design,{width:400,height:800});
 assert.deepEqual(p.boxes.board,{x:40,y:120,width:320,height:520});
