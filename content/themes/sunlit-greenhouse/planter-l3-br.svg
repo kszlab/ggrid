@@ -1,9 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-<defs><linearGradient id="p" x1="1" x2="0" y2="1"><stop stop-color="#d99a62"/><stop offset=".45" stop-color="#ae673f"/><stop offset="1" stop-color="#704029"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#173424" flood-opacity=".58"/></filter></defs>
-<g filter="url(#s)">
- <path d="M104 21Q104 12 113 12H178Q188 12 188 22V178Q188 188 178 188H22Q12 188 12 178V114Q12 105 21 105H104Z" fill="url(#p)" stroke="#e6ad70" stroke-width="4" stroke-linejoin="round"/>
- <path d="M100 8H192V192H8V101H100Z" fill="none" stroke="#efc187" stroke-width="5" stroke-linejoin="round"/>
- <path d="M111 17H181V181H18V111H111Z" fill="#314e2f" opacity=".95"/>
- <g fill="#72a059" stroke="#31522e"><ellipse cx="133" cy="11" rx="8" ry="18" transform="rotate(-24 133 11)"/><ellipse cx="163" cy="12" rx="8" ry="18" transform="rotate(25 163 12)"/><ellipse cx="159" cy="98" rx="8" ry="18" transform="rotate(24 159 98)"/><ellipse cx="87" cy="105" rx="8" ry="18" transform="rotate(-24 87 105)"/><ellipse cx="41" cy="105" rx="8" ry="18" transform="rotate(24 41 105)"/></g>
- <path d="M153 30v62M27 112h72" stroke="#e5ac69" stroke-width="3" opacity=".65"/>
-</g></svg>
+<defs>
+  <linearGradient id="body" x1="1" x2="0" y2="1"><stop offset="0" stop-color="#8b4b2d"/><stop offset="0.18" stop-color="#cf8353"/><stop offset="0.55" stop-color="#b96d43"/><stop offset="0.84" stop-color="#995635"/><stop offset="1" stop-color="#6a3822"/></linearGradient>
+  <linearGradient id="rim" x1="1" x2="0"><stop offset="0" stop-color="#6c3e22"/><stop offset="0.18" stop-color="#e6b677"/><stop offset="0.5" stop-color="#c5794a"/><stop offset="0.82" stop-color="#e0ac71"/><stop offset="1" stop-color="#6d4024"/></linearGradient>
+  <linearGradient id="soil" x1="0" x2="0" y2="1"><stop offset="0" stop-color="#3e5635"/><stop offset="1" stop-color="#263523"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#173425" flood-opacity="0.55"/></filter>
+</defs>
+<g filter="url(#shadow)">
+  <path d="M102 24 Q102 14 114 14 H176 Q188 14 188 24 V176 Q188 188 176 188 H24 Q12 188 12 176 V122 Q12 112 22 112 H102 Z" fill="url(#body)" stroke="#efbc80" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M100 12 H192 Q195 12 195 15 V192 Q195 195 192 195 H8 Q5 195 5 192 V109 Q5 106 8 106 H97 V15 Q97 12 100 12 Z" fill="url(#rim)" stroke="#f4cb93" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M109 19 H178 Q181 19 181 22 V182 Q181 185 178 185 H22 Q19 185 19 182 V116 Q19 113 22 113 H93 V22 Q93 19 96 19 Z" fill="url(#soil)" stroke="#6d4528" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M117 38 V86" stroke="#ebb270" stroke-width="2" opacity="0.35"/>
+  <path d="M135 40 V88" stroke="#f0bd80" stroke-width="2.2" opacity="0.45"/>
+  <path d="M153 38 V86" stroke="#ebb270" stroke-width="2" opacity="0.35"/>
+  <path d="M32 124 V172" stroke="#ebb270" stroke-width="2" opacity="0.35"/>
+  <path d="M50 122 V170" stroke="#f0bd80" stroke-width="2.2" opacity="0.45"/>
+  <path d="M117 124 V172" stroke="#ebb270" stroke-width="2" opacity="0.35"/>
+  <path d="M135 122 V170" stroke="#f0bd80" stroke-width="2.2" opacity="0.45"/>
+  <path d="M28 184 h12 M62 184 h12 M140 184 h12" stroke="#5d331f" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#6ea659" stroke="#35552e" stroke-width="1.4">
+    <ellipse cx="117" cy="13" rx="8" ry="18" transform="rotate(-24 117 13)"/>
+    <ellipse cx="134" cy="10" rx="8" ry="19" transform="rotate(2 134 10)"/>
+    <ellipse cx="151" cy="13" rx="8" ry="18" transform="rotate(24 151 13)"/>
+    <ellipse cx="34" cy="115" rx="8" ry="18" transform="rotate(-22 34 115)"/>
+    <ellipse cx="51" cy="112" rx="8" ry="18" transform="rotate(4 51 112)"/>
+    <ellipse cx="68" cy="115" rx="8" ry="18" transform="rotate(22 68 115)"/>
+    <ellipse cx="134" cy="112" rx="8" ry="18" transform="rotate(-22 134 112)"/>
+    <ellipse cx="151" cy="115" rx="8" ry="18" transform="rotate(22 151 115)"/>
+  </g>
+</g>
+</svg>
