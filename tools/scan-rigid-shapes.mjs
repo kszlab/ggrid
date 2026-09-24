@@ -29,7 +29,7 @@ function scanLevel(level,source,shapes){
   const id=RigidShapes.identify(cells),norm=RigidShapes.normalize(cells),b=RigidShapes.bounds(cells);
   let rec=shapes.get(id);
   if(!rec){
-   rec={id,cells:norm,bounds:{width:b.width,height:b.height},rectangular:RigidShapes.isRectangular(cells),sources:[]};
+   rec={id,cells:norm,bounds:{width:b.width,height:b.height},rectangular:RigidShapes.isRectangular(cells)};
    shapes.set(id,rec);
   }
   if(!rec.sources.includes(source))rec.sources.push(source);
@@ -54,7 +54,7 @@ const result={
  format:'ggrid-rigid-shape-catalog',
  formatVersion:1,
  note:'Generated from repository level/scenario JSON files. Do not edit by hand; run node tools/scan-rigid-shapes.mjs.',
- shapes:[...shapes.values()].sort((a,b)=>a.cells.length-b.cells.length||a.id.localeCompare(b.id)).map(s=>({...s,sources:s.sources.sort()}))
+ shapes:[...shapes.values()].sort((a,b)=>a.cells.length-b.cells.length||a.id.localeCompare(b.id))
 };
 const text=JSON.stringify(result,null,2)+'\n';
 const outPath=path.join(ROOT,OUTPUT);
