@@ -30,7 +30,8 @@
       "gap": 2,
       "visualMode": "sparse-ornament-plus-central-arrow",
       "fullBandHitTarget": true,
-      "cueInset": 8
+      "cueInset": 0,
+      "cuePlacement": "centered-in-control-gutter"
     },
     "hud": {
       "position": "below-scene",
@@ -56,6 +57,8 @@
       "right",
       "down",
       "left"
-    ]
+    ],
+    "maxCellOverlap": "less-than-half-cell",
+    "layering": "behind-moving-pieces"
   }
 }
