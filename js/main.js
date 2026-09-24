@@ -180,12 +180,32 @@ document.querySelectorAll('[data-hold-dir]').forEach(b=>{
 
 /* ===== Discrete screen-direction gestures: tilt and optional slide ===== */
 const MotionControl=(()=>{
- const SETTINGS_KEY='ggrid.motion.gesture.v2',PROFILE_KEY='ggrid.motion.profile.v1';
+ const SETTINGS_KEY='ggrid.motion.gesture.v3',LEGACY_SETTINGS_KEY='ggrid.motion.gesture.v2',PROFILE_KEY='ggrid.motion.profile.v1';
+ const SENSITIVITY_FACTORS=[.85,.70,.58,.48,.40,.36,.33,.30,.27,.24];
+ const SETTLE_MS=[50,80,115,150,180,200,220,240,270,300];
  let enabled=false,paused=false,sensitivity=5,settle=5,allowSlides=false,recognizer=null,lastSensorAt=0,lastOrientationAt=0,healthTimer=null;
  const settleValue=document.querySelector('#settleValue'),slideMotion=document.querySelector('#slideMotion');
  function note(t=''){motionNote.textContent=t}
  function label(){motionBtn.setAttribute('aria-checked',String(enabled))}
- function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');if(Number.isInteger(s.sensitivity))sensitivity=Math.max(1,Math.min(10,s.sensitivity));if(Number.isInteger(s.settle))settle=Math.max(1,Math.min(10,s.settle));allowSlides=s.allowSlides===true}catch(_){}angleValue.textContent=sensitivity+'/10';settleValue.textContent=settle+'/10';slideMotion.checked=allowSlides}
+ function nearestIndex(values,target){let best=0,diff=Infinity;for(let i=0;i<values.length;i++){const d=Math.abs(values[i]-target);if(d<diff){best=i;diff=d}}return best+1}
+ function migrateSensitivity(v){const oldFactor=.85-(Math.max(1,Math.min(10,v))-1)*.05;return nearestIndex(SENSITIVITY_FACTORS,oldFactor)}
+ function migrateSettle(v){const oldMs=40+Math.max(1,Math.min(10,v))*20;return nearestIndex(SETTLE_MS,oldMs)}
+ function loadSettings(){
+  let migrated=false,s={};
+  try{
+   const saved=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null');
+   if(saved)s=saved;
+   else{
+    const legacy=JSON.parse(localStorage.getItem(LEGACY_SETTINGS_KEY)||'null');
+    if(legacy){s={sensitivity:Number.isInteger(legacy.sensitivity)?migrateSensitivity(legacy.sensitivity):5,settle:Number.isInteger(legacy.settle)?migrateSettle(legacy.settle):5,allowSlides:legacy.allowSlides===true};migrated=true}
+   }
+   if(Number.isInteger(s.sensitivity))sensitivity=Math.max(1,Math.min(10,s.sensitivity));
+   if(Number.isInteger(s.settle))settle=Math.max(1,Math.min(10,s.settle));
+   allowSlides=s.allowSlides===true;
+   if(migrated)saveSettings();
+  }catch(_){}
+  angleValue.textContent=sensitivity+'/10';settleValue.textContent=settle+'/10';slideMotion.checked=allowSlides;
+ }
  function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({sensitivity,settle,allowSlides}))}catch(_){}}
  function profile(){
   // Calibration contract: a future on-device flow must validate the profile
@@ -193,13 +213,13 @@ const MotionControl=(()=>{
   // PROFILE_KEY. Unknown or malformed profiles never override safe defaults.
   let p=MotionGestureDefaultProfile;
   try{const saved=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');if(isMotionGestureProfile(saved))p=saved}catch(_){}
-  // Triggering, classification gates and slide gates must track one another.
-  // The earlier fixed trigger prevented small gestures at high sensitivity.
-  const factor=.85-(sensitivity-1)*.05;
-  const triggerFactor=Math.max(.6,factor);
-  return {...p,minimumRate:p.minimumRate*factor,minimumExcursion:p.minimumExcursion*factor,
-   slideAcceleration:p.slideAcceleration*factor,triggerRate:p.triggerRate*triggerFactor,
-   triggerAcceleration:p.triggerAcceleration*triggerFactor,quietMs:40+settle*20};
+  // 5/10 now matches the former 10/10 feel. Higher values intentionally extend
+  // the useful range for smaller gestures, while recognizer validation floors
+  // prevent thresholds from becoming unsafe.
+  const factor=SENSITIVITY_FACTORS[sensitivity-1];
+  return {...p,minimumRate:Math.max(25,p.minimumRate*factor),minimumExcursion:Math.max(2,p.minimumExcursion*factor),
+   slideAcceleration:Math.max(.1,p.slideAcceleration*factor),triggerRate:Math.max(20,p.triggerRate*factor),
+   triggerAcceleration:Math.max(.7,p.triggerAcceleration*factor),quietMs:SETTLE_MS[settle-1]};
  }
  function newRecognizer(){recognizer=new MotionGestureRecognizer(profile(),stepOnce,{allowSlides})}
  function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}

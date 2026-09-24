@@ -8,9 +8,9 @@ function numberOption(name,fallback){const i=args.indexOf(name);if(i<0)return fa
 const sensitivity=numberOption('--sensitivity',5),settle=numberOption('--settle',5);
 if(slides)args.splice(args.indexOf('--slides'),1);
 if(!args.length){console.error('Add calibration JSON paths.');process.exitCode=2}else{
- const factor=.85-(sensitivity-1)*.05;
- const triggerFactor=Math.max(.6,factor);
- const profile={...DEFAULT_PROFILE,minimumRate:DEFAULT_PROFILE.minimumRate*factor,minimumExcursion:DEFAULT_PROFILE.minimumExcursion*factor,slideAcceleration:DEFAULT_PROFILE.slideAcceleration*factor,triggerRate:DEFAULT_PROFILE.triggerRate*triggerFactor,triggerAcceleration:DEFAULT_PROFILE.triggerAcceleration*triggerFactor,quietMs:40+settle*20};
+ const sensitivityFactors=[.85,.70,.58,.48,.40,.36,.33,.30,.27,.24],settleMs=[50,80,115,150,180,200,220,240,270,300];
+ const factor=sensitivityFactors[sensitivity-1];
+ const profile={...DEFAULT_PROFILE,minimumRate:Math.max(25,DEFAULT_PROFILE.minimumRate*factor),minimumExcursion:Math.max(2,DEFAULT_PROFILE.minimumExcursion*factor),slideAcceleration:Math.max(.1,DEFAULT_PROFILE.slideAcceleration*factor),triggerRate:Math.max(20,DEFAULT_PROFILE.triggerRate*factor),triggerAcceleration:Math.max(.7,DEFAULT_PROFILE.triggerAcceleration*factor),quietMs:settleMs[settle-1]};
  const counts={tilts:0,tiltsCorrect:0,tiltsIgnored:0,tiltsWrong:0,slides:0,slidesCorrect:0,slidesIgnored:0,slidesWrong:0,lifts:0,liftsWrong:0,extraSteps:0};
  for(const file of args){
   const data=JSON.parse(fs.readFileSync(file,'utf8'));
