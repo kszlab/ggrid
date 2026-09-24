@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 2,
   "id": "celestial-library",
-  "version": 8,
+  "version": 9,
   "name": "Csillagkönyvtár",
   "description": "Ősi könyvtár és csillagvizsgáló, ahol díszes kódexek és asztrolábiumok között vezetjük ki az asztrálgömböt.",
   "semantic": {
@@ -290,7 +290,7 @@
     "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal."
   },
   "assets": {
-    "css": "artwork.css?v=0.15.11",
+    "css": "artwork.css?v=0.15.12",
     "preload": [
       "library-scene.svg"
     ]
@@ -307,7 +307,7 @@
     "diegeticText": "artwork-allowed"
   },
   "artwork": {
-    "version": 1,
+    "version": 2,
     "landscapeMinAspect": 1.18,
     "layouts": {
       "portrait": {
@@ -324,7 +324,7 @@
           ]
         },
         "controls": {
-          "band": 36,
+          "band": 42,
           "gap": 2,
           "extend": 4,
           "cueInset": 0
@@ -354,28 +354,32 @@
       "background": {
         "portrait": "library-scene.svg",
         "landscape": "library-scene.svg"
+      },
+      "environment": {
+        "portrait": "artwork/scene-lighting.svg",
+        "landscape": "artwork/scene-lighting.svg"
       }
     },
     "board": {
       "frame": {
         "asset": "artwork/board-frame.svg",
         "slice": [
-          88,
-          88,
-          88,
-          88
+          96,
+          96,
+          96,
+          96
         ],
         "width": [
-          18,
-          18,
-          18,
-          18
+          22,
+          22,
+          22,
+          22
         ],
         "expand": [
-          12,
-          12,
-          12,
-          12
+          16,
+          16,
+          16,
+          16
         ]
       },
       "cellVariants": [
@@ -405,32 +409,42 @@
         "asset": "artwork/wall.svg"
       },
       "brickSingle": {
-        "asset": "artwork/book-single.svg"
+        "variants": [
+          {
+            "asset": "artwork/book-single-blue.svg"
+          },
+          {
+            "asset": "artwork/book-single-red.svg"
+          },
+          {
+            "asset": "artwork/book-single-green.svg"
+          }
+        ]
       },
       "rigidShapes": {
         "2H": {
-          "asset": "artwork/book-2h.svg"
+          "asset": "artwork/codex-2h.svg"
         },
         "2V": {
-          "asset": "artwork/book-2v.svg"
+          "asset": "artwork/codex-2v.svg"
         },
         "3H": {
-          "asset": "artwork/book-3h.svg"
+          "asset": "artwork/codex-3h.svg"
         },
         "3V": {
-          "asset": "artwork/book-3v.svg"
+          "asset": "artwork/codex-3v.svg"
         },
         "L3-TL": {
-          "asset": "artwork/book-l3-tl.svg"
+          "asset": "artwork/codex-l3-tl.svg"
         },
         "L3-TR": {
-          "asset": "artwork/book-l3-tr.svg"
+          "asset": "artwork/codex-l3-tr.svg"
         },
         "L3-BL": {
-          "asset": "artwork/book-l3-bl.svg"
+          "asset": "artwork/codex-l3-bl.svg"
         },
         "L3-BR": {
-          "asset": "artwork/book-l3-br.svg"
+          "asset": "artwork/codex-l3-br.svg"
         }
       },
       "exit": {
@@ -444,16 +458,20 @@
     },
     "controls": {
       "up": {
-        "asset": "artwork/control-up.svg"
+        "asset": "artwork/control-zone-up.svg",
+        "target": "zone"
       },
       "right": {
-        "asset": "artwork/control-right.svg"
+        "asset": "artwork/control-zone-right.svg",
+        "target": "zone"
       },
       "down": {
-        "asset": "artwork/control-down.svg"
+        "asset": "artwork/control-zone-down.svg",
+        "target": "zone"
       },
       "left": {
-        "asset": "artwork/control-left.svg"
+        "asset": "artwork/control-zone-left.svg",
+        "target": "zone"
       }
     },
     "ui": {
