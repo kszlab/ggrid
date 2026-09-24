@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 3 – v0.15.12
+/* GGrid Scene Renderer 3 – v0.15.13
    Presentation-only layer. Never changes Game State or physics.
    Legacy CSS themes remain supported; artwork themes use explicit asset/layout layers. */
 const SceneRenderer=(()=>{
