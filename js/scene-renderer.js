@@ -14,7 +14,7 @@ const SceneRenderer=(()=>{
      cached nodes before rendering the restarted state. */
   clearComponentOverlays();boardRef=null;warnedMissingShapes.clear();
   theme=t||null;ensure();const type=t?.scene?.type||'';
-  document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');const st=wrap.querySelector('.skin-scene-title');if(st){st.querySelector('strong').textContent=(t?.name||'GGrid').split('//')[0].trim();st.querySelector('span').textContent=document.body.classList.contains('scenario-mode')?'Forgatókönyv':'Szabad játék'}
+  document.body.dataset.scene=type;wrap.dataset.scene=type;document.body.dataset.uiSkin=t?.ui?.skin||'';document.body.classList.toggle('full-ui-skin',t?.ui?.skin==='full');const st=wrap.querySelector('.skin-scene-title');if(st){st.querySelector('strong').textContent=(t?.name||'GGrid').split('//')[0].trim();st.querySelector('span').textContent=t?.scene?.subtitle||(document.body.classList.contains('scenario-mode')?'Forgatókönyv':'Szabad játék')}
   const m=t?.scene?.markup||{};back.innerHTML=m.back||'';front.innerHTML=m.front||'';frame.innerHTML='';
   wrap.classList.toggle('scene-showcase',t?.scene?.tier==='showcase');
  }
