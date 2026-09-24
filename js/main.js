@@ -87,7 +87,7 @@ function canUseFreeze(){return freezesLeft()>0;}
 function cancelFreezeSelection(){if(!freezeArmed&&!freezeId)return;freezeArmed=false;freezeId=null;MotionControl?.resume?.();render({preservePieces:true});}
 function syncSoundControls(){soundBtn.setAttribute('aria-checked',String(AudioManager.effectsEnabled));ambientBtn.setAttribute('aria-checked',String(AudioManager.ambientEnabled))}
 function selectedDims(){const v=String(sizeEl.value);if(v.includes('x')){const [w,h]=v.split('x').map(Number);return{w,h}}const n=+v;return{w:n,h:n}}
-function pctPos(x,y,w,h){const inset=1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
+function pctPos(x,y,w,h){const inset=globalThis.ThemeVisuals?.pieceInset?.(SceneRenderer?.theme)??1.8,cx=100/w,cy=100/h;return{left:`calc(${x*cx}% + ${inset}px)`,top:`calc(${y*cy}% + ${inset}px)`,width:`calc(${cx}% - ${inset*2}px)`,height:`calc(${cy}% - ${inset*2}px)`};}
 function outerEdgeClasses(o,ci){
  const c=o.cells[ci],all=new Set(o.cells.map(q=>key(q.x,q.y))),cl=[];
  const sides=[['t',0,-1],['r',1,0],['b',0,1],['l',-1,0]];
@@ -97,7 +97,7 @@ function outerEdgeClasses(o,ci){
 function render(opts={}){
  if(!state)return;
  board.style.setProperty('--cols',state.width);board.style.setProperty('--rows',state.height);board.style.aspectRatio=`${state.width}/${state.height}`;
- if(!opts.preservePieces){board.innerHTML='';for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++){const c=document.createElement('div');c.className='cell';c.style.gridColumn=x+1;c.style.gridRow=y+1;board.append(c);}
+ if(!opts.preservePieces){board.innerHTML='';for(let y=0;y<state.height;y++)for(let x=0;x<state.width;x++){const c=document.createElement('div');c.className='cell';c.dataset.x=String(x);c.dataset.y=String(y);c.dataset.index=String(y*state.width+x);c.style.gridColumn=x+1;c.style.gridRow=y+1;board.append(c);}
   const e=document.createElement('div');e.className=`exit exit-${state.exit.dir}`;e.style.gridColumn=state.exit.x+1;e.style.gridRow=state.exit.y+1;board.append(e);
   // The visual waypoint remains separate from the theme's decorative exit.
   // Its position follows the real exit, including every board size/direction.
