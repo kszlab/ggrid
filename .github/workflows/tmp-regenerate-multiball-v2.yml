@@ -1,0 +1,30 @@
+name: Regenerate multiball v2
+on:
+  push:
+    branches:
+      - tmp/multiball-v2-regeneration
+permissions:
+  contents: write
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[generated]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build two-ball library
+        run: node tools/build-multiball-library-v2.mjs
+      - name: Commit generated packs
+        run: |
+          git config user.name "ggrid-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/levels/multiball tools/multiball-v2-build-report.json
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "[generated] Regenerate two-ball library v2"
+            git push
+          fi
