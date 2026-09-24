@@ -62,7 +62,7 @@ function enterVictory(automatic=false,rewardInfo=null){
  if(solverUsedThisRun||automatic)victoryScore.textContent='Automatikus megoldás · 0 pont';
  else if(inFreePlay()&&rewardInfo)victoryScore.textContent=rewardInfo.earned?`+${rewardInfo.earned} pont · Egyenleg: ${rewardInfo.balance}`:`Korábbi legjobb eredmény: ${rewardInfo.previous} pont`;
  else victoryScore.textContent='Pálya teljesítve';
- victoryNext.textContent=(ScenarioMode?.active&&!ScenarioMode?.hasNext)?'Befejezés':'Következő pálya';
+ victoryNext.textContent=(ScenarioMode?.active&&!ScenarioMode?.hasNext)?'Befejezés':'Következő →';
  victoryTimer=setTimeout(()=>{victoryTimer=null;victoryPending=false;victoryOverlay.hidden=false;victoryNext.focus();},380);
 }
 function freezeLimit(){return Infinity;}
