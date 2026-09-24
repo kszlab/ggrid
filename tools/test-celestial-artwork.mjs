@@ -40,6 +40,8 @@ assert.match(css,/\.scene-artwork \.edge-control\s*\{[^}]*z-index:10!important;/
 assert.match(css,/\.edge-control\.art-control-zone\s*\{[^}]*background-size:100% 100%!important;/s,'full artwork control zones must fill their hit geometry');
 assert.match(css,/\.edge-control\.art-control-zone\.pressed,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.edge-control\.art-control-zone:active\s*\{[^}]*background-image:var\(--sr-asset-image\)!important;/s,'pressed state must preserve the zone artwork');
 assert.match(css,/\.edge-control\.art-control-zone\.pressed \.emboss-arrow\.sr-asset-visual,/s,'pressed state must affect the arrow cue, not the whole zone');
+assert.match(css,/-webkit-tap-highlight-color:transparent!important/,'mobile native tap highlight must be disabled on celestial controls');
+assert.match(css,/-webkit-appearance:none/,'celestial controls must suppress native mobile button appearance');
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s,'exit portal must render behind moving pieces');
 assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s,'ball must remain above the exit portal');
 assert.match(css,/\.exit-right,\s*\nbody\[data-theme="celestial-library"\] \.scene-artwork \.exit-left\{width:118%;height:76%\}/s,'horizontal exit portal must use compact boundary footprint');
