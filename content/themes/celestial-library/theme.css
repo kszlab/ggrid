@@ -1,358 +1,376 @@
-/* CSILLAGKÖNYVTÁR // Az égi archívum
-   Full showcase skin: brass, dark wood, parchment glass and celestial instruments. */
+/* CSILLAGKÖNYVTÁR V2 // Az égi archívum
+   Illustrated showcase pass based on the approved visual concept. */
 
 body.full-ui-skin[data-scene="celestial-library"]{
- background:#07111f url("library-scene.svg") center 36% / cover fixed no-repeat;
- color:#fff3d3
+ --cl-gold:#e7c374;--cl-gold-hi:#fff0b6;--cl-bronze:#8c5b24;--cl-ink:#07111f;--cl-blue:#0b2340;
+ background:#040812 url("library-scene.svg") center 43% / cover fixed no-repeat;
+ color:#fff2ce
 }
-body.full-ui-skin[data-scene="celestial-library"]:before{
- content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+body.full-ui-skin[data-scene="celestial-library"]::before{
+ content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
  background:
-  radial-gradient(circle at 50% 15%,#718cc626,transparent 25%),
-  linear-gradient(90deg,#020713b5,transparent 20% 80%,#020713b5),
-  linear-gradient(0deg,#030712bf,transparent 28% 75%,#07101ba8)
+  radial-gradient(circle at 50% 13%,#7ea7e52a 0 12%,transparent 32%),
+  radial-gradient(circle at 8% 45%,#e0a64616,transparent 24%),
+  radial-gradient(circle at 92% 48%,#e0a64616,transparent 24%),
+  linear-gradient(90deg,#02040bd6 0 3%,transparent 18% 82%,#02040bd6 97%),
+  linear-gradient(180deg,#02040a55,transparent 28% 73%,#02040acc);
+ mix-blend-mode:screen
 }
 body.full-ui-skin[data-scene="celestial-library"] #game{position:relative;z-index:1}
-body.full-ui-skin[data-scene="celestial-library"] main{max-width:630px;padding-top:5px}
+body.full-ui-skin[data-scene="celestial-library"] main{max-width:620px;padding-top:5px}
 
+/* compact illuminated header */
 body.full-ui-skin[data-scene="celestial-library"] .game-head{
- height:39px;margin-bottom:2px;padding:2px 7px;position:relative;z-index:30;
- border:2px solid #d0aa63;border-radius:13px 13px 5px 5px;
- background:linear-gradient(120deg,#071522f4,#172b42f2 56%,#08131ff0);
- box-shadow:inset 0 0 0 2px #344c5c,0 5px 11px #020711aa
+ height:42px;margin-bottom:3px;padding:2px 7px 2px 37px;position:relative;z-index:31;
+ border:2px solid #d9b568;border-radius:13px;
+ background:
+  linear-gradient(180deg,#183454f5,#071628f7),
+  url("celestial-ornament.svg") 52% center / 68% 40px no-repeat;
+ box-shadow:inset 0 0 0 2px #35506b,inset 0 8px 18px #7ba5df16,0 5px 14px #01040bcc
+}
+body.full-ui-skin[data-scene="celestial-library"] .game-head::before{
+ content:"✦";position:absolute;left:7px;top:6px;width:27px;height:27px;display:grid;place-items:center;
+ border:2px solid #e6c578;border-radius:50%;
+ background:radial-gradient(circle,#2c527a,#091827 68%);
+ color:#f4d98d;font:700 15px Georgia,serif;box-shadow:inset 0 0 0 2px #6d4b25,0 0 10px #efc97833
 }
 body.full-ui-skin[data-scene="celestial-library"] .game-head .scenario-info{
- color:#fff0c9;text-shadow:0 1px 4px #000;font-family:Georgia,serif;
- font-size:clamp(12px,3.7vw,17px)
+ color:#fff1c7;text-shadow:0 1px 4px #000;font-family:Georgia,serif;font-size:clamp(12px,3.4vw,16px)
 }
-body.full-ui-skin[data-scene="celestial-library"] .game-head .play-level-id{color:#c7c7c0}
+body.full-ui-skin[data-scene="celestial-library"] .game-head .play-level-id{
+ color:#d7d0bb;font-family:ui-monospace,Consolas,monospace;font-size:10px
+}
+body.full-ui-skin[data-scene="celestial-library"] .game-head .icon-menu{
+ border:2px solid #e2bd70!important;border-radius:10px!important;background:linear-gradient(#274967,#0c2035)!important;
+ box-shadow:inset 0 0 0 2px #6e4a20,0 2px 7px #0008!important;color:#f1d484!important
+}
 
+/* grand frame */
 body.full-ui-skin[data-scene="celestial-library"] .board-wrap{
- --skin-side:49px;--skin-top:101px;--skin-bottom:61px;
+ --skin-side:54px;--skin-top:111px;--skin-bottom:62px;
  padding:var(--skin-top) var(--skin-side) var(--skin-bottom);
- margin-top:0;position:relative;overflow:hidden;
- border:5px ridge #d5b36f;border-radius:34px 34px 23px 23px;
+ margin-top:0;position:relative;overflow:hidden;isolation:isolate;
+ border:6px double #e4bd6d;border-radius:35px 35px 25px 25px;
  background:
-  linear-gradient(90deg,#07111ff2,#18304db2 13%,transparent 26% 74%,#18304db2 87%,#07111ff2),
-  linear-gradient(180deg,#0c1b2be8,#13294483 21%,#182b4285 80%,#081420ed),
-  url("library-scene.svg") center 47% / cover;
- box-shadow:0 18px 30px #020711c9,inset 0 0 0 3px #17283a,inset 0 0 0 6px #dfc27e,inset 0 0 0 10px #17283ae0
+  linear-gradient(90deg,#07111ff7 0 10%,#112b49dc 15%,transparent 28% 72%,#112b49dc 85%,#07111ff7 90%),
+  linear-gradient(180deg,#081524e8 0 16%,#122a44b8 34%,#0b1c30a8 77%,#050d18ed),
+  url("library-scene.svg") center 46% / cover;
+ box-shadow:
+  0 20px 36px #000c,
+  inset 0 0 0 2px #102238,
+  inset 0 0 0 5px #ad7935,
+  inset 0 0 0 9px #102a47,
+  inset 0 0 0 11px #efcf83,
+  inset 0 0 44px #6f95cf1e
 }
-body.full-ui-skin[data-scene="celestial-library"] .board-wrap:before{
- content:"";position:absolute;inset:9px;border-radius:25px;
- border:2px solid #dfbf7ca3;pointer-events:none;z-index:2;
+body.full-ui-skin[data-scene="celestial-library"] .board-wrap::before{
+ content:"";position:absolute;inset:10px;z-index:2;pointer-events:none;border-radius:26px;
+ border:1px solid #f2d88ea8;
  background:
-  radial-gradient(circle at 8% 12%,#efcb7a99 0 2px,transparent 3px),
-  radial-gradient(circle at 91% 18%,#efcb7a99 0 2px,transparent 3px),
-  repeating-linear-gradient(135deg,#f4d8970a 0 3px,transparent 4px 11px);
- box-shadow:inset 0 0 15px #8ebcff22
+  url("celestial-ornament.svg") center 6px / 86% 68px no-repeat,
+  url("celestial-ornament.svg") center calc(100% - 5px) / 86% 68px no-repeat,
+  radial-gradient(circle at 4% 12%,#f7dc91 0 2px,transparent 3px),
+  radial-gradient(circle at 96% 12%,#f7dc91 0 2px,transparent 3px),
+  radial-gradient(circle at 4% 88%,#f7dc91 0 2px,transparent 3px),
+  radial-gradient(circle at 96% 88%,#f7dc91 0 2px,transparent 3px);
+ box-shadow:inset 0 0 22px #8ab9f11a
 }
-body.full-ui-skin[data-scene="celestial-library"] .board{
- position:relative;z-index:4;width:100%;height:auto;
- border:4px ridge #d7b46c;border-radius:9px;
- background:linear-gradient(#d5d0c3cc,#aeb7b5cc);
- box-shadow:0 10px 22px #010713cc,inset 0 0 0 2px #263d54,inset 0 0 25px #fff7d04a
-}
-body.full-ui-skin[data-scene="celestial-library"] .cell{
- border:2px ridge #9b8a6b;border-radius:5px;
- background:
-  url("constellation-tile.svg") center / 91% 91% no-repeat,
-  radial-gradient(circle at 65% 26%,#fff9e7ed 0,#ded8c7e8 45%,#b9b6ade4 83%,#8d989ce0);
- box-shadow:inset 0 0 0 2px #fff8df78,inset 0 0 15px #ffffff74,0 1px 3px #1b253166
-}
-body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(4n+2){
- background-position:32% 70%,center;filter:brightness(1.025)
-}
-body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(5n+4){
- background-size:72% 72%,cover;background-position:76% 32%,center
+body.full-ui-skin[data-scene="celestial-library"] .board-wrap::after{
+ content:"";position:absolute;inset:18px;z-index:2;pointer-events:none;border-radius:22px;
+ border:1px solid #7ca5d939;box-shadow:inset 0 0 0 1px #e6c67933
 }
 
+/* title plaque - deliberately close to the concept art */
 body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title{
- display:flex;position:absolute;z-index:18;top:12px;left:13%;right:13%;
- align-items:center;flex-direction:column;padding:8px 4px 11px;pointer-events:none;text-align:center;
- border:3px ridge #e4c579;border-radius:50% 50% 22px 22px / 45% 45% 18px 18px;
- background:radial-gradient(ellipse at 50% -20%,#4b6591c9,#0a1c31f4 67%);
- box-shadow:inset 0 0 0 2px #28425d,0 5px 9px #010712c7;text-shadow:0 2px 8px #01050b
+ display:flex;position:absolute;z-index:22;top:18px;left:15%;right:15%;height:62px;
+ align-items:center;justify-content:center;flex-direction:column;padding:2px 32px 6px;pointer-events:none;text-align:center;
+ border:3px solid #edca7b;border-radius:46% 46% 31% 31% / 55% 55% 38% 38%;
+ background:
+  url("celestial-ornament.svg") center -34px / 110% 92px no-repeat,
+  radial-gradient(ellipse at 50% -28%,#476d9e,#0a2139 52%,#071425 100%);
+ box-shadow:
+  inset 0 0 0 2px #7c5424,
+  inset 0 0 20px #83b7f228,
+  0 5px 0 #4b3015,
+  0 9px 18px #000b;
+ text-shadow:0 2px 6px #000
 }
-body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title:before{
- content:"✦  ◌  ✦";position:absolute;top:-14px;left:0;right:0;
- color:#f1d18b;font:15px Georgia,serif;letter-spacing:.68em;text-shadow:0 1px 5px #020711
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title::before{
+ content:"✦";position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:33px;height:33px;display:grid;place-items:center;
+ border:2px solid #efd181;border-radius:50%;
+ background:radial-gradient(circle,#284e79,#071628 70%);
+ color:#ffe59b;font:18px Georgia,serif;box-shadow:0 0 0 3px #7a5223,0 3px 9px #000a
+}
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title::after{
+ content:"";position:absolute;left:-8%;right:-8%;bottom:-20px;height:30px;
+ background:url("celestial-ornament.svg") center / 100% 36px no-repeat;opacity:.72
 }
 body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title strong{
- color:#fff0bd;font:600 clamp(14px,4.9vw,23px)/1.1 Georgia,serif;letter-spacing:.075em
+ color:#fff1be;font:600 clamp(17px,5.2vw,26px)/1.05 Georgia,"Times New Roman",serif;
+ letter-spacing:.055em;text-transform:uppercase
 }
-body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title span{display:none}
+body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title span{
+ display:block;margin-top:3px;color:#d9bd79;font:italic 600 clamp(9px,2.4vw,12px)/1.1 Georgia,serif;letter-spacing:.08em
+}
 
-/* Library depth around the active board. */
+/* active board */
+body.full-ui-skin[data-scene="celestial-library"] .board{
+ position:relative;z-index:6;width:100%;height:auto;overflow:visible;
+ border:6px double #e1ba68;border-radius:9px;background:#08192c;
+ box-shadow:
+  0 13px 25px #000b,
+  0 0 0 3px #5a3917,
+  0 0 0 5px #d9b76e,
+  inset 0 0 0 2px #162c43,
+  inset 0 0 24px #09111e
+}
+body.full-ui-skin[data-scene="celestial-library"] .cell{
+ margin:1.5px;border:1px solid #796847;border-radius:5px;
+ background:url("constellation-tile.svg") center / cover no-repeat;
+ box-shadow:inset 0 0 0 1px #fff1c25c,inset 0 -5px 10px #7b684125,0 1px 2px #0006
+}
+body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(3n+1){filter:brightness(.98) sepia(.03)}
+body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(4n+2){filter:brightness(1.035)}
+body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(7n+3){
+ background-position:52% 48%;box-shadow:inset 0 0 0 1px #f6e7b174,inset 0 -6px 12px #7f704535,0 1px 2px #0006
+}
+
+/* scene depth around the board */
+.cl-vault-glow{position:absolute;left:20%;right:20%;top:4%;height:38%;border-radius:50%;background:radial-gradient(ellipse,#6fa0e230,transparent 67%);filter:blur(6px)}
 .cl-arch-window{
- position:absolute;left:20%;right:20%;top:7%;height:29%;border:5px double #c9a25d;border-bottom:0;
- border-radius:50% 50% 0 0 / 76% 76% 0 0;
+ position:absolute;left:18%;right:18%;top:6%;height:34%;border:5px double #d3aa5e;border-bottom:0;
+ border-radius:50% 50% 0 0 / 75% 75% 0 0;
  background:
-  radial-gradient(circle at 30% 29%,#fff 0 1px,transparent 2px),
-  radial-gradient(circle at 69% 18%,#badbff 0 1px,transparent 2px),
-  radial-gradient(circle at 54% 57%,#fff0b7 0 1px,transparent 2px),
-  linear-gradient(#19375e90,#0813289e);
- opacity:.58;box-shadow:inset 0 0 30px #6ea2e42a,0 -7px 22px #e3bd7130
+  radial-gradient(circle at 28% 25%,#fff 0 1px,transparent 2px),
+  radial-gradient(circle at 70% 20%,#c5e3ff 0 1px,transparent 2px),
+  linear-gradient(#244b79a0,#07152bbb);
+ opacity:.8;box-shadow:inset 0 0 35px #6ea5e12c,0 0 18px #e6bd6b24
 }
-.cl-arch-window:before,.cl-arch-window:after{content:"";position:absolute;background:#d4ae66aa}
-.cl-arch-window:before{left:50%;top:0;bottom:0;width:2px}
-.cl-arch-window:after{left:0;right:0;top:57%;height:2px}
-.cl-shelf{position:absolute;top:20%;bottom:12%;width:12%;opacity:.55;
+.cl-arch-window::before,.cl-arch-window::after{content:"";position:absolute;background:#d8b76b88}
+.cl-arch-window::before{left:50%;top:0;bottom:0;width:2px}.cl-arch-window::after{left:0;right:0;top:56%;height:2px}
+.cl-shelf{position:absolute;top:15%;bottom:9%;width:13%;opacity:.92;border:4px solid #8f5f29;border-radius:10px;
  background:
-  repeating-linear-gradient(0deg,transparent 0 12%,#b3884f 12.5% 13.3%,transparent 14% 24%),
-  repeating-linear-gradient(90deg,#6c2634 0 10%,#263f68 10% 21%,#365b48 21% 31%,#6a4a2c 31% 39%,#243851 39% 50%);
- border:3px solid #9d713b;box-shadow:inset 0 0 0 3px #20140d
+  repeating-linear-gradient(0deg,transparent 0 13%,#d4a85c 13.5% 14.5%,transparent 15% 24%),
+  repeating-linear-gradient(90deg,#722b36 0 10%,#28476f 10% 20%,#315b48 20% 31%,#754d2a 31% 42%,#203a5e 42% 53%);
+ box-shadow:inset 0 0 0 3px #26150d,inset 0 0 18px #0008,0 6px 14px #0007
 }
-.cl-shelf-left{left:3%;transform:perspective(220px) rotateY(12deg)}
-.cl-shelf-right{right:3%;transform:perspective(220px) rotateY(-12deg)}
-.cl-orrery{position:absolute;right:2%;bottom:9%;width:94px;height:94px;border:3px solid #d1aa60;border-radius:50%;opacity:.62;transform:rotate(-13deg)}
-.cl-orrery:before,.cl-orrery:after{content:"";position:absolute;inset:11px;border:2px solid #d1aa60;border-radius:50%}
-.cl-orrery:before{transform:rotate(57deg)}.cl-orrery:after{transform:rotate(-57deg)}
-.cl-lamp{position:absolute;top:34%;width:11px;height:54px;border-radius:7px;background:linear-gradient(#e8c36f,#60411f);box-shadow:0 0 18px 8px #ffd27c42}
-.cl-lamp:after{content:"";position:absolute;left:-11px;top:7px;width:33px;height:28px;border-radius:50%;background:radial-gradient(circle,#fff3bb,#e4aa4f88 45%,transparent 70%)}
-.cl-lamp-left{left:4.5%}.cl-lamp-right{right:4.5%}
-.cl-dust{position:absolute;inset:8%;opacity:.85;
- background:radial-gradient(circle at 13% 26%,#ffe8a4 0 1px,transparent 3px),radial-gradient(circle at 82% 19%,#b9d8ff 0 1px,transparent 3px),radial-gradient(circle at 48% 72%,#ffe8a4 0 1px,transparent 3px),radial-gradient(circle at 74% 82%,#fff 0 1px,transparent 3px);
- animation:clFloat 7s ease-in-out infinite alternate
+.cl-shelf-left{left:2.2%;transform:perspective(260px) rotateY(11deg)}.cl-shelf-right{right:2.2%;transform:perspective(260px) rotateY(-11deg)}
+.cl-column{position:absolute;top:10%;bottom:7%;width:13px;border-radius:10px;background:linear-gradient(90deg,#573412,#f0cf82,#916024,#3c240f);box-shadow:0 0 0 2px #6c461d,0 0 11px #0009}
+.cl-column::after{content:"";position:absolute;inset:10px -7px;background:repeating-linear-gradient(0deg,transparent 0 28px,#f2d68c 29px 31px,transparent 32px 59px);opacity:.45}
+.cl-column-left{left:14.5%}.cl-column-right{right:14.5%}
+.cl-armillary{position:absolute;right:1.3%;bottom:8%;width:94px;height:94px;border:3px solid #d6ae62;border-radius:50%;opacity:.8;transform:rotate(-12deg);filter:drop-shadow(0 4px 4px #0009)}
+.cl-armillary::before,.cl-armillary::after{content:"";position:absolute;inset:10px;border:2px solid #d6ae62;border-radius:50%}.cl-armillary::before{transform:rotate(58deg)}.cl-armillary::after{transform:rotate(-58deg)}
+.cl-telescope{position:absolute;right:7%;bottom:5%;width:16px;height:96px;border-radius:8px;background:linear-gradient(90deg,#6e451d,#f0d07c,#81551f);transform:rotate(23deg);opacity:.75}
+.cl-telescope::before{content:"";position:absolute;left:-11px;top:-17px;width:36px;height:48px;border:3px solid #d9b667;border-radius:9px;background:linear-gradient(#173a5f,#07192e)}
+.cl-telescope::after{content:"";position:absolute;left:-38px;top:77px;width:92px;height:4px;background:#c99b4e;box-shadow:0 0 0 1px #422b13}
+.cl-globe{position:absolute;left:2%;bottom:8%;width:78px;height:78px;border:4px solid #d0a45a;border-radius:50%;background:radial-gradient(circle at 35% 28%,#396b7f,#173854 60%,#0c1c2d);opacity:.78}
+.cl-globe::before{content:"";position:absolute;inset:8px;border:1px solid #9ac7d7;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 12px,#acd0d733 13px 14px,transparent 15px 25px)}
+.cl-lamp{position:absolute;width:10px;height:44px;border-radius:6px;background:linear-gradient(#f0cc78,#674019);box-shadow:0 0 20px 9px #ffca6945}
+.cl-lamp::after{content:"";position:absolute;left:-13px;top:7px;width:36px;height:28px;border-radius:50%;background:radial-gradient(circle,#fff9d9,#eeb35299 38%,transparent 72%)}
+.cl-lamp-a{left:4.2%;top:29%}.cl-lamp-b{right:4.2%;top:29%}.cl-lamp-c{left:3.2%;bottom:27%}.cl-lamp-d{right:3.2%;bottom:27%}
+.cl-dust{position:absolute;inset:7%;opacity:.85;animation:clFloat 7s ease-in-out infinite alternate;
+ background:
+  radial-gradient(circle at 11% 24%,#ffe8a4 0 1px,transparent 3px),
+  radial-gradient(circle at 82% 18%,#c4e0ff 0 1px,transparent 3px),
+  radial-gradient(circle at 42% 74%,#ffe8a4 0 1px,transparent 3px),
+  radial-gradient(circle at 74% 81%,#fff 0 1px,transparent 3px),
+  radial-gradient(circle at 55% 35%,#ffe2a0 0 1px,transparent 3px)
 }
-.cl-chart{position:absolute;right:8%;bottom:5%;width:70px;height:52px;opacity:.36;transform:rotate(-9deg);
- border:1px solid #d5bb7b;background:radial-gradient(circle at 50% 50%,transparent 0 17%,#d5bb7b 18% 19%,transparent 20% 28%,#d5bb7b 29% 30%,transparent 31%),#ead8a433
-}
-.cl-caption{color:#e8c577}.cl-caption b{color:#a9d6ff}
-@keyframes clFloat{to{transform:translateY(-10px);opacity:.5}}
+.cl-sparkles{position:absolute;inset:5%;opacity:.55;background:radial-gradient(circle at 20% 52%,#fff1b0 0 1px,transparent 2px),radial-gradient(circle at 84% 55%,#aedcff 0 1px,transparent 2px)}
+.cl-chart-stack{position:absolute;right:7%;bottom:5%;width:76px;height:55px;opacity:.46;transform:rotate(-8deg);border:2px solid #d2b16d;background:url("constellation-tile.svg") center/cover;border-radius:3px}
+.cl-front-filigree{position:absolute;left:15%;right:15%;bottom:2px;height:46px;background:url("celestial-ornament.svg") center/100% 50px no-repeat;opacity:.38}
+.cl-caption{color:#edca78}.cl-caption b{color:#b7dcff}
+@keyframes clFloat{to{transform:translateY(-9px);opacity:.53}}
 
-/* Direction controls become engraved celestial levers. */
+/* edge controls as brass astronomical rails */
 body.full-ui-skin[data-scene="celestial-library"] .edge-control{
- z-index:20;opacity:1;border:4px ridge #e4c176;
+ z-index:21;opacity:1;border:3px solid #e5bf70;
  background:
-  radial-gradient(circle at 50% 18%,#4d6380,#142a42 58%,#091827),
-  url("constellation-tile.svg") center / 54px 54px repeat;
- box-shadow:inset 0 0 0 2px #253c55,inset 0 0 0 4px #d2b46b35,inset 0 0 14px #92bffc28,0 5px 10px #020711bf
+  radial-gradient(circle at 50% 12%,#3f6284,#122d4b 48%,#08172a 82%),
+  url("celestial-ornament.svg") center / 190px 28px no-repeat;
+ box-shadow:inset 0 0 0 2px #69471f,inset 0 0 0 4px #2f4b66,inset 0 0 18px #94c3ff21,0 6px 11px #0009
 }
-body.full-ui-skin[data-scene="celestial-library"] .edge-control:active,
-body.full-ui-skin[data-scene="celestial-library"] .edge-control.pressed{filter:brightness(1.24);background-color:#304b69}
 body.full-ui-skin[data-scene="celestial-library"] .edge-left,
-body.full-ui-skin[data-scene="celestial-library"] .edge-right{top:var(--skin-top);bottom:var(--skin-bottom);height:auto;width:39px;border-radius:46% 46% 46% 46% / 10% 10% 10% 10%}
-body.full-ui-skin[data-scene="celestial-library"] .edge-left{left:5px}
-body.full-ui-skin[data-scene="celestial-library"] .edge-right{right:5px}
+body.full-ui-skin[data-scene="celestial-library"] .edge-right{top:var(--skin-top);bottom:var(--skin-bottom);height:auto;width:40px;border-radius:55% / 13%}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left{left:6px}body.full-ui-skin[data-scene="celestial-library"] .edge-right{right:6px}
 body.full-ui-skin[data-scene="celestial-library"] .edge-up,
-body.full-ui-skin[data-scene="celestial-library"] .edge-down{left:15%;width:70%;height:42px;border-radius:48%}
-body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 50px)}
+body.full-ui-skin[data-scene="celestial-library"] .edge-down{left:16%;width:68%;height:40px;border-radius:50% / 73%}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 48px)}
 body.full-ui-skin[data-scene="celestial-library"] .edge-down{bottom:7px}
-body.full-ui-skin[data-scene="celestial-library"] .edge-control:before,
-body.full-ui-skin[data-scene="celestial-library"] .edge-control:after{
- content:"✦ ◌";position:absolute;color:#d9bb75;font:14px Georgia,serif;opacity:.65;pointer-events:none
-}
-body.full-ui-skin[data-scene="celestial-library"] .edge-left:before,
-body.full-ui-skin[data-scene="celestial-library"] .edge-right:before{top:8%;writing-mode:vertical-rl}
-body.full-ui-skin[data-scene="celestial-library"] .edge-left:after,
-body.full-ui-skin[data-scene="celestial-library"] .edge-right:after{bottom:8%;writing-mode:vertical-rl}
-body.full-ui-skin[data-scene="celestial-library"] .edge-up:before,
-body.full-ui-skin[data-scene="celestial-library"] .edge-down:before{left:8%;top:28%}
-body.full-ui-skin[data-scene="celestial-library"] .edge-up:after,
-body.full-ui-skin[data-scene="celestial-library"] .edge-down:after{right:8%;top:28%}
-body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow{filter:drop-shadow(1px 2px 1px #020711)}
-body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow:before{background:linear-gradient(#fff0b8,#ba8c43)}
-body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow:after{border-bottom-color:#f1cf82}
+body.full-ui-skin[data-scene="celestial-library"] .edge-control::before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-control::after{position:absolute;color:#efcf7c;font:13px Georgia,serif;opacity:.75;pointer-events:none}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left::before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-right::before{content:"✦\A○\A☾";white-space:pre;top:7%;left:13px;line-height:4.4}
+body.full-ui-skin[data-scene="celestial-library"] .edge-left::after,
+body.full-ui-skin[data-scene="celestial-library"] .edge-right::after{content:"✧\A○\A✦";white-space:pre;bottom:6%;left:13px;line-height:4.4}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up::before,
+body.full-ui-skin[data-scene="celestial-library"] .edge-down::before{content:"✦  ☾  ✧";left:7%;top:11px}
+body.full-ui-skin[data-scene="celestial-library"] .edge-up::after,
+body.full-ui-skin[data-scene="celestial-library"] .edge-down::after{content:"✧  ○  ✦";right:7%;top:11px}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow{width:24px;height:24px;filter:drop-shadow(0 2px 2px #000)}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow::before{left:8px;top:8px;width:8px;height:14px;background:linear-gradient(90deg,#9a6728,#ffe3a2 50%,#8a5921)}
+body.full-ui-skin[data-scene="celestial-library"] .emboss-arrow::after{border-bottom-color:#f7d98c;filter:drop-shadow(0 -1px 0 #6d481e)}
+body.full-ui-skin[data-scene="celestial-library"] .edge-control:active,
+body.full-ui-skin[data-scene="celestial-library"] .edge-control.pressed{filter:brightness(1.23);box-shadow:inset 0 0 12px #000a,inset 0 0 0 3px #e9c675,0 5px 9px #0008}
 
-/* HUD / menu chrome. */
+/* illustrated HUD */
 body.full-ui-skin[data-scene="celestial-library"] .hud-row{
- margin-top:9px;padding:7px;gap:7px;min-width:0;
- border:4px ridge #d8b36d;border-radius:15px;
- background:linear-gradient(#203851f2,#0b1d30f0);
- box-shadow:inset 0 0 0 2px #34506a,0 7px 17px #020711bb
+ position:relative;margin-top:10px;padding:8px 9px;gap:7px;min-width:0;border:4px double #e3bd6d;border-radius:16px;
+ background:
+  url("celestial-ornament.svg") center / 84% 54px no-repeat,
+  linear-gradient(180deg,#173754f5,#071828f6 74%,#28170cf2);
+ box-shadow:inset 0 0 0 2px #6b471e,inset 0 0 17px #79a9de20,0 8px 18px #000a
 }
 body.full-ui-skin[data-scene="celestial-library"] .play-action,
-body.full-ui-skin[data-scene="celestial-library"] #freeze.play-action,
-body.full-ui-skin[data-scene="celestial-library"] .icon-menu{
- border:3px ridge #dfbd73;border-radius:10px;
- background:radial-gradient(circle at 40% -5%,#3f5670,#10273d 80%);
- box-shadow:inset 0 0 0 2px #38506a,0 3px 7px #020711;
- color:#f4d389;text-shadow:0 1px #09111d
+body.full-ui-skin[data-scene="celestial-library"] #freeze.play-action{
+ border:2px solid #e2bd70;border-radius:9px;
+ background:radial-gradient(circle at 45% 0,#3b5d7a,#0c2238 73%);
+ box-shadow:inset 0 0 0 2px #62421d,inset 0 1px #fff3bd55,0 3px 7px #0008;
+ color:#f4d58a;text-shadow:0 1px 2px #000
 }
+body.full-ui-skin[data-scene="celestial-library"] .play-action:hover{filter:brightness(1.12)}
 body.full-ui-skin[data-scene="celestial-library"] .score-box{
- border:3px ridge #e0bd72;border-radius:20px;
- background:radial-gradient(#273f5a,#091a2b);
- box-shadow:inset 0 0 0 2px #3a536d,0 2px 6px #020711
+ border:3px double #e8c475;border-radius:20px;
+ background:radial-gradient(circle at 50% 0,#315171,#08192b 72%);
+ box-shadow:inset 0 0 0 2px #6e4a20,inset 0 0 11px #8cb9e22c,0 3px 7px #0008
 }
-body.full-ui-skin[data-scene="celestial-library"] .score-box strong{color:#f2cf80}
+body.full-ui-skin[data-scene="celestial-library"] .score-box strong{color:#f6d98d;font-family:Georgia,serif;text-shadow:0 2px 3px #000}
 body.full-ui-skin[data-scene="celestial-library"] .ui-panel .ui-card{
- border:2px solid #d8b46e;border-radius:20px;background:#0d2034;
- box-shadow:0 18px 48px #020711,inset 0 0 0 4px #304a64
+ border:3px double #d9b569;border-radius:19px;background:linear-gradient(#173650,#081a2d);box-shadow:0 18px 48px #000c,inset 0 0 0 3px #59401d
 }
-body.full-ui-skin[data-scene="celestial-library"] .ui-panel button{
- border-color:#d4b16c;border-radius:11px;background:linear-gradient(#304b67,#11283e)
-}
+body.full-ui-skin[data-scene="celestial-library"] .ui-panel button{border-color:#d9b46b;border-radius:10px;background:linear-gradient(#315372,#10283f)}
 
-/* Ball: a miniature luminous sky held in brass orbital rings. */
+/* celestial pearl */
 body.full-ui-skin[data-scene="celestial-library"] .ball.cl-orb{
- overflow:visible;border-radius:50%;border:2px solid #fff3bd;
+ overflow:visible;border-radius:50%;border:2px solid #ffe6a0;
  background:
-  radial-gradient(circle at 34% 25%,#fffef3 0 8%,#d7ecff 17%,#8fc8f3 30%,#6a64c9 54%,#292b72 72%,#11172c 88%);
- box-shadow:inset 3px 3px 6px #fff9df,0 0 14px #9bd9ff,0 0 25px #6b69d066
+  radial-gradient(circle at 34% 25%,#fff 0 8%,#e9fbff 12%,#8bd6ff 28%,#9574e9 47%,#31549a 64%,#23194c 80%,#111226 100%);
+ box-shadow:inset 4px 4px 8px #fff,0 0 11px #fff7d7,0 0 25px #9ddcff,0 0 42px #7769d78a
 }
-.cl-orb-ring{position:absolute;inset:-12%;border:2px solid #e8c16f;border-radius:50%;border-left-color:transparent;animation:clSpin 5s linear infinite}
-.cl-orb-ring.r2{inset:-22%;border-color:#9fdcff transparent #e6bd68 #9fdcff;animation-direction:reverse;animation-duration:7s}
-.cl-orb-core{position:absolute;inset:0;display:grid;place-items:center;color:#fff6c8;text-shadow:0 0 7px #fff,0 0 14px #88cfff}
-@keyframes clSpin{to{transform:rotate(360deg)}}
+.cl-orb-aura{position:absolute;inset:-30%;border-radius:50%;background:radial-gradient(circle,#fff9cc36,transparent 65%);animation:clAura 2.2s ease-in-out infinite alternate}
+.cl-orb-ring{position:absolute;inset:-15%;border:2px solid #efc76e;border-radius:50%;border-left-color:transparent;animation:clSpin 5s linear infinite}
+.cl-orb-ring.r2{inset:-24%;border-color:#9edaff transparent #e9bc61 #9edaff;animation-direction:reverse;animation-duration:7s}
+.cl-orb-stars{position:absolute;inset:10%;border-radius:50%;background:radial-gradient(circle at 25% 36%,#fff 0 1px,transparent 2px),radial-gradient(circle at 71% 29%,#fff1b0 0 1px,transparent 2px),radial-gradient(circle at 62% 72%,#d7edff 0 1px,transparent 2px)}
+.cl-orb-core{position:absolute;inset:0;display:grid;place-items:center;color:#fff3ad;font-size:18px;text-shadow:0 0 8px #fff,0 0 18px #8ed8ff}
+@keyframes clSpin{to{transform:rotate(360deg)}}@keyframes clAura{to{transform:scale(1.08);opacity:.55}}
 
-/* Single-cell movable archive volume. */
+/* single-cell leather volume */
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume{
- overflow:visible;border:0;border-radius:5px;
- background:linear-gradient(90deg,#51212b 0 12%,#8c3943 13% 75%,#3d1722 76% 100%);
- box-shadow:inset 0 0 0 2px #d4a75c,inset 5px 0 #2b1720,0 5px 7px #17202d99
+ overflow:visible;border:2px solid #edc66f;border-radius:5px;
+ background:linear-gradient(90deg,#4a1622 0 11%,#8f3341 12% 67%,#5a1d2b 68% 87%,#2b1018 88%);
+ box-shadow:inset 0 0 0 2px #562014,inset 5px 0 #301018,inset -4px 0 #f0d59a36,0 5px 8px #0008
 }
-.cl-book-band{position:absolute;left:10%;right:10%;top:15%;height:7%;background:#d7b369;box-shadow:0 60% #6d4b27}
-.cl-page-edge{position:absolute;right:4%;top:8%;bottom:8%;width:8%;background:repeating-linear-gradient(0deg,#f2dfae 0 2px,#ab9a7e 2px 3px);opacity:.75}
-.cl-book-sigil{position:absolute;inset:0;display:grid;place-items:center;color:#efcf85;font:22px Georgia,serif;text-shadow:0 1px #2b1118}
+.cl-book-leather{position:absolute;inset:5%;border:1px solid #dfb65f;background:radial-gradient(circle at 48% 50%,transparent 0 34%,#d4a34d18 35% 37%,transparent 38%)}
+.cl-book-ribs{position:absolute;left:7%;right:7%;top:12%;bottom:12%;background:linear-gradient(180deg,#d9ae5c 0 4%,transparent 5% 28%,#d9ae5c 29% 33%,transparent 34% 66%,#d9ae5c 67% 71%,transparent 72%)}
+.cl-book-corners{position:absolute;inset:2%;background:radial-gradient(circle at 0 0,#efcd7b 0 5%,transparent 6%),radial-gradient(circle at 100% 0,#efcd7b 0 5%,transparent 6%),radial-gradient(circle at 0 100%,#efcd7b 0 5%,transparent 6%),radial-gradient(circle at 100% 100%,#efcd7b 0 5%,transparent 6%)}
+.cl-page-edge{position:absolute;right:4%;top:8%;bottom:8%;width:7%;background:repeating-linear-gradient(0deg,#fff2c5 0 1px,#a28a61 1px 2px);opacity:.72}
+.cl-book-sigil{position:absolute;inset:0;display:grid;place-items:center;color:#f1ce75;font:700 20px Georgia,serif;text-shadow:0 1px 2px #301018,0 0 5px #efc97555}
 
-/* Fixed obstacle: stone archive pedestal with brass celestial dial. */
+/* fixed brass astrolabe tile */
 body.full-ui-skin[data-scene="celestial-library"] .wall.cl-pedestal{
- border:2px solid #e0c17e;border-radius:8px;
- background:linear-gradient(135deg,#c4bda9,#747984 56%,#424955);
- box-shadow:inset 0 0 0 3px #59606b,0 5px 8px #111925aa
+ border:2px solid #dfbd72;border-radius:6px;
+ background:linear-gradient(135deg,#d9ceb4,#8c887d 52%,#454b56);
+ box-shadow:inset 0 0 0 2px #635232,inset 0 0 14px #fff2ca55,0 4px 7px #0007
 }
-.cl-stone-inlay{position:absolute;inset:12%;border:2px solid #9b783e;border-radius:50%;box-shadow:inset 0 0 0 3px #d3b76c55}
-.cl-stone-inlay:before,.cl-stone-inlay:after{content:"";position:absolute;background:#a5854e;left:49%;top:8%;bottom:8%;width:2px}
-.cl-stone-inlay:after{transform:rotate(90deg)}
-.cl-pedestal b{position:absolute;inset:0;display:grid;place-items:center;color:#f2d792;text-shadow:0 1px 3px #333}
+.cl-stone-inlay{position:absolute;inset:12%;border:2px solid #a57834;border-radius:50%;box-shadow:inset 0 0 0 3px #e5c67744}
+.cl-stone-inlay::before,.cl-stone-inlay::after{content:"";position:absolute;background:#a67b3e;left:49%;top:7%;bottom:7%;width:2px}.cl-stone-inlay::after{transform:rotate(90deg)}
+.cl-wall-ring{position:absolute;inset:22%;border:1px solid #d2af69;border-radius:50%;transform:rotate(45deg)}
+.cl-pedestal b{position:absolute;inset:0;display:grid;place-items:center;color:#f2d590;text-shadow:0 1px 3px #242424}
 
-/* Exit: small glowing astrolabe door. */
+/* ASTROLABE EXIT */
 body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate{
- width:36px!important;height:36px!important;border:3px solid #dfba68!important;border-radius:50%!important;
- background:radial-gradient(circle,#fff9d8 0 10%,#a7dcff 11% 24%,#4c548a 26% 39%,#17182b 41%)!important;
- box-shadow:0 0 13px #bfe6ff,0 0 0 4px #5c3d1f!important;overflow:visible
+ width:38px!important;height:38px!important;border:3px solid #f0cf79!important;border-radius:50%!important;
+ background:radial-gradient(circle,#fffbe9 0 8%,#addfff 9% 22%,#6a63c2 24% 38%,#10182d 40% 66%,#3a2712 68%)!important;
+ box-shadow:0 0 13px #bce5ff,0 0 0 4px #7c5221,0 0 0 6px #edc36d!important;overflow:visible
 }
-body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-right{justify-self:end;transform:translateX(58%)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-left{justify-self:start;transform:translateX(-58%)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-up{align-self:start;transform:translateY(-58%)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-down{align-self:end;transform:translateY(58%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-right{justify-self:end;transform:translateX(58%)}body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-left{justify-self:start;transform:translateX(-58%)}
+body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-up{align-self:start;transform:translateY(-58%)}body.full-ui-skin[data-scene="celestial-library"] .cl-astrogate.exit-down{align-self:end;transform:translateY(58%)}
+.cl-gate-label{position:absolute;z-index:5;left:50%;top:-20px;transform:translateX(-50%);padding:2px 5px;border:1px solid #f2cf78;border-radius:4px;background:#0d3040;color:#fff0b3;font:700 7px/1 Georgia,serif;white-space:nowrap;box-shadow:0 2px 5px #0008}
+.cl-gate-halo{position:absolute;inset:-45%;border-radius:50%;background:radial-gradient(circle,#fff6c52a,transparent 64%);animation:clAura 2.5s ease-in-out infinite alternate}
 .cl-gate-ring{position:absolute;inset:-10px;border:2px solid #d8b566;border-radius:50%;border-top-color:transparent;animation:clSpin 6s linear infinite}
-.cl-gate-ring.r2{inset:-17px;border-style:dashed;border-color:#8fcdf5 #d7b369 #8fcdf5 #d7b369;animation-direction:reverse;animation-duration:9s}
-.cl-astrogate b{position:absolute;inset:0;display:grid;place-items:center;color:#fff6c8;text-shadow:0 0 8px #fff}
-.cl-astrogate:after{display:none!important}
+.cl-gate-ring.r2{inset:-17px;border-style:dashed;border-color:#92d2fa #d9b568 #92d2fa #d9b568;animation-direction:reverse;animation-duration:9s}
+.cl-gate-stars{position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle at 25% 28%,#fff 0 1px,transparent 2px),radial-gradient(circle at 72% 65%,#ffe5a0 0 1px,transparent 2px)}
+.cl-astrogate b{position:absolute;inset:0;display:grid;place-items:center;color:#fff5bd;text-shadow:0 0 8px #fff}.cl-astrogate::after{display:none!important}
 
-/* Shape-aware multicell archive furniture. */
+/* shape-aware illustrated atlas furniture */
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive{
- overflow:visible;border:3px solid #d8ad60;border-radius:8px;
+ --book-a:#173c68;--book-b:#0b203e;--book-hi:#2d5b92;
+ overflow:visible;border:3px solid #ecc771;border-radius:7px;
  background:
-  linear-gradient(90deg,#281725 0 4%,transparent 4% 96%,#281725 96%),
-  linear-gradient(180deg,#6e2a36 0 48%,#263f68 49% 100%);
- box-shadow:inset 0 0 0 2px #2b1d26,inset 0 3px #f0ce815c,0 6px 10px #07101a99;
- filter:drop-shadow(0 4px 4px #02071188)
+  linear-gradient(135deg,#ffffff0f,transparent 18% 78%,#0000002b),
+  linear-gradient(180deg,var(--book-hi),var(--book-a) 42%,var(--book-b));
+ box-shadow:inset 0 0 0 2px #4f3218,inset 0 4px #ffe6a24a,0 6px 10px #0008;
+ filter:drop-shadow(0 4px 4px #0008)
 }
-.cl-archive-spine{position:absolute;left:5%;right:5%;top:10%;bottom:10%;
- background:
-  repeating-linear-gradient(90deg,transparent 0 21%,#d8b66f 21.5% 23%,transparent 23.5% 47%),
-  linear-gradient(180deg,transparent 0 16%,#d7b66b 17% 20%,transparent 21% 79%,#d7b66b 80% 83%,transparent 84%);
- opacity:.75
-}
-.cl-archive-chart{position:absolute;right:8%;top:20%;width:25%;aspect-ratio:1;border:1px solid #e1c173;border-radius:50%;opacity:.66}
-.cl-archive-chart:before,.cl-archive-chart:after{content:"";position:absolute;left:49%;top:7%;bottom:7%;width:1px;background:#e1c173}
-.cl-archive-chart:after{transform:rotate(60deg)}
-.cl-archive b{position:absolute;left:8%;right:8%;bottom:8%;font:700 clamp(6px,1.8vw,10px)/1 ui-monospace,monospace;text-align:center;letter-spacing:.13em;color:#f2d58e;text-shadow:0 1px 3px #120812}
+.cl-book-red{--book-a:#7b2837;--book-b:#35131d;--book-hi:#a44951}
+.cl-book-green{--book-a:#175445;--book-b:#0b2a23;--book-hi:#2d765f}
+.cl-book-blue{--book-a:#173f70;--book-b:#0b2344;--book-hi:#2e619a}
+.cl-book-violet{--book-a:#402d70;--book-b:#20183c;--book-hi:#645298}
+.cl-archive-leather{position:absolute;inset:5%;border:1px solid #e9c66b;background:radial-gradient(circle at 50% 50%,transparent 0 28%,#e5ba5c1b 29% 31%,transparent 32% 45%,#e5ba5c12 46% 48%,transparent 49%)}
+.cl-archive-ribs{position:absolute;left:4%;right:4%;top:8%;bottom:8%;background:repeating-linear-gradient(90deg,transparent 0 22%,#e1b65f 22.5% 23.8%,transparent 24.2% 47%);opacity:.76}
+.cl-archive-corners{position:absolute;inset:2%;background:radial-gradient(circle at 0 0,#f4d783 0 4%,transparent 5%),radial-gradient(circle at 100% 0,#f4d783 0 4%,transparent 5%),radial-gradient(circle at 0 100%,#f4d783 0 4%,transparent 5%),radial-gradient(circle at 100% 100%,#f4d783 0 4%,transparent 5%)}
+.cl-archive-emblem{position:absolute;left:50%;top:50%;width:min(33%,58px);aspect-ratio:1;transform:translate(-50%,-50%);border:2px solid #e8c36b;border-radius:50%;box-shadow:inset 0 0 0 3px #e7c26b22,0 0 8px #f5d88922}
+.cl-archive-emblem::before{content:"☾";position:absolute;inset:0;display:grid;place-items:center;color:#f4d989;font:700 clamp(15px,4.3vw,31px) Georgia,serif;text-shadow:0 1px 2px #000}
+.sr-shape-2h .cl-archive-emblem::before{content:"✦"}.sr-shape-2v .cl-archive-emblem::before{content:"☼"}.sr-shape-3h .cl-archive-emblem::before{content:"☾"}.sr-shape-3v .cl-archive-emblem::before{content:"✧"}
+.sr-shape-l3-tl .cl-archive-emblem::before{content:"☼"}.sr-shape-l3-tr .cl-archive-emblem::before{content:"✦"}.sr-shape-l3-bl .cl-archive-emblem::before{content:"☾"}.sr-shape-l3-br .cl-archive-emblem::before{content:"✧"}
+.cl-page-gilt{position:absolute;right:3%;top:8%;bottom:8%;width:3%;background:repeating-linear-gradient(0deg,#f7e4aa 0 2px,#9b7441 2px 3px);opacity:.72}
+.sr-shape-2v .cl-archive-ribs,.sr-shape-3v .cl-archive-ribs{background:repeating-linear-gradient(0deg,transparent 0 21%,#e1b65f 21.5% 23%,transparent 23.5% 47%)}
+.sr-shape-2v .cl-page-gilt,.sr-shape-3v .cl-page-gilt{right:8%;left:8%;top:auto;bottom:3%;height:3%;width:auto;background:repeating-linear-gradient(90deg,#f7e4aa 0 2px,#9b7441 2px 3px)}
 
-/* Horizontal atlases are wide display cases. */
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2h{background:linear-gradient(180deg,#742c37,#391a29 48%,#223d68 49%,#182b4b)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3h{background:linear-gradient(180deg,#264b60,#193548 45%,#6b2934 46%,#3b1b28)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3h .cl-archive-chart{width:16%;right:7%}
-
-/* Vertical codices get a tall central spine and stacked brass bands. */
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v{
- background:linear-gradient(90deg,#152f50 0 23%,#375d7f 24% 52%,#54232e 53% 82%,#271620 83%);
- border-radius:9px
-}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v .cl-archive-spine,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v .cl-archive-spine{
- background:
-  repeating-linear-gradient(0deg,transparent 0 21%,#d8b66f 21.5% 23%,transparent 23.5% 47%),
-  linear-gradient(90deg,transparent 0 17%,#d7b66b 18% 22%,transparent 23% 78%,#d7b66b 79% 83%,transparent 84%)
-}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v .cl-archive-chart,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v .cl-archive-chart{width:46%;right:27%;top:10%}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-2v b,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-3v b{
- writing-mode:vertical-rl;transform:rotate(180deg);left:10%;right:auto;top:30%;bottom:10%
-}
-
-/* The four L-shaped archive desks use a transparent missing quadrant. */
+/* L-shaped bound corner atlases */
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl,
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr,
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br{
- border:0;border-radius:0;box-shadow:none;
- background:
-  radial-gradient(circle at 26% 26%,#e2bd6f 0 2px,transparent 3px),
-  linear-gradient(135deg,#6a2a35,#263f68 54%,#172b49);
- filter:drop-shadow(0 5px 5px #020711aa)
-}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br{border:0;border-radius:0;box-shadow:none;filter:drop-shadow(0 5px 5px #000a)}
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl{clip-path:polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)}
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr{clip-path:polygon(0 0,100% 0,100% 100%,50% 100%,50% 50%,0 50%)}
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl{clip-path:polygon(0 0,50% 0,50% 50%,100% 50%,100% 100%,0 100%)}
 body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br{clip-path:polygon(50% 0,100% 0,100% 100%,0 100%,0 50%,50% 50%)}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl:before,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr:before,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl:before,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br:before{
- content:"";position:absolute;inset:4%;border:2px solid #dfbb6e;opacity:.7;pointer-events:none
-}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl .cl-archive-chart{right:56%;top:56%;width:31%}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr .cl-archive-chart{right:12%;top:56%;width:31%}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl .cl-archive-chart{right:12%;top:12%;width:31%}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br .cl-archive-chart{right:56%;top:12%;width:31%}
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl b,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr b,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl b,
-body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br b{font-size:6px;letter-spacing:.08em}
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tl::before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-tr::before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-bl::before,
+body.full-ui-skin[data-scene="celestial-library"] .cl-archive.sr-shape-l3-br::before{content:"";position:absolute;inset:3%;border:2px solid #ecc873;box-shadow:inset 0 0 0 2px #4f3116}
+.sr-shape-l3-tl .cl-archive-emblem{left:27%;top:73%;width:28%}.sr-shape-l3-tr .cl-archive-emblem{left:73%;top:73%;width:28%}
+.sr-shape-l3-bl .cl-archive-emblem{left:73%;top:27%;width:28%}.sr-shape-l3-br .cl-archive-emblem{left:27%;top:27%;width:28%}
 
-/* Cell fallback stays coherent if future level generators introduce a new shape. */
+/* fallback stays book-like for future unknown shapes */
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component:not(.sr-composite-source){
- background:linear-gradient(95deg,#612833,#8a3942 47%,#263f68 48%);border:2px solid #d5ae63;border-radius:0;box-shadow:inset 0 2px #eccb83;overflow:visible
+ background:linear-gradient(95deg,#6e2735,#284c6e 52%,#15314f);border:2px solid #dcb564;border-radius:0;box-shadow:inset 0 2px #ffe49b55;overflow:visible
 }
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-l:not(.sr-composite-source){border-left:0}
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-r:not(.sr-composite-source){border-right:0}
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-t:not(.sr-composite-source){border-top:0}
 body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component.join-b:not(.sr-composite-source){border-bottom:0}
-body.full-ui-skin[data-scene="celestial-library"] .brick.cl-volume.sr-component:not(.sr-composite-source) .cl-book-sigil{opacity:.55}
 
-/* Free Play carousel preview. */
+/* Free Play card */
 .theme-preview[data-theme="celestial-library"] .theme-preview-art{
  background:
-  radial-gradient(circle at 50% 21%,#668bd45c 0 9%,transparent 23%),
+  radial-gradient(circle at 50% 20%,#7096d64c 0 8%,transparent 26%),
   linear-gradient(90deg,#26170f 0 17%,transparent 18% 82%,#26170f 83%),
   url("library-scene.svg") center 42% / cover
 }
 .theme-preview[data-theme="celestial-library"] .mini-board{
- border:6px double #d7b46c;background:#b8b5a8;box-shadow:0 16px 30px #020711bd,inset 0 0 16px #fff0b85c
+ border:6px double #d7b46c;background:#08182a;box-shadow:0 16px 30px #000c,inset 0 0 16px #fff0b838
 }
-.theme-preview[data-theme="celestial-library"] .mini-cell{
- background:url("constellation-tile.svg") center/85% 85% no-repeat,#d4d0c4;border-color:#776b58
-}
-.theme-preview[data-theme="celestial-library"] .mini-cell.block{
- background:linear-gradient(#7a303a,#263f68);border-color:#d8b66e;color:#f3d487
-}
-.theme-preview[data-theme="celestial-library"] .mini-cell.target{
- background:radial-gradient(circle,#fff,#bde4ff 23%,#645ac2 56%,#171a3b 75%);box-shadow:0 0 14px #bde6ff
-}
-.theme-preview[data-theme="celestial-library"] .mini-cell.gate{
- border:3px double #ddb86b;border-radius:50%;background:#24385b;color:#fff1b8
-}
+.theme-preview[data-theme="celestial-library"] .mini-cell{background:url("constellation-tile.svg") center/cover;border-color:#776b58}
+.theme-preview[data-theme="celestial-library"] .mini-cell.block{background:linear-gradient(#7a303a,#263f68);border-color:#d8b66e;color:#f3d487}
+.theme-preview[data-theme="celestial-library"] .mini-cell.target{background:radial-gradient(circle,#fff,#bde4ff 23%,#645ac2 56%,#171a3b 75%);box-shadow:0 0 14px #bde6ff}
+.theme-preview[data-theme="celestial-library"] .mini-cell.gate{border:3px double #ddb86b;border-radius:50%;background:#24385b;color:#fff1b8}
 
 @media(max-width:430px){
- body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-side:42px;--skin-top:98px}
+ body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-side:43px;--skin-top:108px;--skin-bottom:58px;border-width:5px}
  body.full-ui-skin[data-scene="celestial-library"] .edge-left,
  body.full-ui-skin[data-scene="celestial-library"] .edge-right{width:34px}
- body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title strong{font-size:clamp(13px,4.7vw,19px)}
+ body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title{left:14%;right:14%;height:58px}
+ body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title strong{font-size:clamp(15px,4.9vw,20px)}
  body.full-ui-skin[data-scene="celestial-library"] .play-actions{gap:4px}
  body.full-ui-skin[data-scene="celestial-library"] .play-action{width:46px}
  body.full-ui-skin[data-scene="celestial-library"] #freeze.play-action{width:42px;min-width:42px;padding:0}
- body.full-ui-skin[data-scene="celestial-library"] .score-box{min-width:62px;padding:5px}
+ body.full-ui-skin[data-scene="celestial-library"] .score-box{min-width:65px;padding:5px}
 }
 @media(max-height:760px){
- body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-top:88px;--skin-bottom:52px}
- body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 47px)}
+ body.full-ui-skin[data-scene="celestial-library"] .board-wrap{--skin-top:99px;--skin-bottom:53px}
+ body.full-ui-skin[data-scene="celestial-library"] .edge-up{top:calc(var(--skin-top) - 45px)}
+ body.full-ui-skin[data-scene="celestial-library"] .skin-scene-title{top:14px;height:55px}
 }
-@media(prefers-reduced-motion:reduce){
- .cl-dust,.cl-orb-ring,.cl-gate-ring{animation:none!important}
-}
+@media(prefers-reduced-motion:reduce){.cl-dust,.cl-orb-aura,.cl-orb-ring,.cl-gate-halo,.cl-gate-ring{animation:none!important}}
