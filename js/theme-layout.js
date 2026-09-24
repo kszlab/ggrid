@@ -88,7 +88,7 @@
  function clearBoxStyle(el){if(!el)return;for(const p of ['position','left','top','width','height'])el.style.removeProperty(p)}
  function clearGameplay(root,board){
   if(!root)return;clearBoxStyle(board||root.querySelector('.board'));for(const dir of ['up','down','left','right'])clearBoxStyle(root.querySelector('.edge-'+dir));
-  for(const p of [...root.style])if(p.startsWith('--art-'))root.style.removeProperty(p);delete root.dataset.artLayout;
+  const props=[];for(let i=0;i<root.style.length;i++)props.push(root.style[i]);for(const p of props)if(p.startsWith('--art-'))root.style.removeProperty(p);delete root.dataset.artLayout;
  }
  return{designSize,normalizeBox,layouts,modeFor,resolve,pctBox,apply,fitBoard,controlZones,applyBoxStyle,applyGameplay,clearBoxStyle,clearGameplay};
 });
