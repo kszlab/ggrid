@@ -178,26 +178,25 @@ document.querySelectorAll('[data-hold-dir]').forEach(b=>{
  b.addEventListener('lostpointercapture',stopHold);b.addEventListener('contextmenu',e=>e.preventDefault());
 });
 
-/* ===== v0.10.9 MOBILE TILT INPUT – relative H/V transitions =====
-   Calibration-derived controller: DeviceMotion gravity is converted to two physical
-   tilt angles. Each accepted direction becomes the next relative reference, so direct
-   RIGHT→DOWN etc. transitions do not require returning to neutral. */
+/* ===== Discrete screen-direction gestures: tilt and optional slide ===== */
 const MotionControl=(()=>{
- const SETTINGS_KEY='ggrid.motion.gesture.v1',PROFILE_KEY='ggrid.motion.profile.v1';
- let enabled=false,paused=false,angleStrength=5,recognizer=null,lastSensorAt=0,lastOrientationAt=0,healthTimer=null;
+ const SETTINGS_KEY='ggrid.motion.gesture.v2',PROFILE_KEY='ggrid.motion.profile.v1';
+ let enabled=false,paused=false,sensitivity=5,settle=5,allowSlides=false,recognizer=null,lastSensorAt=0,lastOrientationAt=0,healthTimer=null;
+ const settleValue=document.querySelector('#settleValue'),slideMotion=document.querySelector('#slideMotion');
  function note(t=''){motionNote.textContent=t}
  function label(){motionBtn.setAttribute('aria-checked',String(enabled))}
- function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');if(Number.isInteger(s.strength))angleStrength=Math.max(1,Math.min(10,s.strength))}catch(_){}angleValue.textContent=angleStrength+'/10'}
- function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({strength:angleStrength}))}catch(_){}}
+ function loadSettings(){try{const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');if(Number.isInteger(s.sensitivity))sensitivity=Math.max(1,Math.min(10,s.sensitivity));if(Number.isInteger(s.settle))settle=Math.max(1,Math.min(10,s.settle));allowSlides=s.allowSlides===true}catch(_){}angleValue.textContent=sensitivity+'/10';settleValue.textContent=settle+'/10';slideMotion.checked=allowSlides}
+ function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify({sensitivity,settle,allowSlides}))}catch(_){}}
  function profile(){
   // Calibration contract: a future on-device flow must validate the profile
   // against held-out tilts and negative gestures BEFORE storing it under
   // PROFILE_KEY. Unknown or malformed profiles never override safe defaults.
   let p=MotionGestureDefaultProfile;
   try{const saved=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');if(isMotionGestureProfile(saved))p=saved}catch(_){}
-  const factor=1+(angleStrength-5)*.12;
-  return {...p,minimumRate:p.minimumRate*factor,minimumExcursion:p.minimumExcursion*factor};
+  const factor=1.2-(sensitivity-1)*.065;
+  return {...p,minimumRate:p.minimumRate*factor,minimumExcursion:p.minimumExcursion*factor,slideAcceleration:p.slideAcceleration*factor,quietMs:80+settle*20};
  }
+ function newRecognizer(){recognizer=new MotionGestureRecognizer(profile(),stepOnce,{allowSlides})}
  function screenAngle(){return (screen.orientation&&typeof screen.orientation.angle==='number'?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0))||0}
  function stepOnce(dir){if(paused||busy||!state||state.won)return;setBoardTilt(dir,true);move(dir);setTimeout(()=>setBoardTilt(null,false),180)}
  function onOrientation(e){if(!enabled||paused||!recognizer||![e.beta,e.gamma].every(Number.isFinite))return;lastOrientationAt=performance.now();recognizer.orientation(e,lastOrientationAt,screenAngle())}
@@ -213,21 +212,26 @@ const MotionControl=(()=>{
   try{
    if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted'){note('A tájolásérzékelő engedélye hiányzik.');return}
    if(typeof DeviceMotionEvent.requestPermission==='function'&&await DeviceMotionEvent.requestPermission()!=='granted'){note('A mozgásérzékelő engedélye hiányzik.');return}
-   recognizer=new MotionGestureRecognizer(profile(),stepOnce);enabled=true;paused=false;lastSensorAt=lastOrientationAt=performance.now();
+   newRecognizer();enabled=true;paused=false;lastSensorAt=lastOrientationAt=performance.now();
    addEventListener('deviceorientation',onOrientation,true);addEventListener('devicemotion',onMotion,true);
-   healthTimer=setInterval(health,1200);label();note('Rövid, határozott billentés: egy lépés. A visszaállítás nem lép.')
+   healthTimer=setInterval(health,1200);label();note('Rövid mozdulat: egy lépés. A csúsztatás külön kapcsolható.')
   }catch(err){disable();note('A mozgásvezérlés nem indítható: '+(err?.message||'ismeretlen hiba'))}
  }
  function disable(){enabled=false;paused=false;removeEventListener('deviceorientation',onOrientation,true);removeEventListener('devicemotion',onMotion,true);clearInterval(healthTimer);healthTimer=null;reset();recognizer=null;label();note('')}
  async function toggle(){if(enabled)disable();else await enable()}
  function pause(){if(enabled){paused=true;reset();note('Mozgás szünetel')}}
  function resume(){if(!enabled)return;paused=false;reset();lastSensorAt=lastOrientationAt=performance.now();note('Mozgás aktív · egy billentés, egy lépés')}
- function adjustAngle(delta){angleStrength=Math.max(1,Math.min(10,angleStrength+delta));angleValue.textContent=angleStrength+'/10';saveSettings();if(enabled){recognizer=new MotionGestureRecognizer(profile(),stepOnce);note('Billentés erőssége: '+angleStrength+'/10')}}
- loadSettings();return{toggle,pause,resume,adjustAngle,recalibrate:reset,onNewLevel:reset,get enabled(){return enabled}};
+ function adjustAngle(delta){sensitivity=Math.max(1,Math.min(10,sensitivity+delta));angleValue.textContent=sensitivity+'/10';saveSettings();if(enabled)newRecognizer()}
+ function adjustSettle(delta){settle=Math.max(1,Math.min(10,settle+delta));settleValue.textContent=settle+'/10';saveSettings();if(enabled)newRecognizer()}
+ function setSlides(value){allowSlides=value;saveSettings();if(enabled)newRecognizer()}
+ loadSettings();return{toggle,pause,resume,adjustAngle,adjustSettle,setSlides,recalibrate:reset,onNewLevel:reset,get enabled(){return enabled}};
 })();
 motionBtn.addEventListener('click',()=>MotionControl.toggle());
 document.querySelector('#angleMinus').addEventListener('click',()=>MotionControl.adjustAngle(-1));
 document.querySelector('#anglePlus').addEventListener('click',()=>MotionControl.adjustAngle(1));
+document.querySelector('#settleMinus').addEventListener('click',()=>MotionControl.adjustSettle(-1));
+document.querySelector('#settlePlus').addEventListener('click',()=>MotionControl.adjustSettle(1));
+document.querySelector('#slideMotion').addEventListener('change',e=>MotionControl.setSlides(e.target.checked));
 
 /* ===== v0.10.4 MOTION CALIBRATION LAB ===== */
 const CalibrationLab=(()=>{

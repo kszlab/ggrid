@@ -1,11 +1,13 @@
-# GGrid – mozdulatfelismerés és helyi kalibráció, v1
+# GGrid – mozdulatfelismerés és helyi kalibráció, v0.12.88
 
 ## A beépített felismerés
 
-A vezérlés kalibráció nélkül, alapértékekkel használható. Egy rövid, határozott
-billentés egyetlen `move(direction)` hívást eredményez; ugyanaz a játékfizika
-és animáció érvényesül, mint a nyílgombnál. Döntve tartás nem ismétel.
-Visszaállítás, csúsztatás, emelés és süllyesztés nem játékparancs.
+A vezérlés kalibráció nélkül, alapértékekkel használható. Egy rövid billentés
+egyetlen `move(direction)` hívást eredményez. A külön kapcsolható, a képernyő
+síkjában végzett csúsztatás ugyanazt a nyilat adja. A felismerő mindvégig
+megőrzi, hogy billentést vagy csúsztatást észlelt. Ugyanaz a játékfizika és
+animáció érvényesül, mint a nyílgombnál. Döntve tartás nem ismétel.
+Visszaállítás, emelés és süllyesztés nem játékparancs.
 
 **Bemenetek:** `DeviceMotionEvent.acceleration.{x,y,z}` (gravitáció nélküli
 gyorsulás, m/s²), `DeviceMotionEvent.rotationRate.{alpha,beta,gamma}` (°/s),
@@ -19,23 +21,35 @@ adják. A kezdeti 450 ms előjeles forgási csúcsait, a kezdőhelyzethez mért
 legnagyobb szögkitéréseket, a kezdeti 160 ms átlagos forgását és mélységi
 gyorsulását, a gyorsulási csúcsokat és mintaszámot jellemzőkké alakítjuk.
 A végső helyzetből nem számítunk irányt: a játékos addigra visszaállíthatja
-a telefont. A mozdulat végét legalább 170 ms nyugalom vagy 1700 ms időkorlát
-jelöli. Ezután 260 ms alatt nem indul új jelölt, hogy a visszaállítás ne
+a telefont. Csúsztatás esetén a kezdeti 160 ms képernyő síkjába forgatott
+`x,y` gyorsulását és a kezdeti 220 ms két ellenkező gyorsulási csúcsát
+vizsgáljuk; a függőleges gyorsulási és forgási csúcsok kiszűrik az emelést,
+süllyesztést és a billentést. Ellentmondó iránynál nincs parancs.
+A mozdulat végét a beállított, alaphelyzetben 180 ms-os nyugalom vagy
+1700 ms időkorlát jelöli. Ezután 260 ms alatt nem indul új jelölt, hogy a visszaállítás ne
 számítson újabb lépésnek.
 
 **Döntés:** a `motion-model.js` helyi osztályozója jobb/bal/fel/le vagy
 „nincs parancs” eredményt ad. A döntést csak akkor fogadjuk el, ha a
 profilban szereplő minimális forgási sebesség, szögkitérés és tengelydominancia
-is teljesül. Bizonytalan mozdulatból nem lesz lépés. A „Billentés erőssége”
-1–10-es kézi értéke az első két küszöböt együtt skálázza; alapértéke 5.
+is teljesül. Ha a billentés nem igazolható, az engedélyezett csúsztatás
+külön gyorsulási feltételeit vizsgáljuk; máskülönben nincs parancs.
+Az 1–10-es „Mozdulat érzékenysége” skála a billentési és csúsztatási
+küszöböket együtt skálázza: **10 az érzékenyebb**, alapértéke 5. A külön
+1–10-es „Lépés késleltetése” a nyugalmi várakozást 100–280 ms között
+állítja. A „Csúsztatás is léptet” jelölőnégyzet alaphelyzetben kikapcsolt.
+Mindhárom beállítás ezen a böngészőn marad meg a `ggrid.motion.gesture.v2`
+kulcs alatt.
 Nincs ismétlési tempó. Az érzékelők hiánya/engedélyének hiánya nem ad nyilat;
 2500 ms-on át hiányzó használható mozgás- vagy tájolási adat kikapcsolja
 a mozgásvezérlést. A képernyő és billentyűzet nyilai működnek tovább.
 
-**Mérés:** `node tools/replay-motion-gesture.js /útvonal/GGrid-calibration-*.json`.
-A hat fájl 112 jelzett mozdulatából 68/72 billentésre helyes, egyetlen nyíl
-született; négy billentés elutasítódott. A 40 negatív mozdulatból (köztük
-16 csúsztatásból) egyik sem adott nyilat. Ez fejlesztési visszajátszás:
+**Mérés:** `node tools/replay-motion-gesture.js --slides /útvonal/GGrid-calibration-*.json`.
+A hat fájl 112 jelzett mozdulatából az alapbeállításoknál 68/72 billentés és
+14/16 csúsztatás adta az elvárt nyilat, míg két csúsztatás kimaradt.
+Az emelés/süllyesztés 0/24 esetben adott parancsot. Kikapcsolt
+csúsztatásnál mind a 16 csúsztatás figyelmen kívül maradt. A próbák során
+egy mozdulat sem adott egynél több lépést. Ez fejlesztési visszajátszás:
 az osztályozót ugyanennek a hat mérésnek az alapján készítettük, tehát az
 eredmény nem független pontosságbecslés. Más telefon és szabad játék közben
 még szükséges a tényleges próba.
@@ -57,13 +71,15 @@ vizsgálata és a már működő algoritmus kis mértékű finomhangolása. Nem 
    valamint a telefon visszaállítását. Több ismétlést kér mindegyik irányra.
    Külön felirattal/animációval kér emelést, süllyesztést és négy csúsztatást
    a játékos felé néző kijelző síkjában. A nyíl mindig billentést jelent;
-   a többi felszólítás elvárt kimenete „nincs parancs”.
+   a csúsztatási próbák a kapcsoló állapotától függően ugyanazt az irányt
+   vagy „nincs parancs” eredményt várnak. Emelés és süllyesztés mindig
+   „nincs parancs”.
 3. **Mérési bemenet.** A fenti időbélyegzett érzékelőmintákon felül minden
    próbához rögzíti a felszólítás címkéjét, a jelzés idejét, a tényleges
    mozdulat kezdetét/végét és a mozdulat előtti nyugalmi szakaszt.
 4. **Helyi számítás.** A pozitív és negatív próbákból csak kis mértékű,
    korlátozott küszöb- és időzítésmódosítást becsül. Külön visszatartott
-   próbákon ellenőrzi az irányokat és a negatív mozdulatok elutasítását.
+   próbákon ellenőrzi az irányokat és az emelés/süllyesztés elutasítását.
    Ha egy negatív próba nyilat ad, az irányok összekeverednek, vagy a jelek
    nem megbízhatók, nincs érvényes kalibráció: ismétlést vagy hibajelzést ad.
 5. **Kimenet.** Siker esetén az alábbi profilt a készülék saját
@@ -84,8 +100,9 @@ vizsgálata és a már működő algoritmus kis mértékű finomhangolása. Nem 
                "y": {"alpha": 1, "beta": 0, "gamma": 0}},
   "orientationAxes": {"x": {"beta": 0, "gamma": 1},
                       "y": {"beta": 1, "gamma": 0}},
-  "minimumRate": 100,
-  "minimumExcursion": 11,
+  "minimumRate": 75,
+  "minimumExcursion": 8,
+  "slideAcceleration": 0.6,
   "dominance": 1.45,
   "triggerAcceleration": 2.2,
   "triggerRate": 60,
@@ -102,6 +119,7 @@ Az alapértékeket a `js/motion-gesture.js` tartalmazza. A tengelyleképezés
 **rögzített**: a `isMotionGestureProfile()` eltérő előjelet vagy cserét
 elutasít. A becsülhető mezők tartományai: `minimumRate` 70–140 °/s,
 `minimumExcursion` 7–18°, `dominance` 1,2–1,8,
+`slideAcceleration` 0,4–1,2 m/s²,
 `triggerAcceleration` 1,5–3,2 m/s², `triggerRate` 45–85 °/s,
 `quietAcceleration` 0,5–1,3 m/s², `quietRate` 15–33 °/s,
 `quietMs` 130–230 ms, `maxGestureMs` 1300–2100 ms, `minSamples` 4–9.

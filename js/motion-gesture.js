@@ -9,7 +9,7 @@
   // Fixed screen axes: +x right, +y down. Calibration cannot reverse them.
   gyroAxes:{x:{alpha:0,beta:1,gamma:0},y:{alpha:1,beta:0,gamma:0}},
   orientationAxes:{x:{beta:0,gamma:1},y:{beta:1,gamma:0}},
-  minimumRate:100,minimumExcursion:11,dominance:1.45,
+  minimumRate:75,minimumExcursion:8,slideAcceleration:.6,dominance:1.45,
   triggerAcceleration:2.2,triggerRate:60,quietAcceleration:.85,quietRate:23,
   quietMs:170,maxGestureMs:1700,minSamples:5,
   // Require an orientation excursion as independent evidence of a tilt.
@@ -26,13 +26,13 @@
    if(!p[name]?.[axis])return false;
    for(const k of (name==='gyroAxes'?['alpha','beta','gamma']:['beta','gamma']))if(p[name][axis][k]!==DEFAULT_PROFILE[name][axis][k])return false;
   }
-  for(const [k,lo,hi] of [['minimumRate',forStorage?70:35,forStorage?140:260],['minimumExcursion',forStorage?7:3,forStorage?18:35],['dominance',1.2,1.8],['triggerAcceleration',1.5,3.2],['triggerRate',45,85],['quietAcceleration',.5,1.3],['quietRate',15,33],['quietMs',130,230],['maxGestureMs',1300,2100],['minSamples',4,9]])if(!finite(p[k])||p[k]<lo||p[k]>hi)return false;
+  for(const [k,lo,hi] of [['minimumRate',forStorage?70:35,forStorage?140:260],['minimumExcursion',forStorage?7:3,forStorage?18:35],['slideAcceleration',forStorage?.4:.25,forStorage?1.2:2],['dominance',1.2,1.8],['triggerAcceleration',1.5,3.2],['triggerRate',45,85],['quietAcceleration',.5,1.3],['quietRate',15,33],['quietMs',forStorage?130:80,forStorage?230:320],['maxGestureMs',1300,2100],['minSamples',4,9]])if(!finite(p[k])||p[k]<lo||p[k]>hi)return false;
   return p.orientationRequired===true;
  }
  class MotionGestureRecognizer{
-  constructor(profile=DEFAULT_PROFILE,onDirection=()=>{}){
+  constructor(profile=DEFAULT_PROFILE,onDirection=()=>{},options={}){
    if(!validateProfile(profile,false))throw Error('Érvénytelen mozgásprofil');
-   this.profile=profile;this.onDirection=onDirection;this.reset();
+   this.profile=profile;this.onDirection=onDirection;this.allowSlides=options.allowSlides===true;this.reset();
   }
   reset(){this.history=[];this.gesture=null;this.lastOrientation=null;this.lastMotion=null;this.suppressUntil=0}
   orientation(raw,t,angle=0){
@@ -58,11 +58,16 @@
     if(accel<p.triggerAcceleration&&rate<p.triggerRate)return;
     const eligible=this.history.filter(o=>o.angle===angle&&o.t<=t-45&&o.t>=t-500);
     const baseline=eligible.length?eligible[Math.floor(eligible.length/2)]:null;
-    g=this.gesture={start:t,angle,baseline,exc:{right:0,left:0,up:0,down:0},peaks:{right:0,left:0,up:0,down:0},impulse:{right:0,left:0,up:0,down:0},first:{right:0,left:0,up:0,down:0,az:0},firstCount:0,azPeak:0,xyPeak:0,count:0,quietAt:null};
+    g=this.gesture={start:t,angle,baseline,exc:{right:0,left:0,up:0,down:0},peaks:{right:0,left:0,up:0,down:0},impulse:{right:0,left:0,up:0,down:0},first:{right:0,left:0,up:0,down:0,az:0},firstCount:0,azPeak:0,xyPeak:0,count:0,quietAt:null,
+     slide:{firstX:0,firstY:0,firstCount:0,peakX:0,peakY:0,minX:0,minY:0,peakAbsX:0,peakAbsY:0}};
    }
    if(g.angle!==angle){this.gesture=null;return}
    g.count++;
    g.azPeak=Math.max(g.azPeak,Math.abs(raw.az));g.xyPeak=Math.max(g.xyPeak,Math.hypot(raw.ax,raw.ay));
+   const linear=rotate(raw.ax,raw.ay,angle),slide=g.slide;
+   slide.peakAbsX=Math.max(slide.peakAbsX,Math.abs(linear.x));slide.peakAbsY=Math.max(slide.peakAbsY,Math.abs(linear.y));
+   if(t-g.start<160){slide.firstCount++;slide.firstX+=linear.x;slide.firstY+=linear.y}
+   if(t-g.start<220){slide.peakX=Math.max(slide.peakX,linear.x);slide.minX=Math.min(slide.minX,linear.x);slide.peakY=Math.max(slide.peakY,linear.y);slide.minY=Math.min(slide.minY,linear.y)}
    if(t-g.start<160){g.firstCount++;g.first.right+=v.x;g.first.left-=v.x;g.first.down+=v.y;g.first.up-=v.y;g.first.az+=raw.az}
    // The outward pulse is generally in the first 450 ms. Keeping signed
    // maxima means the return movement cannot cancel its direction.
@@ -73,8 +78,8 @@
    const quiet=accel<p.quietAcceleration&&rate<p.quietRate;
    if(!quiet)g.quietAt=null;else if(g.quietAt===null)g.quietAt=t;
    if(t-g.start>=p.maxGestureMs||g.quietAt!==null&&t-g.quietAt>=p.quietMs&&t-g.start>=180){
-    this.gesture=null;this.suppressUntil=t+260;const direction=this.classify(g);
-    if(direction)this.onDirection(direction);
+    this.gesture=null;this.suppressUntil=t+260;const result=this.classify(g);
+    if(result)this.onDirection(result.direction,result.kind);
    }
   }
   classify(g){
@@ -83,11 +88,27 @@
     const other=dir==='right'||dir==='left'?'y':'x';const otherPeak=other==='x'?Math.max(g.peaks.right,g.peaks.left):Math.max(g.peaks.up,g.peaks.down);
     return{dir,rate:g.peaks[dir],exc:g.exc[dir],impulse:g.impulse[dir],otherPeak};
    }).filter(c=>c.rate>=p.minimumRate&&c.exc>=p.minimumExcursion&&c.rate>=p.dominance*c.otherPeak);
-   if(!qualified.length)return null;
    const n=Math.max(1,g.firstCount),keys=['right','left','up','down'];
    const values=[...keys.map(k=>g.peaks[k]),...keys.map(k=>g.exc[k]),g.first.right/n,g.first.up/n,g.first.az/n,g.azPeak,g.xyPeak,g.count,g.firstCount];
    const predicted=root.MotionGestureModel?.classify(values);
-   return qualified.some(c=>c.dir===predicted)?predicted:null;
+   if(qualified.some(c=>c.dir===predicted))return{direction:predicted,kind:'tilt'};
+   if(!this.allowSlides)return null;
+   // Translations have strong in-plane acceleration, little depth motion and
+   // almost no change of screen angle. Lifting/lowering fails the depth gate.
+   const slide=g.slide,nSlide=Math.max(1,slide.firstCount);
+   const x=slide.firstX/nSlide,y=slide.firstY/nSlide;
+   const needed=p.slideAcceleration;
+   const scale=needed/DEFAULT_PROFILE.slideAcceleration;
+   if(g.azPeak>4||Math.max(...Object.values(g.peaks))>110||Math.max(...Object.values(g.exc))>8.5)return null;
+   let direction=null;
+   if(Math.abs(x)>=needed&&Math.abs(x)>1.15*Math.abs(y)){
+    if(x>0&&slide.peakX>=2.5*scale&&slide.minX<=-1.5*scale)direction='right';
+    if(x<0&&slide.minX<=-3*scale&&slide.peakX>=2*scale)direction='left';
+   }else if(Math.abs(y)>=needed&&Math.abs(y)>1.15*Math.abs(x)){
+    if(y>0&&slide.peakY>=1.5*scale&&slide.minY<=-1.5*scale)direction='up';
+    if(y<0&&slide.minY<=-1.5*scale&&slide.peakY>=1.5*scale)direction='down';
+   }
+   return direction?{direction,kind:'slide'}:null;
   }
  }
  root.MotionGestureRecognizer=MotionGestureRecognizer;
