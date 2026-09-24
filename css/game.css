@@ -437,3 +437,33 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
  pointer-events:none;
 }
 .theme-preview-art.has-theme-image .mini-board{background:#06111bc4}
+
+
+/* v0.15.7 – mobile theme selector navigation stays inside the artwork area,
+   leaving the localized theme title/description unobstructed. */
+@media(max-width:600px){
+ .theme-cinema .theme-nav{
+  top:27%;
+  transform:translateY(-50%);
+  width:42px;
+  height:54px;
+  font-size:36px;
+  border-radius:13px;
+ }
+ .theme-cinema .theme-prev{left:8px}
+ .theme-cinema .theme-next{right:8px}
+ .theme-preview-label{
+  left:20px;
+  right:20px;
+  bottom:18px;
+ }
+ .theme-preview-label strong{
+  font-size:clamp(23px,8vw,34px);
+  line-height:1;
+  overflow-wrap:anywhere;
+ }
+ .theme-preview-label p{
+  max-width:none;
+  margin-top:7px;
+ }
+}
