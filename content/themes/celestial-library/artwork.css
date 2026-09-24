@@ -9,10 +9,10 @@ body[data-theme="celestial-library"][data-ui-context="game"]{
 }
 body[data-theme="celestial-library"] .game-head{
  color:#fff0c5;
- border:1px solid #d8a64f;
- border-radius:16px;
- padding:4px 9px;
- background-color:#07182bd9;
+ border:0;
+ border-radius:18px;
+ padding:5px 11px;
+ background-color:#07182d;
  box-shadow:0 4px 18px #0008;
 }
 body[data-theme="celestial-library"] .game-head .scenario-info{color:#fff1c6}
