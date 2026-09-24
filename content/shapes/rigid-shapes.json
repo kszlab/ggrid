@@ -1,0 +1,175 @@
+{
+  "format": "ggrid-rigid-shape-catalog",
+  "formatVersion": 1,
+  "note": "Generated from repository level/scenario JSON files. Do not edit by hand; run node tools/scan-rigid-shapes.mjs.",
+  "shapes": [
+    {
+      "id": "2H",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "bounds": {
+        "width": 2,
+        "height": 1
+      },
+      "rectangular": true
+    },
+    {
+      "id": "2V",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "bounds": {
+        "width": 1,
+        "height": 2
+      },
+      "rectangular": true
+    },
+    {
+      "id": "3H",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "bounds": {
+        "width": 3,
+        "height": 1
+      },
+      "rectangular": true
+    },
+    {
+      "id": "3V",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "bounds": {
+        "width": 1,
+        "height": 3
+      },
+      "rectangular": true
+    },
+    {
+      "id": "L3-BL",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "bounds": {
+        "width": 2,
+        "height": 2
+      },
+      "rectangular": false
+    },
+    {
+      "id": "L3-BR",
+      "cells": [
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "bounds": {
+        "width": 2,
+        "height": 2
+      },
+      "rectangular": false
+    },
+    {
+      "id": "L3-TL",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "bounds": {
+        "width": 2,
+        "height": 2
+      },
+      "rectangular": false
+    },
+    {
+      "id": "L3-TR",
+      "cells": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "bounds": {
+        "width": 2,
+        "height": 2
+      },
+      "rectangular": false
+    }
+  ]
+}
