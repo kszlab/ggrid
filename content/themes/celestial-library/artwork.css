@@ -1,0 +1,171 @@
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.5
+   Layout/state only. The visual identity lives in SVG artwork assets. */
+body[data-theme="celestial-library"]{
+ --freeze-edge:#d6b24f;
+ --freeze-glow:#8cecff;
+}
+body[data-theme="celestial-library"][data-ui-context="game"]{
+ background:#040812;
+}
+body[data-theme="celestial-library"] .game-head{
+ color:#fff0c5;
+ border:1px solid #d8a64f;
+ border-radius:16px;
+ padding:4px 9px;
+ background-color:#07182bd9;
+ box-shadow:0 4px 18px #0008;
+}
+body[data-theme="celestial-library"] .game-head .scenario-info{color:#fff1c6}
+body[data-theme="celestial-library"] .game-head .play-level-id{color:#e1c98e}
+
+body[data-theme="celestial-library"] .board-wrap.scene-artwork{
+ border:0;
+ border-radius:24px;
+ background:#07111e;
+ box-shadow:0 16px 42px #000b;
+ color:#f1ce79;
+}
+body[data-theme="celestial-library"] .scene-artwork-background>img{
+ object-fit:cover;
+ filter:saturate(1.05) brightness(.82);
+}
+body[data-theme="celestial-library"] .scene-artwork-environment{
+ background:radial-gradient(circle at 50% 42%,transparent 0 32%,#02050aa8 82%),
+ linear-gradient(90deg,#02050a66,transparent 22% 78%,#02050a66);
+ z-index:2;
+}
+body[data-theme="celestial-library"] .scene-artwork .board{
+ border:0!important;
+ border-radius:9px;
+ background:#bda97c;
+ box-shadow:0 12px 24px #000b,inset 0 0 0 2px #6e5124;
+ overflow:visible;
+}
+body[data-theme="celestial-library"] .scene-artwork .cell{
+ margin:2px;
+ border:0;
+ border-radius:7px;
+ background:#e8ddbd;
+ box-shadow:inset 0 0 0 1px #6f5c3a,0 2px 4px #0005;
+}
+body[data-theme="celestial-library"] .scene-artwork .cell.sr-asset-visual{
+ background-size:100% 100%!important;
+}
+body[data-theme="celestial-library"] .scene-artwork .piece{
+ border:0!important;
+ background-color:transparent!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 5px 4px #0008);
+}
+body[data-theme="celestial-library"] .scene-artwork .brick.sr-composite-source{opacity:0!important}
+body[data-theme="celestial-library"] .scene-artwork .sr-composite{
+ background-size:100% 100%!important;
+ background-repeat:no-repeat!important;
+ background-position:center!important;
+ filter:drop-shadow(0 6px 5px #0008);
+}
+body[data-theme="celestial-library"] .scene-artwork .ball.sr-asset-visual{
+ border-radius:50%;
+ background-size:112% 112%!important;
+ filter:drop-shadow(0 0 8px #7de8ff) drop-shadow(0 5px 4px #0008);
+}
+body[data-theme="celestial-library"] .scene-artwork .wall.sr-asset-visual{
+ border-radius:8px;
+ background-size:100% 100%!important;
+ filter:drop-shadow(0 4px 3px #0008);
+}
+
+/* The portal visibly breaks the board edge; direction is conveyed by artwork, not text. */
+body[data-theme="celestial-library"] .scene-artwork .exit{
+ z-index:12;
+ border:0!important;
+ background-color:transparent!important;
+ box-shadow:none!important;
+ overflow:visible;
+}
+body[data-theme="celestial-library"] .scene-artwork .exit::after{display:none!important}
+body[data-theme="celestial-library"] .scene-artwork .exit-right,
+body[data-theme="celestial-library"] .scene-artwork .exit-left{width:165%;height:98%}
+body[data-theme="celestial-library"] .scene-artwork .exit-up,
+body[data-theme="celestial-library"] .scene-artwork .exit-down{width:98%;height:165%}
+body[data-theme="celestial-library"] .scene-artwork .exit-right{transform:translateX(49%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-49%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-49%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{transform:translateY(49%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-beacon{
+ opacity:0!important;
+ pointer-events:none!important;
+}
+
+/* Large invisible interaction bands; artwork cue remains compact and central. */
+body[data-theme="celestial-library"] .scene-artwork .edge-control{
+ color:#f2cf79;
+ border:0;
+ background:transparent;
+ box-shadow:none;
+}
+body[data-theme="celestial-library"] .scene-artwork .edge-control::before{
+ border-color:#d8ad5f80;
+ opacity:.7;
+}
+body[data-theme="celestial-library"] .scene-artwork .edge-control.pressed,
+body[data-theme="celestial-library"] .scene-artwork .edge-control:active{
+ background:radial-gradient(circle at center,#f2c96b2b,transparent 68%);
+ filter:brightness(1.25);
+}
+body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{
+ background-size:contain!important;
+ width:38px;height:38px;
+}
+
+/* Compact HUD: Freeze may show count; Hint remains icon-only. */
+body[data-theme="celestial-library"] .hud-row{
+ border:0;
+ border-radius:18px;
+ padding:6px 10px;
+ min-height:58px;
+ background-color:#06182dd9;
+ color:#fff2c9;
+}
+body[data-theme="celestial-library"] .play-action,
+body[data-theme="celestial-library"] #freeze.play-action{
+ border:1px solid #d7aa53;
+ background:#0b2b4c;
+ color:#ffe3a0;
+ box-shadow:inset 0 0 0 2px #071526,0 3px 7px #0007;
+}
+body[data-theme="celestial-library"] .score-box{
+ border:1px solid #d7aa53;
+ background:#0b2b4ce8;
+ color:#ffe3a0;
+}
+
+/* Victory artwork remains text-free. Runtime text sits above it. */
+body[data-theme="celestial-library"] .victory-overlay{
+ background:#02050bb8;
+ backdrop-filter:blur(3px);
+}
+body[data-theme="celestial-library"] .victory-card{
+ border:0;
+ background-color:#06182d;
+ color:#fff1c4;
+ padding:44px 30px 28px;
+ min-width:min(92vw,390px);
+ box-shadow:0 20px 55px #000c;
+}
+body[data-theme="celestial-library"] .victory-result strong{
+ font-family:Georgia,"Times New Roman",serif;
+ letter-spacing:.08em;
+ color:#ffe29b;
+}
+body[data-theme="celestial-library"] .victory-actions button{
+ border:1px solid #d7aa53;
+ background:#0b2b4c;
+ color:#fff1c4;
+}
+
+/* Keep scene legible on small phones. */
+@media(max-width:430px){
+ body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{width:32px;height:32px}
+ body[data-theme="celestial-library"] .hud-row{padding:5px}
+}
