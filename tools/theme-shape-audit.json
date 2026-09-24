@@ -348,6 +348,27 @@
         "cellFallback": 0,
         "total": 8
       }
+    },
+    {
+      "id": "celestial-library",
+      "theme": "content/themes/celestial-library/theme.json",
+      "showcase": true,
+      "coverage": {
+        "2H": "custom",
+        "2V": "custom",
+        "3H": "custom",
+        "3V": "custom",
+        "L3-BL": "custom",
+        "L3-BR": "custom",
+        "L3-TL": "custom",
+        "L3-TR": "custom"
+      },
+      "summary": {
+        "custom": 8,
+        "genericComposite": 0,
+        "cellFallback": 0,
+        "total": 8
+      }
     }
   ]
 }
