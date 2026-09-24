@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.11
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.12
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -27,13 +27,18 @@ body[data-theme="celestial-library"] .board-wrap.scene-artwork{
 }
 body[data-theme="celestial-library"] .scene-artwork-background>img{
  object-fit:cover;
- filter:saturate(1.03) brightness(.72);
+ filter:saturate(1.08) brightness(.86);
 }
 body[data-theme="celestial-library"] .scene-artwork-environment{
  background:
-  radial-gradient(ellipse at 50% 46%,transparent 0 37%,#02050a78 72%,#02050acc 100%),
-  linear-gradient(90deg,#02050a8f,transparent 19% 81%,#02050a8f);
+  radial-gradient(ellipse at 50% 46%,transparent 0 42%,#02050a48 76%,#02050a9a 100%),
+  linear-gradient(90deg,#02050a70,transparent 17% 83%,#02050a70);
  z-index:2;
+}
+body[data-theme="celestial-library"] .scene-artwork-environment>img{
+ object-fit:cover;
+ opacity:.92;
+ mix-blend-mode:screen;
 }
 body[data-theme="celestial-library"] .scene-artwork .board{
  border:0!important;
@@ -73,7 +78,10 @@ body[data-theme="celestial-library"] .scene-artwork .ball.sr-asset-visual{
 body[data-theme="celestial-library"] .scene-artwork .wall.sr-asset-visual{
  border-radius:8px;
  background-size:100% 100%!important;
- filter:drop-shadow(0 4px 3px #0008);
+ filter:drop-shadow(0 4px 3px #0009) drop-shadow(0 0 4px #e5b95a35);
+}
+body[data-theme="celestial-library"] .scene-artwork-frame{
+ filter:drop-shadow(0 5px 6px #000a) drop-shadow(0 0 5px #efc96b42);
 }
 
 /* The portal visibly breaks the board edge; direction is conveyed by artwork, not text. */
@@ -87,19 +95,19 @@ body[data-theme="celestial-library"] .scene-artwork .exit{
 body[data-theme="celestial-library"] .scene-artwork .ball{z-index:9!important}
 body[data-theme="celestial-library"] .scene-artwork .exit::after{display:none!important}
 body[data-theme="celestial-library"] .scene-artwork .exit-right,
-body[data-theme="celestial-library"] .scene-artwork .exit-left{width:125%;height:82%}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{width:118%;height:76%}
 body[data-theme="celestial-library"] .scene-artwork .exit-up,
-body[data-theme="celestial-library"] .scene-artwork .exit-down{width:82%;height:125%}
-body[data-theme="celestial-library"] .scene-artwork .exit-right{transform:translateX(64%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-64%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-64%)}
-body[data-theme="celestial-library"] .scene-artwork .exit-down{transform:translateY(64%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{width:76%;height:118%}
+body[data-theme="celestial-library"] .scene-artwork .exit-right{transform:translateX(70%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-70%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-70%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{transform:translateY(70%)}
 body[data-theme="celestial-library"] .scene-artwork .exit-beacon{
  opacity:0!important;
  pointer-events:none!important;
 }
 
-/* Large invisible interaction bands; artwork cue remains compact and central. */
+/* Full artwork control zones: visual panel and hit zone are the same geometry. */
 body[data-theme="celestial-library"] .scene-artwork .edge-control{
  z-index:10!important;
  color:#f2cf79;
@@ -107,23 +115,22 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control{
  background:transparent;
  box-shadow:none;
 }
-body[data-theme="celestial-library"] .scene-artwork .edge-control::before{
- border-color:#d8ad5f80;
- opacity:.7;
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone{
+ background-size:100% 100%!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ filter:drop-shadow(0 4px 6px #0009);
 }
-body[data-theme="celestial-library"] .scene-artwork .edge-control.pressed,
-body[data-theme="celestial-library"] .scene-artwork .edge-control:active{
- background:radial-gradient(circle at center,#f2c96b2b,transparent 68%);
- filter:brightness(1.25);
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone::before{display:none!important}
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone .emboss-arrow{
+ opacity:0!important;
+ width:0!important;
+ height:0!important;
 }
-body[data-theme="celestial-library"] .scene-artwork .edge-control .emboss-arrow.sr-asset-visual{
- background-size:contain!important;
- width:32px;height:32px;
- transform:translate(var(--art-cue-x,0),var(--art-cue-y,0))!important;
-}
-body[data-theme="celestial-library"] .scene-artwork .edge-control:active .emboss-arrow.sr-asset-visual,
-body[data-theme="celestial-library"] .scene-artwork .edge-control.pressed .emboss-arrow.sr-asset-visual{
- transform:translate(var(--art-cue-x,0),calc(var(--art-cue-y,0) + 1px))!important;
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone.pressed,
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone:active{
+ background-color:transparent!important;
+ filter:brightness(1.22) drop-shadow(0 4px 8px #000a) drop-shadow(0 0 7px #e8c66966);
 }
 
 /* Compact HUD: Freeze may show count; Hint remains icon-only. */
@@ -174,6 +181,5 @@ body[data-theme="celestial-library"] .victory-actions button{
 
 /* Keep scene legible on small phones. */
 @media(max-width:430px){
- body[data-theme="celestial-library"] .scene-artwork .emboss-arrow.sr-asset-visual{width:26px;height:26px}
  body[data-theme="celestial-library"] .hud-row{padding:5px}
 }
