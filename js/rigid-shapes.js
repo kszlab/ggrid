@@ -36,8 +36,15 @@ const RigidShapes=(()=>{
  function isRectangular(cells=[]){
   const b=bounds(cells);return b.count>0&&b.count===b.width*b.height;
  }
+ const clips={
+  'L3-TL':'polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)',
+  'L3-TR':'polygon(0 0,100% 0,100% 100%,50% 100%,50% 50%,0 50%)',
+  'L3-BL':'polygon(0 0,50% 0,50% 50%,100% 50%,100% 100%,0 100%)',
+  'L3-BR':'polygon(50% 0,100% 0,100% 100%,0 100%,0 50%,50% 50%)'
+ };
  function cssClass(id=''){return 'sr-shape-'+String(id).toLowerCase().replace(/[^a-z0-9_-]+/g,'-')}
- return{normalize,signature,bounds,identify,isRectangular,cssClass};
+ function clipPath(id=''){return clips[id]||''}
+ return{normalize,signature,bounds,identify,isRectangular,cssClass,clipPath};
 })();
 if(typeof globalThis!=='undefined')globalThis.RigidShapes=RigidShapes;
 if(typeof module!=='undefined'&&module.exports)module.exports=RigidShapes;
