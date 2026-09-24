@@ -15,6 +15,11 @@ for(const [id,pts] of cases){
 assert.equal(RigidShapes.identify([{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:1,y:1}]),'P4-3x2-111010');
 assert.equal(RigidShapes.isRectangular([{x:0,y:0},{x:1,y:0},{x:0,y:1},{x:1,y:1}]),true);
 assert.equal(RigidShapes.isRectangular([{x:0,y:0},{x:1,y:0},{x:0,y:1}]),false);
+for(const id of ['L3-TL','L3-TR','L3-BL','L3-BR']){
+ const clip=RigidShapes.clipPath(id);
+ assert.ok(clip.startsWith('polygon('),'missing clip path '+id);
+}
+assert.equal(RigidShapes.clipPath('2H'),'');
 
 const catalog=JSON.parse(fs.readFileSync('content/shapes/rigid-shapes.json','utf8'));
 for(const shape of catalog.shapes){
