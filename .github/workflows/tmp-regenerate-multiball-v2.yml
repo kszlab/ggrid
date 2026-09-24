@@ -5,6 +5,9 @@ on:
       - tmp/multiball-v2-regeneration
 permissions:
   contents: write
+concurrency:
+  group: multiball-v2-regeneration
+  cancel-in-progress: true
 jobs:
   build:
     if: ${{ !contains(github.event.head_commit.message, '[generated]') }}
