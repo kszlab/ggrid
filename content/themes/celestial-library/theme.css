@@ -14,7 +14,6 @@ body.full-ui-skin[data-scene="celestial-library"]::before{
   radial-gradient(circle at 92% 48%,#e0a64616,transparent 24%),
   linear-gradient(90deg,#02040bd6 0 3%,transparent 18% 82%,#02040bd6 97%),
   linear-gradient(180deg,#02040a55,transparent 28% 73%,#02040acc);
- mix-blend-mode:screen
 }
 body.full-ui-skin[data-scene="celestial-library"] #game{position:relative;z-index:1}
 body.full-ui-skin[data-scene="celestial-library"] main{max-width:620px;padding-top:5px}
@@ -179,7 +178,7 @@ body.full-ui-skin[data-scene="celestial-library"] .cell:nth-child(7n+3){
 .cl-sparkles{position:absolute;inset:5%;opacity:.55;background:radial-gradient(circle at 20% 52%,#fff1b0 0 1px,transparent 2px),radial-gradient(circle at 84% 55%,#aedcff 0 1px,transparent 2px)}
 .cl-chart-stack{position:absolute;right:7%;bottom:5%;width:76px;height:55px;opacity:.46;transform:rotate(-8deg);border:2px solid #d2b16d;background:url("constellation-tile.svg") center/cover;border-radius:3px}
 .cl-front-filigree{position:absolute;left:15%;right:15%;bottom:2px;height:46px;background:url("celestial-ornament.svg") center/100% 50px no-repeat;opacity:.38}
-.cl-caption{color:#edca78}.cl-caption b{color:#b7dcff}
+.cl-caption{display:none}.cl-caption b{color:#b7dcff}
 @keyframes clFloat{to{transform:translateY(-9px);opacity:.53}}
 
 /* edge controls as brass astronomical rails */
