@@ -21,12 +21,12 @@ const json=(res,code,obj)=>{res.writeHead(code,{'content-type':'application/json
 const readBody=async req=>{const a=[];for await(const c of req)a.push(c);return Buffer.concat(a)};
 const load=async p=>JSON.parse(await fsp.readFile(p,'utf8'));
 async function loadSlotSpec(){
- try{return await load(SLOT_SPEC)}
- catch(e){
-  if(e?.code!=='ENOENT')throw e;
-  await run('python',['tools/theme-kit/make_slots.py']);
-  return load(SLOT_SPEC);
- }
+ try{
+  const s=await load(SLOT_SPEC);
+  if(s?.formatVersion>=3&&s?.packs)return s;
+ }catch(e){if(e?.code!=='ENOENT')throw e}
+ await run('python',['tools/theme-kit/make_slots.py']);
+ return load(SLOT_SPEC);
 }
 const save=async(p,o)=>{await fsp.mkdir(path.dirname(p),{recursive:true});await fsp.writeFile(p,JSON.stringify(o,null,2)+'\n')};
 const projectPath=id=>path.join(DESIGN,id,'project.json');
@@ -39,7 +39,7 @@ function computeStage(p){
  if(s.release?.status==='approved')return'RELEASED';
  if(s.mood?.status!=='approved')return'MOOD';
  if(s.target?.status!=='approved')return'TARGET';
- if(s.sheets?.status!=='approved'||s.sheets?.approvalMode!=='individual')return'ASSETS';
+ if(s.sheets?.status!=='approved'||s.sheets?.approvalMode!=='asset-pack-v2')return'ASSETS';
  if(s.backgrounds?.status!=='approved')return'BACKGROUNDS';
  if(s.build?.status!=='success')return'BUILD';
  if(s.qa?.status!=='approved')return'QA';
@@ -61,23 +61,33 @@ async function loadProject(id){
  p.stages.backgrounds=p.stages.backgrounds||{status:'locked',prompts:[]};
  const spec=await loadSlotSpec();
  const sheetNames=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'];
- p.sheetFiles={};p.assetFiles={};p.backgroundFiles={};
+ p.sheetFiles={};p.packFiles={};p.assetFiles={};p.backgroundFiles={};
  for(const name of sheetNames){
   const fp=path.join(projectDir(id),name);
   try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.sheetFiles[name]={exists:true,size:st.size,sha256:sha256(data),uploadedAt:p.artifacts?.[name]?.uploadedAt||null}}
   catch{p.sheetFiles[name]={exists:false}}
  }
+ for(const [pid,pk] of Object.entries(spec.packs||{})){
+  const name=pk.file,fp=path.join(projectDir(id),name);
+  try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.packFiles[pid]={exists:true,file:name,size:st.size,sha256:sha256(data),title:pk.title,sizePx:pk.size}}
+  catch{p.packFiles[pid]={exists:false,file:name,title:pk.title,sizePx:pk.size}}
+ }
  for(const slot of spec.slots||[]){
-  const name=slot.id+'.png',fp=path.join(projectDir(id),name);
-  try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.assetFiles[slot.id]={exists:true,size:st.size,sha256:sha256(data),required:slot.required!==false,role:slot.role,output:slot.output}}
-  catch{p.assetFiles[slot.id]={exists:false,required:slot.required!==false,role:slot.role,output:slot.output}}
+  const override=path.join(projectDir(id),slot.id+'.png'),derived=path.join(projectDir(id),'extracted',slot.id+'.png');
+  let fp=null,source=null;
+  try{await fsp.access(override);fp=override;source='override'}catch{}
+  if(!fp){try{await fsp.access(derived);fp=derived;source='pack'}catch{}}
+  if(fp){
+   const data=await fsp.readFile(fp),st=await fsp.stat(fp),rel=path.relative(projectDir(id),fp).replaceAll('\\','/');
+   p.assetFiles[slot.id]={exists:true,file:rel,source,size:st.size,sha256:sha256(data),required:slot.required!==false,role:slot.role,output:slot.output,pack:slot.pack||null};
+  }else p.assetFiles[slot.id]={exists:false,required:slot.required!==false,role:slot.role,output:slot.output,pack:slot.pack||null};
  }
  for(const name of BACKGROUND_FILES){
   const fp=path.join(projectDir(id),name);
   try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.backgroundFiles[name]={exists:true,size:st.size,sha256:sha256(data)}}
   catch{p.backgroundFiles[name]={exists:false}}
  }
- p.themeKitSpec={slots:(spec.slots||[]).map(({id,role,required=true,output})=>({id,role,required,output}))};
+ p.themeKitSpec={packs:spec.packs||{},slots:(spec.slots||[]).map(({id,role,required=true,output,pack,packBox})=>({id,role,required,output,pack,packBox}))};
  p.computedStage=computeStage(p);return p;
 }
 async function updateProject(id,fn){
@@ -182,12 +192,14 @@ async function syncPipelineApproval(id,p,stage,file=null){
  }
  if(stage==='sheets'){
   const spec=await loadSlotSpec(),files=[];
+  for(const pk of Object.values(spec.packs||{})){
+   const data=await fsp.readFile(path.join(dir,pk.file));files.push({file:pk.file,sha256:sha256(data),kind:'pack'});
+  }
   for(const slot of spec.slots||[]){
    const name=slot.id+'.png',fp=path.join(dir,name);
-   try{const data=await fsp.readFile(fp);files.push({file:name,sha256:sha256(data),required:slot.required!==false})}
-   catch{if(slot.required!==false)throw new Error('Hiányzó kötelező egyedi asset: '+name)}
+   try{const data=await fsp.readFile(fp);files.push({file:name,sha256:sha256(data),kind:'override'})}catch{}
   }
-  a.stages.sheets={status:'approved',actor,mode:'individual',files};
+  a.stages.sheets={status:'approved',actor,mode:'asset-pack-v2',files};
  }
  if(stage==='backgrounds'){
   const files=[];
@@ -217,7 +229,7 @@ const server=http.createServer(async(req,res)=>{
    const b=JSON.parse((await readBody(req)).toString()||'{}'),id=b.id;
    if(!safeId(id))return json(res,400,{error:'invalid theme id'});
    const dir=projectDir(id);if(fs.existsSync(dir))return json(res,409,{error:'theme exists'});
-   const p={format:'ggrid-theme-project',formatVersion:2,id,name:b.name||id,description:b.description||'',strict:b.strict!==false,projectVersion:1,createdAt:now(),modifiedAt:now(),stages:{mood:{status:'draft',prompts:[]},target:{status:'locked',prompts:[]},sheets:{status:'locked',prompts:[],approvalMode:'individual'},backgrounds:{status:'locked',prompts:[]},build:{status:'none',history:[]},qa:{status:'locked'},release:{status:'none'}},artifacts:{},externalSources:[]};
+   const p={format:'ggrid-theme-project',formatVersion:2,id,name:b.name||id,description:b.description||'',strict:b.strict!==false,projectVersion:1,createdAt:now(),modifiedAt:now(),stages:{mood:{status:'draft',prompts:[]},target:{status:'locked',prompts:[]},sheets:{status:'locked',prompts:[],approvalMode:'asset-pack-v2'},backgrounds:{status:'locked',prompts:[]},build:{status:'none',history:[]},qa:{status:'locked'},release:{status:'none'}},artifacts:{},externalSources:[]};
    await save(projectPath(id),p);return json(res,201,await loadProject(id));
   }
   let m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)$/);
@@ -233,7 +245,13 @@ const server=http.createServer(async(req,res)=>{
    const data=await readBody(req);if(data.length>50*1024*1024)return json(res,413,{error:'file too large'});
    const dest=path.resolve(projectDir(id),rel);if(!dest.startsWith(projectDir(id)+path.sep))return json(res,400,{error:'invalid path'});await fsp.mkdir(path.dirname(dest),{recursive:true});await fsp.writeFile(dest,data);
    await updateProject(id,p=>{p.artifacts=p.artifacts||{};p.artifacts[rel]={sha256:sha256(data),size:data.length,uploadedAt:now()}});
-   return json(res,201,{file:rel,sha256:sha256(data),size:data.length});
+   const spec=await loadSlotSpec(),packNames=new Set(Object.values(spec.packs||{}).map(x=>x.file));
+   let extracted=null;
+   if(packNames.has(rel)){
+    const r=await run('python',['tools/theme-kit/kit.py','extract-packs','--input',path.relative(ROOT,projectDir(id))]);
+    try{extracted=JSON.parse(r.out.trim())}catch{extracted={log:r.out}}
+   }
+   return json(res,201,{file:rel,sha256:sha256(data),size:data.length,extracted});
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/approve$/);
   if(req.method==='POST'&&m){
@@ -243,16 +261,22 @@ const server=http.createServer(async(req,res)=>{
    const p=await updateProject(id,async p=>{
     if(stage==='target'&&p.stages.mood.status!=='approved')throw new Error('mood not approved');
     if(stage==='sheets'&&p.stages.target.status!=='approved')throw new Error('target not approved');
-    if(stage==='backgrounds'&&(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='individual'))throw new Error('individual assets not approved');
+    if(stage==='backgrounds'&&(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='asset-pack-v2'))throw new Error('asset packs not approved');
     let info={status:'approved',approvedAt:now(),actor:b.actor||'owner',notes:b.notes||''};
     if(stage==='sheets'){
      const spec=await loadSlotSpec(),approvedFiles={};
-     for(const slot of spec.slots||[]){
-      const name=slot.id+'.png',fp=path.join(projectDir(id),name);
-      try{const data=await fsp.readFile(fp);approvedFiles[name]={sha256:sha256(data),size:data.length,required:slot.required!==false}}
-      catch{if(slot.required!==false)throw new Error('Hiányzó kötelező egyedi asset: '+name)}
+     for(const pk of Object.values(spec.packs||{})){
+      const name=pk.file;let data;
+      try{data=await fsp.readFile(path.join(projectDir(id),name))}catch{throw new Error('Hiányzó kötelező Asset Pack: '+name)}
+      approvedFiles[name]={sha256:sha256(data),size:data.length,kind:'pack'};
      }
-     info.approvedFiles=approvedFiles;info.approvalMode='individual';
+     for(const slot of spec.slots||[]){
+      const name=slot.id+'.png';
+      try{const data=await fsp.readFile(path.join(projectDir(id),name));approvedFiles[name]={sha256:sha256(data),size:data.length,kind:'override'}}catch{}
+     }
+     const requiredMissing=(spec.slots||[]).filter(x=>x.required!==false&&!p.assetFiles?.[x.id]?.exists);
+     if(requiredMissing.length)throw new Error('A pack kivágás után hiányzó kötelező elemek: '+requiredMissing.map(x=>x.id).join(', '));
+     info.approvedFiles=approvedFiles;info.approvalMode='asset-pack-v2';
     }else if(stage==='backgrounds'){
      const approvedFiles={};
      for(const name of BACKGROUND_FILES){
@@ -265,7 +289,7 @@ const server=http.createServer(async(req,res)=>{
     }
     p.stages[stage]={...p.stages[stage],...info};
     if(stage==='mood')p.stages.target.status='draft';
-    if(stage==='target'){p.stages.sheets.status='draft';p.stages.sheets.approvalMode='individual';p.stages.backgrounds.status='locked'}
+    if(stage==='target'){p.stages.sheets.status='draft';p.stages.sheets.approvalMode='asset-pack-v2';p.stages.backgrounds.status='locked'}
     if(stage==='sheets'){p.stages.backgrounds.status='draft';p.stages.build.status='none';p.stages.qa.status='locked'}
     if(stage==='backgrounds'){p.stages.build.status='ready';p.stages.qa.status='locked'}
     if(stage==='qa')p.stages.release.status='ready';
@@ -275,7 +299,7 @@ const server=http.createServer(async(req,res)=>{
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/build$/);
   if(req.method==='POST'&&m){
-   const id=m[1],p=await loadProject(id);if(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='individual')return json(res,409,{error:'individual assets not approved'});if(p.stages.backgrounds.status!=='approved')return json(res,409,{error:'backgrounds not approved'});
+   const id=m[1],p=await loadProject(id);if(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='asset-pack-v2')return json(res,409,{error:'asset packs not approved'});if(p.stages.backgrounds.status!=='approved')return json(res,409,{error:'backgrounds not approved'});
    const dir=projectDir(id);const started=now();
    try{
     const r=await run('python',['tools/theme-kit/kit.py','build','--input',path.relative(ROOT,dir)]);
