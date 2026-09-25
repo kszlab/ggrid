@@ -10,7 +10,19 @@
     "L3-BL",
     "L3-BR",
     "L3-TL",
-    "L3-TR"
+    "L3-TR",
+    "P4-1x4-1111",
+    "P4-2x2-1111",
+    "P4-2x3-101011",
+    "P4-3x2-111010",
+    "P4-4x1-1111",
+    "P5-2x4-10101011",
+    "P5-3x2-101111",
+    "P5-3x3-100100111",
+    "P5-3x3-111010010",
+    "P5-5x1-11111",
+    "P6-2x5-1010101011",
+    "P6-3x2-111111"
   ],
   "themes": [
     {
@@ -25,13 +37,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -46,13 +70,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -67,13 +103,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -88,13 +136,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -109,13 +169,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -130,13 +202,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -151,13 +235,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -172,13 +268,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -193,13 +301,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -214,13 +334,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -235,13 +367,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -256,13 +400,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -277,13 +433,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -298,13 +466,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -319,13 +499,25 @@
         "L3-BL": "cell-fallback",
         "L3-BR": "cell-fallback",
         "L3-TL": "cell-fallback",
-        "L3-TR": "cell-fallback"
+        "L3-TR": "cell-fallback",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 0,
-        "genericComposite": 4,
-        "cellFallback": 4,
-        "total": 8
+        "genericComposite": 9,
+        "cellFallback": 11,
+        "total": 20
       }
     },
     {
@@ -340,13 +532,25 @@
         "L3-BL": "custom",
         "L3-BR": "custom",
         "L3-TL": "custom",
-        "L3-TR": "custom"
+        "L3-TR": "custom",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 8,
-        "genericComposite": 0,
-        "cellFallback": 0,
-        "total": 8
+        "genericComposite": 5,
+        "cellFallback": 7,
+        "total": 20
       }
     },
     {
@@ -361,13 +565,25 @@
         "L3-BL": "custom",
         "L3-BR": "custom",
         "L3-TL": "custom",
-        "L3-TR": "custom"
+        "L3-TR": "custom",
+        "P4-1x4-1111": "generic-composite",
+        "P4-2x2-1111": "generic-composite",
+        "P4-2x3-101011": "cell-fallback",
+        "P4-3x2-111010": "cell-fallback",
+        "P4-4x1-1111": "generic-composite",
+        "P5-2x4-10101011": "cell-fallback",
+        "P5-3x2-101111": "cell-fallback",
+        "P5-3x3-100100111": "cell-fallback",
+        "P5-3x3-111010010": "cell-fallback",
+        "P5-5x1-11111": "generic-composite",
+        "P6-2x5-1010101011": "cell-fallback",
+        "P6-3x2-111111": "generic-composite"
       },
       "summary": {
         "custom": 8,
-        "genericComposite": 0,
-        "cellFallback": 0,
-        "total": 8
+        "genericComposite": 5,
+        "cellFallback": 7,
+        "total": 20
       }
     }
   ]
