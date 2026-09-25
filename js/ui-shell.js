@@ -132,5 +132,18 @@ const AppUI=(()=>{
  document.querySelector('#menuSettings').addEventListener('click',openSettings);
  document.querySelector('#menuHome').addEventListener('click',()=>{if(ScenarioMode?.active)document.querySelector('#exitScenario').click();showHome()});
  document.querySelector('#settingsClose').addEventListener('click',closeSettings);
- return{enterGame,showHome,openSettings,openFreeSetup};
+
+ async function launchThemeStudioPreview(){
+  const q=new URLSearchParams(location.search),id=q.get('themeStudio');if(!id)return;
+  const sz=q.get('themeStudioSize'),d=q.get('themeStudioD');
+  if(sz&&[...sizeEl.options].some(o=>o.value===sz))sizeEl.value=sz;
+  if(d&&[...difficultyEl.options].some(o=>o.value===d))difficultyEl.value=d;
+  await openFreeSetup();
+  const a=themes(),idx=a.findIndex(t=>t.id===id);
+  if(idx<0)throw new Error('Theme Studio preview theme not found: '+id);
+  themeIndex=idx;paintTheme();themeEl.value=id;
+  await launchFreePlay();document.body.classList.add('theme-studio-preview');
+ }
+ setTimeout(()=>launchThemeStudioPreview().catch(e=>{console.error(e);const t=document.querySelector('#toast');if(t)t.textContent='Theme Studio preview hiba: '+e.message}),0);
+ return{enterGame,showHome,openSettings,openFreeSetup,launchThemeStudioPreview};
 })();
