@@ -1,0 +1,32 @@
+name: Level Fingerprint v1
+
+on:
+  push:
+    paths:
+      - 'tools/level-fingerprint-v1.mjs'
+      - 'tools/level-novelty-v1.mjs'
+      - 'tools/test-level-fingerprint-v1.mjs'
+      - 'tools/level-generator-v2/layout.mjs'
+      - '.github/workflows/level-fingerprint-v1.yml'
+  pull_request:
+    paths:
+      - 'tools/level-fingerprint-v1.mjs'
+      - 'tools/level-novelty-v1.mjs'
+      - 'tools/test-level-fingerprint-v1.mjs'
+      - 'tools/level-generator-v2/layout.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  fingerprint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fingerprint invariance and novelty test
+        run: node tools/test-level-fingerprint-v1.mjs
+      - name: Syntax check generator integration
+        run: node --check tools/level-generator-v2/layout.mjs
