@@ -15,6 +15,16 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.33 — 2026-09-25
+
+### Külön Freeze-aware solver v1 és kísérleti ❄💡 súgó
+- Új, izolált `js/freeze-solver-v1.js` készült; a meglévő `solveDetailed()` változatlan maradt.
+- A solver legfeljebb egy Freeze használatával is kereshet megoldást, és az útvonalban lépésenként tárolja az irányt és az esetleges `freezeId`-t.
+- Normálisan megoldható állapotnál továbbra is Freeze nélküli optimális útvonalat ad vissza.
+- A HUD-ban külön **❄💡 Freeze-súgó** gomb jelent meg: rövid nyomás egy Freeze-t is figyelembe vevő javaslatot ad, 2 másodperces nyomva tartás pedig a teljes megoldást animálja.
+- Az automatikus Freeze-demó kijelöli a lefagyasztandó objektumot, majd végrehajtja a megfelelő irányparancsot; a demó nem von le Freeze-pontköltséget és az adott menetért nem jár pont.
+- Külön regressziós teszt ellenőrzi, hogy a normál megoldások változatlanok maradnak, és hogy egy normálisan megoldhatatlan állapot egy Freeze használatával ténylegesen megmenthető és végigjátszható.
+
 ## v0.15.32 — 2026-09-25
 
 ### Külön V3 D10 benchmark tesztmód
