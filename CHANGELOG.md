@@ -15,6 +15,18 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.51 — 2026-09-25
+
+### Theme Studio v0.2 — egyedi assetek és külön hátterek
+- A végleges témakészítési folyamat most: **MOOD → TARGET → ASSETS → BACKGROUNDS → BUILD → QA → RELEASE**.
+- Az elemlapok többé nem kötelező végleges források. A Studio minden Theme Kit slothoz külön PNG feltöltést kezel; a kötelező elemek csak egyedi assetként hagyhatók jóvá.
+- Az opcionális gyakori rigid alakok külön csoportban maradnak; hiányuk esetén az általános rigid anyagminta rajzolja ki őket.
+- Új külön háttérfázis kezeli és hagyja jóvá a `bg-portrait.png` és `bg-landscape.png` képeket.
+- A strict build csak jóváhagyott egyedi assetkészlet és jóváhagyott háttérpár után indulhat.
+- A pipeline approval hash-eket az egyedi assetekre és a két háttérképre is ellenőrzi.
+- A korábbi négy elemlap továbbra is használható gyors prototípushoz és legacy forrásként, de nem számít végleges Studio-jóváhagyásnak.
+- A Build & QA nézet közvetlenül megpróbálja megjeleníteni a generált `compare.png` képet.
+
 ## v0.15.50 — 2026-09-25
 
 ### Theme Studio QA — háttér és iránynyilak javítása
