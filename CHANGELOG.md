@@ -15,6 +15,17 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.53 — 2026-09-25
+
+### Egybefüggő rigid-body sziluett renderer
+- A többcellás mozgó merev testek `rigidTiles` esetén többé nem cellánkénti autotile elemekből épülnek fel.
+- A renderer a teljes polyomino külső kontúrját kiszámítja, és egyetlen SVG-sziluettként rajzolja ki.
+- A teljes test egyetlen folytonos `rigid-tiles-block` textúrát kap, így megszűnnek a belső cellahatárok és az ismétlődő cellaszintű motívumok.
+- A külső szegély kizárólag a valódi külső kontúrt követi; a keret textúrája a `rigid-tiles-ring` mintából származik.
+- A `rigidTiles` sziluett-renderer elsőbbséget kap a korábbi opcionális per-shape rigid artwork előtt, ezért régi maradványassetek sem tudják visszakapcsolni a korábbi megjelenítést.
+- A régi cellánkénti autotile API kompatibilitási fallbackként megmarad.
+- Új kontúr-regressziós teszt ellenőrzi L/T/U/2×2/6-cellás alakokon, hogy csak a kitett külső élek kerülnek a sziluettbe.
+
 ## v0.15.52 — 2026-09-25
 
 ### Theme Studio v0.3 — Asset Pack v2
