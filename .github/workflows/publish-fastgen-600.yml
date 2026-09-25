@@ -17,6 +17,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Sync current main
+        run: git pull --rebase origin main
       - uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +51,8 @@ jobs:
         run: |
           git config user.name "ggrid-fastgen"
           git config user.email "actions@users.noreply.github.com"
-          git pull --rebase origin main
           git add content/levels/generated-test/catalog.json content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json
           git commit -m "v0.15.26: add 600-level Fast Generator v2 test pack"
           git push origin main
+
+# retry with sync before materializing generated files
