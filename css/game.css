@@ -507,3 +507,12 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 .piece.sr-autotile.join-r>.sr-q-tr,.piece.sr-autotile.join-r>.sr-q-br{right:calc(-1*var(--sr-join,2px))}
 .piece.sr-autotile.join-t>.sr-q-tl,.piece.sr-autotile.join-t>.sr-q-tr{top:calc(-1*var(--sr-join,2px))}
 .piece.sr-autotile.join-b>.sr-q-bl,.piece.sr-autotile.join-b>.sr-q-br{bottom:calc(-1*var(--sr-join,2px))}
+
+
+/* v0.15.50 – painted artwork cues are already direction-specific.
+   Do not apply the legacy generic-arrow rotation or pressed-state transform. */
+.scene-artwork .emboss-arrow.art-directional-cue,
+.scene-artwork .edge-control:active .emboss-arrow.art-directional-cue,
+.scene-artwork .edge-control.pressed .emboss-arrow.art-directional-cue{
+ transform:none!important;
+}
