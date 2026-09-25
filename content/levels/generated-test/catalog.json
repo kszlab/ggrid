@@ -6,6 +6,10 @@
     {
       "id": "fastgen-v2-bootstrap-3x3",
       "src": "packs/fastgen-v2-bootstrap-3x3.json"
+    },
+    {
+      "id": "fastgen-v2-600-mixed-20260925",
+      "src": "packs/fastgen-v2-600-mixed-20260925.json"
     }
   ]
 }
