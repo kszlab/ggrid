@@ -64,6 +64,7 @@ function run(cmd,args,cwd=ROOT){
  return new Promise((resolve,reject)=>{
   const p=spawn(cmd,args,{cwd,env:process.env});let out='',err='';
   p.stdout.on('data',d=>out+=d);p.stderr.on('data',d=>err+=d);
+  p.on('error',e=>reject(Object.assign(new Error(cmd+': '+e.message),{code:'SPAWN_ERROR',out,err})));
   p.on('close',code=>code===0?resolve({code,out,err}):reject(Object.assign(new Error(err||out||cmd+' failed'),{code,out,err})));
  });
 }
@@ -73,52 +74,74 @@ async function externalSources(id,p){
   try{const st=await fsp.stat(abs);if(st.isFile())out.push({path:s.path,size:st.size,kind:s.kind||'legacy'})}catch{}
  }return out;
 }
+async function walkFiles(dir,base=dir){
+ const out=[];
+ for(const e of await fsp.readdir(dir,{withFileTypes:true})){
+  if(e.name==='exports')continue;
+  const p=path.join(dir,e.name);
+  if(e.isDirectory())out.push(...await walkFiles(p,base));
+  else if(e.isFile())out.push({abs:p,rel:path.relative(base,p).replaceAll('\\','/')});
+ }
+ return out;
+}
+async function copyFileWithDirs(src,dest){
+ await fsp.mkdir(path.dirname(dest),{recursive:true});await fsp.copyFile(src,dest);
+}
+async function zipDirectory(src,dest){
+ await fsp.rm(dest,{force:true});
+ if(process.platform==='win32'){
+  const ps='Compress-Archive -Path '+JSON.stringify(path.join(src,'*'))+' -DestinationPath '+JSON.stringify(dest)+' -Force';
+  await run('powershell.exe',['-NoProfile','-Command',ps]);
+ }else{
+  await run('zip',['-q','-r',dest,'.'],src);
+ }
+}
+async function unzipArchive(src,dest){
+ await fsp.rm(dest,{recursive:true,force:true});await fsp.mkdir(dest,{recursive:true});
+ if(process.platform==='win32'){
+  const ps='Expand-Archive -LiteralPath '+JSON.stringify(src)+' -DestinationPath '+JSON.stringify(dest)+' -Force';
+  await run('powershell.exe',['-NoProfile','-Command',ps]);
+ }else{
+  await run('unzip',['-q',src,'-d',dest]);
+ }
+}
 async function makeArchive(id){
  const p=await loadProject(id),dir=projectDir(id),exports=path.join(dir,'exports');await fsp.mkdir(exports,{recursive:true});
  const name=`${id}-project-v${p.projectVersion||1}.ggrid-theme-project`,dest=path.join(exports,name);
- const py=[
-  'import zipfile,sys,os,json,hashlib',
-  'root,proj,dest=sys.argv[1:4]',
-  'p=json.load(open(os.path.join(proj,"project.json"),encoding="utf-8"))',
-  'files={}',
-  'with zipfile.ZipFile(dest,"w",zipfile.ZIP_DEFLATED) as z:',
-  '  for base,ds,fs in os.walk(proj):',
-  '    if os.path.basename(base)=="exports": continue',
-  '    for f in fs:',
-  '      ap=os.path.join(base,f); rel=os.path.relpath(ap,proj).replace(os.sep,"/")',
-  '      data=open(ap,"rb").read(); files[rel]=hashlib.sha256(data).hexdigest(); z.writestr(rel,data)',
-  '  for s in p.get("externalSources",[]):',
-  '    ap=os.path.join(root,s["path"])',
-  '    if os.path.isfile(ap):',
-  '      rel="legacy-runtime/"+s["path"].replace(os.sep,"/"); data=open(ap,"rb").read(); files[rel]=hashlib.sha256(data).hexdigest(); z.writestr(rel,data)',
-  '  manifest={"format":"ggrid-theme-project-archive","formatVersion":1,"themeId":p["id"],"projectVersion":p.get("projectVersion",1),"files":files}',
-  '  z.writestr("manifest.json",json.dumps(manifest,ensure_ascii=False,indent=2)+"\\n")'
- ].join('\n');
- await run('python',['-c',py,ROOT,dir,dest]);return{name,path:dest,size:(await fsp.stat(dest)).size};
+ const stage=path.join(ROOT,'.cache','theme-studio-export-'+id);await fsp.rm(stage,{recursive:true,force:true});await fsp.mkdir(stage,{recursive:true});
+ const manifestFiles={};
+ for(const file of await walkFiles(dir)){
+  const data=await fsp.readFile(file.abs);manifestFiles[file.rel]=sha256(data);await copyFileWithDirs(file.abs,path.join(stage,file.rel));
+ }
+ for(const src of p.externalSources||[]){
+  const abs=path.resolve(ROOT,src.path);if(!abs.startsWith(ROOT+path.sep))continue;
+  try{
+   const st=await fsp.stat(abs);if(!st.isFile())continue;
+   const rel='legacy-runtime/'+src.path.replaceAll('\\','/'),data=await fsp.readFile(abs);
+   manifestFiles[rel]=sha256(data);await copyFileWithDirs(abs,path.join(stage,...rel.split('/')));
+  }catch{}
+ }
+ await save(path.join(stage,'manifest.json'),{format:'ggrid-theme-project-archive',formatVersion:1,themeId:p.id,projectVersion:p.projectVersion||1,files:manifestFiles});
+ await zipDirectory(stage,dest);await fsp.rm(stage,{recursive:true,force:true});
+ return{name,path:dest,size:(await fsp.stat(dest)).size};
 }
 async function importArchive(tmp){
- const py=[
-  'import zipfile,sys,os,json,re,hashlib,shutil,tempfile',
-  'src,destroot=sys.argv[1:3]',
-  'with zipfile.ZipFile(src) as z:',
-  ' names=z.namelist(); assert "project.json" in names and "manifest.json" in names',
-  ' p=json.loads(z.read("project.json")); m=json.loads(z.read("manifest.json")); tid=p["id"]',
-  ' assert re.fullmatch(r"[a-z0-9][a-z0-9-]{1,40}",tid)',
-  ' assert m.get("themeId")==tid',
-  ' for n,h in m.get("files",{}).items():',
-  '  assert hashlib.sha256(z.read(n)).hexdigest()==h, "hash mismatch "+n',
-  ' out=os.path.join(destroot,tid)',
-  ' if os.path.exists(out): raise SystemExit("PROJECT_EXISTS")',
-  ' os.makedirs(out)',
-  ' for n in names:',
-  '  if n=="manifest.json" or n.startswith("legacy-runtime/"): continue',
-  '  target=os.path.normpath(os.path.join(out,n))',
-  '  assert target.startswith(os.path.abspath(out)+os.sep) or target==os.path.abspath(out)',
-  '  if n.endswith("/"): os.makedirs(target,exist_ok=True)',
-  '  else: os.makedirs(os.path.dirname(target),exist_ok=True); open(target,"wb").write(z.read(n))',
-  ' print(tid)'
- ].join('\n');
- const r=await run('python',['-c',py,tmp,DESIGN]);return r.out.trim();
+ const stage=path.join(ROOT,'.cache','theme-studio-import-unpacked');await unzipArchive(tmp,stage);
+ const pp=path.join(stage,'project.json'),mp=path.join(stage,'manifest.json');
+ const p=await load(pp),m=await load(mp),id=p.id;
+ if(!safeId(id)||m.themeId!==id)throw new Error('INVALID_PROJECT_ARCHIVE');
+ for(const [rel,hash] of Object.entries(m.files||{})){
+  if(!safeRel(rel))throw new Error('INVALID_ARCHIVE_PATH');
+  const fp=path.join(stage,...rel.split('/'));const data=await fsp.readFile(fp);
+  if(sha256(data)!==hash)throw new Error('HASH_MISMATCH: '+rel);
+ }
+ const out=projectDir(id);if(fs.existsSync(out))throw new Error('PROJECT_EXISTS');
+ await fsp.mkdir(out,{recursive:true});
+ for(const file of await walkFiles(stage)){
+  if(file.rel==='manifest.json'||file.rel.startsWith('legacy-runtime/'))continue;
+  await copyFileWithDirs(file.abs,path.join(out,...file.rel.split('/')));
+ }
+ await fsp.rm(stage,{recursive:true,force:true});return id;
 }
 async function serveStatic(req,res,url){
  let rel=url.pathname==='/'?'index.html':url.pathname.slice(1);
