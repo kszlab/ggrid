@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 import json, os, stat, sys, zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 MAX_FILES=2000
 MAX_TOTAL=200*1024*1024
 MAX_FILE=50*1024*1024
 
 def bad_name(name):
-    p=Path(name)
+    norm=name.replace('\\','/')
+    p=PurePosixPath(norm)
+    parts=p.parts
     return (
-        not name or
-        name.startswith(('/', '\\')) or
-        '..' in p.parts or
-        ':' in p.parts[0] or
-        any(part in ('', '.', '..') for part in p.parts)
+        not norm or
+        norm.startswith('/') or
+        '..' in parts or
+        (parts and ':' in parts[0]) or
+        any(part in ('', '.', '..') for part in parts)
     )
 
 def main():
