@@ -69,6 +69,7 @@ const AppUI=(()=>{
   const chosen=box.querySelector('button[data-value="'+difficultyEl.value+'"]');if(chosen?.disabled){const first=[...box.querySelectorAll('button[data-value]')].find(b=>!b.disabled);if(first)difficultyEl.value=first.dataset.value;}
   document.querySelector('#freeSetupPlay').disabled=!any||!LevelLibrary.has(d.w,d.h,+difficultyEl.value);
   const multi=document.querySelector('#freeSetupMultiBall');if(multi)multi.disabled=!MultiBallLibrary.has(d.w,d.h,+difficultyEl.value);
+  const generated=document.querySelector('#freeSetupGenerated');if(generated)generated.disabled=!GeneratedTestLibrary.has(d.w,d.h,+difficultyEl.value);
  }
  function bindSegments(id,select,onChange){
   const box=document.querySelector(id),paint=()=>{box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));onChange?.()};
@@ -77,7 +78,7 @@ const AppUI=(()=>{
  const paintSize=bindSegments('#quickSize',sizeEl,syncLevelAvailability),paintDiff=bindSegments('#quickDifficulty',difficultyEl,syncLevelAvailability);
  async function openFreeSetup(){
   cancelFreezeSelection();
-  await Promise.all([LevelLibrary.init(),MultiBallLibrary.init()]);
+  await Promise.all([LevelLibrary.init(),MultiBallLibrary.init(),GeneratedTestLibrary.init()]);
   if(ScenarioMode?.active){document.querySelector('#exitScenario').click()}
   document.body.dataset.uiContext='shell';home.hidden=true;menu.hidden=true;settings.hidden=true;freeSetup.hidden=false;AudioManager?.stopAmbient?.();MotionControl?.pause?.();
   for(let i=0;i<20&&!themes().length;i++)await new Promise(r=>setTimeout(r,50));
@@ -91,13 +92,18 @@ const AppUI=(()=>{
   await ScenarioMode?.loadFreeTheme?.(themeEl.value);
   if(await globalThis.startMultiBallGame?.())enterGame();
  }
+ async function launchGeneratedTest(){
+  document.body.classList.remove('scenario-mode');
+  await ScenarioMode?.loadFreeTheme?.(themeEl.value);
+  if(await globalThis.startGeneratedTestGame?.())enterGame();
+ }
  document.querySelector('#playHint').addEventListener('click',()=>document.querySelector('#hint').click());
  document.querySelector('#playRestart').addEventListener('click',()=>document.querySelector('#restart').click());
  document.querySelector('#playNext').addEventListener('click',()=>document.querySelector('#new').click());
  document.querySelector('#playChoose').addEventListener('click',openFreeSetup);
  document.querySelector('#themePrev').addEventListener('click',()=>selectTheme(-1));document.querySelector('#themeNext').addEventListener('click',()=>selectTheme(1));
  preview.addEventListener('pointerdown',e=>{touchX=e.clientX});preview.addEventListener('pointerup',e=>{if(touchX==null)return;const dx=e.clientX-touchX;touchX=null;if(Math.abs(dx)>42)selectTheme(dx<0?1:-1)});
- document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);document.querySelector('#freeSetupMultiBall').addEventListener('click',launchMultiBallGame);
+ document.querySelector('#freeSetupClose').addEventListener('click',showHome);document.querySelector('#freeSetupPlay').addEventListener('click',launchFreePlay);document.querySelector('#freeSetupMultiBall').addEventListener('click',launchMultiBallGame);document.querySelector('#freeSetupGenerated').addEventListener('click',launchGeneratedTest);
  document.querySelector('#homeFreePlay').addEventListener('click',openFreeSetup);
  document.querySelector('#homeSettings').addEventListener('click',openSettings);
  document.querySelector('#homeHelp').addEventListener('click',()=>openHelp());
