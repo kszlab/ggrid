@@ -59,8 +59,9 @@ function updateScore(){
  }
  const hintDisabled=won,autoSolveAllowed=appFeatureEnabled('autoSolve'),autoSolveSeconds=AUTO_SOLVE_HOLD_MS/1000;
  if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?autoSolveAllowed?`Kétgolyós játék: rövid nyomás javaslat, ${autoSolveSeconds} másodperc automatikus megoldás.`:'Kétgolyós játék: rövid nyomás javaslat.':isScoredFreePlay()?autoSolveAllowed?`Rövid nyomás: súgó (1 pont). ${autoSolveSeconds} másodperc: automatikus megoldás (0 pont).`:'Rövid nyomás: súgó (1 pont).':''}
- const visibleHint=document.querySelector('#playHint');
+ const visibleHint=document.querySelector('#playHint'),visibleFreezeHint=document.querySelector('#playFreezeHint');
  if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?autoSolveAllowed?`Kétgolyós teszt: rövid nyomás javaslat, ${autoSolveSeconds} másodperc automatikus megoldás.`:'Kétgolyós teszt: rövid nyomás javaslat.':autoSolveAllowed?`Rövid nyomás: súgó. ${autoSolveSeconds} másodperc nyomva tartás: automatikus megoldás, pont nélkül.`:'Rövid nyomás: súgó.'}
+ if(visibleFreezeHint){visibleFreezeHint.disabled=hintDisabled;visibleFreezeHint.title=won?'A pálya már kész.':autoSolveAllowed?`Freeze-súgó: rövid nyomás egy lépéses javaslat, ${autoSolveSeconds} másodperc Freeze-t is használó automatikus megoldás.`:'Freeze-súgó: rövid nyomás egy lépéses javaslat.'}
  freezeBtn.disabled=won||!canUseFreeze()||(isScoredFreePlay()&&scoreData.balance<10);
  freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
  freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':generated?'Generátor teszt: Freeze pontlevonás nélkül':test?'Kétgolyós játék: Freeze pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
@@ -286,10 +287,10 @@ function playEvents(events){
 function move(dir,automatic=false){
  if(!state||state.won||busy||(autoSolveActive&&!automatic))return;
  const usedFreeze=freezeArmed&&freezeId!=null,wasArmed=freezeArmed;
- if(usedFreeze&&isScoredFreePlay()&&scoreData.balance<10){cancelFreezeSelection();return}
+ if(usedFreeze&&!automatic&&isScoredFreePlay()&&scoreData.balance<10){cancelFreezeSelection();return}
  SceneRenderer?.setDirection?.(dir);if(hintVisible){hintVisible=false;toast.textContent='';}
  setBusy(true);const r=step(state,dir,usedFreeze?freezeId:null);
- if(usedFreeze){stopHold();if(isScoredFreePlay())spendScore(10);freezeUsed++;}
+ if(usedFreeze){stopHold();if(!automatic&&isScoredFreePlay())spendScore(10);freezeUsed++;}
  state=r.state;lastEvents=r.events;freezeArmed=false;freezeId=null;
  if(wasArmed&&!state.won)MotionControl.resume();
  render({preservePieces:true});playEvents(r.events);
@@ -352,6 +353,75 @@ function startAutoSolve(){
    autoSolveTimer=setTimeout(next,680);
   }
   next();
+ },0);
+}
+function solveWithFreezeForPlay(s,mode='hint'){
+ const multi=totalBalls(s)>1;
+ const options=mode==='auto'
+  ?{maxDepth:multi?65:48,maxStates:multi?180000:110000,timeBudgetMs:multi?3200:2200,maxFreezeUses:1}
+  :{maxDepth:multi?55:38,maxStates:multi?100000:75000,timeBudgetMs:multi?1600:1100,maxFreezeUses:1};
+ return solveDetailedWithFreezeV1(s,options);
+}
+function freezeSolverFailureText(result){
+ if(result?.status==='unsolvable')return'Innen egyetlen Freeze használatával sem találtam megoldást.';
+ if(result?.status==='limit')return'A Freeze-keresés elérte a számítási korlátot; ettől még lehet menthető út.';
+ return'Nem sikerült Freeze-megoldást számolni.';
+}
+function freezeHint(){
+ if(!state||state.won||autoSolveActive)return;
+ cancelFreezeSelection();
+ if(isScoredFreePlay()&&scoreData.balance<1)return;
+ toast.textContent='Freeze-solver számol…';
+ const snapshotKey=stateKey(state);
+ setTimeout(()=>{
+  if(!state||stateKey(state)!==snapshotKey)return;
+  const result=solveWithFreezeForPlay(state,'hint');
+  if(stateKey(state)!==snapshotKey)return;
+  if(result.status!=='solved'||!result.actions?.length){toast.textContent=freezeSolverFailureText(result);return}
+  if(isScoredFreePlay()&&!spendScore(1))return;
+  const arrows={up:'↑',down:'↓',left:'←',right:'→'},first=result.actions[0];
+  if(result.freezeUses===0){
+   toast.textContent=`Freeze nem szükséges. Következő optimális irány: ${arrows[first.dir]} · ${result.actions.length} lépés`;
+  }else if(first.freezeId){
+   toast.textContent=`❄ Fagyaszd le: ${first.freezeId}, majd ${arrows[first.dir]} · innen ${result.actions.length} lépés`;
+  }else{
+   const fi=result.firstFreezeIndex;
+   const fa=fi>=0?result.actions[fi]:null;
+   toast.textContent=`Következő: ${arrows[first.dir]} · Freeze ${fi+1}. lépésnél: ${fa?.freezeId||'?'} + ${fa?arrows[fa.dir]:''}`;
+  }
+ },0);
+}
+function startFreezeAutoSolve(){
+ if(!appFeatureEnabled('autoSolve')){toast.textContent='Az automatikus megoldás ebben a kiadásban nem érhető el.';return}
+ if(!state||state.won||autoSolveActive)return;
+ stopHold();cancelFreezeSelection();hintVisible=false;
+ const token=++autoSolveToken;toast.textContent='Freeze-megoldás számítása…';
+ setTimeout(()=>{
+  if(token!==autoSolveToken||!state)return;
+  const result=solveWithFreezeForPlay(state,'auto');
+  if(token!==autoSolveToken)return;
+  if(result.status!=='solved'||!result.actions?.length){toast.textContent=freezeSolverFailureText(result);return}
+  const actions=result.actions;
+  solverUsedThisRun=true;rewardedThisRun=true;autoSolveActive=true;MotionControl?.pause?.();render({preservePieces:true});
+  let index=0;
+  function runAction(){
+   if(token!==autoSolveToken)return;
+   if(index>=actions.length||state.won){autoSolveActive=false;cancelFreezeSelection();if(!state.won)MotionControl?.resume?.();return}
+   if(busy){autoSolveTimer=setTimeout(runAction,80);return}
+   const action=actions[index],stepNo=index+1;
+   if(action.freezeId){
+    freezeArmed=true;freezeId=action.freezeId;render({preservePieces:true});
+    toast.textContent=`❄ Freeze: ${action.freezeId} · ${stepNo}/${actions.length}`;
+    autoSolveTimer=setTimeout(()=>{
+     if(token!==autoSolveToken)return;
+     move(action.dir,true);index++;autoSolveTimer=setTimeout(runAction,680);
+    },520);
+   }else{
+    toast.textContent=`Freeze-megoldás: ${stepNo}/${actions.length}${result.freezeUses?' · 1 Freeze':' · Freeze nélkül'}`;
+    move(action.dir,true);index++;autoSolveTimer=setTimeout(runAction,680);
+   }
+  }
+  runAction();
  },0);
 }
 function hint(){
@@ -747,6 +817,21 @@ for(const event of ['pointerup','pointercancel','lostpointercapture'])playHintBt
 // Some mobile browsers issue a context menu on long touch; CSS disables that gesture.
 playHintBtn.addEventListener('click',e=>{if(!hintHoldFired)return;e.preventDefault();e.stopImmediatePropagation();hintHoldFired=false},true);
 playHintBtn.addEventListener('contextmenu',e=>e.preventDefault());
+const playFreezeHintBtn=document.querySelector('#playFreezeHint');let freezeHintHoldTimer=null,freezeHintHoldFired=false,freezeHintHoldPointer=null;
+function clearFreezeHintHold(){if(freezeHintHoldTimer)clearTimeout(freezeHintHoldTimer);freezeHintHoldTimer=null;freezeHintHoldPointer=null;playFreezeHintBtn.classList.remove('pressed')}
+playFreezeHintBtn.addEventListener('pointerdown',e=>{
+ if(state?.won||e.button!==0||freezeHintHoldPointer!==null)return;
+ clearFreezeHintHold();freezeHintHoldFired=false;freezeHintHoldPointer=e.pointerId;
+ try{playFreezeHintBtn.setPointerCapture(e.pointerId)}catch(_){}
+ playFreezeHintBtn.classList.add('pressed');
+ freezeHintHoldTimer=setTimeout(()=>{freezeHintHoldTimer=null;freezeHintHoldFired=true;playFreezeHintBtn.classList.remove('pressed');startFreezeAutoSolve()},AUTO_SOLVE_HOLD_MS);
+});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])playFreezeHintBtn.addEventListener(event,e=>{if(e.pointerId===freezeHintHoldPointer)clearFreezeHintHold()});
+playFreezeHintBtn.addEventListener('click',e=>{
+ if(freezeHintHoldFired){e.preventDefault();e.stopImmediatePropagation();freezeHintHoldFired=false;return}
+ freezeHint();
+});
+playFreezeHintBtn.addEventListener('contextmenu',e=>e.preventDefault());
 soundBtn.addEventListener('click',async()=>{await AudioManager.toggleEffects();syncSoundControls()});
 ambientBtn.addEventListener('click',async()=>{await AudioManager.toggleAmbient();syncSoundControls()});
 syncSoundControls();
