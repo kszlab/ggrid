@@ -50,6 +50,7 @@ jobs:
           node --check js/scenario-loader.js
           node --check js/solver.js
           node --check js/freeze-solver-v1.js
+          node --check js/freeze-solver-v2.js
           node --check js/level-library.js
           node --check js/generated-test-library.js
           node --check tools/generate-levels-v2.mjs
@@ -62,6 +63,8 @@ jobs:
         run: node tools/test-runtime-solver.mjs
       - name: Freeze Solver v1 regression
         run: node tools/test-freeze-solver-v1.mjs
+      - name: Freeze Solver v2 regression
+        run: node tools/test-freeze-solver-v2.mjs
       - name: Fast Generator v2 smoke test
         run: node tools/test-level-generator-v2.mjs
       - name: Fast Generator v3 regression test
@@ -87,4 +90,4 @@ jobs:
       - name: Theme asset integrity
         run: node tools/test-theme-assets.mjs
 
-# v0.15.33 Freeze solver v1 validation
+# v0.15.34 compact Freeze solver v2 validation
