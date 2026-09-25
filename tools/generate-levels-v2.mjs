@@ -89,10 +89,10 @@ function writeTestCatalog(abs){
 }
 async function main(){
  const o=parseArgs(process.argv);if(o.help||!o.targets.length){console.log(HELP);process.exit(o.help?0:2)}
- const excluded=libraryFingerprints(),families=new Map(),usedIds=new Set(),seqRef={n:0},all=[],reports=[];
+ const excluded=libraryFingerprints(),families=new Map(),usedIds=new Set(),seqRef={n:0},all=[],reports=[],multiballSizes=new Set(['3x3','4x4','5x5','5x6','5x7','5x8']);
  for(const t of o.targets){
   if(t.w<3||t.h<3||t.w>8||t.h>8)throw Error('First test version supports board dimensions 3..8');
-  for(let bi=0;bi<t.balls.length;bi++){const balls=t.balls[bi];if(![1,2].includes(balls))throw Error('First test version supports B1 and B2 only');
+  for(let bi=0;bi<t.balls.length;bi++){const balls=t.balls[bi];if(![1,2].includes(balls))throw Error('First test version supports B1 and B2 only');if(balls===2&&!multiballSizes.has(t.w+'x'+t.h))throw Error('B2 difficulty is not calibrated for '+t.w+'x'+t.h+' yet; use B1 or a calibrated multiball size');
    const targetCount=Math.floor(t.count/t.balls.length)+(bi<t.count%t.balls.length?1:0),packId=`${o.idPrefix.toLowerCase()}-${t.w}x${t.h}-b${balls}-s${o.seed}`,r=await generateJob(o,t,balls,targetCount,excluded,families,usedIds,seqRef,packId);all.push(...r.levels);reports.push({target:t.label,balls,targetCount,...r,levels:undefined,stats:undefined})}
  }
  const tag=o.targets.length===1?`${o.targets[0].w}x${o.targets[0].h}`:'mixed';
