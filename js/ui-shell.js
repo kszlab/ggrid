@@ -69,7 +69,7 @@ const AppUI=(()=>{
   const chosen=box.querySelector('button[data-value="'+difficultyEl.value+'"]');if(chosen?.disabled){const first=[...box.querySelectorAll('button[data-value]')].find(b=>!b.disabled);if(first)difficultyEl.value=first.dataset.value;}
   document.querySelector('#freeSetupPlay').disabled=!any||!LevelLibrary.has(d.w,d.h,+difficultyEl.value);
   const multi=document.querySelector('#freeSetupMultiBall');if(multi)multi.disabled=!MultiBallLibrary.has(d.w,d.h,+difficultyEl.value);
-  const generated=document.querySelector('#freeSetupGenerated');if(generated)generated.disabled=!GeneratedTestLibrary.has(d.w,d.h,+difficultyEl.value);
+  const generated=document.querySelector('#freeSetupGenerated');if(generated){const exact=GeneratedTestLibrary.has(d.w,d.h,+difficultyEl.value),any=GeneratedTestLibrary.hasAny();generated.disabled=!any;generated.classList.toggle('unavailable',!any);generated.title=exact?'Generátor teszt az aktuális méret és nehézség szerint':any?'Az aktuális kombinációhoz nincs tesztpálya; indításkor az első elérhető generált tesztprofilra vált.':'Nincs generált tesztpálya.'}
  }
  function bindSegments(id,select,onChange){
   const box=document.querySelector(id),paint=()=>{box.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.value===select.value));onChange?.()};
@@ -94,6 +94,10 @@ const AppUI=(()=>{
  }
  async function launchGeneratedTest(){
   document.body.classList.remove('scenario-mode');
+  if(!GeneratedTestLibrary.has(selectedDims().w,selectedDims().h,+difficultyEl.value)){
+   const first=GeneratedTestLibrary.firstAvailable();
+   if(first){sizeEl.value=first.w===first.h?String(first.w):`${first.w}x${first.h}`;difficultyEl.value=String(first.d);paintSize();paintDiff();syncLevelAvailability();}
+  }
   await ScenarioMode?.loadFreeTheme?.(themeEl.value);
   if(await globalThis.startGeneratedTestGame?.())enterGame();
  }
