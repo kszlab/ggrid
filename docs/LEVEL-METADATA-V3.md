@@ -52,6 +52,28 @@ A meglévő solver-metrikák megmaradnak. Ehhez egységesen hozzáadódik:
 
 A novelty v1 szándékosan egyszerű és determinisztikus. Később fejlettebb hasonlósági modell válthatja fel anélkül, hogy a schema szerkezete változna.
 
+
+### Freeze megoldási követelmény
+
+A pálya statikus elemzésének része a Freeze-követelmény:
+
+```json
+"solutionRequirements": {
+  "freeze": {
+    "status": "not-required",
+    "minimumUses": 0
+  }
+}
+```
+
+Megengedett állapotok:
+
+- `not-required`: a pálya Freeze nélkül is megoldható; `minimumUses = 0`;
+- `required`: Freeze nélkül nem megoldható, Freeze használatával igen; `minimumUses >= 1`;
+- `unknown`: a Freeze-követelmény még nincs bizonyítva; `minimumUses = null`.
+
+A jelenlegi aktív pályák normál solverrel igazoltan megoldhatók, ezért migrációkor `not-required / 0` értéket kapnak. Későbbi Freeze-köteles pályák ugyanebben a mezőben tárolják majd a minimum szükséges Freeze-használatok számát. A mező nem tartalmazza, mely objektumot vagy mikor kell lefagyasztani; ez egy későbbi részletes Freeze-analízis külön adata lehet.
+
 ## Pack metadata
 
 Minden catalog-bejegyzés és pack kap:
