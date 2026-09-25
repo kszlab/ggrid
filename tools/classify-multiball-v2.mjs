@@ -16,7 +16,8 @@ function directConstraint(s){let count=0,valid=0;
   }visit(s,Math.abs(dx),Math.abs(dy));
  }return {count,valid,constraint:count?1-valid/count:0};
 }
-export function analyzeState(s,{maxStates=60000,riskStates=10000}={}){
+export function analyzeState(s,{maxStates=60000,riskStates=10000,solve=solveDetailed}={}){
+ const solveDetailed=solve;
  validateLevel(s);if(s.objects.filter(o=>o.type==='ball').length!==2)return {status:'unsupported_ball_count'};
  const solved=solveDetailed(s,{maxDepth:65,maxStates});
  if(solved.status!=='solved')return {status:solved.status,reason:solved.reason};
