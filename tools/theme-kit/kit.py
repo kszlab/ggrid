@@ -117,7 +117,9 @@ def slice_assets(inp,out):
  counts={k:sum(1 for v in report['slots'].values() if v['status']==k) for k in ['ok','warn','missing']}
  counts['requiredMissing']=sum(1 for k,v in report['slots'].items() if v['required'] and v['status']=='missing')
  counts['optionalMissing']=sum(1 for k,v in report['slots'].items() if not v['required'] and v['status']=='missing');report['summary']=counts
- json.dump(report,open(out/'kit-report.json','w'),ensure_ascii=False,indent=2);open(out/'kit-report.json','a').write('\n')
+ with open(out/'kit-report.json','w',encoding='utf-8',newline='\n') as fp:
+  json.dump(report,fp,ensure_ascii=False,indent=2)
+  fp.write('\n')
  # contact sheet
  W,H=1000,((len(KIT['slots'])+4)//5)*190;cs=Image.new('RGB',(W,H),(25,25,30));d=ImageDraw.Draw(cs)
  for i,s in enumerate(KIT['slots']):
@@ -223,14 +225,20 @@ def cmd_build(args):
  preview=ex.get('showcase',{}).get('file') or ex.get('target',{}).get('file') or ex.get('bg-portrait',{}).get('file')
  sem={'ball':'Golyó','brick':'Mozgó elem','wall':'Fal','exit':'Kijárat','freeze':'Freeze'};sem.update(meta.get('semantic',{}))
  theme={'format':'ggrid-theme','formatVersion':2,'id':tid,'version':int(meta.get('version',1)),'name':meta['name'],'description':meta.get('description',''),'semantic':sem,'scene':{'type':tid,'tier':'showcase'},'pieces':{k:{'name':sem[k]} for k in ['ball','brick','wall','exit']},'abilities':{'freeze':{'name':sem['freeze']}},'preview':{'shortName':meta.get('shortName',meta['name']),'tag':meta.get('tag',''),'description':meta.get('description',''),'image':f'content/themes/{tid}/'+preview if preview else ''},'renderMode':'artwork','render':{'pieceInsetPx':.8,'rigidInsetPx':.4,'moveMs':190},'artwork':{'version':2,'landscapeMinAspect':1.18,'layouts':{'portrait':{'designSize':[540,610],'boxes':{'boardSafe':[46,68,448,448]},'controls':{'band':42,'gap':2,'extend':4}},'landscape':{'designSize':[900,520],'boxes':{'boardSafe':[165,70,570,360]},'controls':{'band':54,'gap':5,'extend':5}}},'layers':layers,'board':board,'pieces':pieces,'controls':controls,'ui':ui,'layoutMode':'portrait'},'ui':{'skin':'full','sceneChrome':True,'tokens':tok},'themeKit':{'version':2,'report':'kit-report.json','approval':{'file':'approval.json','stage':'sheets','strict':meta.get('strict',True)},'assetsDigest':digest}}
- json.dump(theme,open(tdir/'theme.json','w'),ensure_ascii=False,indent=2);open(tdir/'theme.json','a').write('\n')
+ with open(tdir/'theme.json','w',encoding='utf-8',newline='\n') as fp:
+  json.dump(theme,fp,ensure_ascii=False,indent=2)
+  fp.write('\n')
  css=CSS.replace('{{THEME}}',tid)
  for k,v in tok.items():css=css.replace('{{'+k+'}}',v)
  if have('freeze-mark'):css+=f'\nbody[data-theme="{tid}"] .freeze-selection-marker{{background:url("raster/freeze-mark.webp") center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;outline:0!important}}\n'
- open(tdir/'artwork.css','w').write(css)
+ with open(tdir/'artwork.css','w',encoding='utf-8',newline='\n') as fp:
+  fp.write(css)
  shutil.copy(inp/'theme-kit.json',tdir/'theme-kit.json');shutil.copy(inp/'approval.json',tdir/'approval.json')
  idx=load_json(ROOT/'content/themes/index.json');entry={'id':tid,'version':theme['version'],'name':theme['name'],'description':theme['description'],'showcase':True,'preview':theme['preview'],'src':tid+'/theme.json','css':tid+'/artwork.css?v='+digest}
- idx['themes']=[x for x in idx['themes'] if x['id']!=tid]+[entry];json.dump(idx,open(ROOT/'content/themes/index.json','w'),ensure_ascii=False,indent=2);open(ROOT/'content/themes/index.json','a').write('\n')
+ idx['themes']=[x for x in idx['themes'] if x['id']!=tid]+[entry]
+ with open(ROOT/'content/themes/index.json','w',encoding='utf-8',newline='\n') as fp:
+  json.dump(idx,fp,ensure_ascii=False,indent=2)
+  fp.write('\n')
  os.system(f'cd "{ROOT}" && node tools/audit-theme-shapes.mjs >/dev/null 2>&1')
  print('built',tid,report['summary'])
 
@@ -262,7 +270,9 @@ def cmd_capture(args):
  srv.shutdown()
  if args.target and os.path.exists(args.target):
   a=Image.open(args.target).convert('RGB').resize((1024,1536),Image.Resampling.LANCZOS);b=Image.open(out/'showcase-phone.png').convert('RGB');sc=min(1024/b.width,1536/b.height);bb=b.resize((round(b.width*sc),round(b.height*sc)),Image.Resampling.LANCZOS);canvas=Image.new('RGB',(2068,1600),(15,18,22));canvas.paste(a,(10,55));canvas.paste(bb,(1034+(1024-bb.width)//2,55+(1536-bb.height)//2));d=ImageDraw.Draw(canvas);d.text((10,12),'Jóváhagyott render-célkép',fill='#efd898',font=font(28,True));d.text((1034,12),'Valódi játék',fill='#efd898',font=font(28,True));canvas.save(out/'compare.png')
- json.dump({'theme':args.theme,'pageErrors':errs},open(out/'capture.json','w'),indent=2)
+ with open(out/'capture.json','w',encoding='utf-8',newline='\n') as fp:
+  json.dump({'theme':args.theme,'pageErrors':errs},fp,ensure_ascii=False,indent=2)
+  fp.write('\n')
  if errs:sys.exit(1)
 
 def main():
