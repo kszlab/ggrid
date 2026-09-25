@@ -1,6 +1,6 @@
 {
   "format": "ggrid-theme-project",
-  "formatVersion": 3,
+  "formatVersion": 4,
   "id": "celestial-library",
   "name": "Csillagkönyvtár",
   "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal.",
@@ -11,7 +11,7 @@
   "migration": {
     "source": "existing-runtime-theme",
     "baselineThemeVersion": 17,
-    "notes": "Első Theme Studio pilot. A működő v17 runtime téma és a hozzá tartozó dokumentáció örökölt referenciaként megmarad. Az eredeti, 2026-09-24-én elfogadott koncepciókép nincs a repóban; az approved-reference.json csak a forráskép méretét és a portrait gameplay crop geometriáját őrzi. A pilot ezért a mood fázistól új, Studio-ban tárolt képi forrásokat hoz létre. Theme Studio workflow v2: a végleges build külön PNG asseteket és külön portré/fekvő háttérképeket vár; a korábbi elemlapok csak legacy/gyors prototípus forrásként maradnak. Asset Pack v2: a végleges forrás 4 ritkán elhelyezett pack; a Studio automatikusan elemenként kivágja őket, az egyedi PNG-k csak hibajavító override-k.",
+    "notes": "Első Theme Studio pilot. A működő v17 runtime téma és a hozzá tartozó dokumentáció örökölt referenciaként megmarad. Az eredeti, 2026-09-24-én elfogadott koncepciókép nincs a repóban; az approved-reference.json csak a forráskép méretét és a portrait gameplay crop geometriáját őrzi. A pilot ezért a mood fázistól új, Studio-ban tárolt képi forrásokat hoz létre. Theme Studio workflow v2: a végleges build külön PNG asseteket és külön portré/fekvő háttérképeket vár; a korábbi elemlapok csak legacy/gyors prototípus forrásként maradnak. Asset Pack v2: a végleges forrás 4 ritkán elhelyezett pack; a Studio automatikusan elemenként kivágja őket, az egyedi PNG-k csak hibajavító override-k. Theme Studio v1.0: az elsődleges authoring most 5 Asset Pack (A–E) + 2 háttér; a Studio automatikusan kis assetekre bontja, amelyek külön override PNG-vel cserélhetők. A Próbajáték ugyanazt a GGrid motort használja.",
     "missingArtifacts": [
       "original-approved-concept-image",
       "original-generation-prompts"
@@ -37,7 +37,7 @@
     "sheets": {
       "status": "locked",
       "prompts": [],
-      "approvalMode": "asset-pack-v2"
+      "approvalMode": "asset-pack-v3"
     },
     "build": {
       "status": "none",
@@ -276,5 +276,9 @@
       "path": "content/themes/celestial-library/artwork/wall.svg",
       "kind": "legacy-runtime"
     }
-  ]
+  ],
+  "renderer": {
+    "rigid": "material"
+  },
+  "assetOverrides": {}
 }
