@@ -166,7 +166,10 @@ const SceneRenderer=(()=>{
  function buildComponentOverlays(board){
   const artPieces=theme?.artwork?.pieces||{},baseSpec=artPieces.rigidBody||theme?.pieces?.rigidBody;
   const variants=artPieces.rigidShapes||artPieces.rigidBodyVariants||theme?.pieces?.rigidBodyVariants||{},hasVariants=Object.keys(variants).length>0;
-  if(!baseSpec&&!hasVariants)return;
+  const tiles=artPieces.rigidTiles,tileUrls=tiles?.ring&&tiles?.block&&globalThis.ThemeAutotile?{ring:globalThis.ThemeAssets?.resolveUrl?.(theme,tiles.ring)||tiles.ring,block:globalThis.ThemeAssets?.resolveUrl?.(theme,tiles.block)||tiles.block}:null;
+  const pieceInset=globalThis.ThemeVisuals?.pieceInset?.(theme)??1.8;
+  board.querySelectorAll('.sr-autotile').forEach(el=>{if(!tileUrls)globalThis.ThemeAutotile?.clear?.(el)});
+  if(!baseSpec&&!hasVariants&&!tileUrls)return;
   const live=new Set(),w=state?.width||1,h=state?.height||w,cellX=100/w,cellY=100/h,inset=globalThis.ThemeVisuals?.rigidInset?.(theme)??1.8;
   for(const o of (state?.objects||[])){
    if(o.exited||o.type!=='brick'||(o.cells||[]).length<2)continue;
@@ -175,8 +178,13 @@ const SceneRenderer=(()=>{
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
    const rectangular=globalThis.RigidShapes?.isRectangular?.(o.cells)??(o.cells.length===boxArea);
    const rawVariant=shapeId?variants[shapeId]:null,useComposite=!!rawVariant||!!baseSpec&&rectangular,rawSpec=rawVariant||baseSpec,spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
-   board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>el.classList.toggle('sr-composite-source',useComposite));
+   board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>{
+    el.classList.toggle('sr-composite-source',useComposite);
+    if(tileUrls&&!useComposite){globalThis.ThemeAutotile.apply(el,o,+(el.dataset.cellkey?.split(':')[1]||0),tileUrls);el.style.setProperty('--sr-join',pieceInset+'px')}
+    else globalThis.ThemeAutotile?.clear?.(el);
+   });
    if(!useComposite){
+    if(tileUrls)continue;
     if(hasVariants&&shapeId){
      const warnKey=(theme?.id||'theme')+':'+shapeId;
      if(!warnedMissingShapes.has(warnKey)){warnedMissingShapes.add(warnKey);console.warn('[GGrid Theme] Missing rigid-body variant:',theme?.id||'unknown',shapeId,'-> cell fallback')}
