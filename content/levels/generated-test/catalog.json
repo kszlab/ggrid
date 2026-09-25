@@ -1,0 +1,6 @@
+{
+  "format": "ggrid-level-catalog",
+  "formatVersion": 1,
+  "description": "Fast Generator v2 isolated test library. Packs published with tools/generate-levels-v2.mjs --publish-test appear here.",
+  "packs": []
+}
