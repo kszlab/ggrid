@@ -70,3 +70,5 @@ jobs:
         run: node tools/audit-theme-shapes.mjs --check
       - name: Theme asset integrity
         run: node tools/test-theme-assets.mjs
+
+# v0.15.21 final validation
