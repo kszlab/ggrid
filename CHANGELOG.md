@@ -15,6 +15,19 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.52 — 2026-09-25
+
+### Theme Studio v0.3 — Asset Pack v2
+- A 26 külön kézi asset-feltöltés helyett a végleges authoring folyamat **4 ritkán elhelyezett Asset Packot** használ: board core, directions, rigid material és chrome/UI.
+- A packok 1024×1536-as sablonjai nagy külső panelt, belső biztonsági keretet és jelentős üres közöket használnak, hogy a kiálló díszek és aszimmetrikus formák ne vágódjanak le.
+- Pack feltöltéskor a Theme Studio automatikusan lefuttatja a kivágást, és elemenként mutatja az eredményt ellenőrzésre.
+- A forrás-prioritás: **egyedi javító override → Asset Pack → legacy elemlap**. Így normál esetben csak 4 packot kell elkészíteni; külön képet kizárólag a hibás elemhez kell adni.
+- A packból származó elem akkor figyelmeztetést kap, ha a rajz veszélyesen közel ér a panel külső széléhez.
+- A két külön háttér (`bg-portrait.png`, `bg-landscape.png`) továbbra is önálló BACKGROUNDS fázisban készül és kerül jóváhagyásra.
+- A build a forrás-packok és az esetleges override-ok hashét rögzíti, nem a származtatott kivágott fájlokat.
+- Új `extract-packs` Theme Kit parancs és Asset Pack v2 CI regresszió készült.
+- A régi sűrű elemlapok kompatibilitási fallbackként megmaradtak.
+
 ## v0.15.51 — 2026-09-25
 
 ### Theme Studio v0.2 — egyedi assetek és külön hátterek
