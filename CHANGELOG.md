@@ -15,6 +15,20 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.35 — 2026-09-25
+
+### Theme Pipeline v1 — hangulattervtől reprodukálható játékbeli témáig
+- Elkészült az önálló GGrid **Theme Pipeline v1**; a Claude-javaslat hasznos ötletei beépültek, de a rendszer nem függ Claude-tól.
+- A folyamat rögzített: **hangulatterv → render-célkép → elemlapok → strict build → valódi játék screenshot QA → tulajdonosi átvétel**.
+- A `showcase.png` és a geometriailag kötött `target.png` külön szerepet kapott; a végső összevetés a render-célképhez történik.
+- SHA-256 alapú `approval.json` jóváhagyási lánc készült (`mood → target → sheets`); jóváhagyott kép módosítása után a build új jóváhagyás nélkül leáll.
+- Strict módban kötelező a teljes board/chrome/Freeze/anyag assetkészlet; a külön festett 2H/2V/3H/3V/L alakok opcionálisak.
+- Új `ThemeAutotile` renderer képes tetszőleges összefüggő többcellás rigid testet két 3×3 festett anyagmintából folytonos tárgyként kirajzolni.
+- A meglévő per-shape artwork továbbra is elsőbbséget élvez; a régi témák működése változatlan marad.
+- Új **GGrid theme templates** Action generálja a mindenkori játékból az elemlap-sablonokat és a render-célkép alapot.
+- Új **GGrid theme pipeline** Action strict buildet, repository-teszteket, valódi játék screenshotokat és külön theme PR-t készít.
+- Dokumentáció és CI-regresszió készült a pipeline slot-sémájára és az autotile alakzatkezelésére.
+
 ## v0.15.34 — 2026-09-25
 
 ### Compact Freeze Solver v2 nagy pályákhoz
