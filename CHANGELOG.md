@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.44 — 2026-09-25
+
+### Theme Studio Windows indító stabilizálás
+- Külön `START_THEME_STUDIO_SERVER.bat` indító készült a Node szerverhez.
+- A fő `START_THEME_STUDIO.bat` most ezt a külön szerverindítót hívja a korábbi, törékeny többszörös idézőjelezés helyett.
+- A szerverablak induláskor kiírja a munkamappát és hiba esetén nyitva marad, így a tényleges Node hibaüzenet látható marad.
+
 ## v0.15.43 — 2026-09-25
 
 ### Theme Pipeline Windows kimeneti UTF-8 javítás
