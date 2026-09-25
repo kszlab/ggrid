@@ -15,6 +15,17 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.30 — 2026-09-25
+
+### Fast Generator v3 — adaptív multiball keresés
+- Elkészült a külön Fast Generator v3; a működő v2 referencia változatlanul megmarad.
+- A v3 átveszi a Claude-javaslat hasznos elemeit: multiball-specifikus layout profilok, transition-table alapú `graphSolver`, direct-open/direct-hard keresés, elite-pool alapú `direct-mutate`, valamint adaptív stratégia-választás.
+- D8–D10 kétgolyós hiány esetén a worker automatikusan nagyobb súlyt ad az elite-mutate és hard-multiball keresésnek.
+- Megmarad a jelenlegi Metadata Schema v3, globális `levelId`, family-diverzitás, 4–6 cellás nagy rigid shape támogatás, Freeze requirement, valamint canonical fingerprint / SimHash / LSH novelty-szűrés.
+- Az új generátor elfogadási kapuja az aktív könyvtár és a futás során már elfogadott pályák ellen is ellenőrzi a duplikációt/hasonlóságot.
+- A kétgolyós classifier opcionális solver-backendet kapott; alapértelmezett működése változatlan, state-space ágon pedig a gráfból gyorsítható.
+- Új regressziós teszt ellenőrzi a graphSolver/runtime solver egyezést, a multiball classifier egyezést és a v3 end-to-end kimeneti metadata-t.
+
 ## v0.15.29 — 2026-09-25
 
 ### Freeze megoldási követelmény metaadat
