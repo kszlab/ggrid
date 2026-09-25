@@ -60,8 +60,8 @@ function verify(s,a){
   const best=solveDetailed(s,{maxDepth:Math.max(70,a.optimalSolution.length+2),maxStates:2e6});return best.status==='solved'&&best.path.length===a.optimalSolution.length;
  }catch(_){return false}
 }
-async function generateJob(o,t,balls,excluded,families,usedIds,seqRef,packId){
- const shared=new SharedArrayBuffer(4*11),needed=new Int32Array(shared),q=quotas(Math.ceil(t.count/t.balls.length),t.classes);
+async function generateJob(o,t,balls,targetCount,excluded,families,usedIds,seqRef,packId){
+ const shared=new SharedArrayBuffer(4*11),needed=new Int32Array(shared),q=quotas(targetCount,t.classes);
  for(const [d,n] of q)needed[d]=n;
  const accepted=[],perWorker=new Map(),rejected={duplicate:0,family:0,classFull:0,verification:0},started=Date.now();
  const workers=Array.from({length:o.workers},(_,i)=>new Worker(new URL('./level-generator-v2/worker.mjs',import.meta.url),{workerData:{w:t.w,h:t.h,balls,seed:o.seed*10000+t.w*100+t.h*10+balls*1000+i,minMoves:o.minMoves,maxMoves:o.maxMoves,samplesPerLayout:o.samples,stateCap:o.stateCap,largeShapes:o.largeShapes,shared}}));
@@ -92,8 +92,8 @@ async function main(){
  const excluded=libraryFingerprints(),families=new Map(),usedIds=new Set(),seqRef={n:0},all=[],reports=[];
  for(const t of o.targets){
   if(t.w<3||t.h<3||t.w>8||t.h>8)throw Error('First test version supports board dimensions 3..8');
-  for(const balls of t.balls){if(![1,2].includes(balls))throw Error('First test version supports B1 and B2 only');
-   const packId=`${o.idPrefix.toLowerCase()}-${t.w}x${t.h}-b${balls}-s${o.seed}`,r=await generateJob(o,t,balls,excluded,families,usedIds,seqRef,packId);all.push(...r.levels);reports.push({target:t.label,balls,...r,levels:undefined,stats:undefined})}
+  for(let bi=0;bi<t.balls.length;bi++){const balls=t.balls[bi];if(![1,2].includes(balls))throw Error('First test version supports B1 and B2 only');
+   const targetCount=Math.floor(t.count/t.balls.length)+(bi<t.count%t.balls.length?1:0),packId=`${o.idPrefix.toLowerCase()}-${t.w}x${t.h}-b${balls}-s${o.seed}`,r=await generateJob(o,t,balls,targetCount,excluded,families,usedIds,seqRef,packId);all.push(...r.levels);reports.push({target:t.label,balls,targetCount,...r,levels:undefined,stats:undefined})}
  }
  const tag=o.targets.length===1?`${o.targets[0].w}x${o.targets[0].h}`:'mixed';
  let out=o.out||path.join('generated-levels',`${o.idPrefix.toLowerCase()}-${tag}-s${o.seed}.json`);
