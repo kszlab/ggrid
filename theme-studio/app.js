@@ -14,7 +14,29 @@ function stageImage(stage,title,folder){const s=current.stages[stage];panel(prom
 async function addPrompt(stage){const text=$('#promptText').value.trim();if(!text)return;await api('/api/themes/'+current.id+'/prompts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage,text})});await refresh()}
 async function upload(stage,folder){const f=$('#fileUp').files[0];if(!f)return;const ext=f.name.match(/\.[^.]+$/)?.[0]||'.png',rel=`${folder}/${Date.now()}${ext}`;await api('/api/themes/'+current.id+'/upload/'+encodeURIComponent(rel),{method:'PUT',body:f});current._lastUpload={stage,file:rel};$('#uploadStatus').innerHTML='<span class="ok">Feltöltve: '+rel+'</span>'}
 async function approve(stage,folder){const file=current._lastUpload?.stage===stage?current._lastUpload.file:prompt('Elfogadandó projektfájl relatív útvonala:',current.stages[stage].file||'');if(!file)return;await api('/api/themes/'+current.id+'/approve',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage,file,actor:'Krisztián'})});await refresh()}
-function sheets(){const s=current.stages.sheets,files=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'];panel(promptCard('sheets')+`<div class="card"><h3>Elemlapok</h3><div class="grid">${files.map((n,i)=>`<div class="drop"><b>${n}</b><input type="file" data-sheet="${n}" accept=".png"><button data-upload-sheet="${n}">Feltöltés</button></div>`).join('')}</div><p>Státusz: <b>${s.status}</b></p><button id="approveSheets">Elemlapok jóváhagyása</button></div>`);$('#addPrompt').onclick=()=>addPrompt('sheets');document.querySelectorAll('[data-upload-sheet]').forEach(b=>b.onclick=async()=>{const n=b.dataset.uploadSheet,f=document.querySelector('input[data-sheet="'+n+'"]').files[0];if(!f)return;await api('/api/themes/'+current.id+'/upload/'+encodeURIComponent(n),{method:'PUT',body:f});b.textContent='✓ Feltöltve'});$('#approveSheets').onclick=async()=>{await api('/api/themes/'+current.id+'/approve',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage:'sheets',actor:'Krisztián'})});await refresh()}}
+function sheets(){
+ const s=current.stages.sheets,files=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'],sheetFiles=current.sheetFiles||{},approved=s.approvedFiles||{};
+ const cards=files.map(n=>{
+  const f=sheetFiles[n]||{exists:false},isApproved=!!approved[n]&&approved[n].sha256===f.sha256;
+  const state=isApproved?'JÓVÁHAGYOTT':f.exists?'FELTÖLTVE':'HIÁNYZIK';
+  const cls=isApproved?'ok':f.exists?'warn':'bad';
+  const preview=f.exists?`<img src="/project-file/${current.id}/${n}?v=${encodeURIComponent(f.sha256||'')}" alt="${n}">`:'';
+  const meta=f.exists?`<div class="sheet-meta"><span class="${cls}">● ${state}</span><br><small>${Math.round((f.size||0)/1024)} KB · ${String(f.sha256||'').slice(0,12)}…</small></div>`:`<div class="sheet-meta"><span class="bad">● HIÁNYZIK</span></div>`;
+  return `<div class="drop sheet-card"><b>${n}</b>${preview}${meta}<input type="file" data-sheet="${n}" accept=".png"><button data-upload-sheet="${n}">${f.exists?'Csere feltöltése':'Feltöltés'}</button></div>`;
+ }).join('');
+ const missing=files.filter(n=>!sheetFiles[n]?.exists);
+ panel(promptCard('sheets')+`<div class="card"><h3>Elemlapok</h3><div class="grid">${cards}</div><p>Státusz: <b>${s.status}</b></p>${missing.length?`<p class="bad">Hiányzik: ${missing.join(', ')}</p>`:'<p class="ok">✓ Mind a négy kötelező elemlap fel van töltve.</p>'}<button id="approveSheets" ${missing.length?'disabled':''}>Elemlapok jóváhagyása</button></div>`);
+ $('#addPrompt').onclick=()=>addPrompt('sheets');
+ document.querySelectorAll('[data-upload-sheet]').forEach(b=>b.onclick=async()=>{
+  const n=b.dataset.uploadSheet,f=document.querySelector('input[data-sheet="'+n+'"]').files[0];if(!f)return;
+  try{b.disabled=true;b.textContent='Feltöltés…';await api('/api/themes/'+current.id+'/upload/'+encodeURIComponent(n),{method:'PUT',body:f});await refresh()}
+  catch(e){alert('Feltöltési hiba: '+e.message);b.disabled=false}
+ });
+ $('#approveSheets').onclick=async()=>{
+  try{await api('/api/themes/'+current.id+'/approve',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage:'sheets',actor:'Krisztián'})});await refresh()}
+  catch(e){alert('Jóváhagyási hiba: '+e.message);await refresh()}
+ }
+}
 function build(){const b=current.stages.build,q=current.stages.qa;panel(`<div class="card"><h3>Build</h3><button id="buildBtn">▶ TÉMA ÉPÍTÉSE</button><p>Build státusz: <b>${b.status}</b></p><div class="log">${esc(b.history?.at(-1)?.log||'Még nincs build.')}</div></div><div class="card"><h3>QA</h3><p>Státusz: <b>${q.status}</b></p>${b.history?.at(-1)?.qaDir?`<p>QA mappa: <code>${b.history.at(-1).qaDir}</code></p>`:''}<button id="qaApprove">✓ TÉMA ELFOGADÁSA</button></div>`);$('#buildBtn').onclick=async()=>{try{await api('/api/themes/'+current.id+'/build',{method:'POST'});await refresh()}catch(e){alert(e.message);await refresh()}};$('#qaApprove').onclick=async()=>{await api('/api/themes/'+current.id+'/approve',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage:'qa',actor:'Krisztián'})});await refresh()}}
 async function exportProject(){const r=await fetch('/api/themes/'+current.id+'/export',{method:'POST'});if(!r.ok)return alert('Export hiba');const b=await r.blob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=r.headers.get('content-disposition')?.match(/filename="([^"]+)/)?.[1]||current.id+'.ggrid-theme-project';a.click();URL.revokeObjectURL(a.href)}
 $('#newBtn').onclick=async()=>{const name=prompt('Téma neve:');if(!name)return;const id=prompt('Theme ID:');if(!id)return;await api('/api/themes',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name,id,strict:true})});await refresh()}
