@@ -1,4 +1,4 @@
-name: Theme Studio v0.1 CI
+name: Theme Studio v0.2 CI
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
           NODE
       - name: Export self-contained project
         run: |
-          curl -fsS -X POST http://127.0.0.1:4177/api/themes/celestial-library/export -o /tmp/celestial-library.ggrid-theme-project
+          curl -fsS -X POST http://127.0.0.1:4177/api/themes/celestial-library/export -o /tmp/celestial-library.ggrid-theme-project || { cat /tmp/theme-studio.log; exit 1; }
           python - <<'PY'
           import zipfile,json
           p='/tmp/celestial-library.ggrid-theme-project'
