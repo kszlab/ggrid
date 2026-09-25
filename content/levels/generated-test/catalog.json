@@ -2,5 +2,10 @@
   "format": "ggrid-level-catalog",
   "formatVersion": 1,
   "description": "Fast Generator v2 isolated test library. Packs published with tools/generate-levels-v2.mjs --publish-test appear here.",
-  "packs": []
+  "packs": [
+    {
+      "id": "fastgen-v2-bootstrap-3x3",
+      "src": "packs/fastgen-v2-bootstrap-3x3.json"
+    }
+  ]
 }
