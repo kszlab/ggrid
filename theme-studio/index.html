@@ -1,10 +1,10 @@
 <!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GGrid Theme Studio</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div><b>GGrid Theme Studio</b><small>v0.1 · Theme Pipeline v1</small></div><div class="head-actions"><button id="importBtn">Projekt import</button><input id="importFile" type="file" accept=".ggrid-theme-project,.zip" hidden><button id="newBtn">+ Új téma</button></div></header>
+<header><div><b>GGrid Theme Studio</b><small>v0.2 · Theme Pipeline v2</small></div><div class="head-actions"><button id="importBtn">Projekt import</button><input id="importFile" type="file" accept=".ggrid-theme-project,.zip" hidden><button id="newBtn">+ Új téma</button></div></header>
 <main><aside><h2>Témák</h2><div id="catalog"></div></aside><section id="workspace"><div class="empty">Válassz témát a katalógusból.</div></section></main>
 <template id="projectTemplate"><article>
 <div class="project-head"><div><h1 data-k="name"></h1><code data-k="id"></code></div><button data-act="export">Projekt export</button></div>
 <div class="stagebar" data-k="stagebar"></div>
-<nav><button data-tab="overview">Áttekintés</button><button data-tab="mood">Hangulatterv</button><button data-tab="target">Render célkép</button><button data-tab="sheets">Elemlapok</button><button data-tab="build">Build & QA</button></nav>
+<nav><button data-tab="overview">Áttekintés</button><button data-tab="mood">Hangulatterv</button><button data-tab="target">Render célkép</button><button data-tab="assets">Egyedi elemek</button><button data-tab="backgrounds">Hátterek</button><button data-tab="build">Build & QA</button></nav>
 <div class="panel" data-k="panel"></div>
 </article></template>
 <script type="module" src="app.js"></script></body></html>
