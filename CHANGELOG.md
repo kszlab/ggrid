@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.32 — 2026-09-25
+
+### Külön V3 D10 benchmark tesztmód
+- A Szabad játék választóban külön **🧪 V3 D10 TESZT** gomb jelent meg.
+- A mód kizárólag a `fastgen-v3-d10-benchmark` pack 15 pályáját használja; nem keveri őket a 600-as régi generátor-tesztcsomaggal.
+- A mód automatikusan D10-re állítja a nehézséget, és 5×6 / 5×7 / 5×8 méreten az adott 5 benchmarkpályát járja körbe.
+- Az **Új pálya** gomb benchmark módban ugyanazon packon belül léptet tovább.
+- A generált tesztkönyvtár pack-szintű `hasPack`, `nextPack`, `firstPackAvailable` API-t kapott.
+
 ## v0.15.31 — 2026-09-25
 
 ### FastGen v3 D10 benchmark tesztpack
