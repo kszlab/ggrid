@@ -1,6 +1,7 @@
 import {createHash} from 'node:crypto';
 // GGrid Fast Generator v2: random layouts, diversity fingerprints and records.
 import {readJson,libraryRecords,stateFromRecord} from './engine.mjs';
+import {fingerprintsFor} from '../level-fingerprint-v1.mjs';
 
 const BASE_PROFILES={
  '3x3':{walls:[0,2],bricks:[1,3]},
@@ -98,6 +99,7 @@ export function qualityScore(a){
  return +Math.max(0,Math.min(1,.18*Math.min(1,turns/6)+.18*Math.min(1,detour/5)+.16*Math.min(1,setup/4)+.14*Math.min(1,conflict/3)+.14*Math.min(1,alts)+.20*Math.min(1,challenge))).toFixed(3);
 }
 export function toRecord(s,a,levelId,generator,{packId=null,familyId=null,noveltyScore=1,library='generated'}={}){
+ const fingerprints=fingerprintsFor(s,{analysis:a});
  let wall=0,brick=0,ball=0;
  const entities=s.objects.map(o=>{
   const id=o.type==='ball'?'ball'+(++ball):o.type==='wall'?'W'+(++wall):'K'+(++brick);
@@ -111,6 +113,6 @@ export function toRecord(s,a,levelId,generator,{packId=null,familyId=null,novelt
   board:{width:s.width,height:s.height,exit:{direction:s.exit.dir,x:s.exit.x,y:s.exit.y}},entities,initialResources:{freeze:0},
   difficulty:{class:a.difficulty,score:a.raw,modelVersion:a.model},
   analysis:{solution:a.optimalSolution,metrics:a.metrics,qualityScore:qualityScore(a),noveltyScore,qualityMethod:'solver-metrics-v1',noveltyMethod:'family-frequency-v1'},
-  content:{metadataVersion:3,packId,library,familyId:normalizedFamily,ballCount:ball,generatorVersion:2,structure,provenance:{origin:'generated',metadataMigratedBy:null,generatorTool:generator?.tool||null}},
+  content:{metadataVersion:3,packId,library,familyId:normalizedFamily,ballCount:ball,generatorVersion:2,structure,fingerprints,provenance:{origin:'generated',metadataMigratedBy:null,generatorTool:generator?.tool||null}},
   generator};
 }
