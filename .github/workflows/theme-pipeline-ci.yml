@@ -40,16 +40,25 @@ jobs:
           spec=json.load(open('tools/theme-kit/slots.json',encoding='utf-8'))
           for n in ['mood.png','target.png']:
               im=Image.new('RGB',(1024,1536),(20,30,50));ImageDraw.Draw(im).ellipse((350,550,674,874),fill=(220,180,80));im.save(p+'/'+n)
+          packs={}
+          for pid,pk in spec['packs'].items():
+              packs[pid]=Image.new('RGB',tuple(pk['size']),(255,0,255))
           for i,s in enumerate(spec['slots']):
-              w,h=s['output'];im=Image.new('RGBA',(w,h),(70+(i*17)%150,80+(i*23)%130,120+(i*11)%120,255))
-              d=ImageDraw.Draw(im);d.rectangle((max(1,w//12),max(1,h//12),max(2,w-w//12),max(2,h-h//12)),outline=(245,195,75,255),width=max(2,min(w,h)//20))
-              im.save(f"{p}/{s['id']}.png")
+              if not s.get('pack'): continue
+              x,y,w,h=s['packBox'];im=packs[s['pack']];d=ImageDraw.Draw(im)
+              pad=max(18,min(w,h)//8)
+              fill=(70+(i*17)%150,80+(i*23)%130,120+(i*11)%120)
+              d.rounded_rectangle((x+pad,y+pad,x+w-pad,y+h-pad),radius=max(8,pad//2),fill=fill,outline=(245,195,75),width=max(3,pad//6))
+          for pid,pk in spec['packs'].items():
+              packs[pid].save(f"{p}/{pk['file']}")
           Image.new('RGB',(1080,1620),(18,28,52)).save(p+'/bg-portrait.png')
           Image.new('RGB',(1620,1080),(18,28,52)).save(p+'/bg-landscape.png')
           json.dump({'id':'ci-theme','name':'CI Theme','description':'Theme Pipeline CI','strict':True},open(p+'/theme-kit.json','w'))
           PY
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage mood --actor ci
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage target --actor ci
+          python tools/theme-kit/kit.py extract-packs --input design/themes/ci-theme
+          test -f design/themes/ci-theme/extracted/cell-1.png
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage sheets --actor ci
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage backgrounds --actor ci
           python tools/theme-kit/kit.py build --input design/themes/ci-theme
