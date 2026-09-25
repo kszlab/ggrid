@@ -37,7 +37,7 @@ if errorlevel 1 (
   )
 )
 
-start "GGrid Theme Studio Server" cmd /k "chcp 65001 >nul && cd /d ""%~dp0"" && node theme-studio\server.mjs"
+start "GGrid Theme Studio Server" "%~dp0START_THEME_STUDIO_SERVER.bat"
 
 timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:4177"
