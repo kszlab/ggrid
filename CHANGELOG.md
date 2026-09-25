@@ -15,6 +15,14 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.31 — 2026-09-25
+
+### FastGen v3 D10 benchmark tesztpack
+- A 15 célzott FastGen v3 kétgolyós D10 benchmarkpálya külön `fastgen-v3-d10-benchmark` tesztpackba került.
+- A pack 5×6, 5×7 és 5×8 méreten 5-5 pályát tartalmaz, kizárólag a `generated-test` katalógusban.
+- A pályák metadata-ja egységesítve lett: `generatorVersion: 3`, `library: generated-test`, végleges benchmark `packId`.
+- Javítva a közös `toRecord()` is, hogy a `content.generatorVersion` a tényleges generátorverzióból származzon.
+
 ## v0.15.30 — 2026-09-25
 
 ### Fast Generator v3 — adaptív multiball keresés
