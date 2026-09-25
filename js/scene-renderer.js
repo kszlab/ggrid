@@ -115,10 +115,16 @@ const SceneRenderer=(()=>{
    }else if(cue)applyAsset(cue,spec,{layout:mode,direction:dir});
   }
   const ui=theme?.artwork?.ui||{};applyChromeAsset(document.querySelector('.game-head'),ui.header,{layout:mode});applyChromeAsset(document.querySelector('.hud-row'),ui.hud,{layout:mode});applyChromeAsset(document.querySelector('.victory-card'),ui.victory,{layout:mode});
+  const uic=theme?.artwork?.uiControls||{};
+  document.querySelectorAll('.play-action').forEach(el=>applyChromeAsset(el,uic['button-square']||uic.buttonSquare,{layout:mode}));
+  applyChromeAsset(document.querySelector('#gameMenu'),uic['button-menu']||uic.buttonMenu||uic['button-square'],{layout:mode});
+  applyChromeAsset(document.querySelector('#scoreBox'),uic['score-box']||uic.scoreBox||uic['button-wide'],{layout:mode});
+  document.querySelectorAll('.victory-actions button').forEach(el=>applyChromeAsset(el,uic['button-wide']||uic.buttonWide||uic['button-square'],{layout:mode}));
  }
  function clearArtworkChrome(){
   for(const dir of ['up','down','left','right']){const zone=wrap?.querySelector('.edge-'+dir),cue=zone?.querySelector('.emboss-arrow');clearAsset(zone);clearAsset(cue)}
   clearChromeAsset(document.querySelector('.game-head'));clearChromeAsset(document.querySelector('.hud-row'));clearChromeAsset(document.querySelector('.victory-card'));
+  document.querySelectorAll('.play-action,.victory-actions button').forEach(clearChromeAsset);clearChromeAsset(document.querySelector('#gameMenu'));clearChromeAsset(document.querySelector('#scoreBox'));
  }
  function decorateExit(el){
   if(!el||!theme)return;
@@ -177,12 +183,16 @@ const SceneRenderer=(()=>{
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
    const rectangular=globalThis.RigidShapes?.isRectangular?.(o.cells)??(o.cells.length===boxArea);
-   const rawVariant=shapeId?variants[shapeId]:null,useSilhouette=!!tileUrls,useComposite=useSilhouette||!!rawVariant||!!baseSpec&&rectangular,rawSpec=useSilhouette?null:(rawVariant||baseSpec),spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
+   const rawVariant=shapeId?variants[shapeId]:null,rigidMode=theme?.renderer?.rigid||'material';
+   const useTiles=rigidMode==='tiles'&&!!tileUrls,useSilhouette=rigidMode==='material'&&!!tileUrls,useShape=rigidMode==='shape'&&!!rawVariant;
+   const useComposite=useSilhouette||useShape||(!useTiles&&!!baseSpec&&rectangular),rawSpec=useShape?rawVariant:(!useSilhouette&&!useTiles?baseSpec:null),spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
    board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>{
     el.classList.toggle('sr-composite-source',useComposite);
-    globalThis.ThemeAutotile?.clear?.(el);
+    if(useTiles){globalThis.ThemeAutotile?.apply?.(el,o,+(el.dataset.cellkey?.split(':')[1]||0),tileUrls);el.style.setProperty('--sr-join',pieceInset+'px')}
+    else globalThis.ThemeAutotile?.clear?.(el);
    });
    if(!useComposite){
+    if(useTiles)continue;
     if(hasVariants&&shapeId){
      const warnKey=(theme?.id||'theme')+':'+shapeId;
      if(!warnedMissingShapes.has(warnKey)){warnedMissingShapes.add(warnKey);console.warn('[GGrid Theme] Missing rigid-body variant:',theme?.id||'unknown',shapeId,'-> cell fallback')}
