@@ -1,0 +1,26 @@
+name: GGrid theme templates
+
+on:
+  workflow_dispatch:
+
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install theme tooling
+        run: |
+          pip install --quiet pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Generate element-sheet templates
+        run: python tools/theme-kit/kit.py templates
+      - name: Generate render-target base from current game
+        run: python tools/theme-kit/kit.py scaffold --theme classic
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ggrid-theme-templates
+          path: tools/theme-kit/templates/
