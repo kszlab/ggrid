@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.37 — 2026-09-25
+
+### Egylépéses Theme Studio indítás Windows alatt
+- Új gyökérszintű `START_THEME_STUDIO.bat` indító került a repóba.
+- Dupla kattintásra ellenőrzi a Node.js elérhetőségét, külön parancssori ablakban elindítja a Theme Studio szervert, majd megnyitja a böngészőt a `http://127.0.0.1:4177` címen.
+- Új `theme-studio/INDITAS-WINDOWS.txt` rövid leírás készült kézi indítási és leállítási lépésekkel.
+
 ## v0.15.36 — 2026-09-25
 
 ### Theme Studio v0.1 és Csillagkönyvtár pilot
