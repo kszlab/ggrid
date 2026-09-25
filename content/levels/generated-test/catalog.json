@@ -14,6 +14,18 @@
         "visibility": "public"
       },
       "levelCount": 600
+    },
+    {
+      "id": "fastgen-v3-d10-benchmark",
+      "src": "packs/fastgen-v3-d10-benchmark.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 15
     }
   ],
   "metadataVersion": 3
