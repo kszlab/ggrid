@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.45 — 2026-09-25
+
+### Theme Kit Python szintaxis és UTF-8 javítás
+- Javítva a `kit.py` sérült több soros `approval.json` írása, ahol a literális `\\n` karakterek SyntaxError-t okoztak.
+- Minden érintett JSON/CSS kimeneti írás explicit UTF-8 és valódi soremelés használatára állt át.
+- A Theme Studio CI most `python -m py_compile` ellenőrzést futtat a `kit.py` és `make_slots.py` fájlokra is.
+
 ## v0.15.44 — 2026-09-25
 
 ### Theme Studio Windows indító stabilizálás
