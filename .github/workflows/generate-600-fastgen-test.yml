@@ -96,3 +96,5 @@ jobs:
           git add content/levels/generated-test/catalog.json content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json
           git commit -m "v0.15.24: add 600-level Fast Generator v2 test pack"
           git push
+
+# retry after v0.15.25 parser fix
