@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.29 — 2026-09-25
+
+### Freeze megoldási követelmény metaadat
+- A pályák `analysis.solutionRequirements.freeze` mezőt kaptak.
+- `status` értéke lehet `not-required`, `required` vagy `unknown`; a hozzá tartozó `minimumUses` rendre 0, legalább 1 vagy `null`.
+- A jelenlegi aktív pályák normál solverrel megoldhatók, ezért migrációkor `not-required / 0` értéket kapnak.
+- A Fast Generator normál pályái mostantól közvetlenül ugyanezt a mezőt írják.
+- A validator ellenőrzi a Freeze-státusz és `minimumUses` konzisztenciáját.
+
 ## v0.15.28 — 2026-09-25
 
 ### Level Fingerprint / novelty index v1
