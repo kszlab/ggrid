@@ -5,7 +5,16 @@
   "packs": [
     {
       "id": "fastgen-v2-600-mixed-20260925",
-      "src": "packs/fastgen-v2-600-mixed-20260925.json"
+      "src": "packs/fastgen-v2-600-mixed-20260925.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 600
     }
-  ]
+  ],
+  "metadataVersion": 3
 }

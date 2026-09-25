@@ -1,0 +1,126 @@
+{
+  "metadataVersion": 3,
+  "totalLevels": 1602,
+  "packs": [
+    {
+      "packId": "classified-v2-3x3",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-3x3.json",
+      "levels": 77
+    },
+    {
+      "packId": "classified-v2-4x4",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-4x4.json",
+      "levels": 77
+    },
+    {
+      "packId": "classified-v2-5x5",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-5x5.json",
+      "levels": 77
+    },
+    {
+      "packId": "classified-v2-5x6",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-5x6.json",
+      "levels": 77
+    },
+    {
+      "packId": "classified-v2-5x7",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-5x7.json",
+      "levels": 77
+    },
+    {
+      "packId": "classified-v2-5x8",
+      "library": "core",
+      "file": "content/levels/packs/classified-v2-5x8.json",
+      "levels": 77
+    },
+    {
+      "packId": "expansion-v2-3x3",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-3x3.json",
+      "levels": 50
+    },
+    {
+      "packId": "expansion-v2-4x4",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-4x4.json",
+      "levels": 50
+    },
+    {
+      "packId": "expansion-v2-5x5",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-5x5.json",
+      "levels": 50
+    },
+    {
+      "packId": "expansion-v2-5x6",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-5x6.json",
+      "levels": 50
+    },
+    {
+      "packId": "expansion-v2-5x7",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-5x7.json",
+      "levels": 50
+    },
+    {
+      "packId": "expansion-v2-5x8",
+      "library": "core",
+      "file": "content/levels/packs/expansion-v2-5x8.json",
+      "levels": 50
+    },
+    {
+      "packId": "multiball-v2-3x3",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-3x3.json",
+      "levels": 40
+    },
+    {
+      "packId": "multiball-v2-4x4",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-4x4.json",
+      "levels": 40
+    },
+    {
+      "packId": "multiball-v2-5x5",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-5x5.json",
+      "levels": 40
+    },
+    {
+      "packId": "multiball-v2-5x6",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-5x6.json",
+      "levels": 40
+    },
+    {
+      "packId": "multiball-v2-5x7",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-5x7.json",
+      "levels": 40
+    },
+    {
+      "packId": "multiball-v2-5x8",
+      "library": "multiball",
+      "file": "content/levels/multiball/packs/multiball-v2-5x8.json",
+      "levels": 40
+    },
+    {
+      "packId": "fastgen-v2-600-mixed-20260925",
+      "library": "generated-test",
+      "file": "content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json",
+      "levels": 600
+    }
+  ],
+  "families": 1150,
+  "libraries": {
+    "core": 762,
+    "multiball": 240,
+    "generated-test": 600
+  }
+}

@@ -5,27 +5,76 @@
   "packs": [
     {
       "id": "multiball-v2-3x3",
-      "src": "packs/multiball-v2-3x3.json"
+      "src": "packs/multiball-v2-3x3.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     },
     {
       "id": "multiball-v2-4x4",
-      "src": "packs/multiball-v2-4x4.json"
+      "src": "packs/multiball-v2-4x4.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     },
     {
       "id": "multiball-v2-5x5",
-      "src": "packs/multiball-v2-5x5.json"
+      "src": "packs/multiball-v2-5x5.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     },
     {
       "id": "multiball-v2-5x6",
-      "src": "packs/multiball-v2-5x6.json"
+      "src": "packs/multiball-v2-5x6.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     },
     {
       "id": "multiball-v2-5x7",
-      "src": "packs/multiball-v2-5x7.json"
+      "src": "packs/multiball-v2-5x7.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     },
     {
       "id": "multiball-v2-5x8",
-      "src": "packs/multiball-v2-5x8.json"
+      "src": "packs/multiball-v2-5x8.json",
+      "metadataVersion": 3,
+      "contentType": "level-pack",
+      "status": "active",
+      "access": {
+        "entitlement": null,
+        "visibility": "public"
+      },
+      "levelCount": 40
     }
-  ]
+  ],
+  "metadataVersion": 3
 }
