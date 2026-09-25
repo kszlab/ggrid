@@ -48,6 +48,10 @@ jobs:
           node --check js/scene-renderer.js
           node --check js/main.js
           node --check js/scenario-loader.js
+          node --check js/solver.js
+          node --check js/level-library.js
+      - name: Runtime solver equivalence
+        run: node tools/test-runtime-solver.mjs
       - name: Test classifier
         run: node tools/test-rigid-shapes.mjs
       - name: Theme Visuals V3
