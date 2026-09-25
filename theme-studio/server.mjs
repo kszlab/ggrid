@@ -20,6 +20,14 @@ const safeRel=s=>!!s&&!path.isAbsolute(s)&&!s.split(/[\\/]+/).includes('..');
 const json=(res,code,obj)=>{res.writeHead(code,{'content-type':'application/json; charset=utf-8','cache-control':'no-store'});res.end(JSON.stringify(obj,null,2))};
 const readBody=async req=>{const a=[];for await(const c of req)a.push(c);return Buffer.concat(a)};
 const load=async p=>JSON.parse(await fsp.readFile(p,'utf8'));
+async function loadSlotSpec(){
+ try{return await loadSlotSpec()}
+ catch(e){
+  if(e?.code!=='ENOENT')throw e;
+  await run('python',['tools/theme-kit/make_slots.py']);
+  return load(SLOT_SPEC);
+ }
+}
 const save=async(p,o)=>{await fsp.mkdir(path.dirname(p),{recursive:true});await fsp.writeFile(p,JSON.stringify(o,null,2)+'\n')};
 const projectPath=id=>path.join(DESIGN,id,'project.json');
 const projectDir=id=>path.join(DESIGN,id);
@@ -51,7 +59,7 @@ async function loadProject(id){
  const p=await load(projectPath(id));
  p.stages=p.stages||{};
  p.stages.backgrounds=p.stages.backgrounds||{status:'locked',prompts:[]};
- const spec=await load(SLOT_SPEC);
+ const spec=await loadSlotSpec();
  const sheetNames=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'];
  p.sheetFiles={};p.assetFiles={};p.backgroundFiles={};
  for(const name of sheetNames){
@@ -173,7 +181,7 @@ async function syncPipelineApproval(id,p,stage,file=null){
   const data=await fsp.readFile(dest);a.stages.target={status:'approved',actor,files:[{file:'target.png',sha256:sha256(data)}]};
  }
  if(stage==='sheets'){
-  const spec=await load(SLOT_SPEC),files=[];
+  const spec=await loadSlotSpec(),files=[];
   for(const slot of spec.slots||[]){
    const name=slot.id+'.png',fp=path.join(dir,name);
    try{const data=await fsp.readFile(fp);files.push({file:name,sha256:sha256(data),required:slot.required!==false})}
@@ -238,7 +246,7 @@ const server=http.createServer(async(req,res)=>{
     if(stage==='backgrounds'&&(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='individual'))throw new Error('individual assets not approved');
     let info={status:'approved',approvedAt:now(),actor:b.actor||'owner',notes:b.notes||''};
     if(stage==='sheets'){
-     const spec=await load(SLOT_SPEC),approvedFiles={};
+     const spec=await loadSlotSpec(),approvedFiles={};
      for(const slot of spec.slots||[]){
       const name=slot.id+'.png',fp=path.join(projectDir(id),name);
       try{const data=await fsp.readFile(fp);approvedFiles[name]={sha256:sha256(data),size:data.length,required:slot.required!==false}}
