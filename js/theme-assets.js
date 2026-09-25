@@ -14,11 +14,15 @@
   if(typeof src!=='string'||!src.trim())return'';
   if(/^(?:data:|https?:|blob:|#)/i.test(src))return src;
   const base=baseUrl(theme,fallback);
+  // Opt-in cache key for themes replacing artwork at existing file paths.
+  // This leaves source paths stable for catalog validation and offline tooling.
+  const version=theme?.artwork?.assetVersion;
+  const versioned=url=>version==null?url:url+(url.includes('?')?'&':'?')+'art='+encodeURIComponent(version);
   try{
-   if(typeof location!=='undefined')return new URL(src,new URL(base||location.href,location.href)).href;
-   if(/^https?:/i.test(base))return new URL(src,base).href;
+   if(typeof location!=='undefined')return versioned(new URL(src,new URL(base||location.href,location.href)).href);
+   if(/^https?:/i.test(base))return versioned(new URL(src,base).href);
   }catch(_){}
-  return src;
+  return versioned(src);
  }
  function source(spec,context={}){
   if(typeof spec==='string')return spec;
