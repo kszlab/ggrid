@@ -8,9 +8,9 @@ const entry=index.themes.find(t=>t.id==='celestial-library');
 const atlas='content/themes/celestial-library/artwork/hf-atlas.webp';
 const shapes=['2H','2V','3H','3V','L3-TL','L3-TR','L3-BL','L3-BR'];
 assert.equal(theme.formatVersion,2); assert.equal(theme.renderMode,'artwork');
-assert.equal(theme.artwork?.version,3); assert.equal(theme.artwork?.fidelity,'approved-reference-raster');
+assert.equal(theme.artwork?.version,2); assert.equal(theme.artwork?.fidelity,'approved-reference-raster');
 assert.equal(theme.artwork?.layoutMode,'portrait'); assert.equal(theme.textPolicy?.themeIdentity,'theme-selector-only');
-assert.equal(ref.textPolicy?.themeTitleInGameplay,false); assert.equal(entry?.version,12);
+assert.equal(ref.textPolicy?.themeTitleInGameplay,false); assert.equal(entry?.version,17);
 assert.ok(entry?.preview?.description); assert.ok(entry?.preview?.image); assert.ok(fs.existsSync(atlas));
 const bytes=fs.statSync(atlas).size; assert.ok(bytes>250000&&bytes<900000,'unexpected atlas size '+bytes);
 function check(spec,label){assert.equal(spec?.asset,'artwork/hf-atlas.webp',label+' asset');assert.deepEqual(spec?.atlas?.size,[2048,2576],label+' atlas size');const r=spec?.atlas?.rect;assert.ok(Array.isArray(r)&&r.length===4&&r.every(Number.isFinite)&&r[2]>0&&r[3]>0,label+' rect')}
