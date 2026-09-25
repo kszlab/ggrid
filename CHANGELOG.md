@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.43 — 2026-09-25
+
+### Theme Pipeline Windows kimeneti UTF-8 javítás
+- A Theme Kit minden generált JSON/CSS kimenetet explicit UTF-8 kódolással ír Windows alatt is.
+- Javítva a `kit-report.json`, `approval.json`, runtime `theme.json`, `artwork.css`, `content/themes/index.json` és `capture.json` írása.
+- Ez megszünteti a Windows alapértelmezett kódlapja miatt jelentkező UnicodeEncodeError hibákat a build végén.
+
 ## v0.15.42 — 2026-09-25
 
 ### Theme Studio ↔ Theme Pipeline approval szinkron
