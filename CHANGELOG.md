@@ -15,6 +15,22 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.23 — 2026-09-25
+
+### Fast Generator v2 — első tesztelhető verzió
+- Beépült a Claude-féle state-space/reverse-BFS ötlet továbbfejlesztett változata.
+- A generátor paraméterezhető célokat fogad, például: `100@5x8:D1-D10:B1,B2`.
+- Egy futás több célt is kezelhet, és 3–8 cellás szélesség/magasság tartományban egyedi méretet is elfogad (például 4×8).
+- 1 golyós pályáknál gyors `puzzle-v2` classifier, 2 golyós pályáknál a meglévő `puzzle-v3-multiball-anchored-v2` classifier működik.
+- Nagyobb táblákon `auto` módban 4–6 cellás rigid objektumok is generálhatók.
+- Javítva lett a korábbi ball/brick fingerprint-típusütközés; külön exact és family szintű változatossági szűrés működik.
+- A worker-szám alapból legfeljebb 4, a state-space workerenkénti memóriaőrrel fut.
+- A generált rekordok pack/family/ballCount/generator metadata, valamint quality/novelty mezők számára előkészített struktúrát kapnak.
+- Külön `content/levels/generated-test/` katalógus és **⚗ GENERÁTOR TESZT** játékmód készült, amely nem keveri a tesztpackokat az éles könyvtárral.
+- A teszt UI azonnali kipróbálásához külön 3×3-as bootstrap pack került be 1 és 2 golyós pályákkal.
+- A `--publish-test` kapcsolóval a generátor közvetlenül ebbe az elkülönített tesztkatalógusba tud publikálni.
+- CI smoke teszt ellenőrzi a kétgolyós compact state-space támogatást, a nagy shape-készletet, a fingerprintet és a family-szűrést.
+
 ## v0.15.22 — 2026-09-25
 
 ### Automatikus megoldás kiadásfüggő engedélyezése
