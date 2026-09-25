@@ -516,3 +516,42 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 .scene-artwork .edge-control.pressed .emboss-arrow.art-directional-cue{
  transform:none!important;
 }
+
+
+/* v0.15.53 – unified rigid silhouette renderer
+   Multi-cell artwork rigid bodies are drawn once across the complete polyomino.
+   No internal cell seams; outline follows only the true external contour. */
+.sr-composite.sr-rigid-silhouette{
+ overflow:visible;
+ filter:drop-shadow(0 5px 4px #0009);
+}
+.sr-composite.sr-rigid-silhouette.sr-asset-visual{
+ background:none!important;
+}
+.sr-rigid-svg{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ overflow:visible;
+ pointer-events:none;
+}
+.sr-rigid-svg .sr-rigid-fill{
+ opacity:1;
+}
+.sr-rigid-svg .sr-rigid-outline-shadow{
+ stroke:#261300;
+ stroke-width:8px;
+ stroke-linejoin:round;
+ stroke-linecap:round;
+ opacity:.95;
+}
+.sr-rigid-svg .sr-rigid-outline{
+ stroke-width:5px;
+ stroke-linejoin:round;
+ stroke-linecap:round;
+ filter:drop-shadow(0 0 1px #ffd976) drop-shadow(0 1px 1px #000a);
+}
+.scene-artwork .brick.sr-composite-source{
+ opacity:0!important;
+}
