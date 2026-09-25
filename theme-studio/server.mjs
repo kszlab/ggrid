@@ -21,7 +21,7 @@ const json=(res,code,obj)=>{res.writeHead(code,{'content-type':'application/json
 const readBody=async req=>{const a=[];for await(const c of req)a.push(c);return Buffer.concat(a)};
 const load=async p=>JSON.parse(await fsp.readFile(p,'utf8'));
 async function loadSlotSpec(){
- try{return await loadSlotSpec()}
+ try{return await load(SLOT_SPEC)}
  catch(e){
   if(e?.code!=='ENOENT')throw e;
   await run('python',['tools/theme-kit/make_slots.py']);
