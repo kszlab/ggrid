@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.49 — 2026-09-25
+
+### Theme Kit atomi fájlírás
+- A generált JSON/CSS fájlok előbb ideiglenes fájlba készülnek, majd biztonságos cserével kerülnek a helyükre.
+- Egy írási vagy kódolási hiba így nem tudja félbevágni a meglévő theme indexet vagy más runtime fájlt.
+- A közös írófüggvények UTF-8 kimenetet használnak.
+
 ## v0.15.48 — 2026-09-25
 
 ### Theme Kit UTF-8 kimeneti javítás véglegesítése
