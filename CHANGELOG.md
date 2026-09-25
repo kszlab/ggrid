@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.34 — 2026-09-25
+
+### Compact Freeze Solver v2 nagy pályákhoz
+- Új, külön `js/freeze-solver-v2.js` készült; a normál `solveDetailed()` és a Freeze Solver v1 változatlanul megmaradt.
+- A v2 tömör `Int16Array` állapotokat használ, így jóval kevesebb objektumklónozás és string-alapú állapotépítés történik.
+- Freeze-jelöltként csak olyan aktív, nem fal objektumot vizsgál, amely az adott normál irányparancsra ténylegesen elmozdulna; a már eleve helyben maradó objektumok felesleges Freeze-ágai kiesnek.
+- A ❄💡 súgó most a v2 solvert használja. A kétgolyós nagy pályák idő-/állapotkerete is nőtt, de a fő gyorsulást az állapottér és a Freeze-elágazások csökkentése adja.
+- Új regressziós teszt hasonlítja össze a v1 és v2 mentési képességét, visszajátssza a v2 Freeze-akcióit, és 5×8 D10 benchmarkpályákon is ellenőrzi a normál megoldások megőrzését.
+
 ## v0.15.33 — 2026-09-25
 
 ### Külön Freeze-aware solver v1 és kísérleti ❄💡 súgó
