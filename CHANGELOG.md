@@ -15,6 +15,14 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.50 — 2026-09-25
+
+### Theme Studio QA — háttér és iránynyilak javítása
+- A Theme Pipeline külön `bg-portrait/bg-landscape` hiányában az elfogadott targetből készült preview képet használja ideiglenes háttér-fallbackként; dedikált háttérasset továbbra is elsőbbséget élvez.
+- Az artwork vezérlőnyilak külön, irányhelyes cue assetként vannak megjelölve.
+- A régi generikus nyílforgatás nem fut rá ezekre az artwork cue-kra, így megszűnik a kettős forgatás és a hibás irány.
+- A javítás a runtime játékban és a Theme Studio QA screenshotokon is ugyanazt a renderelési útvonalat használja.
+
 ## v0.15.49 — 2026-09-25
 
 ### Theme Kit atomi fájlírás
