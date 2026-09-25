@@ -117,10 +117,10 @@ async function generateJob(o,t,balls,targetCount,records,index,families,usedIds,
  });
  return {levels:accepted,seconds:Math.round((Date.now()-started)/1000),coverage:Object.fromEntries(t.classes.map(d=>['D'+d,accepted.filter(l=>l.difficulty.class===d).length])),rejected,stats:[...perWorker.values()]};
 }
-function writeTestCatalog(abs){
+function writeTestCatalog(abs,levelCount){
  const dir=path.join(root,'content/levels/generated-test'),catFile=path.join(dir,'catalog.json');const cat=readJson(path.relative(root,catFile));
  const src=path.relative(dir,abs).split(path.sep).join('/'),id=path.basename(abs,'.json');
- cat.packs=(cat.packs||[]).filter(p=>p.id!==id&&p.src!==src);cat.packs.push({id,src,metadataVersion:3,contentType:'level-pack',status:'active',access:{entitlement:null,visibility:'public'}});
+ cat.packs=(cat.packs||[]).filter(p=>p.id!==id&&p.src!==src);cat.packs.push({id,src,metadataVersion:3,contentType:'level-pack',status:'active',access:{entitlement:null,visibility:'public'},levelCount});
  fs.writeFileSync(catFile,JSON.stringify(cat,null,2)+'\n');
 }
 async function main(){
@@ -142,7 +142,7 @@ async function main(){
  }
  fs.mkdirSync(path.dirname(abs),{recursive:true});
  const payload={format:'ggrid-level-pack',formatVersion:1,metadata:{metadataVersion:3,id:packId,packId,library:o.publishTest?'generated-test':'generated',levelCount:all.length,contentType:'level-pack',status:'active',access:{entitlement:null,visibility:'public'},generatorVersion:3,seed:o.seed,purpose:o.publishTest?'generator-test':'generated'},levels:all};
- fs.writeFileSync(abs,JSON.stringify(payload)+'\n');if(o.publishTest)writeTestCatalog(abs);
+ fs.writeFileSync(abs,JSON.stringify(payload)+'\n');if(o.publishTest)writeTestCatalog(abs,all.length);
  console.log(JSON.stringify({output:path.relative(root,abs),levels:all.length,targets:o.targets,reports},null,2));
 }
 main().catch(e=>{console.error(e.stack||e);process.exit(1)});
