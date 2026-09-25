@@ -5,6 +5,19 @@ const freezeBtn=document.querySelector('#freeze'),difficultyEl=document.querySel
 const victoryOverlay=document.querySelector('#victoryOverlay'),victoryMoves=document.querySelector('#victoryMoves'),victoryScore=document.querySelector('#victoryScore'),victoryNext=document.querySelector('#victoryNext'),victoryRestart=document.querySelector('#victoryRestart'),victoryChoose=document.querySelector('#victoryChoose');
 let victoryTimer=null,victoryPending=false,solverUsedThisRun=false;
 
+/* v0.15.22: build/edition feature gate.
+   Development keeps every feature enabled. A future commercial build can set
+   globalThis.GGRID_APP_VARIANT to 'free' or 'paid' before main.js loads. */
+const APP_VARIANT=globalThis.GGRID_APP_VARIANT||'development';
+const APP_VARIANT_FEATURES=Object.freeze({
+ development:Object.freeze({autoSolve:true}),
+ free:Object.freeze({autoSolve:false}),
+ paid:Object.freeze({autoSolve:true})
+});
+const AUTO_SOLVE_HOLD_MS=2000;
+function appFeatureEnabled(name){return APP_VARIANT_FEATURES[APP_VARIANT]?.[name]===true}
+
+
 /* Browsers suspend Web Audio until a genuine user gesture. Capture the first
    pointer/key gesture and let AudioManager start the selected theme ambient. */
 const unlockAudio=()=>AudioManager?.userGesture?.();
@@ -42,10 +55,10 @@ function updateScore(){
    scoreValue.dataset.size=digits<=3?'lg':digits===4?'md':digits===5?'sm':digits===6?'xs':'xxs';
   }
  }
- const hintDisabled=won;
- if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?'Kétgolyós játék: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':isScoredFreePlay()?'Rövid nyomás: súgó (1 pont). 3 másodperc: automatikus megoldás (0 pont).':''}
+ const hintDisabled=won,autoSolveAllowed=appFeatureEnabled('autoSolve'),autoSolveSeconds=AUTO_SOLVE_HOLD_MS/1000;
+ if(hintBtn){hintBtn.disabled=hintDisabled;hintBtn.title=won?'A pálya már kész.':test?autoSolveAllowed?`Kétgolyós játék: rövid nyomás javaslat, ${autoSolveSeconds} másodperc automatikus megoldás.`:'Kétgolyós játék: rövid nyomás javaslat.':isScoredFreePlay()?autoSolveAllowed?`Rövid nyomás: súgó (1 pont). ${autoSolveSeconds} másodperc: automatikus megoldás (0 pont).`:'Rövid nyomás: súgó (1 pont).':''}
  const visibleHint=document.querySelector('#playHint');
- if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?'Kétgolyós teszt: rövid nyomás javaslat, 3 másodperc automatikus megoldás.':'Rövid nyomás: súgó. 3 másodperc nyomva tartás: automatikus megoldás, pont nélkül.'}
+ if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?autoSolveAllowed?`Kétgolyós teszt: rövid nyomás javaslat, ${autoSolveSeconds} másodperc automatikus megoldás.`:'Kétgolyós teszt: rövid nyomás javaslat.':autoSolveAllowed?`Rövid nyomás: súgó. ${autoSolveSeconds} másodperc nyomva tartás: automatikus megoldás, pont nélkül.`:'Rövid nyomás: súgó.'}
  freezeBtn.disabled=won||!canUseFreeze()||(isScoredFreePlay()&&scoreData.balance<10);
  freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
  freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':test?'Kétgolyós játék: Freeze pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
@@ -266,6 +279,7 @@ function solverFailureText(result){
 }
 function cancelAutoSolve(){autoSolveToken++;if(autoSolveTimer)clearTimeout(autoSolveTimer);autoSolveTimer=null;if(autoSolveActive){autoSolveActive=false;MotionControl?.resume?.()}}
 function startAutoSolve(){
+ if(!appFeatureEnabled('autoSolve')){toast.textContent='Az automatikus megoldás ebben a kiadásban nem érhető el.';return}
  if(!state||state.won||autoSolveActive)return;
  stopHold();cancelFreezeSelection();hintVisible=false;
  const token=++autoSolveToken;toast.textContent='Automatikus megoldás számítása…';
@@ -670,7 +684,7 @@ victoryNext.addEventListener('click',async()=>{
  hideVictory();newLevel();MotionControl.resume();
 });
 document.querySelector('#hint').addEventListener('click',hint);
-// Short click still requests a hint; a three-second pointer hold runs the demo.
+// Short click still requests a hint; a two-second pointer hold runs the demo when enabled for this app variant.
 const playHintBtn=document.querySelector('#playHint');let hintHoldTimer=null,hintHoldFired=false,hintHoldPointer=null;
 function clearHintHold(){if(hintHoldTimer)clearTimeout(hintHoldTimer);hintHoldTimer=null;hintHoldPointer=null;playHintBtn.classList.remove('pressed')}
 playHintBtn.addEventListener('pointerdown',e=>{
@@ -679,7 +693,7 @@ playHintBtn.addEventListener('pointerdown',e=>{
  // Keep receiving the release even if the finger drifts off this small button.
  try{playHintBtn.setPointerCapture(e.pointerId)}catch(_){}
  playHintBtn.classList.add('pressed');
- hintHoldTimer=setTimeout(()=>{hintHoldTimer=null;hintHoldFired=true;playHintBtn.classList.remove('pressed');startAutoSolve()},3000);
+ hintHoldTimer=setTimeout(()=>{hintHoldTimer=null;hintHoldFired=true;playHintBtn.classList.remove('pressed');startAutoSolve()},AUTO_SOLVE_HOLD_MS);
 });
 for(const event of ['pointerup','pointercancel','lostpointercapture'])playHintBtn.addEventListener(event,e=>{if(e.pointerId===hintHoldPointer)clearHintHold()});
 // Some mobile browsers issue a context menu on long touch; CSS disables that gesture.
