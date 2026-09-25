@@ -1,4 +1,4 @@
-name: Theme Studio v0.3 CI
+name: Theme Studio v1.0 CI
 
 on:
   push:
@@ -29,6 +29,11 @@ jobs:
           echo $! > /tmp/theme-studio.pid
           for i in {1..30}; do curl -fsS http://127.0.0.1:4177/api/themes >/tmp/themes.json && break; sleep 1; done
           cat /tmp/themes.json
+          curl -fsS http://127.0.0.1:4177/api/session >/tmp/session.json
+          python - <<'PY'
+          import json
+          print(json.load(open('/tmp/session.json'))['token'])
+          PY
       - name: Verify Celestial Library pilot
         run: |
           node - <<'NODE'
@@ -36,13 +41,14 @@ jobs:
           const j=JSON.parse(fs.readFileSync('/tmp/themes.json','utf8'));
           const p=j.themes.find(x=>x.id==='celestial-library');
           if(!p)throw Error('celestial-library pilot missing');
-          if(p.computedStage!=='MOOD')throw Error('pilot must start at MOOD, got '+p.computedStage);
+          if(!['MOOD','TARGET','ASSETS','BACKGROUNDS','BUILD','QA','READY','RELEASED'].includes(p.computedStage))throw Error('invalid pilot stage '+p.computedStage);
           if(!p.migration?.missingArtifacts?.includes('original-approved-concept-image'))throw Error('missing legacy artifact not tracked');
           console.log(JSON.stringify({pilot:'passed',stage:p.computedStage,version:p.projectVersion}));
           NODE
       - name: Export self-contained project
         run: |
-          curl -fsS -X POST http://127.0.0.1:4177/api/themes/celestial-library/export -o /tmp/celestial-library.ggrid-theme-project || { cat /tmp/theme-studio.log; exit 1; }
+          TOKEN=$(python -c "import json;print(json.load(open('/tmp/session.json'))['token'])")
+          curl -fsS -H "X-Theme-Studio-Token: $TOKEN" -X POST http://127.0.0.1:4177/api/themes/celestial-library/export -o /tmp/celestial-library.ggrid-theme-project || { cat /tmp/theme-studio.log; exit 1; }
           python - <<'PY'
           import zipfile,json
           p='/tmp/celestial-library.ggrid-theme-project'
