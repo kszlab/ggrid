@@ -19,11 +19,15 @@ const GeneratedTestLibrary=(()=>{
  }
  function compatible(l){const balls=l._state.objects.filter(o=>o.type==='ball').length;return l.formatVersion<=2&&l.rulesVersion<=1&&balls>=1&&balls<=2&&(l.requires?.features||[]).every(f=>SUPPORTED_FEATURES.has(f))}
  function candidates(w,h,d){return parse().filter(l=>compatible(l)&&l.board.width===w&&l.board.height===h&&l.analysis.testDifficultyClass===d)}
+ function packCandidates(packId,w,h,d){return candidates(w,h,d).filter(l=>l.content?.packId===packId)}
  function has(w,h,d){return candidates(w,h,d).length>0}
+ function hasPack(packId,w,h,d){return packCandidates(packId,w,h,d).length>0}
  function hasAny(){return parse().some(compatible)}
  function firstAvailable(){const l=parse().find(compatible);return l?{w:l.board.width,h:l.board.height,d:l.analysis.testDifficultyClass}:null}
  function next(w,h,d){const a=candidates(w,h,d);if(!a.length)return null;const k=w+'x'+h+'|'+d,n=cursor.get(k)||0;cursor.set(k,n+1);return a[n%a.length]}
+ function nextPack(packId,w,h,d){const a=packCandidates(packId,w,h,d);if(!a.length)return null;const k='pack:'+packId+'|'+w+'x'+h+'|'+d,n=cursor.get(k)||0;cursor.set(k,n+1);return a[n%a.length]}
+ function firstPackAvailable(packId){const l=parse().find(x=>compatible(x)&&x.content?.packId===packId);return l?{w:l.board.width,h:l.board.height,d:l.analysis.testDifficultyClass}:null}
  function toGame(l){return{state:structuredClone(l._state),solution:[...l.analysis.solution],code:l.levelId,level:l}}
  function coverage(){const out={};for(const l of parse()){if(!compatible(l))continue;const k=l.board.width+'x'+l.board.height,d=l.analysis.testDifficultyClass;(out[k]??=Array(10).fill(0))[d-1]++}return out}
- return{init,next,has,hasAny,firstAvailable,candidates,toGame,coverage,all:parse};
+ return{init,next,nextPack,has,hasPack,hasAny,firstAvailable,firstPackAvailable,candidates,packCandidates,toGame,coverage,all:parse};
 })();
