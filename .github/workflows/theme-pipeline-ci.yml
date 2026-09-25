@@ -1,0 +1,54 @@
+name: Theme Pipeline v1 CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/theme-kit/**"
+      - "tools/test-theme-pipeline-v1.py"
+      - "js/theme-autotile.js"
+      - "tools/test-theme-autotile.mjs"
+      - ".github/workflows/theme-pipeline-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pillow
+      - name: Syntax and schema
+        run: |
+          python -m py_compile tools/theme-kit/kit.py tools/theme-kit/make_slots.py
+          python tools/test-theme-pipeline-v1.py
+          node tools/test-theme-autotile.mjs
+      - name: Generate templates
+        run: python tools/theme-kit/kit.py templates
+      - name: Build synthetic strict theme end to end
+        run: |
+          mkdir -p design/themes/ci-theme
+          cp tools/theme-kit/templates/template-board.png design/themes/ci-theme/sheet-board.png
+          cp tools/theme-kit/templates/template-rigid.png design/themes/ci-theme/sheet-rigid.png
+          cp tools/theme-kit/templates/template-chrome.png design/themes/ci-theme/sheet-chrome.png
+          cp tools/theme-kit/templates/template-tiles.png design/themes/ci-theme/sheet-tiles.png
+          python - <<'PY'
+          from PIL import Image,ImageDraw
+          import json,os
+          p='design/themes/ci-theme'
+          for n in ['mood.png','target.png']:
+              im=Image.new('RGB',(1024,1536),(20,30,50));ImageDraw.Draw(im).ellipse((350,550,674,874),fill=(220,180,80));im.save(p+'/'+n)
+          json.dump({'id':'ci-theme','name':'CI Theme','description':'Theme Pipeline CI','strict':True},open(p+'/theme-kit.json','w'))
+          PY
+          python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage mood --actor ci
+          python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage target --actor ci
+          python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage sheets --actor ci
+          python tools/theme-kit/kit.py build --input design/themes/ci-theme
+          test -f content/themes/ci-theme/theme.json
+          test -f content/themes/ci-theme/raster/rigid-tiles-ring.webp
+          test -f content/themes/ci-theme/approval.json
