@@ -50,8 +50,13 @@ jobs:
           node --check js/scenario-loader.js
           node --check js/solver.js
           node --check js/level-library.js
+          node --check js/generated-test-library.js
+          node --check tools/generate-levels-v2.mjs
+          node --check tools/level-generator-v2/worker.mjs
       - name: Runtime solver equivalence
         run: node tools/test-runtime-solver.mjs
+      - name: Fast Generator v2 smoke test
+        run: node tools/test-level-generator-v2.mjs
       - name: Test classifier
         run: node tools/test-rigid-shapes.mjs
       - name: Theme Visuals V3
