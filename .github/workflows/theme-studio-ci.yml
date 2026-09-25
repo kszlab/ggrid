@@ -1,4 +1,4 @@
-name: Theme Studio v0.2 CI
+name: Theme Studio v0.3 CI
 
 on:
   push:
