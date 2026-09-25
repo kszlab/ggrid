@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {validateMetadataV3,familyIdFor,structureMetadata,qualityFor} from './level-metadata-v3.mjs';
+import {validateMetadataV3,familyIdFor,structureMetadata,qualityFor,freezeRequirementFor} from './level-metadata-v3.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const specs=[
@@ -35,6 +35,8 @@ for(const [catPath,library] of specs){
    if(JSON.stringify(level.content.structure)!==JSON.stringify(structure))errors.push(packPath+' '+level.levelId+': stale structure');
    const q=qualityFor({...level,analysis:{...(level.analysis||{}),qualityScore:undefined}});
    if(q!==null&&Math.abs((level.analysis.qualityScore??-1)-q)>1e-9)errors.push(packPath+' '+level.levelId+': stale qualityScore');
+   const fr=freezeRequirementFor({...level,analysis:{...(level.analysis||{}),solutionRequirements:undefined}});
+   if(level.analysis?.solutionRequirements?.freeze?.status==='not-required'&&Array.isArray(level.analysis?.solution)&&fr.status!=='not-required')errors.push(packPath+' '+level.levelId+': stale freeze requirement');
    if(structure.largeRigidCount>0)largeRigid++;
    if(structure.ballCount===1)oneBall++;else if(structure.ballCount===2)twoBall++;
   }
