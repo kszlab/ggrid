@@ -36,3 +36,5 @@ jobs:
           git commit -m "v0.15.27: migrate active level library to metadata v3"
           git pull --rebase origin main
           git push origin main
+
+# retry after duplicate bootstrap retirement
