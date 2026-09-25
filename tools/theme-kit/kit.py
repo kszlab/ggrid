@@ -139,7 +139,7 @@ def cmd_approve(args):
  miss=[n for n in names if not (inp/n).exists()]
  if miss:sys.exit('missing: '+', '.join(miss))
  st[args.stage]={'status':'approved','actor':args.actor,'files':[{'file':n,'sha256':sha(inp/n)} for n in names]}
- json.dump(a,open(inp/'approval.json','w'),ensure_ascii=False,indent=2);open(inp/'approval.json','a').write('\n');print('approved',args.stage)
+ with open(inp/'approval.json','w',encoding='utf-8',newline='\\n') as fp:\n  json.dump(a,fp,ensure_ascii=False,indent=2);fp.write('\\n')\n print('approved',args.stage)
 
 def verify_approval(inp):
  a=approval(inp);s=a.get('stages',{}).get('sheets',{});err=[]
