@@ -15,6 +15,16 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.36 — 2026-09-25
+
+### Theme Studio v0.1 és Csillagkönyvtár pilot
+- Elkészült a helyi, Node.js-alapú **Theme Studio v0.1** webalkalmazás a Theme Pipeline v1 fölött.
+- A Studio kezeli a témakatalógust, a mood/target/sheets promptverziókat, a képfeltöltéseket, a jóváhagyási lépéseket, a Theme Pipeline build indítását, a QA státuszt, valamint a teljes projekt export/import folyamatot.
+- Bevezetve a hordozható `.ggrid-theme-project` projektarchívum; exportkor a projektforrások mellett a megadott örökölt runtime források is bekerülnek, SHA-256 manifesttel.
+- Az első pilotprojekt a **Csillagkönyvtár / celestial-library**. A meglévő v17 runtime téma és artwork baseline referenciaként megmarad, de az új Studio-folyamat MOOD fázisból indul.
+- A pilot migráció explicit módon jelzi, hogy az eredeti 2026-09-24 jóváhagyott koncepciókép és az eredeti képgenerálási promptok nincsenek a repóban.
+- Külön CI ellenőrzi a Studio szerver indulását, a pilot projekt állapotát és a self-contained projekt-exportot.
+
 ## v0.15.35 — 2026-09-25
 
 ### Theme Pipeline v1 — hangulattervtől reprodukálható játékbeli témáig
