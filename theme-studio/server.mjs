@@ -45,7 +45,17 @@ async function listProjects(){
 }
 async function loadProject(id){
  if(!safeId(id))throw new Error('INVALID_ID');
- const p=await load(projectPath(id));p.computedStage=computeStage(p);return p;
+ const p=await load(projectPath(id));
+ const sheetNames=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'];
+ p.sheetFiles={};
+ for(const name of sheetNames){
+  const fp=path.join(projectDir(id),name);
+  try{
+   const data=await fsp.readFile(fp),st=await fsp.stat(fp);
+   p.sheetFiles[name]={exists:true,size:st.size,sha256:sha256(data),uploadedAt:p.artifacts?.[name]?.uploadedAt||null};
+  }catch{p.sheetFiles[name]={exists:false}}
+ }
+ p.computedStage=computeStage(p);return p;
 }
 async function updateProject(id,fn){
  const p=await loadProject(id);delete p.computedStage;await fn(p);p.modifiedAt=now();p.projectVersion=(p.projectVersion||0)+1;await save(projectPath(id),p);return loadProject(id);
@@ -157,7 +167,18 @@ const server=http.createServer(async(req,res)=>{
     if(stage==='target'&&p.stages.mood.status!=='approved')throw new Error('mood not approved');
     if(stage==='sheets'&&p.stages.target.status!=='approved')throw new Error('target not approved');
     let info={status:'approved',approvedAt:now(),actor:b.actor||'owner',notes:b.notes||''};
-    if(file){const data=await fsp.readFile(path.join(projectDir(id),file));info={...info,file,sha256:sha256(data)}}
+    if(stage==='sheets'){
+     const names=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'],approvedFiles={};
+     for(const name of names){
+      const fp=path.join(projectDir(id),name);
+      let data;
+      try{data=await fsp.readFile(fp)}catch{throw new Error('Hiányzó kötelező elemlap: '+name)}
+      approvedFiles[name]={sha256:sha256(data),size:data.length};
+     }
+     info.approvedFiles=approvedFiles;
+    }else if(file){
+     const data=await fsp.readFile(path.join(projectDir(id),file));info={...info,file,sha256:sha256(data)}
+    }
     p.stages[stage]={...p.stages[stage],...info};
     if(stage==='mood')p.stages.target.status='draft';
     if(stage==='target')p.stages.sheets.status='draft';
