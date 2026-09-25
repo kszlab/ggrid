@@ -73,7 +73,7 @@ async function generateJob(o,t,balls,targetCount,excluded,families,usedIds,seqRe
     if(Atomics.load(needed,d)<=0){rejected.classFull++;return}if(!verify(m.state,m.analysis)){rejected.verification++;return}
     excluded.add(m.fingerprint);families.set(m.family,(families.get(m.family)||0)+1);Atomics.sub(needed,d,1);
     let id;do id=`${o.idPrefix}-${t.w}X${t.h}-B${balls}-${String(++seqRef.n).padStart(5,'0')}`;while(usedIds.has(id));usedIds.add(id);
-    accepted.push(toRecord(m.state,m.analysis,id,{tool:'tools/generate-levels-v2.mjs',version:2,seed:o.seed,method:'state-space-reverse-bfs',largeShapes:o.largeShapes},{packId,familyId:m.family,noveltyScore:1/(1+(families.get(m.family)||1)-1)}));
+    accepted.push(toRecord(m.state,m.analysis,id,{tool:'tools/generate-levels-v2.mjs',version:2,seed:o.seed,method:'state-space-reverse-bfs',largeShapes:o.largeShapes},{packId,familyId:m.family,noveltyScore:1/(1+(families.get(m.family)||1)-1),library:o.publishTest?'generated-test':'generated'}));
     if(remaining()===0)Atomics.store(needed,0,1);
    });wk.on('error',e=>{console.error(e);Atomics.store(needed,0,1)});wk.on('exit',()=>{if(++finished===workers.length){clearTimeout(timer);clearInterval(progress);resolve()}})});
  });
