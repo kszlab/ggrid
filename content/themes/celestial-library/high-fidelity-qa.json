@@ -1,27 +1,31 @@
 {
-  "version": "0.15.15",
-  "reference": "approved portrait Celestial Library concept",
-  "method": "direct-approved-reference-raster-extraction",
-  "atlas": {
-    "path": "artwork/hf-atlas.webp",
-    "size": [
-      2048,
-      2576
+  "version": "0.15.21",
+  "reference": "User-approved 1024x1536 portrait supplied 2026-09-25",
+  "method": "Visual inspection of the actual LV3-5X8-0073 level in browser, plus a 23-step playthrough using directional buttons",
+  "testedViewports": [
+    [
+      412,
+      880
     ],
-    "format": "WebP",
-    "quality": 90
-  },
-  "metrics": {
-    "pieceMaterialFidelity": 0.994,
-    "overallMoodSimilarity": 0.693,
-    "detailEntropyRatio": 0.908,
-    "edgeDensityRatio": 0.803
-  },
-  "assessment": {
-    "pieceDetail": "near-source",
-    "materialLanguage": "near-source",
-    "paletteAndMood": "strong match",
-    "remainingDifference": "dynamic 5x8 live-board density and layout rather than asset quality"
-  },
-  "verdict": "pass"
+    [
+      360,
+      800
+    ]
+  ],
+  "outcome": "Substantial visual reconstruction; not pixel-identical",
+  "changes": [
+    "Reference-conditioned illustrated leather book assets embedded in independent SVG image containers",
+    "Photographic-style library backdrop, parchment variants and brass/navy controls",
+    "Stable blue/red horizontal book variants and all four L orientations"
+  ],
+  "knownDifferences": [
+    "The reference depicts seven board rows; the real catalog level has eight. No level cells were removed.",
+    "The playable level has an upward exit at column five; the reference omits this indicator.",
+    "Generated illustrations closely follow the reference but are not pixel-identical copies.",
+    "Score balance remains actual browser-local game data."
+  ],
+  "evidence": [
+    "../../../docs/celestial-library-v0.15.21.md"
+  ],
+  "noSimilarityScore": true
 }
