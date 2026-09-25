@@ -12,6 +12,7 @@ import {Worker} from 'node:worker_threads';
 import {root,step,validateLevel,solveDetailed,readJson,stateFromRecord,libraryRecords} from './level-generator-v2/engine.mjs';
 import {toRecord,fingerprint,familyFingerprint} from './level-generator-v3/layout.mjs';
 import {createFingerprintIndex,classifyAgainstIndex,fingerprintsFor} from './level-fingerprint-v1.mjs';
+import {analyzeState as analyzeMultiballOfficial} from './classify-multiball-v2.mjs';
 
 function parseRange(txt,prefix=''){
  const out=new Set();
@@ -70,10 +71,9 @@ function verifyRuntime(s,a){
   return best.status==='solved'&&best.path.length===a.optimalSolution.length;
  }catch(_){return false}
 }
-async function verifyOfficial(s,a,balls){
+function verifyOfficial(s,a,balls){
  if(balls!==2)return true;
- const {analyzeState}=await import('./classify-multiball-v2.mjs');
- const b=analyzeState(s,{maxStates:70000,riskStates:8000});
+ const b=analyzeMultiballOfficial(s,{maxStates:70000,riskStates:8000});
  return b.status==='ok'&&b.difficulty===a.difficulty&&b.optimalSolution?.length===a.optimalSolution?.length;
 }
 function addToIndex(index,level){
@@ -98,13 +98,13 @@ async function generateJob(o,t,balls,targetCount,records,index,families,usedIds,
  await new Promise(resolve=>{
   let finished=0;const timer=setTimeout(()=>Atomics.store(needed,0,1),o.minutes*60000),progress=setInterval(()=>log(o,`  V3 ${t.w}x${t.h} B${balls} · accepted ${accepted.length} · need ${remaining()}`),10000);
   workers.forEach((wk,i)=>{
-   wk.on('message',async m=>{
+   wk.on('message',m=>{
     if(m.type==='stats'){perWorker.set(i,m.stats);return}
     const d=m.analysis.difficulty;if(Atomics.load(needed,d)<=0){rejected.classFull++;return}
     if((families.get(m.family)||0)>=o.familyCap){rejected.family++;return}
     if(!noveltyAccept(m.state,m.analysis,index,o.novelty)){rejected.duplicateOrSimilar++;return}
     if(!verifyRuntime(m.state,m.analysis)){rejected.verification++;return}
-    if(o.officialCheck&&!(await verifyOfficial(m.state,m.analysis,balls))){rejected.official++;return}
+    if(o.officialCheck&&!verifyOfficial(m.state,m.analysis,balls)){rejected.official++;return}
     if(Atomics.load(needed,d)<=0)return;
     families.set(m.family,(families.get(m.family)||0)+1);Atomics.sub(needed,d,1);
     let id;do id=`${o.idPrefix}-${t.w}X${t.h}-B${balls}-${String(++seqRef.n).padStart(6,'0')}`;while(usedIds.has(id));usedIds.add(id);
