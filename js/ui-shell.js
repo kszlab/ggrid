@@ -65,7 +65,7 @@ const AppUI=(()=>{
  function selectTheme(delta){themeIndex+=delta;paintTheme()}
  function syncLevelAvailability(){
   const d=selectedDims(),box=document.querySelector('#quickDifficulty');let any=false;
-  box.querySelectorAll('button[data-value]').forEach(b=>{const ok=LevelLibrary.has(d.w,d.h,+b.dataset.value);b.disabled=!ok;b.classList.toggle('unavailable',!ok);if(ok)any=true;});
+  box.querySelectorAll('button[data-value]').forEach(b=>{const diff=+b.dataset.value,ok=LevelLibrary.has(d.w,d.h,diff)||MultiBallLibrary.has(d.w,d.h,diff)||GeneratedTestLibrary.has(d.w,d.h,diff);b.disabled=!ok;b.classList.toggle('unavailable',!ok);if(ok)any=true;});
   const chosen=box.querySelector('button[data-value="'+difficultyEl.value+'"]');if(chosen?.disabled){const first=[...box.querySelectorAll('button[data-value]')].find(b=>!b.disabled);if(first)difficultyEl.value=first.dataset.value;}
   document.querySelector('#freeSetupPlay').disabled=!any||!LevelLibrary.has(d.w,d.h,+difficultyEl.value);
   const multi=document.querySelector('#freeSetupMultiBall');if(multi)multi.disabled=!MultiBallLibrary.has(d.w,d.h,+difficultyEl.value);
