@@ -1,0 +1,38 @@
+name: Migrate Level Metadata v3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/migrate-level-metadata-v3.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run metadata migration
+        run: node tools/migrate-level-metadata-v3.mjs
+      - name: Validate metadata
+        run: node tools/verify-level-metadata-v3.mjs
+      - name: Validate runtime compatibility
+        run: node tools/test-runtime-solver.mjs
+      - name: Commit migrated level metadata
+        run: |
+          git config user.name "ggrid-metadata"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/levels/catalog.json content/levels/multiball/catalog.json content/levels/generated-test/catalog.json
+          git add content/levels/packs/*.json content/levels/multiball/packs/*.json content/levels/generated-test/packs/*.json
+          git add tools/level-metadata-v3-report.json
+          git commit -m "v0.15.27: migrate active level library to metadata v3"
+          git pull --rebase origin main
+          git push origin main
