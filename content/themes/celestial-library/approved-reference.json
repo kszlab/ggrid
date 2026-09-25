@@ -5,14 +5,13 @@
   "status": "approved",
   "approvedDate": "2026-09-24",
   "sourceConcept": {
-    "width": 1122,
-    "height": 1402,
-    "portraitGameplayCrop": {
-      "x": 8,
-      "y": 186,
-      "width": 540,
-      "height": 748
-    }
+    "width": 1024,
+    "height": 1536,
+    "visibleBoardColumns": 5,
+    "visibleBoardRows": 7,
+    "actualLevelId": "LV3-5X8-0073",
+    "actualBoardColumns": 5,
+    "actualBoardRows": 8
   },
   "portrait": {
     "designSize": [
@@ -71,5 +70,6 @@
     "fixedWall": "brass-astrolabe-pedestal",
     "frame": "multi-line-filigree-nine-slice",
     "lighting": "warm-candle-plus-blue-observatory-overlay"
-  }
+  },
+  "implementationAssessment": "See high-fidelity-qa.json: no pixel-identical claim"
 }

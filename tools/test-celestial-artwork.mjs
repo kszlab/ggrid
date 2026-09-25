@@ -1,30 +1,42 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-const theme=JSON.parse(fs.readFileSync('content/themes/celestial-library/theme.json','utf8'));
-const index=JSON.parse(fs.readFileSync('content/themes/index.json','utf8'));
-const ref=JSON.parse(fs.readFileSync('content/themes/celestial-library/approved-reference.json','utf8'));
-const qa=JSON.parse(fs.readFileSync('content/themes/celestial-library/high-fidelity-qa.json','utf8'));
-const entry=index.themes.find(t=>t.id==='celestial-library');
-const atlas='content/themes/celestial-library/artwork/hf-atlas.webp';
-const shapes=['2H','2V','3H','3V','L3-TL','L3-TR','L3-BL','L3-BR'];
-assert.equal(theme.formatVersion,2); assert.equal(theme.renderMode,'artwork');
-assert.equal(theme.artwork?.version,3); assert.equal(theme.artwork?.fidelity,'approved-reference-raster');
-assert.equal(theme.artwork?.layoutMode,'portrait'); assert.equal(theme.textPolicy?.themeIdentity,'theme-selector-only');
-assert.equal(ref.textPolicy?.themeTitleInGameplay,false); assert.equal(entry?.version,12);
-assert.ok(entry?.preview?.description); assert.ok(entry?.preview?.image); assert.ok(fs.existsSync(atlas));
-const bytes=fs.statSync(atlas).size; assert.ok(bytes>250000&&bytes<900000,'unexpected atlas size '+bytes);
-function check(spec,label){assert.equal(spec?.asset,'artwork/hf-atlas.webp',label+' asset');assert.deepEqual(spec?.atlas?.size,[2048,2576],label+' atlas size');const r=spec?.atlas?.rect;assert.ok(Array.isArray(r)&&r.length===4&&r.every(Number.isFinite)&&r[2]>0&&r[3]>0,label+' rect')}
-check(theme.artwork.pieces.ball,'ball');check(theme.artwork.pieces.wall,'wall');
-theme.artwork.pieces.brickSingle.variants.forEach((s,i)=>check(s,'single '+i));
-for(const id of shapes)check(theme.artwork.pieces.rigidShapes[id],id);
-for(const dir of ['up','right','down','left']){check(theme.artwork.pieces.exit.directions[dir],'exit '+dir);check(theme.artwork.controls[dir],'control '+dir);assert.equal(theme.artwork.controls[dir].target,'zone');assert.ok(theme.artwork.controls[dir].cue.asset.endsWith('control-'+dir+'.svg'))}
-const missing={'L3-TL':'BR','L3-TR':'BL','L3-BL':'TR','L3-BR':'TL'};for(const [id,c] of Object.entries(missing))assert.equal(theme.artwork.pieces.rigidShapes[id].missingCorner,c);
-assert.equal(theme.artwork.board.fitMode.portrait,'expand-height');assert.ok(theme.artwork.layouts.portrait.boxes.boardSafe[2]>=440);assert.equal(theme.artwork.layouts.portrait.controls.band,42);
-assert.equal(ref.portrait.hud.hintCounter,false);assert.equal(ref.portrait.hud.freezeCounter,true);assert.equal(ref.portrait.controls.fullBandHitTarget,true);
-const renderer=fs.readFileSync('js/scene-renderer.js','utf8'),baseCss=fs.readFileSync('css/game.css','utf8'),css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
-assert.ok(renderer.includes('resolvedAssetSpec'));assert.ok(renderer.includes('--sr-asset-size'));assert.ok(renderer.includes('--sr-asset-position'));
-assert.ok(baseCss.includes('var(--sr-asset-size,contain)'));assert.ok(baseCss.includes('var(--sr-asset-position,center)'));
-assert.ok(css.includes('var(--sr-asset-size,100% 100%)'));assert.match(css,/-webkit-tap-highlight-color:transparent!important/);assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s);assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s);
-assert.match(css,/\.art-control-zone \.emboss-arrow\.sr-asset-visual\s*\{[^}]*opacity:0!important;/s);assert.match(css,/\.art-control-zone:active \.emboss-arrow\.sr-asset-visual\{[\s\S]*?opacity:1!important;/s);
-assert.equal(qa.version,'0.15.15');assert.equal(qa.verdict,'pass');assert.ok(qa.metrics.pieceMaterialFidelity>=0.99);assert.ok(qa.metrics.overallMoodSimilarity>=0.68);assert.ok(qa.metrics.edgeDensityRatio>=0.78);
-console.log('Celestial Library high-fidelity artwork contract passed.');
+import path from 'node:path';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const root=process.cwd(),dir=path.join(root,'content/themes/celestial-library');
+const theme=JSON.parse(fs.readFileSync(path.join(dir,'theme.json')));
+const index=JSON.parse(fs.readFileSync('content/themes/index.json'));
+const A=require(path.join(root,'js/theme-assets.js'));
+const V=require(path.join(root,'js/theme-visuals.js'));
+const L=require(path.join(root,'js/theme-layout.js'));
+assert.equal(theme.renderMode,'artwork');
+assert.equal(index.themes.find(t=>t.id===theme.id).version,theme.version);
+for(const src of A.collect(theme))assert.ok(fs.existsSync(path.join(dir,src)),src+' missing');
+const pieces=theme.artwork.pieces;
+for(const id of ['2H','2V','3H','3V','L3-TL','L3-TR','L3-BL','L3-BR']){
+ const spec=pieces.rigidShapes[id];assert.ok(spec,id+' missing');
+ for(const variant of spec.variants||[spec]){
+  const svg=fs.readFileSync(path.join(dir,variant.asset),'utf8');
+  const payload=svg.match(/data:image\/webp;base64,([^"\s]+)/)?.[1];
+  assert.ok(payload,id+' must contain illustrated artwork');
+  const bytes=Buffer.from(payload,'base64');
+  assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');
+  assert.ok(bytes.length>20000,id+' unexpectedly small raster');
+ }
+}
+assert.match(V.resolveSpec(pieces.rigidShapes['3H'],'celestial-library:rigid:3H:K6').asset,/blue/);
+assert.match(V.resolveSpec(pieces.rigidShapes['3H'],'celestial-library:rigid:3H:K9').asset,/red/);
+assert.ok(theme.artwork.board.cellVariants.length>=3,'varied parchment');
+for(const [w,h]of [[3,3],[5,5],[5,8]]){
+ const fit=L.fitBoard(theme,w,h,412,880),zones=L.controlZones(theme,fit.board,412,880).zones;
+ assert.ok(Math.abs(fit.board.width/w-fit.board.height/h)<.001,'square cells');
+ for(const d of ['up','down','left','right']){
+  assert.ok(zones[d].x>=0&&zones[d].y>=0,d+' outside scene');
+  assert.ok(theme.artwork.controls[d].cue.asset.endsWith('control-'+d+'.svg'));
+ }
+}
+const level=JSON.parse(fs.readFileSync('content/levels/packs/classified-v2-5x8.json')).levels.find(l=>l.levelId==='LV3-5X8-0073');
+assert.deepEqual([level.board.width,level.board.height],[5,8]);
+assert.deepEqual(level.board.exit,{direction:'up',x:4,y:0});
+assert.equal(level.entities.find(e=>e.id==='K9').position.y,7,'do not delete the eighth row to imitate the mockup');
+console.log('Celestial illustrated assets, color variants, control geometry and reference-level invariants passed.');

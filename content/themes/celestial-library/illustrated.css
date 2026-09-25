@@ -1,0 +1,42 @@
+/* Illustrated Celestial Library: separate playable objects and responsive chrome. */
+@import url('artwork.css?v=0.15.21');
+body[data-theme="celestial-library"][data-ui-context="game"]{background:#100b07;display:grid;align-items:start}
+body[data-theme="celestial-library"][data-ui-context="game"] main{width:min(100vw,580px,calc((100dvh - 4px)*.60));padding:38px 0 14px;background:#100b07 url('artwork/library-hall.webp') center/100% 100% no-repeat;min-height:0;isolation:isolate}
+body[data-theme="celestial-library"] .game-head{position:relative;width:91%;height:42px;margin:0 auto;padding:3px 7px 3px 14px;grid-template-columns:minmax(0,1fr) 42px;gap:3px;border-radius:24px;color:#ffe6a0;background:linear-gradient(120deg,#08283e,#001422 75%);border:2px solid #d4a33e;box-shadow:inset 0 0 0 2px #263d47,inset 0 0 0 3px #a17632,0 3px 4px #000b}
+body[data-theme="celestial-library"] .game-head .scenario-info{gap:6px;font-size:clamp(11px,2.9vw,16px);overflow:visible;white-space:normal;line-height:1.12;color:#ffe7aa}
+body[data-theme="celestial-library"] .game-head #playModeLabel{white-space:nowrap}
+body[data-theme="celestial-library"] .game-head .play-level-id{font:500 clamp(9px,2.45vw,13px)/1.3 system-ui;white-space:normal;overflow:visible;color:#edcf90;opacity:1}
+body[data-theme="celestial-library"][data-ui-context="game"] main .icon-menu,
+body[data-theme="celestial-library"][data-ui-context="game"] main .play-action,
+body[data-theme="celestial-library"][data-ui-context="game"] main #freeze.freeze-action,
+body[data-theme="celestial-library"][data-ui-context="game"] main .score-box{background:linear-gradient(135deg,#123851,#032338 48%,#001422);color:#ffe49c;border:2px solid #d7a33f;box-shadow:inset 0 0 0 2px #152532,inset 0 0 0 3px #829294,0 3px 4px #000b}
+body[data-theme="celestial-library"] .icon-menu{border-radius:12px;min-height:36px;height:36px;width:42px;font-size:27px;line-height:1;padding:0}
+body[data-theme="celestial-library"] .board-wrap.scene-artwork{border:0;border-radius:0;background:transparent;box-shadow:none;color:#f6d47d;overflow:visible}
+body[data-theme="celestial-library"] .scene-artwork .board{border:0!important;border-radius:6px;background:#45331d;box-shadow:0 5px 9px #000b;overflow:visible}
+body[data-theme="celestial-library"] .scene-artwork .cell{margin:2px;border:0;border-radius:5px;background-color:#e9d9ad;box-shadow:0 2px 3px #0008;filter:none}
+body[data-theme="celestial-library"] .scene-artwork .piece{filter:drop-shadow(0 3px 2px #000b)}
+body[data-theme="celestial-library"] .scene-artwork .sr-composite{filter:drop-shadow(0 4px 2px #000c)}
+body[data-theme="celestial-library"] .scene-artwork .ball.sr-asset-visual{background-size:94% 94%!important;filter:drop-shadow(0 0 5px #7de8ff) drop-shadow(0 3px 2px #000a)}
+body[data-theme="celestial-library"] .scene-artwork .wall.sr-asset-visual{filter:drop-shadow(0 3px 2px #000b)}
+body[data-theme="celestial-library"] .scene-artwork-frame{filter:drop-shadow(0 3px 3px #000a)}
+/* The illustration omitted the gate; keep the real exit visible and compact. */
+body[data-theme="celestial-library"] .scene-artwork .exit{background-size:contain!important}
+body[data-theme="celestial-library"] .scene-artwork .exit-up,
+body[data-theme="celestial-library"] .scene-artwork .exit-down{width:48%;height:64%;justify-self:center}
+body[data-theme="celestial-library"] .scene-artwork .exit-left,
+body[data-theme="celestial-library"] .scene-artwork .exit-right{width:64%;height:48%;align-self:center}
+body[data-theme="celestial-library"] .scene-artwork .exit-up{transform:translateY(-74%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-down{align-self:end;transform:translateY(74%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-left{transform:translateX(-74%)}
+body[data-theme="celestial-library"] .scene-artwork .exit-right{justify-self:end;transform:translateX(74%)}
+body[data-theme="celestial-library"] .scene-artwork .edge-control.art-control-zone{filter:drop-shadow(0 3px 3px #000b)}
+body[data-theme="celestial-library"] .scene-artwork .edge-control:focus-visible{outline:2px solid #fff0b2!important;outline-offset:2px}
+body[data-theme="celestial-library"] .hud-row{display:grid!important;grid-template-columns:minmax(0,1fr) 24%;gap:7px;width:94%;margin:-15px auto 0;padding:0;border:0;border-radius:0;background:transparent;min-height:54px}
+body[data-theme="celestial-library"] .hud-row .play-actions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;width:100%!important}
+body[data-theme="celestial-library"] .hud-row .play-action,
+body[data-theme="celestial-library"] .hud-row #freeze.play-action{width:100%!important;min-width:0!important;height:51px;min-height:44px;border-radius:15px;padding:0;font-size:28px}
+body[data-theme="celestial-library"] .score-box{height:51px;min-width:0!important;width:100%;margin:0;padding:2px;border-radius:17px;display:grid;place-items:center}
+body[data-theme="celestial-library"] .score-box strong{font-size:34px;line-height:1;color:#ffe49c}
+body[data-theme="celestial-library"] .toast:empty,
+body[data-theme="celestial-library"] .motion-note:empty{display:none}
+@media(max-width:360px){body[data-theme="celestial-library"] .game-head{height:46px}body[data-theme="celestial-library"] .game-head .scenario-info{display:block}body[data-theme="celestial-library"] .game-head .play-level-id{display:block}body[data-theme="celestial-library"] .hud-row .play-action{font-size:23px}}

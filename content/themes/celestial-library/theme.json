@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 2,
   "id": "celestial-library",
-  "version": 17,
+  "version": 18,
   "name": "Csillagkönyvtár",
   "description": "Ősi könyvtár és csillagvizsgáló, ahol díszes kódexek és asztrolábiumok között vezetjük ki az asztrálgömböt.",
   "semantic": {
@@ -290,14 +290,14 @@
     "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal."
   },
   "assets": {
-    "css": "artwork.css?v=0.15.20",
+    "css": "illustrated.css?v=0.15.21",
     "preload": [
-      "library-scene.svg"
+      "artwork/library-hall.webp"
     ]
   },
   "render": {
-    "pieceInsetPx": 0.8,
-    "rigidInsetPx": 0.4,
+    "pieceInsetPx": 1.4,
+    "rigidInsetPx": 1.4,
     "moveMs": 190
   },
   "renderMode": "artwork",
@@ -313,21 +313,23 @@
       "portrait": {
         "designSize": [
           540,
-          610
+          568
         ],
         "boxes": {
           "boardSafe": [
-            46,
-            68,
-            448,
-            448
+            72,
+            60,
+            396,
+            396
           ]
         },
         "controls": {
-          "band": 42,
-          "gap": 2,
-          "extend": 4,
-          "cueInset": 0
+          "band": 36,
+          "gap": 8,
+          "extend": 0,
+          "cueInset": 0,
+          "horizontalSpan": 0.88,
+          "verticalSpan": 0.68
         }
       },
       "landscape": {
@@ -350,16 +352,7 @@
         }
       }
     },
-    "layers": {
-      "background": {
-        "portrait": "library-scene.svg",
-        "landscape": "library-scene.svg"
-      },
-      "environment": {
-        "portrait": "artwork/scene-lighting.svg",
-        "landscape": "artwork/scene-lighting.svg"
-      }
-    },
+    "layers": {},
     "board": {
       "frame": {
         "asset": "artwork/board-frame.svg",
@@ -370,30 +363,30 @@
           96
         ],
         "width": [
-          22,
-          22,
-          22,
-          22
+          12,
+          12,
+          12,
+          12
         ],
         "expand": [
-          16,
-          16,
-          16,
-          16
+          9,
+          9,
+          9,
+          9
         ]
       },
       "cellVariants": [
         {
-          "asset": "artwork/cell-star.svg"
+          "asset": "artwork/parchment-cell.webp"
         },
         {
-          "asset": "artwork/cell-moon.svg"
+          "asset": "artwork/parchment-moon.webp"
         },
         {
-          "asset": "artwork/cell-rosette.svg"
+          "asset": "artwork/parchment-cell.webp"
         },
         {
-          "asset": "artwork/cell-constellation.svg"
+          "asset": "artwork/parchment-constellation.webp"
         }
       ],
       "fitMode": {
@@ -409,17 +402,7 @@
         "asset": "artwork/wall.svg"
       },
       "brickSingle": {
-        "variants": [
-          {
-            "asset": "artwork/book-single-blue.svg"
-          },
-          {
-            "asset": "artwork/book-single-red.svg"
-          },
-          {
-            "asset": "artwork/book-single-green.svg"
-          }
-        ]
+        "asset": "artwork/book-single-red.svg"
       },
       "rigidShapes": {
         "2H": {
@@ -429,7 +412,14 @@
           "asset": "artwork/codex-2v.svg"
         },
         "3H": {
-          "asset": "artwork/codex-3h.svg"
+          "variants": [
+            {
+              "asset": "artwork/codex-3h-blue.svg"
+            },
+            {
+              "asset": "artwork/codex-3h-red.svg"
+            }
+          ]
         },
         "3V": {
           "asset": "artwork/codex-3v.svg"
@@ -487,19 +477,14 @@
       }
     },
     "ui": {
-      "hud": {
-        "asset": "artwork/hud-frame.svg",
-        "fit": "100% 100%"
-      },
+      "hud": null,
       "victory": {
         "asset": "artwork/victory-frame.svg",
         "fit": "100% 100%"
       },
-      "header": {
-        "asset": "artwork/header-frame.svg",
-        "fit": "100% 100%"
-      }
+      "header": null
     },
-    "layoutMode": "portrait"
+    "layoutMode": "portrait",
+    "assetVersion": 18
   }
 }

@@ -25,4 +25,8 @@ const refs=A.collect(theme);
 for(const expected of ['legacy.svg','bg-p.webp','bg-l.webp','ball.png','left.webp','right.webp'])assert.ok(refs.includes(expected),expected+' must be discovered');
 assert.ok(!refs.includes('localized'),'non-asset strings must not be treated as files');
 
+assert.equal(A.resolveUrl({__url:'https://example.test/theme.json',artwork:{assetVersion:18}},'book.svg'),'https://example.test/book.svg?art=18');
+assert.equal(A.resolveUrl({__url:'https://example.test/theme.json',artwork:{assetVersion:18}},'book.svg?size=2'),'https://example.test/book.svg?size=2&art=18');
+assert.equal(A.resolveUrl({__url:'https://example.test/theme.json'},'book.svg'),'https://example.test/book.svg');
+
 console.log('Artwork Theme Assets tests passed.');

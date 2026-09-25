@@ -175,8 +175,8 @@ const ScenarioMode=(()=>{
  function close(){panel.hidden=true;MotionControl.resume()}
  async function start(){if(!scenario)return;panel.hidden=true;try{await loadStage(0,0)}catch(e){showError(e);active=false;MotionControl.resume()}}
  async function freePlay(){active=false;scenario=null;effective=null;stopTimer();document.body.classList.remove('scenario-mode');AppUI?.enterGame?.();newBtn.hidden=false;topbar.hidden=false;loadrow.hidden=false;scenarioOpenBtn.hidden=false;exitScenarioBtn.hidden=true;info.textContent='';panel.hidden=true;freezeLimitEl.value='inf';await loadFreeTheme();changeLevelProfile();MotionControl.resume()}
- initFreeThemes();
+ const ready=initFreeThemes();
  scenarioOpenBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);playBtn.addEventListener('click',start);freeBtn.addEventListener('click',freePlay);exitScenarioBtn.addEventListener('click',freePlay);
  const baseMove=move;move=function(dir,automatic=false){const wasWon=!!state?.won;baseMove(dir,automatic);if(active&&!wasWon)setTimeout(onWin,180)};
- return{open,loadFreeTheme,advanceAfterWin,get hasNext(){return hasNextStage()},get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
+ return{ready,open,loadFreeTheme,advanceAfterWin,get hasNext(){return hasNextStage()},get freeThemes(){return freeThemeIndex?.themes||[]},get active(){return active}};
 })();
