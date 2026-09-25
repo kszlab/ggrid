@@ -47,7 +47,7 @@ function updateLevelScore(){
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
 function updateScore(){
- const won=!!state?.won,test=inMultiBallTest()||inGeneratedTest();
+ const won=!!state?.won,generated=inGeneratedTest(),test=inMultiBallTest()||generated;
  if(scoreValue){
   if(test){scoreValue.textContent='D'+difficultyEl.value;scoreValue.dataset.size='sm';scoreValue.title='Kétgolyós játék · pontozás nélkül'}
   else{
@@ -62,7 +62,7 @@ function updateScore(){
  if(visibleHint){visibleHint.disabled=hintDisabled;visibleHint.title=won?'A pálya már kész.':test?autoSolveAllowed?`Kétgolyós teszt: rövid nyomás javaslat, ${autoSolveSeconds} másodperc automatikus megoldás.`:'Kétgolyós teszt: rövid nyomás javaslat.':autoSolveAllowed?`Rövid nyomás: súgó. ${autoSolveSeconds} másodperc nyomva tartás: automatikus megoldás, pont nélkül.`:'Rövid nyomás: súgó.'}
  freezeBtn.disabled=won||!canUseFreeze()||(isScoredFreePlay()&&scoreData.balance<10);
  freezeBtn.dataset.freezeState=freezeBtn.disabled?'unavailable':freezeArmed?'active':'available';
- freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':test?'Kétgolyós játék: Freeze pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
+ freezeBtn.title=won?'A pálya már kész.':freezeBtn.disabled?'Freeze: 10 pont szükséges':freezeArmed?'Freeze aktív: válassz elemet, vagy nyomd meg újra a kilépéshez':generated?'Generátor teszt: Freeze pontlevonás nélkül':test?'Kétgolyós játék: Freeze pontlevonás nélkül':isScoredFreePlay()?'Freeze: 10 pont a kijelölt elemmel kiadott irányparancsért':'Freeze: elem kijelölése';
 }
 function spendScore(cost){if(scoreData.balance<cost)return false;scoreData.balance-=cost;saveScore();updateScore();return true}
 function awardWin(){
