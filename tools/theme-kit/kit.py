@@ -11,12 +11,14 @@ def load_slots():
  if not SLOTS_FILE.exists():
   import make_slots;make_slots.main()
  try:
-  with open(SLOTS_FILE,encoding='utf-8') as f:return json.load(f)
+  with open(SLOTS_FILE,encoding='utf-8') as f:data=json.load(f)
+  if data.get('formatVersion',0)>=3 and data.get('packs'):return data
  except UnicodeDecodeError:
-  data=make_spec()
-  with open(SLOTS_FILE,'w',encoding='utf-8',newline='\\n') as f:
-   json.dump(data,f,ensure_ascii=False,indent=1);f.write('\\n')
-  return data
+  pass
+ data=make_spec()
+ with open(SLOTS_FILE,'w',encoding='utf-8',newline='\\n') as f:
+  json.dump(data,f,ensure_ascii=False,indent=1);f.write('\\n')
+ return data
 KIT=load_slots()
 SLOTS={s['id']:s for s in KIT['slots']}
 KEY=tuple(KIT['keyColor'])
@@ -49,19 +51,25 @@ def write_json_atomic(path,obj,indent=2):
 
 def cmd_templates(args):
  out=HERE/'templates';out.mkdir(parents=True,exist_ok=True)
+ # Legacy dense sheets.
  for sid,sh in KIT['sheets'].items():
   W,H=sh['size'];im=Image.new('RGB',(W,H),KEY);d=ImageDraw.Draw(im)
   d.text((W//2,25),sh['title'],fill='white',font=font(23,True),anchor='mm')
   for s in [x for x in KIT['slots'] if x['sheet']==sid]:
    x,y,w,h=s['box'];d.rectangle((x,y,x+w,y+h),outline='white',width=3)
    d.text((x,y-6),s['id'],fill='white',font=font(15,True),anchor='ls')
-   if s.get('missingQuadrant'):
-    q=s['missingQuadrant'];hx=x+w//2;hy=y+h//2
-    box={'tl':(x,y,hx,hy),'tr':(hx,y,x+w,hy),'bl':(x,hy,hx,y+h),'br':(hx,hy,x+w,y+h)}[q]
-    d.rectangle(box,fill=(90,0,90));d.text(((box[0]+box[2])//2,(box[1]+box[3])//2),'ÜRES',fill='white',font=font(17,True),anchor='mm')
-   if s.get('hole'):
-    d.rectangle((x+w//3,y+h//3,x+2*w//3,y+2*h//3),fill=(90,0,90));d.text((x+w//2,y+h//2),'ÜRES',fill='white',font=font(20,True),anchor='mm')
   im.save(out/('template-'+sid+'.png'))
+ # Asset Pack v2 templates: sparse panels plus an inner safe guide.
+ for pid,pk in KIT.get('packs',{}).items():
+  W,H=pk['size'];im=Image.new('RGB',(W,H),KEY);d=ImageDraw.Draw(im)
+  d.text((W//2,28),pk['title'],fill='white',font=font(23,True),anchor='mm')
+  inset=int(pk.get('safeInset',24))
+  for s in [x for x in KIT['slots'] if x.get('pack')==pid]:
+   x,y,w,h=s['packBox']
+   d.rectangle((x,y,x+w,y+h),outline='white',width=4)
+   d.rectangle((x+inset,y+inset,x+w-inset,y+h-inset),outline=(255,220,80),width=2)
+   d.text((x+8,y+20),s['id'],fill='white',font=font(15,True))
+  im.save(out/('template-pack-'+pid+'.png'))
  print(out)
 
 def key_image(img):
@@ -95,27 +103,49 @@ def fit(im,slot):
   b=slot['nineSlice']['outputSlice'];a=out.getchannel('A');a.paste(0,(b,b,ow-b,oh-b));out.putalpha(a)
  return out
 
+def extract_packs(inp):
+ inp=Path(inp);derived=inp/'extracted';derived.mkdir(parents=True,exist_ok=True)
+ packs={}
+ for pid,pk in KIT.get('packs',{}).items():
+  p=inp/pk['file']
+  if p.exists():packs[pid]=Image.open(p).convert('RGBA').resize(tuple(pk['size']),Image.Resampling.LANCZOS)
+ written=[]
+ for s in KIT['slots']:
+  pid=s.get('pack')
+  if not pid or pid not in packs:continue
+  x,y,w,h=s['packBox'];panel=key_image(packs[pid].crop((x,y,x+w,y+h)))
+  panel.save(derived/(s['id']+'.png'))
+  written.append(s['id'])
+ return written
+
 def slice_assets(inp,out):
  inp=Path(inp);out=Path(out);ras=out/'raster';chk=out/'kit-check';ras.mkdir(parents=True,exist_ok=True);chk.mkdir(parents=True,exist_ok=True)
- report={'format':'ggrid-theme-kit-report','formatVersion':2,'slots':{},'extras':{}}
+ report={'format':'ggrid-theme-kit-report','formatVersion':3,'slots':{},'extras':{}}
+ extract_packs(inp)
  sheets={}
  for sid,sh in KIT['sheets'].items():
   p=inp/sh['file']
   if p.exists():sheets[sid]=Image.open(p).convert('RGBA').resize(tuple(sh['size']),Image.Resampling.LANCZOS)
  for slot in KIT['slots']:
   sid=slot['id'];single=next((inp/(sid+e) for e in ['.png','.webp','.jpg'] if (inp/(sid+e)).exists()),None)
+  derived=inp/'extracted'/(sid+'.png')
   src=None
-  if single:im=key_image(Image.open(single));src='single'
+  if single:im=key_image(Image.open(single));src='override'
+  elif derived.exists():im=key_image(Image.open(derived));src='pack'
   elif slot['sheet'] in sheets:
-   x,y,w,h=slot['box'];im=key_image(sheets[slot['sheet']].crop((x,y,x+w,y+h)));src='sheet'
+   x,y,w,h=slot['box'];im=key_image(sheets[slot['sheet']].crop((x,y,x+w,y+h)));src='legacy-sheet'
   else:
-   report['slots'][sid]={'status':'missing','warnings':['nincs forráslap vagy külön asset'],'required':sid in REQUIRED};continue
+   report['slots'][sid]={'status':'missing','warnings':['nincs Asset Pack, override vagy legacy forrás'],'required':sid in REQUIRED};continue
   bb=bbox_alpha(im)
   if not bb:
    report['slots'][sid]={'status':'missing','warnings':['nem található rajz a slotban'],'required':sid in REQUIRED};continue
   crop=im.crop(bb);warnings=[]
+  if src=='pack':
+   px0,py0,px1,py1=bb;pw,ph=im.size;guard=max(4,round(min(pw,ph)*.025))
+   if px0<=guard or py0<=guard or px1>=pw-guard or py1>=ph-guard:
+    warnings.append('az artwork túl közel ér a pack panel széléhez; újragenerálás ajánlott')
   sw,sh=slot['box'][2],slot['box'][3]
-  if src=='sheet' and crop.width*crop.height<.35*sw*sh:warnings.append('a rajz feltűnően kicsi a slothoz képest')
+  if src=='legacy-sheet' and crop.width*crop.height<.35*sw*sh:warnings.append('a rajz feltűnően kicsi a slothoz képest')
   if slot['fit']=='fill' and abs((crop.width/max(1,crop.height))/(slot['output'][0]/slot['output'][1])-1)>.22:warnings.append('szokatlan képarány; torzulhat')
   outim=fit(crop,slot);outim.save(ras/(sid+'.webp'),'WEBP',quality=96,method=6)
   report['slots'][sid]={'status':'warn' if warnings else 'ok','warnings':warnings,'required':sid in REQUIRED,'source':src,'file':'raster/'+sid+'.webp'}
@@ -301,8 +331,11 @@ def main():
  sp.add_parser('templates')
  a=sp.add_parser('approve');a.add_argument('--input',required=True);a.add_argument('--stage',required=True,choices=['mood','target','sheets','backgrounds','release']);a.add_argument('--actor',default='owner')
  a=sp.add_parser('slice');a.add_argument('--input',required=True);a.add_argument('--out',required=True)
+ a=sp.add_parser('extract-packs');a.add_argument('--input',required=True)
  a=sp.add_parser('build');a.add_argument('--input',required=True)
  a=sp.add_parser('scaffold');a.add_argument('--theme',default='classic')
  a=sp.add_parser('capture');a.add_argument('--theme',required=True);a.add_argument('--out',required=True);a.add_argument('--target')
- x=p.parse_args();{'templates':cmd_templates,'approve':cmd_approve,'slice':cmd_slice,'build':cmd_build,'scaffold':cmd_scaffold,'capture':cmd_capture}[x.cmd](x)
+ x=p.parse_args()
+ if x.cmd=='extract-packs':print(json.dumps({'extracted':extract_packs(x.input)},ensure_ascii=False))
+ else:{'templates':cmd_templates,'approve':cmd_approve,'slice':cmd_slice,'build':cmd_build,'scaffold':cmd_scaffold,'capture':cmd_capture}[x.cmd](x)
 if __name__=='__main__':main()
