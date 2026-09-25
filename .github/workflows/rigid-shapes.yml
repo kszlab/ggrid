@@ -57,6 +57,8 @@ jobs:
         run: node tools/test-runtime-solver.mjs
       - name: Fast Generator v2 smoke test
         run: node tools/test-level-generator-v2.mjs
+      - name: Level Metadata v3
+        run: node tools/verify-level-metadata-v3.mjs
       - name: Test classifier
         run: node tools/test-rigid-shapes.mjs
       - name: Theme Visuals V3
