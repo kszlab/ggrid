@@ -1,0 +1,89 @@
+name: GGrid theme pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme:
+        description: "Theme id under design/themes/"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: theme-pipeline-${{ inputs.theme }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      THEME: ${{ inputs.theme }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tools
+        run: |
+          pip install --quiet pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Validate input
+        run: |
+          case "$THEME" in *[!a-z0-9-]*|"") echo "Invalid theme id"; exit 1;; esac
+          test -f "design/themes/$THEME/theme-kit.json"
+          test -f "design/themes/$THEME/approval.json"
+          python - <<'PY'
+          import json,os
+          t=os.environ['THEME'];a=json.load(open(f'design/themes/{t}/approval.json',encoding='utf-8'))
+          assert a.get('themeId')==t, 'approval themeId mismatch'
+          assert a.get('stages',{}).get('sheets',{}).get('status')=='approved', 'sheets not approved'
+          print('approved by',a['stages']['sheets'].get('actor','owner'))
+          PY
+      - name: Strict build
+        run: python tools/theme-kit/kit.py build --input "design/themes/$THEME"
+      - name: Repository theme checks
+        run: |
+          node tools/test-theme-autotile.mjs
+          node tools/test-theme-assets.mjs
+          node tools/test-theme-assets-v2.mjs
+          node tools/test-theme-layout.mjs
+          node tools/test-theme-frame.mjs
+          node tools/audit-theme-shapes.mjs --check
+      - name: Capture real-game QA
+        run: |
+          python tools/theme-kit/kit.py capture --theme "$THEME" --out theme-pipeline-check --target "design/themes/$THEME/target.png"
+          mkdir -p "content/themes/$THEME/kit-check"
+          cp theme-pipeline-check/*.png "content/themes/$THEME/kit-check/" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: theme-pipeline-${{ inputs.theme }}
+          path: theme-pipeline-check/
+      - name: Open or update pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="theme-pipeline/$THEME"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add "content/themes/$THEME" content/themes/index.json tools/theme-shape-audit.json
+          git commit -m "Theme pipeline: $THEME" || { echo "No changes"; exit 0; }
+          git push -f origin "$BRANCH"
+          python - <<'PY' > pr-body.md
+          import json,os
+          t=os.environ['THEME'];r=json.load(open(f'content/themes/{t}/kit-report.json',encoding='utf-8'));s=r['summary']
+          print(f"Theme Pipeline v1: **{t}**\n")
+          print(f"Assets: {s['ok']} ok · {s['warn']} review · {s['requiredMissing']} required missing · {s['optionalMissing']} optional missing.\n")
+          print(f"QA: `content/themes/{t}/kit-check/compare.png`, `showcase-phone.png`, `shapes-extra-phone.png`.\n")
+          print("A PR csak vizuális átvétel után merge-elhető.")
+          PY
+          gh pr view "$BRANCH" >/dev/null 2>&1 && gh pr edit "$BRANCH" --body-file pr-body.md || gh pr create --head "$BRANCH" --title "Theme pipeline: $THEME" --body-file pr-body.md
