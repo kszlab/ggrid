@@ -1,4 +1,4 @@
-name: Theme Pipeline v2 CI
+name: Theme Pipeline v3 CI
 
 on:
   push:
@@ -63,5 +63,5 @@ jobs:
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage backgrounds --actor ci
           python tools/theme-kit/kit.py build --input design/themes/ci-theme
           test -f content/themes/ci-theme/theme.json
-          test -f content/themes/ci-theme/raster/rigid-tiles-ring.webp
+          test -f content/themes/ci-theme/raster/rigid-tiles-ring.webp\n          test -f content/themes/ci-theme/raster/button-square.webp\n          test -f content/themes/ci-theme/raster/score-box.webp
           test -f content/themes/ci-theme/approval.json
