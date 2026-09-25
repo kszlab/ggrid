@@ -89,6 +89,7 @@ export function enrichLevel(level,{packId,library,familyCount=1}){
 
 export function validateMetadataV3(level,{packId=null}={}){
  const errors=[],c=level.content,a=level.analysis;
+ if(typeof level.levelId!=='string'||!level.levelId.trim())errors.push('levelId');
  if(c?.metadataVersion!==3)errors.push('content.metadataVersion');
  if(!c?.packId)errors.push('content.packId');
  if(packId&&c?.packId!==packId)errors.push('content.packId mismatch');
