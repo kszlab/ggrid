@@ -555,3 +555,36 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 .scene-artwork .brick.sr-composite-source{
  opacity:0!important;
 }
+
+
+/* v0.15.54 – theme UI primitive states.
+   One painted control body is reused for runtime roles; interaction states are
+   generated programmatically so a theme does not need 5 PNGs per button. */
+.scene-artwork .play-action.art-chrome-asset,
+.scene-artwork #gameMenu.art-chrome-asset,
+.scene-artwork .score-box.art-chrome-asset,
+.scene-artwork .victory-actions button.art-chrome-asset{
+ border-color:transparent!important;
+ background-color:transparent!important;
+ background-repeat:no-repeat!important;
+ background-position:center!important;
+ color:var(--ui-text,#fff)!important;
+ text-shadow:0 1px 3px #000c;
+ transition:transform .08s ease,filter .08s ease,opacity .12s ease;
+}
+.scene-artwork .play-action.art-chrome-asset:active,
+.scene-artwork #gameMenu.art-chrome-asset:active,
+.scene-artwork .victory-actions button.art-chrome-asset:active{
+ transform:translateY(2px) scale(.98);
+ filter:brightness(.82);
+}
+.scene-artwork .play-action.art-chrome-asset:disabled,
+.scene-artwork .victory-actions button.art-chrome-asset:disabled{
+ filter:saturate(.15) brightness(.72);
+ opacity:.48;
+}
+.scene-artwork .play-action.art-chrome-asset.active,
+.scene-artwork .play-action.art-chrome-asset[aria-pressed="true"]{
+ filter:brightness(1.12) drop-shadow(0 0 7px var(--ui-focus,#fff));
+}
+body.theme-studio-preview .dev-detail{display:none!important}
