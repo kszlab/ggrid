@@ -179,14 +179,15 @@ def cmd_approve(args):
  if args.stage=='mood':names=['mood.png']
  elif args.stage=='target':names=['target.png']
  elif args.stage=='sheets':
-  names=[s['id']+'.png' for s in KIT['slots'] if s.get('required',True)]
-  names += [s['id']+'.png' for s in KIT['slots'] if not s.get('required',True) and (inp/(s['id']+'.png')).exists()]
+  names=[pk['file'] for pk in KIT.get('packs',{}).values()]
+  # Root-level per-slot files are optional manual corrections and override the pack.
+  names += [s['id']+'.png' for s in KIT['slots'] if (inp/(s['id']+'.png')).exists()]
  elif args.stage=='backgrounds':names=['bg-portrait.png','bg-landscape.png']
  else:names=['target.png','bg-portrait.png','bg-landscape.png']+[s['id']+'.png' for s in KIT['slots'] if s.get('required',True)]
  miss=[n for n in names if not (inp/n).exists()]
  if miss:sys.exit('missing: '+', '.join(miss))
  st[args.stage]={'status':'approved','actor':args.actor,'files':[{'file':n,'sha256':sha(inp/n)} for n in names]}
- if args.stage=='sheets':st[args.stage]['mode']='individual'
+ if args.stage=='sheets':st[args.stage]['mode']='asset-pack-v2'
  write_json_atomic(inp/'approval.json',a)
  print('approved',args.stage)
 
@@ -195,7 +196,7 @@ def verify_approval(inp):
  for stage in ('sheets','backgrounds'):
   s=a.get('stages',{}).get(stage,{})
   if s.get('status')!='approved':err.append(stage+' stage not approved')
-  if stage=='sheets' and s.get('mode') not in (None,'individual'):err.append('sheets stage is not individual-asset mode')
+  if stage=='sheets' and s.get('mode')!='asset-pack-v2':err.append('sheets stage is not Asset Pack v2 mode')
   for r in s.get('files',[]):
    p=Path(inp)/r['file']
    if not p.exists():err.append(r['file']+' missing')
