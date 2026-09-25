@@ -1,0 +1,17 @@
+{
+  "id": "celestial-library",
+  "name": "Csillagkönyvtár",
+  "shortName": "Csillagkönyvtár",
+  "tag": "Az égi archívum",
+  "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal.",
+  "strict": true,
+  "version": 18,
+  "semantic": {
+    "ball": "Asztrálgyöngy",
+    "brick": "Archívumkötet",
+    "wall": "Csillagtérkép-talapzat",
+    "exit": "Asztrolábium-kapu",
+    "freeze": "Időpecsét"
+  },
+  "tokens": {}
+}
