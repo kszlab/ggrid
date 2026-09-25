@@ -33,7 +33,8 @@ try{const saved=JSON.parse(localStorage.getItem(SCORE_KEY)||'null');if(saved&&Nu
 function saveScore(){try{localStorage.setItem(SCORE_KEY,JSON.stringify(scoreData))}catch(e){console.warn('Pontok helyi mentése sikertelen',e)}}
 function inFreePlay(){return !document.body.classList.contains('scenario-mode')}
 function inMultiBallTest(){return document.body.classList.contains('multiball-test-mode')}
-function isScoredFreePlay(){return inFreePlay()&&!inMultiBallTest()}
+function inGeneratedTest(){return document.body.classList.contains('generated-test-mode')}
+function isScoredFreePlay(){return inFreePlay()&&!inMultiBallTest()&&!inGeneratedTest()}
 function totalBalls(s=state){return s?.objects?.filter(o=>o.type==='ball').length||0}
 function remainingBalls(s=state){return s?.objects?.filter(o=>o.type==='ball'&&!o.exited).length||0}
 function scoreBase(){const d=Math.max(1,Math.min(10,Number(currentLevelRecord?.analysis?.testDifficultyClass)||Number(difficultyEl.value)||1));return 5+Math.ceil(state.width*state.height/5)+2*d+Math.ceil(optimal.length/3)}
@@ -46,7 +47,7 @@ function updateLevelScore(){
  for(const id of ['homeLevelId','playLevelId']){const el=document.querySelector('#'+id);if(!el)continue;el.textContent=label;el.classList.toggle('completed',done);el.title=done?`Teljesített pálya · legjobb eredmény: ${best}/${scoreBase()} pont`:`Még nem teljesített pálya · maximum: ${scoreBase()} pont`}
 }
 function updateScore(){
- const won=!!state?.won,test=inMultiBallTest();
+ const won=!!state?.won,test=inMultiBallTest()||inGeneratedTest();
  if(scoreValue){
   if(test){scoreValue.textContent='D'+difficultyEl.value;scoreValue.dataset.size='sm';scoreValue.title='Kétgolyós játék · pontozás nélkül'}
   else{
@@ -174,7 +175,7 @@ function render(opts={}){
    D1-D10 and theme selectors as Free Play, but remains unscored while the
    multi-ball difficulty calibration is being play-tested. */
 function applyMultiBallLevel(g){
- cancelAutoSolve();clearSolverCache();resetWinState();
+ cancelAutoSolve();clearSolverCache();resetWinState();document.body.classList.remove('generated-test-mode');
  state=g.state;validateLevel(state);
  if(totalBalls(state)!==2)throw Error('MULTIBALL_LEVEL_REQUIRES_TWO_BALLS');
  document.body.classList.add('multiball-test-mode');
@@ -207,12 +208,31 @@ globalThis.startMultiBallGame=startMultiBallGame;
 globalThis.startMultiBallTest=startMultiBallGame;
 globalThis.inMultiBallTest=inMultiBallTest;
 
+/* ===== FAST GENERATOR V2 ISOLATED TEST LIBRARY ===== */
+function applyGeneratedTestLevel(g){
+ cancelAutoSolve();clearSolverCache();resetWinState();document.body.classList.remove('multiball-test-mode');document.body.classList.add('generated-test-mode');
+ state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;
+ freezeLimitEl.value='inf';freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=true;solverUsedThisRun=false;toast.textContent='';
+ if(optimal.length)rememberSolverRoute(state,optimal);
+ const modeLabel=document.querySelector('#playModeLabel');if(modeLabel)modeLabel.textContent='Generátor teszt';
+ render();MotionControl?.onNewLevel?.();
+}
+function requestGeneratedTestLevel(){
+ const d=selectedDims(),difficulty=Math.max(1,Math.min(10,parseInt(difficultyEl.value,10)||1));
+ try{const l=GeneratedTestLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_GENERATED_TEST_LEVEL');applyGeneratedTestLevel(GeneratedTestLibrary.toGame(l));return true}
+ catch(e){console.error('Generated test library',e);toast.textContent='Nincs generált tesztpálya ehhez a mérethez és nehézséghez.';return false}
+}
+async function startGeneratedTestGame(){cancelAutoSolve();clearSolverCache();resetWinState();await GeneratedTestLibrary.init();return requestGeneratedTestLevel()}
+function leaveGeneratedTest(){document.body.classList.remove('generated-test-mode')}
+globalThis.startGeneratedTestGame=startGeneratedTestGame;
+globalThis.inGeneratedTest=inGeneratedTest;
+
 /* ===== PRE-GENERATED LEVEL LIBRARY =====
    A player kizárólag előre generált, elemzett pályákat tölt a Level Libraryból.
    A pályagenerálás a fejlesztői/content pipeline feladata, nem runtime funkció. */
 let currentLevelRecord=null;
 function applyLibraryLevel(g){
- cancelAutoSolve();clearSolverCache();leaveMultiBallTest();
+ cancelAutoSolve();clearSolverCache();leaveMultiBallTest();leaveGeneratedTest();
  resetWinState();state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;updateLevelScore();
  freezeLimitEl.value='inf';
  freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;toast.textContent='';
@@ -227,7 +247,7 @@ function requestLibraryLevel(){
   console.error('Level library',e);toast.textContent='Nincs kompatibilis pálya ehhez a mérethez és nehézséghez.';return false;
  }
 }
-function newLevel(){return inMultiBallTest()?requestMultiBallLevel():requestLibraryLevel()}
+function newLevel(){return inGeneratedTest()?requestGeneratedTestLevel():inMultiBallTest()?requestMultiBallLevel():requestLibraryLevel()}
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
  if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
