@@ -129,6 +129,16 @@ export function lshBuckets(simHash,{bands=LSH_BANDS,bitsPerBand=LSH_BITS_PER_BAN
   for(let i=0;i<bands;i++){const v=(x>>BigInt(i*bitsPerBand))&mask;out.push(`${prefix}b${i}:${v.toString(16).padStart(Math.ceil(bitsPerBand/4),'0')}`);}
   return out;
 }
+export function lshProbeBuckets(simHash,{bands=LSH_BANDS,bitsPerBand=LSH_BITS_PER_BAND,prefix=''}={}){
+  if(bands*bitsPerBand!==64)throw Error('LSH bands * bitsPerBand must equal 64');
+  const x=BigInt('0x'+simHash),mask=(1n<<BigInt(bitsPerBand))-1n,out=[];
+  for(let i=0;i<bands;i++){
+    const v=(x>>BigInt(i*bitsPerBand))&mask,hex=n=>n.toString(16).padStart(Math.ceil(bitsPerBand/4),'0');
+    out.push(`${prefix}b${i}:${hex(v)}`);
+    for(let bit=0;bit<bitsPerBand;bit++)out.push(`${prefix}b${i}:${hex(v^(1n<<BigInt(bit)))}`);
+  }
+  return out;
+}
 export function fingerprintsFor(input,{analysis=null}={}){
   const s=stateLike(input);const can=canonicalRepresentation(s);
   const canonicalHash=sha256(can.representation);
@@ -158,7 +168,8 @@ export function classifyAgainstIndex(input,index,{analysis=null,thresholds=DEFAU
   const fp=fingerprintsFor(input,{analysis});
   const exact=index.exact?.[fp.canonicalHash]||[];
   if(exact.length)return {classification:'DUPLICATE',accepted:false,distance:0,matches:exact,fingerprints:fp};
-  const ids=new Set();for(const b of fp.buckets)for(const id of index.buckets?.[b]||[])ids.add(id);
+  const s=stateLike(input),balls=s.objects.filter(o=>o.type==='ball').length,prefix=`${s.width}x${s.height}:B${balls}:`;
+  const ids=new Set();for(const b of lshProbeBuckets(fp.simHash,{prefix}))for(const id of index.buckets?.[b]||[])ids.add(id);
   let nearest=null,distance=Infinity;
   for(const id of ids){const item=index.items?.[id];if(!item)continue;const d=hamming64(fp.simHash,item.simHash);if(d<distance){distance=d;nearest=id;}}
   if(nearest===null)return {classification:'UNIQUE',accepted:true,distance:null,nearest:null,candidates:0,fingerprints:fp};
