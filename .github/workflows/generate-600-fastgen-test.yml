@@ -1,0 +1,98 @@
+name: Generate 600 FastGen test levels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/generate-600-fastgen-test.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    strategy:
+      fail-fast: false
+      matrix:
+        size: ["3x3","4x4","5x5","5x6","5x7","5x8"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Generate 100 levels
+        shell: bash
+        run: |
+          node tools/generate-levels-v2.mjs \
+            --target "100@${{ matrix.size }}:D1-D10:B1,B2" \
+            --workers 3 \
+            --minutes 8 \
+            --family-cap 2 \
+            --large-shapes auto \
+            --seed 20260925 \
+            --out "generated-levels/fastgen-v2-${{ matrix.size }}.json"
+      - name: Verify exact coverage
+        shell: bash
+        env:
+          SIZE: ${{ matrix.size }}
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const size=process.env.SIZE;
+          const p=JSON.parse(fs.readFileSync('generated-levels/fastgen-v2-'+size+'.json','utf8'));
+          if(p.levels.length!==100) throw Error(size+': expected 100 levels, got '+p.levels.length);
+          for(let d=1;d<=10;d++){
+            const a=p.levels.filter(l=>l.difficulty.class===d);
+            if(a.length!==10) throw Error(size+' D'+d+': expected 10, got '+a.length);
+            const b1=a.filter(l=>l.content?.ballCount===1).length;
+            const b2=a.filter(l=>l.content?.ballCount===2).length;
+            if(b1!==5||b2!==5) throw Error(size+' D'+d+': expected 5 B1 + 5 B2, got '+b1+' + '+b2);
+          }
+          console.log(size,'coverage OK');
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fastgen-${{ matrix.size }}
+          path: generated-levels/fastgen-v2-${{ matrix.size }}.json
+
+  publish:
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fastgen-*
+          path: generated-levels
+          merge-multiple: true
+      - name: Merge generated packs
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const sizes=['3x3','4x4','5x5','5x6','5x7','5x8'];
+          const levels=[];
+          for(const s of sizes){
+            const p=JSON.parse(fs.readFileSync('generated-levels/fastgen-v2-'+s+'.json','utf8'));
+            levels.push(...p.levels);
+          }
+          if(levels.length!==600) throw Error('Expected 600 levels, got '+levels.length);
+          const ids=new Set();
+          for(const l of levels){if(ids.has(l.levelId))throw Error('Duplicate ID '+l.levelId);ids.add(l.levelId)}
+          const out={format:'ggrid-level-pack',formatVersion:1,metadata:{id:'fastgen-v2-600-mixed-20260925',generatorVersion:2,seed:20260925,purpose:'generator-test',description:'600 Fast Generator v2 test levels: 10 per D-class per canonical size, 5 single-ball + 5 two-ball.'},levels};
+          fs.mkdirSync('content/levels/generated-test/packs',{recursive:true});
+          fs.writeFileSync('content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json',JSON.stringify(out)+'\n');
+          const catFile='content/levels/generated-test/catalog.json';
+          const cat=JSON.parse(fs.readFileSync(catFile,'utf8'));
+          cat.packs=(cat.packs||[]).filter(p=>p.id!=='fastgen-v2-600-mixed-20260925');
+          cat.packs.push({id:'fastgen-v2-600-mixed-20260925',src:'packs/fastgen-v2-600-mixed-20260925.json'});
+          fs.writeFileSync(catFile,JSON.stringify(cat,null,2)+'\n');
+          NODE
+      - name: Commit generated test pack
+        run: |
+          git config user.name "ggrid-fastgen"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/levels/generated-test/catalog.json content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json
+          git commit -m "v0.15.24: add 600-level Fast Generator v2 test pack"
+          git push
