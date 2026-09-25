@@ -33,8 +33,10 @@ jobs:
           git add content/levels/catalog.json content/levels/multiball/catalog.json content/levels/generated-test/catalog.json
           git add content/levels/packs/*.json content/levels/multiball/packs/*.json content/levels/generated-test/packs/*.json
           git add tools/level-metadata-v3-report.json
-          git commit -m "v0.15.27: migrate active level library to metadata v3"
+          git commit -m "v0.15.29: add Freeze requirements to level metadata"
           git pull --rebase origin main
           git push origin main
 
 # retry after duplicate bootstrap retirement
+
+# v0.15.29 Freeze requirement migration
