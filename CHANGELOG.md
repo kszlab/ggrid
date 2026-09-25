@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.47 — 2026-09-25
+
+### Windows BAT indítók kódolásbiztosítása
+- A Theme Studio indító BAT fájlok csak ASCII karaktereket használnak.
+- Ez megszünteti a Windows cmd kódlap/UTF-8 értelmezési hibáit, amelyek ékezetes `echo` sorokat külön parancstöredékekként próbáltak futtatni.
+- A szerverindító hiba esetén nyitva marad és láthatóan kiírja a Node hibát.
+
 ## v0.15.46 — 2026-09-25
 
 ### make_slots.py szintaxisjavítás
