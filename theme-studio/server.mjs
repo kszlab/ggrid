@@ -143,6 +143,30 @@ async function importArchive(tmp){
  }
  await fsp.rm(stage,{recursive:true,force:true});return id;
 }
+async function syncPipelineApproval(id,p,stage,file=null){
+ const dir=projectDir(id),ap=path.join(dir,'approval.json');
+ let a={format:'ggrid-theme-approval',formatVersion:1,themeId:id,stages:{}};
+ try{a=await load(ap)}catch{}
+ a.format='ggrid-theme-approval';a.formatVersion=1;a.themeId=id;a.stages=a.stages||{};
+ const actor=p.stages?.[stage]?.actor||'owner';
+ if(stage==='mood'&&file){
+  const src=path.join(dir,file),dest=path.join(dir,'mood.png');await copyFileWithDirs(src,dest);
+  const data=await fsp.readFile(dest);a.stages.mood={status:'approved',actor,files:[{file:'mood.png',sha256:sha256(data)}]};
+ }
+ if(stage==='target'&&file){
+  const src=path.join(dir,file),dest=path.join(dir,'target.png');await copyFileWithDirs(src,dest);
+  const data=await fsp.readFile(dest);a.stages.target={status:'approved',actor,files:[{file:'target.png',sha256:sha256(data)}]};
+ }
+ if(stage==='sheets'){
+  const names=['sheet-board.png','sheet-rigid.png','sheet-chrome.png','sheet-tiles.png'],files=[];
+  for(const name of names){
+   const data=await fsp.readFile(path.join(dir,name));files.push({file:name,sha256:sha256(data)});
+  }
+  a.stages.sheets={status:'approved',actor,files};
+ }
+ await save(ap,a);
+ return a;
+}
 async function serveStatic(req,res,url){
  let rel=url.pathname==='/'?'index.html':url.pathname.slice(1);
  if(rel.startsWith('api/'))return false;
@@ -207,7 +231,9 @@ const server=http.createServer(async(req,res)=>{
     if(stage==='target')p.stages.sheets.status='draft';
     if(stage==='sheets'){p.stages.build.status='ready';p.stages.qa.status='locked'}
     if(stage==='qa')p.stages.release.status='ready';
-   });return json(res,200,p);
+   });
+   await syncPipelineApproval(id,p,stage,file||null);
+   return json(res,200,await loadProject(id));
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/build$/);
   if(req.method==='POST'&&m){
@@ -216,7 +242,7 @@ const server=http.createServer(async(req,res)=>{
    try{
     const r=await run('python',['tools/theme-kit/kit.py','build','--input',path.relative(ROOT,dir)]);
     const qadir=path.join(dir,'builds',`build-${Date.now()}`);await fsp.mkdir(qadir,{recursive:true});
-    let qa=null;try{qa=await run('python',['tools/theme-kit/kit.py','capture','--theme',id,'--out',qadir,'--target',path.join(dir,'target','approved.png')])}catch(e){qa={out:e.out||'',err:e.err||String(e)}}
+    let qa=null;try{qa=await run('python',['tools/theme-kit/kit.py','capture','--theme',id,'--out',qadir,'--target',path.join(dir,'target.png')])}catch(e){qa={out:e.out||'',err:e.err||String(e)}}
     const up=await updateProject(id,p=>{p.stages.build.status='success';p.stages.build.history=p.stages.build.history||[];p.stages.build.history.push({started,finishedAt:now(),status:'success',log:r.out,qaDir:path.relative(dir,qadir).replaceAll('\\','/')});p.stages.qa.status='review'});
     return json(res,200,{project:up,buildLog:r.out,qa});
    }catch(e){await updateProject(id,p=>{p.stages.build.status='failed';p.stages.build.history=p.stages.build.history||[];p.stages.build.history.push({started,finishedAt:now(),status:'failed',log:e.err||e.out||String(e)})});return json(res,500,{error:String(e),log:e.err||e.out})}
