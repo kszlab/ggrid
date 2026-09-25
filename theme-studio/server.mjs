@@ -13,6 +13,26 @@ const PUBLIC=HERE;
 const PORT=Number(process.env.THEME_STUDIO_PORT||4177);
 const SLOT_SPEC=path.join(ROOT,'tools','theme-kit','slots.json');
 const BACKGROUND_FILES=['bg-portrait.png','bg-landscape.png'];
+const SESSION_TOKEN=crypto.randomBytes(24).toString('hex');
+const MAX_UPLOAD=50*1024*1024;
+const PROTECTED_UPLOADS=new Set(['project.json','approval.json','manifest.json','theme-kit.json']);
+const allowedHost=h=>/^(127\.0\.0\.1|localhost)(:\d+)?$/i.test(String(h||''));
+const inside=(base,target)=>{const b=path.resolve(base),t=path.resolve(target);return t===b||t.startsWith(b+path.sep)};
+function mutationAllowed(req){
+ if(!allowedHost(req.headers.host))return false;
+ const origin=String(req.headers.origin||'');
+ if(origin&&!['http://127.0.0.1:'+PORT,'http://localhost:'+PORT].includes(origin))return false;
+ return req.headers['x-theme-studio-token']===SESSION_TOKEN;
+}
+function pngInfo(buf){
+ if(buf.length<24||!buf.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))return null;
+ return{width:buf.readUInt32BE(16),height:buf.readUInt32BE(20)};
+}
+function validatePng(buf,w=null,h=null){
+ const i=pngInfo(buf);if(!i)throw new Error('PNG_REQUIRED');
+ if(w&&i.width!==w||h&&i.height!==h)throw new Error('INVALID_PNG_SIZE '+i.width+'x'+i.height+' expected '+w+'x'+h);
+ return i;
+}
 
 const MIME={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml'};
 const safeId=s=>/^[a-z0-9][a-z0-9-]{1,40}$/.test(s||'');
@@ -39,7 +59,7 @@ function computeStage(p){
  if(s.release?.status==='approved')return'RELEASED';
  if(s.mood?.status!=='approved')return'MOOD';
  if(s.target?.status!=='approved')return'TARGET';
- if(s.sheets?.status!=='approved'||s.sheets?.approvalMode!=='asset-pack-v2')return'ASSETS';
+ if(s.sheets?.status!=='approved'||s.sheets?.!['asset-pack-v2','asset-pack-v3'].includes(p.stages.sheets.approvalMode))return'ASSETS';
  if(s.backgrounds?.status!=='approved')return'BACKGROUNDS';
  if(s.build?.status!=='success')return'BUILD';
  if(s.qa?.status!=='approved')return'QA';
@@ -68,14 +88,15 @@ async function loadProject(id){
   catch{p.sheetFiles[name]={exists:false}}
  }
  for(const [pid,pk] of Object.entries(spec.packs||{})){
-  const name=pk.file,fp=path.join(projectDir(id),name);
-  try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.packFiles[pid]={exists:true,file:name,size:st.size,sha256:sha256(data),title:pk.title,sizePx:pk.size}}
-  catch{p.packFiles[pid]={exists:false,file:name,title:pk.title,sizePx:pk.size}}
+  const name=pk.file,candidates=[path.join(projectDir(id),'source','packs',name),path.join(projectDir(id),name)];let fp=null;
+  for(const q of candidates){try{await fsp.access(q);fp=q;break}catch{}}
+  if(fp){const data=await fsp.readFile(fp),st=await fsp.stat(fp),rel=path.relative(projectDir(id),fp).replaceAll('\\','/');p.packFiles[pid]={exists:true,file:rel,size:st.size,sha256:sha256(data),title:pk.title,sizePx:pk.size}}
+  else p.packFiles[pid]={exists:false,file:'source/packs/'+name,title:pk.title,sizePx:pk.size}
  }
  for(const slot of spec.slots||[]){
-  const override=path.join(projectDir(id),slot.id+'.png'),derived=path.join(projectDir(id),'extracted',slot.id+'.png');
+  const overrides=[path.join(projectDir(id),'overrides',slot.id+'.png'),path.join(projectDir(id),slot.id+'.png')],derived=path.join(projectDir(id),'extracted',slot.id+'.png');
   let fp=null,source=null;
-  try{await fsp.access(override);fp=override;source='override'}catch{}
+  for(const override of overrides){try{await fsp.access(override);fp=override;source='override';break}catch{}}
   if(!fp){try{await fsp.access(derived);fp=derived;source='pack'}catch{}}
   if(fp){
    const data=await fsp.readFile(fp),st=await fsp.stat(fp),rel=path.relative(projectDir(id),fp).replaceAll('\\','/');
@@ -83,10 +104,12 @@ async function loadProject(id){
   }else p.assetFiles[slot.id]={exists:false,required:slot.required!==false,role:slot.role,output:slot.output,pack:slot.pack||null};
  }
  for(const name of BACKGROUND_FILES){
-  const fp=path.join(projectDir(id),name);
-  try{const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.backgroundFiles[name]={exists:true,size:st.size,sha256:sha256(data)}}
-  catch{p.backgroundFiles[name]={exists:false}}
+  const candidates=[path.join(projectDir(id),'source','backgrounds',name),path.join(projectDir(id),name)];let fp=null;
+  for(const q of candidates){try{await fsp.access(q);fp=q;break}catch{}}
+  if(fp){const data=await fsp.readFile(fp),st=await fsp.stat(fp);p.backgroundFiles[name]={exists:true,file:path.relative(projectDir(id),fp).replaceAll('\\','/'),size:st.size,sha256:sha256(data)}}
+  else p.backgroundFiles[name]={exists:false,file:'source/backgrounds/'+name}
  }
+ p.assetOverrides=p.assetOverrides||{};
  p.themeKitSpec={packs:spec.packs||{},slots:(spec.slots||[]).map(({id,role,required=true,output,pack,packBox})=>({id,role,required,output,pack,packBox}))};
  p.computedStage=computeStage(p);return p;
 }
@@ -131,12 +154,7 @@ async function zipDirectory(src,dest){
 }
 async function unzipArchive(src,dest){
  await fsp.rm(dest,{recursive:true,force:true});await fsp.mkdir(dest,{recursive:true});
- if(process.platform==='win32'){
-  const ps='Expand-Archive -LiteralPath '+JSON.stringify(src)+' -DestinationPath '+JSON.stringify(dest)+' -Force';
-  await run('powershell.exe',['-NoProfile','-Command',ps]);
- }else{
-  await run('unzip',['-q',src,'-d',dest]);
- }
+ await run('python',['theme-studio/safe_import.py',src,dest]);
 }
 async function makeArchive(id){
  const p=await loadProject(id),dir=projectDir(id),exports=path.join(dir,'exports');await fsp.mkdir(exports,{recursive:true});
@@ -193,23 +211,37 @@ async function syncPipelineApproval(id,p,stage,file=null){
  if(stage==='sheets'){
   const spec=await loadSlotSpec(),files=[];
   for(const pk of Object.values(spec.packs||{})){
-   const data=await fsp.readFile(path.join(dir,pk.file));files.push({file:pk.file,sha256:sha256(data),kind:'pack'});
+   const candidates=[path.join(dir,'source','packs',pk.file),path.join(dir,pk.file)];let fp=null;
+   for(const q of candidates){try{await fsp.access(q);fp=q;break}catch{}}
+   if(!fp)throw new Error('Hiányzó Asset Pack: '+pk.file);
+   const data=await fsp.readFile(fp);files.push({file:path.relative(dir,fp).replaceAll('\\','/'),sha256:sha256(data),kind:'pack'});
   }
   for(const slot of spec.slots||[]){
-   const name=slot.id+'.png',fp=path.join(dir,name);
-   try{const data=await fsp.readFile(fp);files.push({file:name,sha256:sha256(data),kind:'override'})}catch{}
+   const candidates=[path.join(dir,'overrides',slot.id+'.png'),path.join(dir,slot.id+'.png')];let fp=null;
+   for(const q of candidates){try{await fsp.access(q);fp=q;break}catch{}}
+   if(fp){const data=await fsp.readFile(fp);files.push({file:path.relative(dir,fp).replaceAll('\\','/'),sha256:sha256(data),kind:'override'})}
   }
-  a.stages.sheets={status:'approved',actor,mode:'asset-pack-v2',files};
+  a.stages.sheets={status:'approved',actor,mode:'asset-pack-v3',files};
  }
  if(stage==='backgrounds'){
   const files=[];
-  for(const name of BACKGROUND_FILES){const data=await fsp.readFile(path.join(dir,name));files.push({file:name,sha256:sha256(data)})}
+  for(const name of BACKGROUND_FILES){
+   const candidates=[path.join(dir,'source','backgrounds',name),path.join(dir,name)];let fp=null;
+   for(const q of candidates){try{await fsp.access(q);fp=q;break}catch{}}
+   if(!fp)throw new Error('Hiányzó háttér: '+name);
+   const data=await fsp.readFile(fp);files.push({file:path.relative(dir,fp).replaceAll('\\','/'),sha256:sha256(data)});
+  }
   a.stages.backgrounds={status:'approved',actor,files};
  }
  await save(ap,a);
  return a;
 }
 async function serveStatic(req,res,url){
+ if(url.pathname.startsWith('/game/')){
+  const rel=url.pathname.slice('/game/'.length)||'index.html',p=path.resolve(ROOT,rel);
+  if(!inside(ROOT,p))return false;
+  try{const st=await fsp.stat(p);if(!st.isFile())return false;res.writeHead(200,{'content-type':MIME[path.extname(p).toLowerCase()]||'application/octet-stream','cache-control':'no-store','x-content-type-options':'nosniff'});fs.createReadStream(p).pipe(res);return true}catch{return false}
+ }
  let rel=url.pathname==='/'?'index.html':url.pathname.slice(1);
  if(rel.startsWith('api/'))return false;
  if(rel.startsWith('project-file/')){
@@ -224,13 +256,18 @@ async function serveStatic(req,res,url){
 const server=http.createServer(async(req,res)=>{
  try{
   const url=new URL(req.url,'http://localhost');
+  if(!allowedHost(req.headers.host))return json(res,403,{error:'invalid host'});
+  if(req.method==='GET'&&url.pathname==='/api/session')return json(res,200,{token:SESSION_TOKEN});
+  if(!['GET','HEAD','OPTIONS'].includes(req.method)&&!mutationAllowed(req))return json(res,403,{error:'forbidden'});
   if(req.method==='GET'&&url.pathname==='/api/themes')return json(res,200,{themes:await listProjects()});
   if(req.method==='POST'&&url.pathname==='/api/themes'){
    const b=JSON.parse((await readBody(req)).toString()||'{}'),id=b.id;
    if(!safeId(id))return json(res,400,{error:'invalid theme id'});
    const dir=projectDir(id);if(fs.existsSync(dir))return json(res,409,{error:'theme exists'});
-   const p={format:'ggrid-theme-project',formatVersion:2,id,name:b.name||id,description:b.description||'',strict:b.strict!==false,projectVersion:1,createdAt:now(),modifiedAt:now(),stages:{mood:{status:'draft',prompts:[]},target:{status:'locked',prompts:[]},sheets:{status:'locked',prompts:[],approvalMode:'asset-pack-v2'},backgrounds:{status:'locked',prompts:[]},build:{status:'none',history:[]},qa:{status:'locked'},release:{status:'none'}},artifacts:{},externalSources:[]};
-   await save(projectPath(id),p);return json(res,201,await loadProject(id));
+   const p={format:'ggrid-theme-project',formatVersion:4,id,name:b.name||id,description:b.description||'',strict:b.strict!==false,projectVersion:1,createdAt:now(),modifiedAt:now(),stages:{mood:{status:'draft',prompts:[]},target:{status:'locked',prompts:[]},sheets:{status:'locked',prompts:[],approvalMode:'asset-pack-v3'},backgrounds:{status:'locked',prompts:[]},build:{status:'none',history:[]},qa:{status:'locked'},release:{status:'none'}},artifacts:{},assetOverrides:{},renderer:{rigid:'material'},externalSources:[]};
+   await save(projectPath(id),p);
+   await save(path.join(dir,'theme-kit.json'),{id,name:p.name,description:p.description,strict:p.strict,version:1,renderer:{rigid:'material'}});
+   return json(res,201,await loadProject(id));
   }
   let m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)$/);
   if(req.method==='GET'&&m)return json(res,200,await loadProject(m[1]));
@@ -241,17 +278,52 @@ const server=http.createServer(async(req,res)=>{
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/upload\/(.+)$/);
   if(req.method==='PUT'&&m){
-   const id=m[1],rel=decodeURIComponent(m[2]);if(!safeRel(rel)||!['.png','.jpg','.jpeg','.webp','.json','.md'].includes(path.extname(rel).toLowerCase()))return json(res,400,{error:'invalid file'});
-   const data=await readBody(req);if(data.length>50*1024*1024)return json(res,413,{error:'file too large'});
-   const dest=path.resolve(projectDir(id),rel);if(!dest.startsWith(projectDir(id)+path.sep))return json(res,400,{error:'invalid path'});await fsp.mkdir(path.dirname(dest),{recursive:true});await fsp.writeFile(dest,data);
+   const id=m[1],rel=decodeURIComponent(m[2]),base=path.basename(rel).toLowerCase();
+   if(!safeRel(rel)||PROTECTED_UPLOADS.has(base)||!['.png','.jpg','.jpeg','.webp'].includes(path.extname(rel).toLowerCase()))return json(res,400,{error:'invalid file'});
+   const data=await readBody(req);if(data.length>MAX_UPLOAD)return json(res,413,{error:'file too large'});
+   const spec=await loadSlotSpec(),pack=Object.values(spec.packs||{}).find(x=>x.file===base);
+   if(pack)validatePng(data,pack.size[0],pack.size[1]);
+   if(BACKGROUND_FILES.includes(base)){const wh=base==='bg-portrait.png'?[1080,1620]:[1620,1080];validatePng(data,wh[0],wh[1])}
+   const dest=path.resolve(projectDir(id),rel);if(!inside(projectDir(id),dest))return json(res,400,{error:'invalid path'});await fsp.mkdir(path.dirname(dest),{recursive:true});await fsp.writeFile(dest,data);
    await updateProject(id,p=>{p.artifacts=p.artifacts||{};p.artifacts[rel]={sha256:sha256(data),size:data.length,uploadedAt:now()}});
-   const spec=await loadSlotSpec(),packNames=new Set(Object.values(spec.packs||{}).map(x=>x.file));
+   const packNames=new Set(Object.values(spec.packs||{}).map(x=>x.file));
    let extracted=null;
-   if(packNames.has(rel)){
+   if(packNames.has(path.basename(rel))){
     const r=await run('python',['tools/theme-kit/kit.py','extract-packs','--input',path.relative(ROOT,projectDir(id))]);
     try{extracted=JSON.parse(r.out.trim())}catch{extracted={log:r.out}}
    }
    return json(res,201,{file:rel,sha256:sha256(data),size:data.length,extracted});
+  }
+  m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/assets\/([a-z0-9-]+)$/);
+  if(req.method==='PUT'&&m){
+   const id=m[1],slotId=m[2],spec=await loadSlotSpec(),slot=(spec.slots||[]).find(x=>x.id===slotId);
+   if(!slot)return json(res,404,{error:'unknown asset'});
+   const data=await readBody(req);if(data.length>MAX_UPLOAD)return json(res,413,{error:'file too large'});validatePng(data);
+   const dir=projectDir(id),dest=path.join(dir,'overrides',slotId+'.png'),hist=path.join(dir,'history',slotId);
+   try{const old=await fsp.readFile(dest);await fsp.mkdir(hist,{recursive:true});await fsp.writeFile(path.join(hist,Date.now()+'.png'),old)}catch{}
+   await fsp.mkdir(path.dirname(dest),{recursive:true});await fsp.writeFile(dest,data);
+   const p=await updateProject(id,p=>{p.assetOverrides=p.assetOverrides||{};p.assetOverrides[slotId]={file:'overrides/'+slotId+'.png',status:'review',sha256:sha256(data),updatedAt:now()};p.stages.build.status='ready';p.stages.qa.status='locked'});
+   return json(res,201,p);
+  }
+  if(req.method==='DELETE'&&m){
+   const id=m[1],slotId=m[2],dir=projectDir(id),dest=path.join(dir,'overrides',slotId+'.png');
+   try{const old=await fsp.readFile(dest),hist=path.join(dir,'history',slotId);await fsp.mkdir(hist,{recursive:true});await fsp.writeFile(path.join(hist,Date.now()+'.png'),old)}catch{}
+   await fsp.rm(dest,{force:true});
+   const p=await updateProject(id,p=>{if(p.assetOverrides)delete p.assetOverrides[slotId];p.stages.build.status='ready';p.stages.qa.status='locked'});return json(res,200,p);
+  }
+  m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/quick-build$/);
+  if(req.method==='POST'&&m){
+   const id=m[1],p0=await loadProject(id);
+   if(p0.stages.sheets.status!=='approved')return json(res,409,{error:'asset packs not approved'});
+   if(p0.stages.backgrounds.status!=='approved')return json(res,409,{error:'backgrounds not approved'});
+   const p1=await updateProject(id,p=>{for(const v of Object.values(p.assetOverrides||{})){v.status='approved';v.approvedAt=now()}p.stages.sheets.approvalMode='asset-pack-v3'});
+   await syncPipelineApproval(id,p1,'sheets');
+   const dir=projectDir(id),started=now();
+   try{
+    const r=await run('python',['tools/theme-kit/kit.py','build','--input',path.relative(ROOT,dir)]);
+    const up=await updateProject(id,p=>{p.stages.build.status='success';p.stages.build.history=p.stages.build.history||[];p.stages.build.history.push({started,finishedAt:now(),status:'success',quick:true,log:r.out});p.stages.qa.status='review'});
+    return json(res,200,{project:up,buildLog:r.out});
+   }catch(e){await updateProject(id,p=>{p.stages.build.status='failed'});return json(res,500,{error:e.message||String(e),log:e.err||e.out||''})}
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/approve$/);
   if(req.method==='POST'&&m){
@@ -261,7 +333,7 @@ const server=http.createServer(async(req,res)=>{
    const p=await updateProject(id,async p=>{
     if(stage==='target'&&p.stages.mood.status!=='approved')throw new Error('mood not approved');
     if(stage==='sheets'&&p.stages.target.status!=='approved')throw new Error('target not approved');
-    if(stage==='backgrounds'&&(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='asset-pack-v2'))throw new Error('asset packs not approved');
+    if(stage==='backgrounds'&&(p.stages.sheets.status!=='approved'||!['asset-pack-v2','asset-pack-v3'].includes(p.stages.sheets.approvalMode)))throw new Error('asset packs not approved');
     let info={status:'approved',approvedAt:now(),actor:b.actor||'owner',notes:b.notes||''};
     if(stage==='sheets'){
      const spec=await loadSlotSpec(),approvedFiles={};
@@ -276,7 +348,7 @@ const server=http.createServer(async(req,res)=>{
      }
      const requiredMissing=(spec.slots||[]).filter(x=>x.required!==false&&!p.assetFiles?.[x.id]?.exists);
      if(requiredMissing.length)throw new Error('A pack kivágás után hiányzó kötelező elemek: '+requiredMissing.map(x=>x.id).join(', '));
-     info.approvedFiles=approvedFiles;info.approvalMode='asset-pack-v2';
+     info.approvedFiles=approvedFiles;info.approvalMode='asset-pack-v3';
     }else if(stage==='backgrounds'){
      const approvedFiles={};
      for(const name of BACKGROUND_FILES){
@@ -289,7 +361,7 @@ const server=http.createServer(async(req,res)=>{
     }
     p.stages[stage]={...p.stages[stage],...info};
     if(stage==='mood')p.stages.target.status='draft';
-    if(stage==='target'){p.stages.sheets.status='draft';p.stages.sheets.approvalMode='asset-pack-v2';p.stages.backgrounds.status='locked'}
+    if(stage==='target'){p.stages.sheets.status='draft';p.stages.sheets.approvalMode='asset-pack-v3';p.stages.backgrounds.status='locked'}
     if(stage==='sheets'){p.stages.backgrounds.status='draft';p.stages.build.status='none';p.stages.qa.status='locked'}
     if(stage==='backgrounds'){p.stages.build.status='ready';p.stages.qa.status='locked'}
     if(stage==='qa')p.stages.release.status='ready';
@@ -299,7 +371,7 @@ const server=http.createServer(async(req,res)=>{
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/build$/);
   if(req.method==='POST'&&m){
-   const id=m[1],p=await loadProject(id);if(p.stages.sheets.status!=='approved'||p.stages.sheets.approvalMode!=='asset-pack-v2')return json(res,409,{error:'asset packs not approved'});if(p.stages.backgrounds.status!=='approved')return json(res,409,{error:'backgrounds not approved'});
+   const id=m[1],p=await loadProject(id);if(p.stages.sheets.status!=='approved'||!['asset-pack-v2','asset-pack-v3'].includes(p.stages.sheets.approvalMode))return json(res,409,{error:'asset packs not approved'});if(p.stages.backgrounds.status!=='approved')return json(res,409,{error:'backgrounds not approved'});
    const dir=projectDir(id);const started=now();
    try{
     const r=await run('python',['tools/theme-kit/kit.py','build','--input',path.relative(ROOT,dir)]);
@@ -312,7 +384,7 @@ const server=http.createServer(async(req,res)=>{
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/export$/);
   if(req.method==='POST'&&m){const a=await makeArchive(m[1]);res.writeHead(200,{'content-type':'application/octet-stream','content-disposition':`attachment; filename="${a.name}"`,'content-length':a.size});return fs.createReadStream(a.path).pipe(res)}
   if(req.method==='POST'&&url.pathname==='/api/import'){
-   const data=await readBody(req);const tmp=path.join(ROOT,'.cache','theme-studio-import.zip');await fsp.mkdir(path.dirname(tmp),{recursive:true});await fsp.writeFile(tmp,data);
+   const data=await readBody(req);if(data.length>200*1024*1024)return json(res,413,{error:'archive too large'});const tmp=path.join(ROOT,'.cache','theme-studio-import.zip');await fsp.mkdir(path.dirname(tmp),{recursive:true});await fsp.writeFile(tmp,data);
    try{const id=await importArchive(tmp);return json(res,201,await loadProject(id))}finally{fsp.rm(tmp,{force:true}).catch(()=>{})}
   }
   m=url.pathname.match(/^\/api\/themes\/([a-z0-9-]+)\/external-sources$/);
