@@ -15,6 +15,12 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.46 — 2026-09-25
+
+### make_slots.py szintaxisjavítás
+- Javítva a `make_slots.py` sérült több soros UTF-8 írása, ahol literális `\\n` karakterek SyntaxError-t okoztak.
+- A Python szintaxisellenőrzés továbbra is kötelező a Theme Studio CI-ben.
+
 ## v0.15.45 — 2026-09-25
 
 ### Theme Kit Python szintaxis és UTF-8 javítás
