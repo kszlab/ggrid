@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.26 — 2026-09-25
+
+### Fast Generator invalid-state és kevert kvóta javítás
+- Az érvénytelen state-space jelöltek már nem állítják le a workert, hanem kiesnek és a generálás tovább fut.
+- A 600-as tesztcsomag D-osztályonként továbbra is 10 pályát céloz, de a kétgolyós arány nem kényszerített 5+5; ahol van megfelelő B2 jelölt, legfeljebb 5 kerül be, a hiányt B1 tölti fel.
+- A nagyobb pályákon a 4–6 cellás rigid alakzatok továbbra is aktívak.
+
 ## v0.15.25 — 2026-09-25
 
 ### Fast Generator CLI parser javítás
