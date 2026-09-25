@@ -38,7 +38,11 @@ function sheets(){
  }
 }
 function build(){const b=current.stages.build,q=current.stages.qa;panel(`<div class="card"><h3>Build</h3><button id="buildBtn">▶ TÉMA ÉPÍTÉSE</button><p>Build státusz: <b>${b.status}</b></p><div class="log">${esc(b.history?.at(-1)?.log||'Még nincs build.')}</div></div><div class="card"><h3>QA</h3><p>Státusz: <b>${q.status}</b></p>${b.history?.at(-1)?.qaDir?`<p>QA mappa: <code>${b.history.at(-1).qaDir}</code></p>`:''}<button id="qaApprove">✓ TÉMA ELFOGADÁSA</button></div>`);$('#buildBtn').onclick=async()=>{try{await api('/api/themes/'+current.id+'/build',{method:'POST'});await refresh()}catch(e){alert(e.message);await refresh()}};$('#qaApprove').onclick=async()=>{await api('/api/themes/'+current.id+'/approve',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({stage:'qa',actor:'Krisztián'})});await refresh()}}
-async function exportProject(){const r=await fetch('/api/themes/'+current.id+'/export',{method:'POST'});if(!r.ok)return alert('Export hiba');const b=await r.blob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=r.headers.get('content-disposition')?.match(/filename="([^"]+)/)?.[1]||current.id+'.ggrid-theme-project';a.click();URL.revokeObjectURL(a.href)}
+async function exportProject(){
+ const r=await fetch('/api/themes/'+current.id+'/export',{method:'POST'});
+ if(!r.ok){let e={};try{e=await r.json()}catch{};return alert('Export hiba: '+(e.error||r.statusText))}
+ const b=await r.blob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=r.headers.get('content-disposition')?.match(/filename="([^"]+)/)?.[1]||current.id+'.ggrid-theme-project';a.click();URL.revokeObjectURL(a.href)
+}
 $('#newBtn').onclick=async()=>{const name=prompt('Téma neve:');if(!name)return;const id=prompt('Theme ID:');if(!id)return;await api('/api/themes',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name,id,strict:true})});await refresh()}
 $('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=async()=>{const f=$('#importFile').files[0];if(!f)return;try{current=await api('/api/import',{method:'POST',body:f});tab='overview';await refresh()}catch(e){alert('Import hiba: '+e.message)}}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
