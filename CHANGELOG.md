@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.39 — 2026-09-25
+
+### Theme Studio projekt-export javítás
+- A `.ggrid-theme-project` export/import többé nem igényel Python telepítést.
+- Windows alatt a Studio a rendszer PowerShell `Compress-Archive / Expand-Archive` funkcióját használja; Linux/macOS alatt a szabványos `zip / unzip` parancsot.
+- A SHA-256 manifestet és az export staging struktúrát maga a Node szerver készíti és ellenőrzi.
+- A subprocess indítás most külön spawn-hibát is kezel.
+- Export hiba esetén a felület már a szerver tényleges hibaüzenetét mutatja, nem csak az általános „Export hiba” szöveget.
+
 ## v0.15.38 — 2026-09-25
 
 ### Theme Studio elemlap-feltöltés állapotjavítás
