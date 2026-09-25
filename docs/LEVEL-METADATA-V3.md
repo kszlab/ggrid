@@ -80,6 +80,22 @@ Az `access.entitlement` ma `null`, tehát minden tartalom elérhető. Később p
 
 A játék/UI később ebből döntheti el, hogy egy pack játszható vagy csak szürkén/lakattal jelenjen meg.
 
+## Stabil pályaazonosító és közösségi adatok
+
+A `levelId` a pálya **globálisan egyedi és tartós azonosítója**. Kiadott pálya `levelId` értéke nem változhat újracsomagolás, másik packba helyezés vagy metadata-frissítés miatt. A későbbi rating/telemetria backend kizárólag ezt használja foreign key-ként.
+
+Példa backend rekord:
+
+```json
+{
+  "levelId": "LV3-5X8-0001",
+  "userId": "...",
+  "rating": "excellent"
+}
+```
+
+A pályafájl nem hordoz közösségi összesítést vagy felhasználói állapotot.
+
 ## Mi NEM kerül a statikus pályafájlba?
 
 A felhasználói és közösségi adatok külön backend-adatok lesznek:
