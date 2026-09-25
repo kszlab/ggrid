@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.48 — 2026-09-25
+
+### Theme Kit UTF-8 kimeneti javítás véglegesítése
+- A Theme Kit minden generált JSON/CSS kimenetet explicit UTF-8 kódolással ír.
+- Javítva a kit-report, runtime theme.json, artwork.css, themes index és capture.json írása Windows alatt.
+- Ezzel megszűnik a CP1250/CP1252 UnicodeEncodeError a build végén.
+
 ## v0.15.47 — 2026-09-25
 
 ### Windows BAT indítók kódolásbiztosítása
