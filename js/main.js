@@ -222,7 +222,14 @@ function requestGeneratedTestLevel(){
  try{const l=GeneratedTestLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_GENERATED_TEST_LEVEL');applyGeneratedTestLevel(GeneratedTestLibrary.toGame(l));return true}
  catch(e){console.error('Generated test library',e);toast.textContent='Nincs generált tesztpálya ehhez a mérethez és nehézséghez.';return false}
 }
-async function startGeneratedTestGame(){cancelAutoSolve();clearSolverCache();resetWinState();await GeneratedTestLibrary.init();return requestGeneratedTestLevel()}
+async function startGeneratedTestGame(){
+ cancelAutoSolve();clearSolverCache();resetWinState();await GeneratedTestLibrary.init();
+ if(!GeneratedTestLibrary.has(selectedDims().w,selectedDims().h,Math.max(1,Math.min(10,parseInt(difficultyEl.value,10)||1)))){
+  const first=GeneratedTestLibrary.firstAvailable();if(!first){toast.textContent='Nincs generált tesztpálya.';return false}
+  sizeEl.value=first.w===first.h?String(first.w):first.w+'x'+first.h;difficultyEl.value=String(first.d);
+ }
+ return requestGeneratedTestLevel()
+}
 function leaveGeneratedTest(){document.body.classList.remove('generated-test-mode')}
 globalThis.startGeneratedTestGame=startGeneratedTestGame;
 globalThis.inGeneratedTest=inGeneratedTest;
