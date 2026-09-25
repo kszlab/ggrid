@@ -80,7 +80,7 @@ async function makeArchive(id){
   '  for s in p.get("externalSources",[]):',
   '    ap=os.path.join(root,s["path"])',
   '    if os.path.isfile(ap):',
-  '      rel="legacy-runtime/"+s["path"].replace("\\","/"); data=open(ap,"rb").read(); files[rel]=hashlib.sha256(data).hexdigest(); z.writestr(rel,data)',
+  '      rel="legacy-runtime/"+s["path"].replace(os.sep,"/"); data=open(ap,"rb").read(); files[rel]=hashlib.sha256(data).hexdigest(); z.writestr(rel,data)',
   '  manifest={"format":"ggrid-theme-project-archive","formatVersion":1,"themeId":p["id"],"projectVersion":p.get("projectVersion",1),"files":files}',
   '  z.writestr("manifest.json",json.dumps(manifest,ensure_ascii=False,indent=2)+"\\n")'
  ].join('\n');
