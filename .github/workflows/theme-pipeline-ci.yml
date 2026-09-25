@@ -1,4 +1,4 @@
-name: Theme Pipeline v1 CI
+name: Theme Pipeline v2 CI
 
 on:
   push:
@@ -33,21 +33,25 @@ jobs:
       - name: Build synthetic strict theme end to end
         run: |
           mkdir -p design/themes/ci-theme
-          cp tools/theme-kit/templates/template-board.png design/themes/ci-theme/sheet-board.png
-          cp tools/theme-kit/templates/template-rigid.png design/themes/ci-theme/sheet-rigid.png
-          cp tools/theme-kit/templates/template-chrome.png design/themes/ci-theme/sheet-chrome.png
-          cp tools/theme-kit/templates/template-tiles.png design/themes/ci-theme/sheet-tiles.png
           python - <<'PY'
           from PIL import Image,ImageDraw
           import json,os
           p='design/themes/ci-theme'
+          spec=json.load(open('tools/theme-kit/slots.json',encoding='utf-8'))
           for n in ['mood.png','target.png']:
               im=Image.new('RGB',(1024,1536),(20,30,50));ImageDraw.Draw(im).ellipse((350,550,674,874),fill=(220,180,80));im.save(p+'/'+n)
+          for i,s in enumerate(spec['slots']):
+              w,h=s['output'];im=Image.new('RGBA',(w,h),(70+(i*17)%150,80+(i*23)%130,120+(i*11)%120,255))
+              d=ImageDraw.Draw(im);d.rectangle((max(1,w//12),max(1,h//12),max(2,w-w//12),max(2,h-h//12)),outline=(245,195,75,255),width=max(2,min(w,h)//20))
+              im.save(f"{p}/{s['id']}.png")
+          Image.new('RGB',(1080,1620),(18,28,52)).save(p+'/bg-portrait.png')
+          Image.new('RGB',(1620,1080),(18,28,52)).save(p+'/bg-landscape.png')
           json.dump({'id':'ci-theme','name':'CI Theme','description':'Theme Pipeline CI','strict':True},open(p+'/theme-kit.json','w'))
           PY
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage mood --actor ci
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage target --actor ci
           python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage sheets --actor ci
+          python tools/theme-kit/kit.py approve --input design/themes/ci-theme --stage backgrounds --actor ci
           python tools/theme-kit/kit.py build --input design/themes/ci-theme
           test -f content/themes/ci-theme/theme.json
           test -f content/themes/ci-theme/raster/rigid-tiles-ring.webp
