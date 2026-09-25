@@ -20,7 +20,7 @@ node tools/generate-levels-v2.mjs --target "100@5x8:D1-D10:B1" --target "100@4x8
 node tools/generate-levels-v2.mjs --size 5x7 --classes 6-10 --balls 1,2 --count 200
 ```
 
-A `--target` elején lévő szám az adott célhoz kért teljes pályaszám. Több golyószám esetén a kvóta megoszlik köztük, a D-osztályokon belül pedig közel egyenletesen.
+A `--target` elején lévő szám az adott célhoz kért teljes pályaszám. Több golyószám esetén a kvóta pontosan megoszlik köztük, a D-osztályokon belül pedig közel egyenletesen. Az egygolyós mód 3–8 közötti egyedi táblaméreteket is elfogad (például 4×8). A kétgolyós D-besorolás jelenleg csak a kalibrált 3×3, 4×4, 5×5, 5×6, 5×7 és 5×8 méretekre engedélyezett.
 
 ## Fontos kapcsolók
 
