@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.38 — 2026-09-25
+
+### Theme Studio elemlap-feltöltés állapotjavítás
+- A négy elemlap kártyája most a tényleges projektfájlok alapján mutatja a `HIÁNYZIK / FELTÖLTVE / JÓVÁHAGYOTT` állapotot.
+- Feltöltés után megmarad az előnézet, a fájlméret és a SHA-256 hash rövidített értéke; a böngésző fájlválasztójának „Nincs fájl kiválasztva” szövege többé nem téveszthető össze a projekt feltöltési állapotával.
+- Az „Elemlapok jóváhagyása” gomb csak akkor aktív, ha mind a négy kötelező PNG ténylegesen létezik.
+- A szerver jóváhagyáskor újra beolvassa és SHA-256-tal rögzíti mind a négy elemlapot; hiányzó fájl esetén a jóváhagyás hibával leáll.
+- A jóváhagyott státusz csak addig marad érvényes, amíg a feltöltött fájl hash-e egyezik a jóváhagyott verzióval.
+
 ## v0.15.37 — 2026-09-25
 
 ### Egylépéses Theme Studio indítás Windows alatt
