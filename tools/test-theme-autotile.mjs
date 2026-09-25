@@ -21,4 +21,18 @@ for(const [name,cells] of Object.entries(shapes)){
 }
 assert.equal(api.quarterTypes(shapes.box,0).br,'fill');
 assert.equal(api.quarterTypes(shapes.L,0).tr,'outer');
-console.log(JSON.stringify({themeAutotile:'passed',shapes:Object.keys(shapes),cells:Object.values(shapes).reduce((n,a)=>n+a.length,0)}));
+
+// v2 silhouette contract: one closed external contour, no internal cell edges.
+for(const [name,cells] of Object.entries(shapes)){
+ const b=api.bounds(cells);assert.ok(b.cols>=1&&b.rows>=1,name);
+ const loops=api.boundaryLoops(cells);assert.equal(loops.length,1,name+' must be one connected outer loop');
+ const d=api.shapePath(cells);assert.match(d,/^M /);assert.ok(d.endsWith(' Z'),name);
+ const expectedExposed=cells.reduce((n,c)=>n+
+  !cells.some(q=>q.x===c.x&&q.y===c.y-1)+
+  !cells.some(q=>q.x===c.x+1&&q.y===c.y)+
+  !cells.some(q=>q.x===c.x&&q.y===c.y+1)+
+  !cells.some(q=>q.x===c.x-1&&q.y===c.y),0);
+ assert.equal(loops[0].length-1,expectedExposed,name+' outline must contain exposed edges only');
+}
+assert.equal(api.shapePath(shapes.box),'M 0 0 L 1 0 L 2 0 L 2 1 L 2 2 L 1 2 L 0 2 L 0 1 L 0 0 Z');
+console.log(JSON.stringify({themeAutotile:'passed',renderer:'silhouette-v2',shapes:Object.keys(shapes),cells:Object.values(shapes).reduce((n,a)=>n+a.length,0)}));
