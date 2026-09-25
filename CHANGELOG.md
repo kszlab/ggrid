@@ -15,6 +15,14 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.40 — 2026-09-25
+
+### Theme Studio build-előfeltétel ellenőrzés
+- A Windows indító most UTF-8 kódlapot használ, így a magyar hibaüzenetek nem torzulnak.
+- Induláskor ellenőrzi a Node.js mellett a Python jelenlétét is.
+- Ha Python hiányzik, előre jelzi, hogy a Studio használható, de a TÉMA ÉPÍTÉSE funkció nem fog működni.
+- Ha Python megvan, ellenőrzi a Pillow és Playwright csomagokat, és kiírja a pontos telepítési parancsokat.
+
 ## v0.15.39 — 2026-09-25
 
 ### Theme Studio projekt-export javítás
