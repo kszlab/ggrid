@@ -1,4 +1,4 @@
-/* GGrid Scene Renderer 3 – v0.15.15
+/* GGrid Scene Renderer 3 – v0.15.16
    Presentation-only layer. Never changes Game State or physics.
    Legacy CSS themes remain supported; artwork themes use explicit asset/layout layers. */
 const SceneRenderer=(()=>{
@@ -90,43 +90,19 @@ const SceneRenderer=(()=>{
   if(type==='brick')return p.brickSingle||p.brick||null;
   return p[type]||null;
  }
- function resolvedAssetSpec(spec,context={}){
-  let v=spec;
-  if(v&&typeof v==='object'){
-   const dir=context.direction;
-   if(dir&&v.directions?.[dir]!=null)v=v.directions[dir];
-   else if(dir&&v[dir]!=null)v=v[dir];
-   const layout=context.layout;
-   if(v&&typeof v==='object'&&layout&&v.layouts?.[layout]!=null)v=v.layouts[layout];
-   else if(v&&typeof v==='object'&&layout&&v[layout]!=null)v=v[layout];
-  }
-  return v;
- }
  function applyAsset(el,spec,context={}){
-  el.classList.remove('sr-asset-visual');
-  for(const p of ['--sr-asset-image','--sr-asset-size','--sr-asset-position'])el.style.removeProperty(p);
-  const visual=resolvedAssetSpec(spec,{layout:wrap?.dataset?.artLayout||'',...context});
-  const src=globalThis.ThemeAssets?.source?.(visual?.asset??visual,{layout:wrap?.dataset?.artLayout||'',...context})||'';
+  el.classList.remove('sr-asset-visual');el.style.removeProperty('--sr-asset-image');
+  const src=globalThis.ThemeAssets?.source?.(spec?.asset??spec,{layout:wrap?.dataset?.artLayout||'',...context})||'';
   if(!src)return false;
   const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;
-  el.classList.add('sr-asset-visual');el.style.setProperty('--sr-asset-image',`url("${String(url).replace(/"/g,'\\\"')}")`);
-  const atlas=visual?.atlas||spec?.atlas;
-  if(atlas){
-   const [aw,ah]=atlas.size||[],[x,y,w,h]=atlas.rect||[];
-   if(aw>0&&ah>0&&w>0&&h>0){
-    const sx=aw/w*100,sy=ah/h*100,px=aw===w?0:x/(aw-w)*100,py=ah===h?0:y/(ah-h)*100;
-    el.style.setProperty('--sr-asset-size',sx+'% '+sy+'%');
-    el.style.setProperty('--sr-asset-position',px+'% '+py+'%');
-   }
-  }
-  return true;
+  el.classList.add('sr-asset-visual');el.style.setProperty('--sr-asset-image',`url("${String(url).replace(/"/g,'\\\"')}")`);return true;
  }
  function clearChromeAsset(el){if(!el)return;el.classList.remove('art-chrome-asset');el.style.removeProperty('--art-chrome-image');el.style.removeProperty('--art-chrome-fit')}
  function applyChromeAsset(el,spec,context={}){
   clearChromeAsset(el);if(!spec)return false;const src=globalThis.ThemeAssets?.source?.(spec,{layout:wrap?.dataset?.artLayout||'',...context})||'';if(!src)return false;
   const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;el.classList.add('art-chrome-asset');el.style.setProperty('--art-chrome-image',`url("${String(url).replace(/"/g,'\\\"')}")`);el.style.setProperty('--art-chrome-fit',spec?.fit||'100% 100%');return true;
  }
- function clearAsset(el){if(!el)return;el.classList.remove('sr-asset-visual','art-control-zone');for(const p of ['--sr-asset-image','--sr-asset-size','--sr-asset-position'])el.style.removeProperty(p)}
+ function clearAsset(el){if(!el)return;el.classList.remove('sr-asset-visual','art-control-zone');el.style.removeProperty('--sr-asset-image')}
  function renderArtworkChrome(mode){
   const controls=theme?.artwork?.controls||{};
   for(const dir of ['up','down','left','right']){
