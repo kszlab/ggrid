@@ -15,6 +15,16 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.28 — 2026-09-25
+
+### Level Fingerprint / novelty index v1
+- Elkészült a külön futtatható pálya-ujjlenyomat és újdonságvizsgáló eszköz: `tools/level-novelty-v1.mjs`.
+- Minden pályához determinisztikus, szimmetriára normalizált SHA-256 `canonicalHash`, 64 bites `simHash` és 8 LSH bucket-kulcs számítható.
+- Az exact hash figyelmen kívül hagyja az objektumazonosítókat és az objektumok JSON-sorrendjét; négyzetes táblán a forgatások és tükrözések, téglalapnál a mérettartó tükrözések/180° forgatás azonos pályának számítanak.
+- A hasonlósági keresés indexelt LSH multi-probe módszert használ, így nem kell a teljes pályakatalógust lineárisan végigvizsgálni; a jelenlegi 8×8 bites felosztás 1 bites band-probe-bal minden legfeljebb 15 bites Hamming-távolságú jelöltet felvesz a jelölthalmazba.
+- A Fast Generator v2 `toRecord()` útvonala automatikusan beírja a `content.fingerprints` blokkot az újonnan generált pályákba.
+- Hozzáadva külön invariancia/duplikáció/hasonlóság teszt: `tools/test-level-fingerprint-v1.mjs`.
+
 ## v0.15.27 — 2026-09-25
 
 ### Egységes Level Metadata Schema v3
