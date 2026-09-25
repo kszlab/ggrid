@@ -1,0 +1,67 @@
+name: Publish FastGen v3 D10 benchmark pack
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-fastgen-v3-d10.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Sync current main
+        run: git pull --rebase origin main
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: kszlab/ggrid
+          run-id: 36114206985
+          pattern: fastgen-v3-*-d10
+          path: benchmark-artifacts
+          merge-multiple: true
+      - name: Build benchmark test pack
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path');
+          const dir='benchmark-artifacts',packId='fastgen-v3-d10-benchmark',levels=[];
+          for(const name of ['v3-5x6-b2-d10.json','v3-5x7-b2-d10.json','v3-5x8-b2-d10.json']){
+            const p=JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'));
+            for(const l of p.levels){
+              l.content={...(l.content||{}),packId,library:'generated-test',generatorVersion:3};
+              l.generator={...(l.generator||{}),version:3};
+              levels.push(l);
+            }
+          }
+          if(levels.length!==15)throw Error('Expected 15 benchmark levels, got '+levels.length);
+          const ids=new Set();for(const l of levels){if(ids.has(l.levelId))throw Error('Duplicate levelId '+l.levelId);ids.add(l.levelId)}
+          for(const size of ['5x6','5x7','5x8']){
+            const [w,h]=size.split('x').map(Number);
+            const a=levels.filter(l=>l.board.width===w&&l.board.height===h&&l.difficulty.class===10&&l.content.ballCount===2);
+            if(a.length!==5)throw Error(size+' expected 5 D10 B2 levels, got '+a.length);
+          }
+          const out={format:'ggrid-level-pack',formatVersion:1,metadata:{metadataVersion:3,id:packId,packId,library:'generated-test',levelCount:levels.length,contentType:'level-pack',status:'active',access:{entitlement:null,visibility:'public'},generatorVersion:3,purpose:'generator-test-benchmark',description:'Fast Generator v3 high-D multiball benchmark: 5x6/5x7/5x8, D10, 5 levels per size.'},levels};
+          fs.mkdirSync('content/levels/generated-test/packs',{recursive:true});
+          fs.writeFileSync('content/levels/generated-test/packs/'+packId+'.json',JSON.stringify(out)+'\n');
+          const catFile='content/levels/generated-test/catalog.json',cat=JSON.parse(fs.readFileSync(catFile,'utf8'));
+          cat.packs=(cat.packs||[]).filter(p=>p.id!==packId);
+          cat.packs.push({id:packId,src:'packs/'+packId+'.json',metadataVersion:3,contentType:'level-pack',status:'active',access:{entitlement:null,visibility:'public'},levelCount:15});
+          fs.writeFileSync(catFile,JSON.stringify(cat,null,2)+'\n');
+          console.log(JSON.stringify({packId,levels:levels.length,bySize:Object.fromEntries(['5x6','5x7','5x8'].map(s=>{const [w,h]=s.split('x').map(Number);return [s,levels.filter(l=>l.board.width===w&&l.board.height===h).length]}))},null,2));
+          NODE
+      - name: Validate metadata
+        run: node tools/verify-level-metadata-v3.mjs
+      - name: Commit benchmark pack
+        run: |
+          git config user.name "ggrid-fastgen"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/levels/generated-test/catalog.json content/levels/generated-test/packs/fastgen-v3-d10-benchmark.json
+          git commit -m "v0.15.31: add FastGen v3 D10 benchmark test pack"
+          git push origin main
