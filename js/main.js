@@ -34,6 +34,7 @@ function saveScore(){try{localStorage.setItem(SCORE_KEY,JSON.stringify(scoreData
 function inFreePlay(){return !document.body.classList.contains('scenario-mode')}
 function inMultiBallTest(){return document.body.classList.contains('multiball-test-mode')}
 function inGeneratedTest(){return document.body.classList.contains('generated-test-mode')}
+function inV3D10Benchmark(){return document.body.classList.contains('v3-d10-benchmark-mode')}
 function isScoredFreePlay(){return inFreePlay()&&!inMultiBallTest()&&!inGeneratedTest()}
 function totalBalls(s=state){return s?.objects?.filter(o=>o.type==='ball').length||0}
 function remainingBalls(s=state){return s?.objects?.filter(o=>o.type==='ball'&&!o.exited).length||0}
@@ -209,12 +210,12 @@ globalThis.startMultiBallTest=startMultiBallGame;
 globalThis.inMultiBallTest=inMultiBallTest;
 
 /* ===== FAST GENERATOR V2 ISOLATED TEST LIBRARY ===== */
-function applyGeneratedTestLevel(g){
- cancelAutoSolve();clearSolverCache();resetWinState();document.body.classList.remove('multiball-test-mode');document.body.classList.add('generated-test-mode');
+function applyGeneratedTestLevel(g,label='Generátor teszt',benchmark=false){
+ cancelAutoSolve();clearSolverCache();resetWinState();document.body.classList.remove('multiball-test-mode');document.body.classList.add('generated-test-mode');document.body.classList.toggle('v3-d10-benchmark-mode',!!benchmark);
  state=g.state;validateLevel(state);initial=cloneState(state);optimal=g.solution||[];currentLevelId=g.code;currentLevelRecord=g.level||null;
  freezeLimitEl.value='inf';freezeArmed=false;freezeId=null;freezeUsed=0;hintVisible=false;rewardedThisRun=true;solverUsedThisRun=false;toast.textContent='';
  if(optimal.length)rememberSolverRoute(state,optimal);
- const modeLabel=document.querySelector('#playModeLabel');if(modeLabel)modeLabel.textContent='Generátor teszt';
+ const modeLabel=document.querySelector('#playModeLabel');if(modeLabel)modeLabel.textContent=label;
  render();MotionControl?.onNewLevel?.();
 }
 function requestGeneratedTestLevel(){
@@ -230,9 +231,29 @@ async function startGeneratedTestGame(){
  }
  return requestGeneratedTestLevel()
 }
-function leaveGeneratedTest(){document.body.classList.remove('generated-test-mode')}
+const V3_D10_BENCHMARK_PACK='fastgen-v3-d10-benchmark';
+function requestV3D10BenchmarkLevel(){
+ const d=selectedDims();
+ try{
+  const l=GeneratedTestLibrary.nextPack(V3_D10_BENCHMARK_PACK,d.w,d.h,10);if(!l)throw Error('NO_V3_D10_BENCHMARK_LEVEL');
+  difficultyEl.value='10';applyGeneratedTestLevel(GeneratedTestLibrary.toGame(l),'V3 D10 teszt',true);return true;
+ }catch(e){console.error('V3 D10 benchmark',e);toast.textContent='Nincs V3 D10 tesztpálya ehhez a mérethez.';return false}
+}
+async function startV3D10BenchmarkGame(){
+ cancelAutoSolve();clearSolverCache();resetWinState();await GeneratedTestLibrary.init();
+ const d=selectedDims();
+ if(!GeneratedTestLibrary.hasPack(V3_D10_BENCHMARK_PACK,d.w,d.h,10)){
+  const first=GeneratedTestLibrary.firstPackAvailable(V3_D10_BENCHMARK_PACK);if(!first){toast.textContent='Nincs V3 D10 benchmarkpálya.';return false}
+  sizeEl.value=first.w===first.h?String(first.w):first.w+'x'+first.h;
+ }
+ difficultyEl.value='10';
+ return requestV3D10BenchmarkLevel();
+}
+function leaveGeneratedTest(){document.body.classList.remove('generated-test-mode','v3-d10-benchmark-mode')}
 globalThis.startGeneratedTestGame=startGeneratedTestGame;
+globalThis.startV3D10BenchmarkGame=startV3D10BenchmarkGame;
 globalThis.inGeneratedTest=inGeneratedTest;
+globalThis.inV3D10Benchmark=inV3D10Benchmark;
 
 /* ===== PRE-GENERATED LEVEL LIBRARY =====
    A player kizárólag előre generált, elemzett pályákat tölt a Level Libraryból.
@@ -254,7 +275,7 @@ function requestLibraryLevel(){
   console.error('Level library',e);toast.textContent='Nincs kompatibilis pálya ehhez a mérethez és nehézséghez.';return false;
  }
 }
-function newLevel(){return inGeneratedTest()?requestGeneratedTestLevel():inMultiBallTest()?requestMultiBallLevel():requestLibraryLevel()}
+function newLevel(){return inV3D10Benchmark()?requestV3D10BenchmarkLevel():inGeneratedTest()?requestGeneratedTestLevel():inMultiBallTest()?requestMultiBallLevel():requestLibraryLevel()}
 function playEvents(events){
  const moves=events.filter(e=>e.type==='move').length,blocked=events.some(e=>e.type==='blocked'),exited=events.some(e=>e.type==='exit'),won=events.some(e=>e.type==='win');
  if(blocked){AudioManager.blocked();SceneRenderer?.event?.('blocked')}else if(moves){AudioManager.move(moves);SceneRenderer?.event?.('move')}
