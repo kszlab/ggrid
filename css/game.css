@@ -495,3 +495,15 @@ body.multiball-test-mode .score-box strong{font-size:16px!important;letter-spaci
 .freeze-selection-marker.freeze-selection-composite.sr-shape-l3-tr::after{right:6px;left:auto;top:6px;bottom:auto}
 .freeze-selection-marker.freeze-selection-composite.sr-shape-l3-bl::after{left:6px;right:auto;bottom:6px;top:auto}
 .freeze-selection-marker.freeze-selection-composite.sr-shape-l3-br::after{right:6px;left:auto;bottom:6px;top:auto}
+
+/* Theme Pipeline v1: arbitrary rigid-body autotile quarters. */
+.piece.sr-autotile{background:transparent!important;overflow:visible}
+.piece.sr-autotile>.sr-q{position:absolute;display:block!important;opacity:1!important;background-size:600% 600%;background-repeat:no-repeat;pointer-events:none}
+.piece.sr-autotile>.sr-q-tl{left:0;top:0;right:50%;bottom:50%}
+.piece.sr-autotile>.sr-q-tr{left:50%;top:0;right:0;bottom:50%}
+.piece.sr-autotile>.sr-q-bl{left:0;top:50%;right:50%;bottom:0}
+.piece.sr-autotile>.sr-q-br{left:50%;top:50%;right:0;bottom:0}
+.piece.sr-autotile.join-l>.sr-q-tl,.piece.sr-autotile.join-l>.sr-q-bl{left:calc(-1*var(--sr-join,2px))}
+.piece.sr-autotile.join-r>.sr-q-tr,.piece.sr-autotile.join-r>.sr-q-br{right:calc(-1*var(--sr-join,2px))}
+.piece.sr-autotile.join-t>.sr-q-tl,.piece.sr-autotile.join-t>.sr-q-tr{top:calc(-1*var(--sr-join,2px))}
+.piece.sr-autotile.join-b>.sr-q-bl,.piece.sr-autotile.join-b>.sr-q-br{bottom:calc(-1*var(--sr-join,2px))}
