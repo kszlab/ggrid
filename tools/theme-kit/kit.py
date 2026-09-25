@@ -36,7 +36,16 @@ def sha(path):
  return h.hexdigest()
 
 def load_json(path,default=None):
- return json.load(open(path,encoding='utf-8')) if os.path.exists(path) else default
+ if not os.path.exists(path):return default
+ with open(path,encoding='utf-8') as fp:return json.load(fp)
+
+def write_text_atomic(path,text):
+ path=Path(path);tmp=path.with_name(path.name+'.tmp')
+ with open(tmp,'w',encoding='utf-8',newline='\n') as fp:fp.write(text)
+ os.replace(tmp,path)
+
+def write_json_atomic(path,obj,indent=2):
+ write_text_atomic(path,json.dumps(obj,ensure_ascii=False,indent=indent)+'\n')
 
 def cmd_templates(args):
  out=HERE/'templates';out.mkdir(parents=True,exist_ok=True)
@@ -141,9 +150,7 @@ def cmd_approve(args):
  miss=[n for n in names if not (inp/n).exists()]
  if miss:sys.exit('missing: '+', '.join(miss))
  st[args.stage]={'status':'approved','actor':args.actor,'files':[{'file':n,'sha256':sha(inp/n)} for n in names]}
- with open(inp/'approval.json','w',encoding='utf-8',newline='\n') as fp:
-  json.dump(a,fp,ensure_ascii=False,indent=2)
-  fp.write('\n')
+ write_json_atomic(inp/'approval.json',a)
  print('approved',args.stage)
 
 def verify_approval(inp):
