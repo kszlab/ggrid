@@ -76,4 +76,4 @@ jobs:
       - name: Theme asset integrity
         run: node tools/test-theme-assets.mjs
 
-# v0.15.21 final validation 3
+# v0.15.23 Fast Generator v2 final validation
