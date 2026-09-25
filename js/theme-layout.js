@@ -96,16 +96,18 @@
    extend:Math.max(0,finite(v.extend,0)),
    /* Signed design-space offset: positive pulls the cue toward the board,
       negative moves it outward into the surrounding control gutter. */
-   cueInset:finite(v.cueInset,0)
+   cueInset:finite(v.cueInset,0),
+   horizontalSpan:Math.min(1,Math.max(.5,finite(v.horizontalSpan,1))),
+   verticalSpan:Math.min(1,Math.max(.5,finite(v.verticalSpan,1)))
   };
  }
  function zonesForResolved(r,theme,boardBox){
   const b=boardBox||r.boxes.board||{x:0,y:0,width:r.design.width,height:r.design.height},c=controlConfig(r,theme),e=c.extend;
   return{
-   up:{x:b.x-e,y:b.y-c.gap-c.band,width:b.width+e*2,height:c.band},
-   down:{x:b.x-e,y:b.y+b.height+c.gap,width:b.width+e*2,height:c.band},
-   left:{x:b.x-c.gap-c.band,y:b.y-e,width:c.band,height:b.height+e*2},
-   right:{x:b.x+b.width+c.gap,y:b.y-e,width:c.band,height:b.height+e*2}
+   up:{x:b.x-e+b.width*(1-c.horizontalSpan)/2,y:b.y-c.gap-c.band,width:b.width*c.horizontalSpan+e*2,height:c.band},
+   down:{x:b.x-e+b.width*(1-c.horizontalSpan)/2,y:b.y+b.height+c.gap,width:b.width*c.horizontalSpan+e*2,height:c.band},
+   left:{x:b.x-c.gap-c.band,y:b.y-e+b.height*(1-c.verticalSpan)/2,width:c.band,height:b.height*c.verticalSpan+e*2},
+   right:{x:b.x+b.width+c.gap,y:b.y-e+b.height*(1-c.verticalSpan)/2,width:c.band,height:b.height*c.verticalSpan+e*2}
   };
  }
  function controlZones(theme,boardBox,width,height){
