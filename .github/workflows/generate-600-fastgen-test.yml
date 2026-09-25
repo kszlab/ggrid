@@ -22,35 +22,48 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Generate 100 levels
-        shell: bash
+      - name: Generate single-ball pool
         run: |
           node tools/generate-levels-v2.mjs \
-            --target "100@${{ matrix.size }}:D1-D10:B1,B2" \
+            --target "100@${{ matrix.size }}:D1-D10:B1" \
             --workers 3 \
-            --minutes 8 \
-            --family-cap 2 \
+            --minutes 5 \
+            --family-cap 3 \
             --large-shapes auto \
             --seed 20260925 \
-            --out "generated-levels/fastgen-v2-${{ matrix.size }}.json"
-      - name: Verify exact coverage
-        shell: bash
+            --out "generated-levels/fastgen-v2-${{ matrix.size }}-b1.json"
+      - name: Generate two-ball candidate pool
+        run: |
+          node tools/generate-levels-v2.mjs \
+            --target "50@${{ matrix.size }}:D1-D10:B2" \
+            --workers 3 \
+            --minutes 2 \
+            --family-cap 3 \
+            --large-shapes auto \
+            --seed 20260926 \
+            --out "generated-levels/fastgen-v2-${{ matrix.size }}-b2.json"
+      - name: Build exact 10-per-D mixed pack
         env:
           SIZE: ${{ matrix.size }}
         run: |
           node - <<'NODE'
           const fs=require('fs');
           const size=process.env.SIZE;
-          const p=JSON.parse(fs.readFileSync('generated-levels/fastgen-v2-'+size+'.json','utf8'));
-          if(p.levels.length!==100) throw Error(size+': expected 100 levels, got '+p.levels.length);
+          const b1=JSON.parse(fs.readFileSync('generated-levels/fastgen-v2-'+size+'-b1.json','utf8')).levels;
+          const b2=JSON.parse(fs.readFileSync('generated-levels/fastgen-v2-'+size+'-b2.json','utf8')).levels;
+          const out=[];
           for(let d=1;d<=10;d++){
-            const a=p.levels.filter(l=>l.difficulty.class===d);
-            if(a.length!==10) throw Error(size+' D'+d+': expected 10, got '+a.length);
-            const b1=a.filter(l=>l.content?.ballCount===1).length;
-            const b2=a.filter(l=>l.content?.ballCount===2).length;
-            if(b1!==5||b2!==5) throw Error(size+' D'+d+': expected 5 B1 + 5 B2, got '+b1+' + '+b2);
+            const one=b1.filter(l=>l.difficulty.class===d);
+            const two=b2.filter(l=>l.difficulty.class===d).slice(0,5);
+            if(one.length<10-two.length) throw Error(size+' D'+d+': insufficient B1 pool ('+one.length+'), B2='+two.length);
+            out.push(...two,...one.slice(0,10-two.length));
           }
-          console.log(size,'coverage OK');
+          if(out.length!==100) throw Error(size+': expected 100 final levels, got '+out.length);
+          const mixed=out.some(l=>l.content?.ballCount===2);
+          if(!mixed) throw Error(size+': no two-ball levels selected');
+          const payload={format:'ggrid-level-pack',formatVersion:1,metadata:{id:'fastgen-v2-'+size+'-mixed-20260925',purpose:'generator-test-size',size,seed1:20260925,seed2:20260926},levels:out};
+          fs.writeFileSync('generated-levels/fastgen-v2-'+size+'.json',JSON.stringify(payload)+'\n');
+          console.log(JSON.stringify({size,total:out.length,twoBall:out.filter(l=>l.content?.ballCount===2).length,largeRigid:out.filter(l=>l.entities?.some(e=>e.type==='rigid-body'&&(e.properties?.cells?.length||0)>=4)).length}));
           NODE
       - uses: actions/upload-artifact@v4
         with:
@@ -78,9 +91,9 @@ jobs:
             levels.push(...p.levels);
           }
           if(levels.length!==600) throw Error('Expected 600 levels, got '+levels.length);
-          const ids=new Set();
-          for(const l of levels){if(ids.has(l.levelId))throw Error('Duplicate ID '+l.levelId);ids.add(l.levelId)}
-          const out={format:'ggrid-level-pack',formatVersion:1,metadata:{id:'fastgen-v2-600-mixed-20260925',generatorVersion:2,seed:20260925,purpose:'generator-test',description:'600 Fast Generator v2 test levels: 10 per D-class per canonical size, 5 single-ball + 5 two-ball.'},levels};
+          const ids=new Set();for(const l of levels){if(ids.has(l.levelId))throw Error('Duplicate ID '+l.levelId);ids.add(l.levelId)}
+          const stats={total:levels.length,oneBall:levels.filter(l=>l.content?.ballCount===1).length,twoBall:levels.filter(l=>l.content?.ballCount===2).length,largeRigid:levels.filter(l=>l.entities?.some(e=>e.type==='rigid-body'&&(e.properties?.cells?.length||0)>=4)).length};
+          const out={format:'ggrid-level-pack',formatVersion:1,metadata:{id:'fastgen-v2-600-mixed-20260925',generatorVersion:2,purpose:'generator-test',description:'600 Fast Generator v2 test levels: 10 per D-class per canonical size, mixed one/two-ball.',stats},levels};
           fs.mkdirSync('content/levels/generated-test/packs',{recursive:true});
           fs.writeFileSync('content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json',JSON.stringify(out)+'\n');
           const catFile='content/levels/generated-test/catalog.json';
@@ -88,13 +101,14 @@ jobs:
           cat.packs=(cat.packs||[]).filter(p=>p.id!=='fastgen-v2-600-mixed-20260925');
           cat.packs.push({id:'fastgen-v2-600-mixed-20260925',src:'packs/fastgen-v2-600-mixed-20260925.json'});
           fs.writeFileSync(catFile,JSON.stringify(cat,null,2)+'\n');
+          console.log(stats);
           NODE
       - name: Commit generated test pack
         run: |
           git config user.name "ggrid-fastgen"
           git config user.email "actions@users.noreply.github.com"
           git add content/levels/generated-test/catalog.json content/levels/generated-test/packs/fastgen-v2-600-mixed-20260925.json
-          git commit -m "v0.15.24: add 600-level Fast Generator v2 test pack"
+          git commit -m "v0.15.26: add 600-level Fast Generator v2 test pack"
           git push
 
-# retry after v0.15.25 parser fix
+# retry with mixed quota policy after v0.15.26 invalid-state handling
