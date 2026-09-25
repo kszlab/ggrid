@@ -15,6 +15,15 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.42 — 2026-09-25
+
+### Theme Studio ↔ Theme Pipeline approval szinkron
+- A Studio mood/target/sheets jóváhagyásai most automatikusan frissítik a Theme Pipeline által használt `approval.json` fájlt.
+- Mood és target jóváhagyáskor szabványos `mood.png` illetve `target.png` másolat készül a kiválasztott képből.
+- Sheets jóváhagyáskor a négy kötelező elemlap SHA-256 hash-e bekerül a pipeline approval manifestbe.
+- A QA capture a szabványos `target.png` fájlt használja.
+- Ez megszünteti a `approval validation failed: sheets stage not approved` buildhibát a Studio-ból indított buildnél.
+
 ## v0.15.41 — 2026-09-25
 
 ### Theme Kit Windows UTF-8 javítás
