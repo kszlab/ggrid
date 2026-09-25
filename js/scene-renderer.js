@@ -177,14 +177,12 @@ const SceneRenderer=(()=>{
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
    const rectangular=globalThis.RigidShapes?.isRectangular?.(o.cells)??(o.cells.length===boxArea);
-   const rawVariant=shapeId?variants[shapeId]:null,useComposite=!!rawVariant||!!baseSpec&&rectangular,rawSpec=rawVariant||baseSpec,spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
+   const rawVariant=shapeId?variants[shapeId]:null,useSilhouette=!!tileUrls&&!rawVariant&&!baseSpec,useComposite=!!rawVariant||!!baseSpec&&rectangular||useSilhouette,rawSpec=rawVariant||baseSpec,spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
    board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>{
     el.classList.toggle('sr-composite-source',useComposite);
-    if(tileUrls&&!useComposite){globalThis.ThemeAutotile.apply(el,o,+(el.dataset.cellkey?.split(':')[1]||0),tileUrls);el.style.setProperty('--sr-join',pieceInset+'px')}
-    else globalThis.ThemeAutotile?.clear?.(el);
+    globalThis.ThemeAutotile?.clear?.(el);
    });
    if(!useComposite){
-    if(tileUrls)continue;
     if(hasVariants&&shapeId){
      const warnKey=(theme?.id||'theme')+':'+shapeId;
      if(!warnedMissingShapes.has(warnKey)){warnedMissingShapes.add(warnKey);console.warn('[GGrid Theme] Missing rigid-body variant:',theme?.id||'unknown',shapeId,'-> cell fallback')}
@@ -200,7 +198,13 @@ const SceneRenderer=(()=>{
    if(!ov){ov=document.createElement('div');ov.dataset.objectId=id;board.append(ov);componentOverlays.push(ov);}
    ov.className=spec?.className||'sr-composite';
    if(shapeId){ov.dataset.shapeId=shapeId;const shapeClass=globalThis.RigidShapes?.cssClass?.(shapeId);if(shapeClass)ov.classList.add(shapeClass)}else delete ov.dataset.shapeId;
-   ov.innerHTML=spec?.markup??'';applyAsset(ov,spec);
+   if(useSilhouette){
+    ov.innerHTML='';
+    ov.classList.add('sr-rigid-silhouette');
+    globalThis.ThemeAutotile?.applyComposite?.(ov,o,tileUrls);
+   }else{
+    ov.innerHTML=spec?.markup??'';applyAsset(ov,spec);
+   }
    ov.classList.toggle('sr-wide',maxX-minX>maxY-minY);ov.classList.toggle('sr-tall',maxY-minY>maxX-minX);ov.classList.toggle('sr-square',maxX-minX===maxY-minY);
    ov.style.left=`calc(${(o.x+minX)*cellX}% + ${inset}px)`;ov.style.top=`calc(${(o.y+minY)*cellY}% + ${inset}px)`;
    ov.style.width=`calc(${(maxX-minX+1)*cellX}% - ${inset*2}px)`;ov.style.height=`calc(${(maxY-minY+1)*cellY}% - ${inset*2}px)`;
