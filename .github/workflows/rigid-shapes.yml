@@ -45,6 +45,7 @@ jobs:
           node --check js/theme-assets.js
           node --check js/theme-layout.js
           node --check js/theme-frame.js
+          node --check js/theme-autotile.js
           node --check js/scene-renderer.js
           node --check js/main.js
           node --check js/scenario-loader.js
@@ -75,6 +76,10 @@ jobs:
         run: node tools/test-rigid-shapes.mjs
       - name: Theme Visuals V3
         run: node tools/test-theme-visuals.mjs
+      - name: Theme autotile
+        run: node tools/test-theme-autotile.mjs
+      - name: Theme Pipeline v1 schema
+        run: python tools/test-theme-pipeline-v1.py
       - name: Artwork Theme Assets
         run: node tools/test-theme-assets-v2.mjs
       - name: Artwork Theme Layout
@@ -90,4 +95,4 @@ jobs:
       - name: Theme asset integrity
         run: node tools/test-theme-assets.mjs
 
-# v0.15.34 compact Freeze solver v2 validation
+# v0.15.35 Theme Pipeline v1 validation
