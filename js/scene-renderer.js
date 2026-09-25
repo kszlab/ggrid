@@ -177,7 +177,7 @@ const SceneRenderer=(()=>{
    const xs=o.cells.map(q=>q.x),ys=o.cells.map(q=>q.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
    const boxArea=(maxX-minX+1)*(maxY-minY+1);
    const rectangular=globalThis.RigidShapes?.isRectangular?.(o.cells)??(o.cells.length===boxArea);
-   const rawVariant=shapeId?variants[shapeId]:null,useSilhouette=!!tileUrls&&!rawVariant&&!baseSpec,useComposite=!!rawVariant||!!baseSpec&&rectangular||useSilhouette,rawSpec=rawVariant||baseSpec,spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
+   const rawVariant=shapeId?variants[shapeId]:null,useSilhouette=!!tileUrls,useComposite=useSilhouette||!!rawVariant||!!baseSpec&&rectangular,rawSpec=useSilhouette?null:(rawVariant||baseSpec),spec=resolvedSpec(rawSpec,`${theme?.id||'theme'}:rigid:${shapeId}:${o.id}`);
    board.querySelectorAll('.piece[data-id="'+CSS.escape(id)+'"]').forEach(el=>{
     el.classList.toggle('sr-composite-source',useComposite);
     globalThis.ThemeAutotile?.clear?.(el);
