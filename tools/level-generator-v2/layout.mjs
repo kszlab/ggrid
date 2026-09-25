@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 // GGrid Fast Generator v2: random layouts, diversity fingerprints and records.
 import {readJson,libraryRecords,stateFromRecord} from './engine.mjs';
 
@@ -96,17 +97,20 @@ export function qualityScore(a){
  const m=a.metrics||{},turns=m.directionChanges||0,detour=m.detourMoves||0,setup=m.setupMoves||0,conflict=m.conflictMoves||0,alts=m.averageAlternatives||0,challenge=m.challengeSignal||0;
  return +Math.max(0,Math.min(1,.18*Math.min(1,turns/6)+.18*Math.min(1,detour/5)+.16*Math.min(1,setup/4)+.14*Math.min(1,conflict/3)+.14*Math.min(1,alts)+.20*Math.min(1,challenge))).toFixed(3);
 }
-export function toRecord(s,a,levelId,generator,{packId=null,familyId=null,noveltyScore=1}={}){
+export function toRecord(s,a,levelId,generator,{packId=null,familyId=null,noveltyScore=1,library='generated'}={}){
  let wall=0,brick=0,ball=0;
  const entities=s.objects.map(o=>{
   const id=o.type==='ball'?'ball'+(++ball):o.type==='wall'?'W'+(++wall):'K'+(++brick);
   return {id,type:o.type==='brick'?'rigid-body':o.type,position:{x:o.x,y:o.y},properties:{cells:o.cells.map(c=>({x:c.x,y:c.y}))}};
  });
  const features=['core.movement','core.exit','object.ball','object.rigid-body','object.wall'];if(ball>1)features.push('rule.multi-ball');
+ const rigid=s.objects.filter(o=>o.type==='brick'),sizes=rigid.map(o=>o.cells.length),hist={};for(const n of sizes)hist[n]=1+(hist[n]||0);
+ const structure={ballCount:ball,wallCount:s.objects.filter(o=>o.type==='wall').length,rigidBodyCount:rigid.length,rigidCellCount:sizes.reduce((x,y)=>x+y,0),multiCellRigidCount:sizes.filter(n=>n>1).length,largeRigidCount:sizes.filter(n=>n>=4).length,maxRigidCells:sizes.length?Math.max(...sizes):0,rigidSizeHistogram:hist};
+ const normalizedFamily=familyId?(String(familyId).startsWith('fam-')?String(familyId):'fam-'+createHash('sha256').update(String(familyId)).digest('hex').slice(0,16)):null;
  return {format:'ggrid-level',formatVersion:2,levelId,rulesVersion:1,requires:{features},
   board:{width:s.width,height:s.height,exit:{direction:s.exit.dir,x:s.exit.x,y:s.exit.y}},entities,initialResources:{freeze:0},
   difficulty:{class:a.difficulty,score:a.raw,modelVersion:a.model},
-  analysis:{solution:a.optimalSolution,metrics:a.metrics,qualityScore:qualityScore(a),noveltyScore},
-  content:{packId,familyId,ballCount:ball,generatorVersion:2},
+  analysis:{solution:a.optimalSolution,metrics:a.metrics,qualityScore:qualityScore(a),noveltyScore,qualityMethod:'solver-metrics-v1',noveltyMethod:'family-frequency-v1'},
+  content:{metadataVersion:3,packId,library,familyId:normalizedFamily,ballCount:ball,generatorVersion:2,structure,provenance:{origin:'generated',metadataMigratedBy:null,generatorTool:generator?.tool||null}},
   generator};
 }
