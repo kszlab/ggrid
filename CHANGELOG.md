@@ -15,6 +15,31 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.54 — 2026-09-25
+
+### Theme Studio v1.0 — asset-first szerkesztés, gyors override és valódi játékmotoros preview
+- A normál téma-authoring belépési pont továbbra is kevés nagy kép: **5 Asset Pack + 2 háttér**. A Studio ezeket automatikusan kis runtime assetekre bontja.
+- Új **Asset Pack E / UI primitives** került be: `button-square`, `button-round`, `button-wide`, `button-menu`, `score-box`. A HUD így nem kényszerül előre festett gombrekeszekre.
+- Minden kis asset külön PNG-vel felülírható. Az override az eredeti packot nem módosítja; törölhető, ekkor a rendszer visszaáll a packból kivágott változatra.
+- Az override-ok előző változatai helyi history mappába kerülnek, a felülírások státusza külön követhető.
+- Új **Jóváhagyás + gyors build** útvonal csak a runtime témát építi újra; nem készít minden iterációnál teljes screenshot QA-t.
+- Új **Próbajáték** fül ugyanazt a GGrid motort tölti be iframe-ben, mint a valódi játék. Méret és D-osztály választható, a build egy kattintással újratölthető.
+- A játék query-paraméteres Theme Studio preview módot kapott, amely automatikusan betölti a kiválasztott témát és elindítja a játékot.
+- A rigid megjelenítés projektbeállításként választható: `material` (folytonos sziluett), `shape` (külön festett alakok), `tiles` (legacy autotile).
+- A témázott UI gombok normál/pressed/disabled/selected állapotait a runtime programozottan állítja elő, így nem kell minden állapothoz külön PNG.
+- A Theme Kit input feloldási sorrendje: **override → packból kivágott asset → legacy fallback**.
+- Új projektformátum v4 és Asset Pack schema v4 készült.
+
+### Theme Studio biztonsági megerősítés
+- A Studio továbbra is kizárólag `127.0.0.1`-en figyel.
+- Host és Origin ellenőrzés került a szerverbe.
+- Minden módosító API hívás sessionönként véletlen CSRF tokenhez kötött.
+- A generikus upload endpoint nem írhatja felül a `project.json`, `approval.json`, `manifest.json` és `theme-kit.json` fájlokat.
+- A packok és hátterek PNG fejlécét és kötelező pixelméretét szerveroldalon ellenőrizzük.
+- Az import külön biztonságos ZIP-kibontót használ: path traversal/ZIP slip, symlink, túl sok fájl, túl nagy kibontott tartalom és manifesten kívüli fájl tiltott.
+- A projektimport csak a manifestben felsorolt fájlokat másolja a projektbe.
+- A Studio UI a projektből származó szövegeket escape-eli / DOM textként kezeli, hogy ne legyen stored-XSS útvonal.
+
 ## v0.15.53 — 2026-09-25
 
 ### Egybefüggő rigid-body sziluett renderer
