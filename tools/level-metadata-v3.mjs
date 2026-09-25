@@ -6,6 +6,7 @@ import {familyFingerprint,qualityScore} from './level-generator-v2/layout.mjs';
 export const LEVEL_METADATA_VERSION=3;
 export const NOVELTY_METHOD='family-frequency-v1';
 export const QUALITY_METHOD='solver-metrics-v1';
+export const FREEZE_STATUSES=new Set(['not-required','required','unknown']);
 
 const round3=n=>+Number(n||0).toFixed(3);
 const cellsOf=e=>Array.isArray(e?.properties?.cells)&&e.properties.cells.length?e.properties.cells:[{x:0,y:0}];
@@ -53,6 +54,13 @@ export function packMetadata(packId,library,levelCount){
  };
 }
 
+export function freezeRequirementFor(level){
+ const current=level.analysis?.solutionRequirements?.freeze;
+ if(current&&FREEZE_STATUSES.has(current.status))return current;
+ if(Array.isArray(level.analysis?.solution))return {status:'not-required',minimumUses:0};
+ return {status:'unknown',minimumUses:null};
+}
+
 export function enrichLevel(level,{packId,library,familyCount=1}){
  const structure=structureMetadata(level);
  const familyId=familyIdFor(level);
@@ -82,7 +90,11 @@ export function enrichLevel(level,{packId,library,familyCount=1}){
    ...(quality===null?{}:{qualityScore:quality}),
    noveltyScore:novelty,
    qualityMethod:QUALITY_METHOD,
-   noveltyMethod:NOVELTY_METHOD
+   noveltyMethod:NOVELTY_METHOD,
+   solutionRequirements:{
+    ...(level.analysis?.solutionRequirements||{}),
+    freeze:freezeRequirementFor(level)
+   }
   }
  };
 }
@@ -99,5 +111,10 @@ export function validateMetadataV3(level,{packId=null}={}){
  if(!c?.structure)errors.push('content.structure');
  if(!Number.isFinite(a?.noveltyScore)||a.noveltyScore<=0||a.noveltyScore>1)errors.push('analysis.noveltyScore');
  if(a?.qualityScore!==undefined&&(!Number.isFinite(a.qualityScore)||a.qualityScore<0||a.qualityScore>1))errors.push('analysis.qualityScore');
+ const fr=a?.solutionRequirements?.freeze;
+ if(!fr||!FREEZE_STATUSES.has(fr.status))errors.push('analysis.solutionRequirements.freeze.status');
+ else if(fr.status==='not-required'&&fr.minimumUses!==0)errors.push('analysis.solutionRequirements.freeze.minimumUses');
+ else if(fr.status==='required'&&(!Number.isInteger(fr.minimumUses)||fr.minimumUses<1))errors.push('analysis.solutionRequirements.freeze.minimumUses');
+ else if(fr.status==='unknown'&&fr.minimumUses!==null)errors.push('analysis.solutionRequirements.freeze.minimumUses');
  return errors;
 }
