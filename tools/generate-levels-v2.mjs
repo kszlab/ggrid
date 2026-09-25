@@ -14,13 +14,13 @@ import {fingerprint,libraryFingerprints,toRecord} from './level-generator-v2/lay
 
 function parseRange(txt,prefix=''){
  const out=new Set();
- for(const raw of String(txt).split(',')){const part=raw.replace(prefix,'');const [a,b]=part.split('-').map(Number);for(let x=a;x<=(b||a);x++)out.add(x)}
+ for(const raw of String(txt).split(',')){const part=raw.toUpperCase().split(String(prefix).toUpperCase()).join('');const [a,b]=part.split('-').map(Number);for(let x=a;x<=(b||a);x++)out.add(x)}
  return [...out].filter(Number.isFinite).sort((a,b)=>a-b);
 }
 function parseTarget(txt){
- const m=String(txt).match(/^(\d+)@(\d+)x(\d+):D([0-9,-]+):B([0-9,]+)$/i);
+ const m=String(txt).match(/^(\d+)@(\d+)x(\d+):D([0-9D,-]+):B([0-9B,]+)$/i);
  if(!m)throw Error('Invalid --target '+txt+'; expected e.g. 100@5x8:D1-D10:B1,B2');
- const count=+m[1],w=+m[2],h=+m[3],classes=parseRange(m[4]),balls=parseRange(m[5]);
+ const count=+m[1],w=+m[2],h=+m[3],classes=parseRange(m[4],'D'),balls=parseRange(m[5],'B');
  return {count,w,h,classes,balls,label:txt};
 }
 function parseArgs(argv){
