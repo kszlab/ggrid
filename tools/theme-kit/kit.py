@@ -12,7 +12,7 @@ def load_slots():
   import make_slots;make_slots.main()
  try:
   with open(SLOTS_FILE,encoding='utf-8') as f:data=json.load(f)
-  if data.get('formatVersion',0)>=3 and data.get('packs'):return data
+  if data.get('formatVersion',0)>=4 and data.get('packs'):return data
  except UnicodeDecodeError:
   pass
  data=make_spec()
@@ -48,6 +48,13 @@ def write_text_atomic(path,text):
 
 def write_json_atomic(path,obj,indent=2):
  write_text_atomic(path,json.dumps(obj,ensure_ascii=False,indent=indent)+'\n')
+
+def resolve_input_file(inp,*rels):
+ inp=Path(inp)
+ for rel in rels:
+  p=inp/rel
+  if p.exists():return p
+ return None
 
 def cmd_templates(args):
  out=HERE/'templates';out.mkdir(parents=True,exist_ok=True)
@@ -107,8 +114,8 @@ def extract_packs(inp):
  inp=Path(inp);derived=inp/'extracted';derived.mkdir(parents=True,exist_ok=True)
  packs={}
  for pid,pk in KIT.get('packs',{}).items():
-  p=inp/pk['file']
-  if p.exists():packs[pid]=Image.open(p).convert('RGBA').resize(tuple(pk['size']),Image.Resampling.LANCZOS)
+  p=resolve_input_file(inp,pk['file'],Path('source/packs')/pk['file'])
+  if p:packs[pid]=Image.open(p).convert('RGBA').resize(tuple(pk['size']),Image.Resampling.LANCZOS)
  written=[]
  for s in KIT['slots']:
   pid=s.get('pack')
@@ -127,7 +134,8 @@ def slice_assets(inp,out):
   p=inp/sh['file']
   if p.exists():sheets[sid]=Image.open(p).convert('RGBA').resize(tuple(sh['size']),Image.Resampling.LANCZOS)
  for slot in KIT['slots']:
-  sid=slot['id'];single=next((inp/(sid+e) for e in ['.png','.webp','.jpg'] if (inp/(sid+e)).exists()),None)
+  sid=slot['id']
+  single=next((p for e in ['.png','.webp','.jpg'] for p in [resolve_input_file(inp,Path('overrides')/(sid+e),sid+e)] if p),None)
   derived=inp/'extracted'/(sid+'.png')
   src=None
   if single:im=key_image(Image.open(single));src='override'
@@ -150,8 +158,10 @@ def slice_assets(inp,out):
   outim=fit(crop,slot);outim.save(ras/(sid+'.webp'),'WEBP',quality=96,method=6)
   report['slots'][sid]={'status':'warn' if warnings else 'ok','warnings':warnings,'required':sid in REQUIRED,'source':src,'file':'raster/'+sid+'.webp'}
  for eid,e in KIT['extras'].items():
-  p=inp/e['file']
-  if not p.exists():report['extras'][eid]={'status':'missing'};continue
+  rels=[e['file']]
+  if eid in ('bg-portrait','bg-landscape'):rels.insert(0,Path('source/backgrounds')/e['file'])
+  p=resolve_input_file(inp,*rels)
+  if not p:report['extras'][eid]={'status':'missing'};continue
   im=Image.open(p).convert('RGB').resize(tuple(e['output']),Image.Resampling.LANCZOS);name='preview.webp' if eid=='target' else eid+'.webp';im.save(ras/name,'WEBP',quality=94,method=6);report['extras'][eid]={'status':'ok','file':'raster/'+name}
  counts={k:sum(1 for v in report['slots'].values() if v['status']==k) for k in ['ok','warn','missing']}
  counts['requiredMissing']=sum(1 for k,v in report['slots'].items() if v['required'] and v['status']=='missing')
@@ -179,15 +189,29 @@ def cmd_approve(args):
  if args.stage=='mood':names=['mood.png']
  elif args.stage=='target':names=['target.png']
  elif args.stage=='sheets':
-  names=[pk['file'] for pk in KIT.get('packs',{}).values()]
-  # Root-level per-slot files are optional manual corrections and override the pack.
-  names += [s['id']+'.png' for s in KIT['slots'] if (inp/(s['id']+'.png')).exists()]
- elif args.stage=='backgrounds':names=['bg-portrait.png','bg-landscape.png']
+  files=[]
+  for pk in KIT.get('packs',{}).values():
+   p=resolve_input_file(inp,pk['file'],Path('source/packs')/pk['file'])
+   if not p:sys.exit('missing: '+pk['file'])
+   files.append({'file':str(p.relative_to(inp)).replace('\\','/'),'sha256':sha(p)})
+  for s in KIT['slots']:
+   p=resolve_input_file(inp,Path('overrides')/(s['id']+'.png'),s['id']+'.png')
+   if p:files.append({'file':str(p.relative_to(inp)).replace('\\','/'),'sha256':sha(p)})
+  st[args.stage]={'status':'approved','actor':args.actor,'files':files,'mode':'asset-pack-v3'}
+  write_json_atomic(inp/'approval.json',a);print('approved',args.stage);return
+ elif args.stage=='backgrounds':
+  files=[]
+  for n in ('bg-portrait.png','bg-landscape.png'):
+   p=resolve_input_file(inp,Path('source/backgrounds')/n,n)
+   if not p:sys.exit('missing: '+n)
+   files.append({'file':str(p.relative_to(inp)).replace('\\','/'),'sha256':sha(p)})
+  st[args.stage]={'status':'approved','actor':args.actor,'files':files}
+  write_json_atomic(inp/'approval.json',a);print('approved',args.stage);return
  else:names=['target.png','bg-portrait.png','bg-landscape.png']+[s['id']+'.png' for s in KIT['slots'] if s.get('required',True)]
  miss=[n for n in names if not (inp/n).exists()]
  if miss:sys.exit('missing: '+', '.join(miss))
  st[args.stage]={'status':'approved','actor':args.actor,'files':[{'file':n,'sha256':sha(inp/n)} for n in names]}
- if args.stage=='sheets':st[args.stage]['mode']='asset-pack-v2'
+ if args.stage=='sheets':st[args.stage]['mode']='asset-pack-v3'
  write_json_atomic(inp/'approval.json',a)
  print('approved',args.stage)
 
@@ -196,7 +220,7 @@ def verify_approval(inp):
  for stage in ('sheets','backgrounds'):
   s=a.get('stages',{}).get(stage,{})
   if s.get('status')!='approved':err.append(stage+' stage not approved')
-  if stage=='sheets' and s.get('mode')!='asset-pack-v2':err.append('sheets stage is not Asset Pack v2 mode')
+  if stage=='sheets' and s.get('mode') not in ('asset-pack-v2','asset-pack-v3'):err.append('sheets stage is not Asset Pack mode')
   for r in s.get('files',[]):
    p=Path(inp)/r['file']
    if not p.exists():err.append(r['file']+' missing')
@@ -273,10 +297,13 @@ def cmd_build(args):
   # but no separately painted background yet. Dedicated backgrounds always win.
   p=ex.get('target',{}).get('file');layers['background']={'portrait':p,'landscape':p}
  ui={k:{'asset':R(k),'fit':'100% 100%'} for k in ['hud','header','victory'] if have(k)}
+ uiControls={}
+ for k in ['button-square','button-round','button-wide','button-menu','score-box']:
+  if have(k):uiControls[k]={'asset':R(k),'fit':'100% 100%'}
  digest=hashlib.sha1(b''.join(open(ras/f,'rb').read() for f in sorted(os.listdir(ras)))).hexdigest()[:8]
  preview=ex.get('showcase',{}).get('file') or ex.get('target',{}).get('file') or ex.get('bg-portrait',{}).get('file')
  sem={'ball':'Golyó','brick':'Mozgó elem','wall':'Fal','exit':'Kijárat','freeze':'Freeze'};sem.update(meta.get('semantic',{}))
- theme={'format':'ggrid-theme','formatVersion':2,'id':tid,'version':int(meta.get('version',1)),'name':meta['name'],'description':meta.get('description',''),'semantic':sem,'scene':{'type':tid,'tier':'showcase'},'pieces':{k:{'name':sem[k]} for k in ['ball','brick','wall','exit']},'abilities':{'freeze':{'name':sem['freeze']}},'preview':{'shortName':meta.get('shortName',meta['name']),'tag':meta.get('tag',''),'description':meta.get('description',''),'image':f'content/themes/{tid}/'+preview if preview else ''},'renderMode':'artwork','render':{'pieceInsetPx':.8,'rigidInsetPx':.4,'moveMs':190},'artwork':{'version':2,'landscapeMinAspect':1.18,'layouts':{'portrait':{'designSize':[540,610],'boxes':{'boardSafe':[46,68,448,448]},'controls':{'band':42,'gap':2,'extend':4}},'landscape':{'designSize':[900,520],'boxes':{'boardSafe':[165,70,570,360]},'controls':{'band':54,'gap':5,'extend':5}}},'layers':layers,'board':board,'pieces':pieces,'controls':controls,'ui':ui,'layoutMode':'portrait'},'ui':{'skin':'full','sceneChrome':True,'tokens':tok},'themeKit':{'version':2,'report':'kit-report.json','approval':{'file':'approval.json','stage':'sheets','strict':meta.get('strict',True)},'assetsDigest':digest}}
+ theme={'format':'ggrid-theme','formatVersion':2,'id':tid,'version':int(meta.get('version',1)),'name':meta['name'],'description':meta.get('description',''),'semantic':sem,'scene':{'type':tid,'tier':'showcase'},'pieces':{k:{'name':sem[k]} for k in ['ball','brick','wall','exit']},'abilities':{'freeze':{'name':sem['freeze']}},'preview':{'shortName':meta.get('shortName',meta['name']),'tag':meta.get('tag',''),'description':meta.get('description',''),'image':f'content/themes/{tid}/'+preview if preview else ''},'renderMode':'artwork','render':{'pieceInsetPx':.8,'rigidInsetPx':.4,'moveMs':190},'renderer':{'rigid':meta.get('renderer',{}).get('rigid','material')},'artwork':{'version':3,'landscapeMinAspect':1.18,'layouts':{'portrait':{'designSize':[540,610],'boxes':{'boardSafe':[46,68,448,448]},'controls':{'band':42,'gap':2,'extend':4}},'landscape':{'designSize':[900,520],'boxes':{'boardSafe':[165,70,570,360]},'controls':{'band':54,'gap':5,'extend':5}}},'layers':layers,'board':board,'pieces':pieces,'controls':controls,'ui':ui,'uiControls':uiControls,'layoutMode':'portrait'},'ui':{'skin':'full','sceneChrome':True,'tokens':tok},'themeKit':{'version':3,'report':'kit-report.json','approval':{'file':'approval.json','stage':'sheets','strict':meta.get('strict',True)},'assetsDigest':digest}}
  with open(tdir/'theme.json','w',encoding='utf-8',newline='\n') as fp:
   json.dump(theme,fp,ensure_ascii=False,indent=2)
   fp.write('\n')
