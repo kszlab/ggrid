@@ -25,7 +25,7 @@ while(!Atomics.load(needed,0)&&open()){
   if(a.status!=='ok'){stats.trivial++;continue}
   if(usedClasses.has(a.difficulty)||Atomics.load(needed,a.difficulty)<=0)continue;
   usedClasses.add(a.difficulty);stats.candidates++;
-  parentPort.postMessage({type:'candidate',state:s,analysis:a,fingerprint:f,family:fingerprint(s)+'#'+familyFingerprint(s)});
+  parentPort.postMessage({type:'candidate',state:s,analysis:a,fingerprint:f,family:familyFingerprint(s)});
  }
  if(Date.now()-lastReport>2500){parentPort.postMessage({type:'stats',stats:{...stats}});lastReport=Date.now()}
 }
