@@ -21,6 +21,8 @@ jobs:
         run: |
           node --check theme-studio/server.mjs
           node --check theme-studio/app.js
+          python -m py_compile tools/theme-kit/kit.py
+          python -m py_compile tools/theme-kit/make_slots.py
       - name: Start Theme Studio
         run: |
           node theme-studio/server.mjs > /tmp/theme-studio.log 2>&1 &
