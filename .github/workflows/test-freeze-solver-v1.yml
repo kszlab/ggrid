@@ -1,4 +1,4 @@
-name: Freeze Solver v1 focused test
+name: Freeze Solver focused tests
 
 on:
   push:
@@ -16,4 +16,8 @@ jobs:
         with:
           node-version: "22"
       - run: node --check js/freeze-solver-v1.js
+      - run: node --check js/freeze-solver-v2.js
       - run: node tools/test-freeze-solver-v1.mjs
+      - run: node tools/test-freeze-solver-v2.mjs
+
+# v0.15.34 focused v2 validation
