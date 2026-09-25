@@ -4,10 +4,6 @@
   "description": "Fast Generator v2 isolated test library. Packs published with tools/generate-levels-v2.mjs --publish-test appear here.",
   "packs": [
     {
-      "id": "fastgen-v2-bootstrap-3x3",
-      "src": "packs/fastgen-v2-bootstrap-3x3.json"
-    },
-    {
       "id": "fastgen-v2-600-mixed-20260925",
       "src": "packs/fastgen-v2-600-mixed-20260925.json"
     }
