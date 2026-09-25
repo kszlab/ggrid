@@ -1,0 +1,45 @@
+name: Benchmark FastGen v3 high-D multiball
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/benchmark-fastgen-v3.yml"
+
+jobs:
+  benchmark:
+    strategy:
+      fail-fast: false
+      matrix:
+        size: ["5x6","5x7","5x8"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Generate B2 D10 sample
+        shell: bash
+        run: |
+          node tools/generate-levels-v3.mjs \
+            --target "5@${{ matrix.size }}:D10:B2" \
+            --minutes 4 \
+            --workers 3 \
+            --seed 30330 \
+            --novelty off \
+            --official-check \
+            --out "generated-levels/v3-${{ matrix.size }}-b2-d10.json"
+      - name: Report
+        env:
+          SIZE: ${{ matrix.size }}
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),s=process.env.SIZE;
+          const p=JSON.parse(fs.readFileSync('generated-levels/v3-'+s+'-b2-d10.json','utf8'));
+          console.log(JSON.stringify({size:s,levels:p.levels.length,raw:p.levels.map(l=>l.difficulty.score),moves:p.levels.map(l=>l.analysis.metrics.optimalMoves),strategies:p.metadata.generatorVersion},null,2));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fastgen-v3-${{ matrix.size }}-d10
+          path: generated-levels/v3-${{ matrix.size }}-b2-d10.json
