@@ -144,22 +144,32 @@ def approval(inp):
 
 def cmd_approve(args):
  inp=Path(args.input);meta=load_json(inp/'theme-kit.json');a=approval(inp);a['themeId']=meta['id'];st=a.setdefault('stages',{})
- pre={'target':'mood','sheets':'target','release':'sheets'}.get(args.stage)
+ pre={'target':'mood','sheets':'target','backgrounds':'sheets','release':'backgrounds'}.get(args.stage)
  if pre and st.get(pre,{}).get('status')!='approved':sys.exit(f'{args.stage} requires approved {pre}')
- names={'mood':['mood.png'],'target':['target.png'],'sheets':[v['file'] for v in KIT['sheets'].values()],'release':['target.png']+[v['file'] for v in KIT['sheets'].values()]}[args.stage]
+ if args.stage=='mood':names=['mood.png']
+ elif args.stage=='target':names=['target.png']
+ elif args.stage=='sheets':
+  names=[s['id']+'.png' for s in KIT['slots'] if s.get('required',True)]
+  names += [s['id']+'.png' for s in KIT['slots'] if not s.get('required',True) and (inp/(s['id']+'.png')).exists()]
+ elif args.stage=='backgrounds':names=['bg-portrait.png','bg-landscape.png']
+ else:names=['target.png','bg-portrait.png','bg-landscape.png']+[s['id']+'.png' for s in KIT['slots'] if s.get('required',True)]
  miss=[n for n in names if not (inp/n).exists()]
  if miss:sys.exit('missing: '+', '.join(miss))
  st[args.stage]={'status':'approved','actor':args.actor,'files':[{'file':n,'sha256':sha(inp/n)} for n in names]}
+ if args.stage=='sheets':st[args.stage]['mode']='individual'
  write_json_atomic(inp/'approval.json',a)
  print('approved',args.stage)
 
 def verify_approval(inp):
- a=approval(inp);s=a.get('stages',{}).get('sheets',{});err=[]
- if s.get('status')!='approved':err.append('sheets stage not approved')
- for r in s.get('files',[]):
-  p=Path(inp)/r['file']
-  if not p.exists():err.append(r['file']+' missing')
-  elif sha(p)!=r['sha256']:err.append(r['file']+' changed after approval')
+ a=approval(inp);err=[]
+ for stage in ('sheets','backgrounds'):
+  s=a.get('stages',{}).get(stage,{})
+  if s.get('status')!='approved':err.append(stage+' stage not approved')
+  if stage=='sheets' and s.get('mode') not in (None,'individual'):err.append('sheets stage is not individual-asset mode')
+  for r in s.get('files',[]):
+   p=Path(inp)/r['file']
+   if not p.exists():err.append(r['file']+' missing')
+   elif sha(p)!=r['sha256']:err.append(r['file']+' changed after approval')
  return a,err
 
 def cmd_slice(args):
@@ -289,7 +299,7 @@ def cmd_capture(args):
 def main():
  p=argparse.ArgumentParser();sp=p.add_subparsers(dest='cmd',required=True)
  sp.add_parser('templates')
- a=sp.add_parser('approve');a.add_argument('--input',required=True);a.add_argument('--stage',required=True,choices=['mood','target','sheets','release']);a.add_argument('--actor',default='owner')
+ a=sp.add_parser('approve');a.add_argument('--input',required=True);a.add_argument('--stage',required=True,choices=['mood','target','sheets','backgrounds','release']);a.add_argument('--actor',default='owner')
  a=sp.add_parser('slice');a.add_argument('--input',required=True);a.add_argument('--out',required=True)
  a=sp.add_parser('build');a.add_argument('--input',required=True)
  a=sp.add_parser('scaffold');a.add_argument('--theme',default='classic')
