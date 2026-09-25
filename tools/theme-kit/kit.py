@@ -7,9 +7,17 @@ from make_slots import spec as make_spec
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parent.parent
 SLOTS_FILE=HERE/'slots.json'
-if not SLOTS_FILE.exists():
- import make_slots;make_slots.main()
-KIT=json.load(open(SLOTS_FILE,encoding='utf-8'))
+def load_slots():
+ if not SLOTS_FILE.exists():
+  import make_slots;make_slots.main()
+ try:
+  with open(SLOTS_FILE,encoding='utf-8') as f:return json.load(f)
+ except UnicodeDecodeError:
+  data=make_spec()
+  with open(SLOTS_FILE,'w',encoding='utf-8',newline='\\n') as f:
+   json.dump(data,f,ensure_ascii=False,indent=1);f.write('\\n')
+  return data
+KIT=load_slots()
 SLOTS={s['id']:s for s in KIT['slots']}
 KEY=tuple(KIT['keyColor'])
 REQUIRED={s['id'] for s in KIT['slots'] if s.get('required',True)}
