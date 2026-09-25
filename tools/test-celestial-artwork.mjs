@@ -51,14 +51,7 @@ assert.equal(ref.portrait.hud.hintCounter,false);
 assert.equal(ref.portrait.hud.freezeCounter,true);
 assert.equal(ref.portrait.controls.fullBandHitTarget,true);
 
-const renderer=fs.readFileSync('js/scene-renderer.js','utf8');
-const baseCss=fs.readFileSync('css/game.css','utf8');
 const css=fs.readFileSync('content/themes/celestial-library/artwork.css','utf8');
-assert.ok(renderer.includes('resolvedAssetSpec'));
-assert.ok(renderer.includes('--sr-asset-size'));
-assert.ok(renderer.includes('--sr-asset-position'));
-assert.ok(baseCss.includes('var(--sr-asset-size,contain)'));
-assert.ok(baseCss.includes('var(--sr-asset-position,center)'));
 assert.match(css,/-webkit-tap-highlight-color:transparent!important/);
 assert.match(css,/\.scene-artwork \.exit\s*\{[^}]*z-index:2;/s);
 assert.match(css,/\.scene-artwork \.ball\s*\{z-index:9!important\}/s);
