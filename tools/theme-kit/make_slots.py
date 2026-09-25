@@ -39,5 +39,9 @@ def spec():
    'showcase':{'file':'showcase.png','output':[1024,1536]}},
   'slots':slots}
 def main():
- p=os.path.join(HERE,'slots.json')\n with open(p,'w',encoding='utf-8',newline='\\n') as f:\n  json.dump(spec(),f,ensure_ascii=False,indent=1);f.write('\\n')\n print(p)
+ p=os.path.join(HERE,'slots.json')
+ with open(p,'w',encoding='utf-8',newline='\n') as f:
+  json.dump(spec(),f,ensure_ascii=False,indent=1)
+  f.write('\n')
+ print(p)
 if __name__=='__main__':main()
