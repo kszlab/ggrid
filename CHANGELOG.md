@@ -15,6 +15,14 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.24 — 2026-09-25
+
+### Generátor teszt indítás javítása
+- A **⚗ GENERÁTOR TESZT** gomb most akkor is indítható, ha az aktuálisan kiválasztott méret/D kombinációhoz nincs generált tesztpálya.
+- Ilyenkor a játék automatikusan az első elérhető generált tesztprofilra vált.
+- A jelenlegi bootstrap pack 3×3-as, ezért a korábbi 4×4 / D5 alapállapot többé nem tiltja le a teszt indítását.
+- Külön `hasAny()` és `firstAvailable()` tesztkönyvtár API került be, valamint közvetlen indításnál is működik a biztonsági fallback.
+
 ## v0.15.23 — 2026-09-25
 
 ### Fast Generator v2 — első tesztelhető verzió
