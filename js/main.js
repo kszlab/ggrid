@@ -208,7 +208,7 @@ function applyLibraryLevel(g){
 function requestLibraryLevel(){
  const d=selectedDims(),difficulty=Math.max(1,Math.min(10,parseInt(difficultyEl.value,10)||1));
  try{
-  const l=LevelLibrary.next(d.w,d.h,difficulty);if(!l)throw Error('NO_LIBRARY_LEVEL');
+  const l=LevelLibrary.next(d.w,d.h,difficulty,id=>Number(scoreData.best[id])>0);if(!l)throw Error('NO_LIBRARY_LEVEL');
   applyLibraryLevel(LevelLibrary.toGame(l));return true;
  }catch(e){
   console.error('Level library',e);toast.textContent='Nincs kompatibilis pálya ehhez a mérethez és nehézséghez.';return false;
