@@ -7,7 +7,7 @@ const solver=fs.readFileSync(new URL('../js/solver.js',import.meta.url),'utf8');
 // is immutable during search; sharing it avoids cloning every cell at every edge.
 const searchClone=s=>({...s,objects:s.objects.map(o=>({...o}))});
 export const production=new Function(core+'\n'+solver+'\nreturn {step,validateLevel,solveDetailed,stateKey}')();
-const engine=new Function('structuredClone','searchStep',core+'\n'+solver.replace(/\bstep\(/g,'searchStep(')+'\nreturn {step,validateLevel,solveDetailed,stateKey}')(searchClone,searchStep);
+const engine=new Function('structuredClone','searchStep',core+'\n'+solver.replace(/\bstep\(/g,'searchStep(')+'\nreturn {step,validateLevel,solveDetailed:solveDetailedLegacy,stateKey}')(searchClone,searchStep);
 export const {step,validateLevel,stateKey}=engine;
 let cache=new Map(),geometries=new Map(),geometry=0;
 export function resetSearchCache(){cache=new Map();geometries=new Map();}
