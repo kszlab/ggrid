@@ -6,7 +6,7 @@ import {analyzeState as classifyMulti} from '../classify-multiball-v2.mjs';
 
 const {w,h,balls,seed,minMoves,maxMoves,samplesPerLayout,stateCap,largeShapes,shared}=workerData;
 const needed=new Int32Array(shared),rand=rng(seed),seen=new Set();
-const stats={layouts:0,exploredStates:0,classified:0,trivial:0,candidates:0,oversize:0};
+const stats={layouts:0,exploredStates:0,classified:0,trivial:0,candidates:0,oversize:0,invalidCandidates:0};
 let lastReport=Date.now();
 const open=()=>{let n=0;for(let d=1;d<=10;d++)if(Atomics.load(needed,d)>0)n++;return n};
 
@@ -21,7 +21,7 @@ while(!Atomics.load(needed,0)&&open()){
  for(const len of new Set(picks)){
   if(Atomics.load(needed,0))break;
   const list=byLength.get(len),s=stateAt(layout,r.states[list[rand(list.length)]]),f=fingerprint(s);if(seen.has(f))continue;seen.add(f);
-  const a=balls===1?classifyFast({id:'candidate',state:s}):classifyMulti(s,{maxStates:70000,riskStates:8000});stats.classified++;
+  let a;try{a=balls===1?classifyFast({id:'candidate',state:s}):classifyMulti(s,{maxStates:70000,riskStates:8000})}catch(_){stats.invalidCandidates++;continue}stats.classified++;
   if(a.status!=='ok'){stats.trivial++;continue}
   if(usedClasses.has(a.difficulty)||Atomics.load(needed,a.difficulty)<=0)continue;
   usedClasses.add(a.difficulty);stats.candidates++;
