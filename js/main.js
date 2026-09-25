@@ -358,9 +358,9 @@ function startAutoSolve(){
 function solveWithFreezeForPlay(s,mode='hint'){
  const multi=totalBalls(s)>1;
  const options=mode==='auto'
-  ?{maxDepth:multi?65:48,maxStates:multi?180000:110000,timeBudgetMs:multi?3200:2200,maxFreezeUses:1}
-  :{maxDepth:multi?55:38,maxStates:multi?100000:75000,timeBudgetMs:multi?1600:1100,maxFreezeUses:1};
- return solveDetailedWithFreezeV1(s,options);
+  ?{maxDepth:multi?70:52,maxStates:multi?420000:220000,timeBudgetMs:multi?6000:3800,maxFreezeUses:1}
+  :{maxDepth:multi?60:42,maxStates:multi?240000:140000,timeBudgetMs:multi?3500:2200,maxFreezeUses:1};
+ return solveDetailedWithFreezeV2(s,options);
 }
 function freezeSolverFailureText(result){
  if(result?.status==='unsolvable')return'Innen egyetlen Freeze használatával sem találtam megoldást.';
