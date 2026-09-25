@@ -227,6 +227,10 @@ def cmd_build(args):
  ex=report['extras']
  if ex.get('bg-portrait',{}).get('status')=='ok' or ex.get('bg-landscape',{}).get('status')=='ok':
   p=ex.get('bg-portrait',{}).get('file') or ex.get('bg-landscape',{}).get('file');l=ex.get('bg-landscape',{}).get('file') or p;layers['background']={'portrait':p,'landscape':l}
+ elif ex.get('target',{}).get('status')=='ok':
+  # Temporary generic fallback for Studio projects that have an approved target
+  # but no separately painted background yet. Dedicated backgrounds always win.
+  p=ex.get('target',{}).get('file');layers['background']={'portrait':p,'landscape':p}
  ui={k:{'asset':R(k),'fit':'100% 100%'} for k in ['hud','header','victory'] if have(k)}
  digest=hashlib.sha1(b''.join(open(ras/f,'rb').read() for f in sorted(os.listdir(ras)))).hexdigest()[:8]
  preview=ex.get('showcase',{}).get('file') or ex.get('target',{}).get('file') or ex.get('bg-portrait',{}).get('file')
