@@ -112,7 +112,7 @@ export function toRecord(s,a,levelId,generator,{packId=null,familyId=null,novelt
  return {format:'ggrid-level',formatVersion:2,levelId,rulesVersion:1,requires:{features},
   board:{width:s.width,height:s.height,exit:{direction:s.exit.dir,x:s.exit.x,y:s.exit.y}},entities,initialResources:{freeze:0},
   difficulty:{class:a.difficulty,score:a.raw,modelVersion:a.model},
-  analysis:{solution:a.optimalSolution,metrics:a.metrics,qualityScore:qualityScore(a),noveltyScore,qualityMethod:'solver-metrics-v1',noveltyMethod:'family-frequency-v1'},
+  analysis:{solution:a.optimalSolution,metrics:a.metrics,qualityScore:qualityScore(a),noveltyScore,qualityMethod:'solver-metrics-v1',noveltyMethod:'family-frequency-v1',solutionRequirements:{freeze:{status:'not-required',minimumUses:0}}},
   content:{metadataVersion:3,packId,library,familyId:normalizedFamily,ballCount:ball,generatorVersion:2,structure,fingerprints,provenance:{origin:'generated',metadataMigratedBy:null,generatorTool:generator?.tool||null}},
   generator};
 }
