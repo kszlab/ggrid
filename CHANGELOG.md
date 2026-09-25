@@ -15,6 +15,12 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.25 — 2026-09-25
+
+### Fast Generator CLI parser javítás
+- Javítva a dokumentált `D1-D10` és `B1,B2` target-formátum feldolgozása.
+- A 600 pályás generálási futás ezzel a javított parserrel indul újra.
+
 ## v0.15.24 — 2026-09-25
 
 ### Generátor teszt indítás javítása
