@@ -1,0 +1,62 @@
+GGRID THEME STUDIO - WINDOWS INDÍTÁS
+=====================================
+
+LEGEGYSZERŰBB MÓDSZER
+---------------------
+
+A GGrid főkönyvtárában kattints duplán erre:
+
+    START_THEME_STUDIO.bat
+
+A parancsfájl:
+1. ellenőrzi, hogy a Node.js elérhető-e;
+2. elindítja a Theme Studio helyi szerverét;
+3. megnyitja a böngészőt ezen a címen:
+
+    http://127.0.0.1:4177
+
+
+FONTOS
+------
+
+A megnyíló "GGrid Theme Studio Server" parancssori ablak maradjon nyitva,
+amíg a Theme Studio-t használod.
+
+A szerver leállításához:
+- zárd be ezt az ablakot, vagy
+- nyomj benne Ctrl+C-t.
+
+
+KÉZI INDÍTÁS
+------------
+
+Ha a BAT fájl valamiért nem működik:
+
+1. Nyiss parancssort a GGrid főkönyvtárában.
+2. Futtasd:
+
+    node theme-studio/server.mjs
+
+3. Böngészőben nyisd meg:
+
+    http://127.0.0.1:4177
+
+
+HELYES KÖNYVTÁR
+---------------
+
+A főkönyvtárban többek között ezeket kell látnod:
+
+    index.html
+    theme-studio
+    content
+    design
+    js
+    tools
+
+
+MEGJEGYZÉS
+----------
+
+A Theme Studio helyi fejlesztői alkalmazás. Nem a GitHub Pages-en fut.
+A böngészős felület a saját gépeden futó Node.js szerverhez kapcsolódik.
