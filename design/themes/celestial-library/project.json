@@ -1,0 +1,275 @@
+{
+  "format": "ggrid-theme-project",
+  "formatVersion": 1,
+  "id": "celestial-library",
+  "name": "Csillagkönyvtár",
+  "description": "Ősi könyvtár és csillagvizsgáló, díszes kódexekkel, csillagtérképekkel és asztrolábiumokkal.",
+  "strict": true,
+  "projectVersion": 1,
+  "createdAt": "2026-09-25T10:20:00Z",
+  "modifiedAt": "2026-09-25T10:20:00Z",
+  "migration": {
+    "source": "existing-runtime-theme",
+    "baselineThemeVersion": 17,
+    "notes": "Első Theme Studio pilot. A működő v17 runtime téma és a hozzá tartozó dokumentáció örökölt referenciaként megmarad. Az eredeti, 2026-09-24-én elfogadott koncepciókép nincs a repóban; az approved-reference.json csak a forráskép méretét és a portrait gameplay crop geometriáját őrzi. A pilot ezért a mood fázistól új, Studio-ban tárolt képi forrásokat hoz létre.",
+    "missingArtifacts": [
+      "original-approved-concept-image",
+      "original-generation-prompts"
+    ]
+  },
+  "stages": {
+    "mood": {
+      "status": "draft",
+      "prompts": [
+        {
+          "id": "mood-001",
+          "createdAt": "2026-09-25T10:20:00Z",
+          "notes": "A korábbi DESIGN.md és ARTWORK_V2.md alapján rekonstruált briefing; nem az eredeti történeti prompt.",
+          "text": "Készíts álló, részletgazdag GGrid hangulattervet a Csillagkönyvtár / Az égi archívum témához. A világ egy régi égi archívum és csillagvizsgáló: sötét fa, mélykék zománc, öregített bronz, pergamen/elefántcsont, hideg kék-lila csillagfény és meleg arany könyvtári fény. A mozgó elemek bőr- és vászonkötésű csillagászati kódexek és atlaszszekrények, a golyó fénylő asztrálgyöngy bronz pályagyűrűkkel, a fal nehéz kő/bronz asztrolábium-talapzat, a kijárat határozott asztrolábium-kapu. A játéktábla maradjon a vizuális fókusz, világos nyugodt cellákkal és erős, könnyen olvasható elem-sziluettekkel. Ne legyen sci-fi HUD és ne legyen steampunk gépház. Szöveg nélkül.",
+          "files": []
+        }
+      ]
+    },
+    "target": {
+      "status": "locked",
+      "prompts": []
+    },
+    "sheets": {
+      "status": "locked",
+      "prompts": []
+    },
+    "build": {
+      "status": "none",
+      "history": []
+    },
+    "qa": {
+      "status": "locked"
+    },
+    "release": {
+      "status": "none"
+    }
+  },
+  "artifacts": {},
+  "externalSources": [
+    {
+      "path": "content/themes/celestial-library/DESIGN.md",
+      "kind": "design-spec"
+    },
+    {
+      "path": "content/themes/celestial-library/ARTWORK_V2.md",
+      "kind": "implementation-contract"
+    },
+    {
+      "path": "content/themes/celestial-library/approved-reference.json",
+      "kind": "approved-reference-metadata"
+    },
+    {
+      "path": "content/themes/celestial-library/high-fidelity-qa.json",
+      "kind": "legacy-qa"
+    },
+    {
+      "path": "content/themes/celestial-library/theme.json",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork.css",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/theme.css",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/preview.css",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/library-scene.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/celestial-ornament.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/constellation-tile.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/ball.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/board-frame.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-2h.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-2v.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-3h.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-3v.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-l3-bl.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-l3-br.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-l3-tl.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-l3-tr.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-single-blue.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-single-green.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-single-red.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/book-single.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/cell-constellation.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/cell-moon.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/cell-rosette.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/cell-star.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-2h.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-2v.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-3h.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-3v.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-l3-bl.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-l3-br.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-l3-tl.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/codex-l3-tr.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-down.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-left.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-right.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-up.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-zone-down.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-zone-left.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-zone-right.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/control-zone-up.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/exit-down.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/exit-left.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/exit-right.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/exit-up.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/header-frame.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/hf-atlas.webp",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/hud-frame.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/scene-lighting.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/victory-frame.svg",
+      "kind": "legacy-runtime"
+    },
+    {
+      "path": "content/themes/celestial-library/artwork/wall.svg",
+      "kind": "legacy-runtime"
+    }
+  ]
+}
