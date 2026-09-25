@@ -4,3 +4,12 @@
 .sheet-meta{font-size:12px;min-height:38px}
 .sheet-card input[type=file]{width:100%}
 button:disabled{opacity:.45;cursor:not-allowed}
+
+.asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.asset-card,.background-card{display:flex;flex-direction:column;gap:8px}
+.asset-title{display:flex;flex-direction:column;gap:2px}.asset-title small,.background-card>small{color:#8fa6bc}
+.asset-card img{width:100%;height:170px;object-fit:contain;background:#0c131b;border-radius:7px;border:1px solid #2f4354}
+.background-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.background-card img{width:100%;max-height:360px;object-fit:contain;background:#0c131b;border-radius:7px;border:1px solid #2f4354}
+details.card>summary{cursor:pointer;font-weight:700;margin-bottom:12px}
+.qa-preview img{width:100%;max-height:780px;object-fit:contain;background:#0c131b;border-radius:8px;border:1px solid #2f4354}
