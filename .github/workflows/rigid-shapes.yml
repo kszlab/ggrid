@@ -53,10 +53,16 @@ jobs:
           node --check js/generated-test-library.js
           node --check tools/generate-levels-v2.mjs
           node --check tools/level-generator-v2/worker.mjs
+          node --check tools/generate-levels-v3.mjs
+          node --check tools/level-generator-v3/layout.mjs
+          node --check tools/level-generator-v3/statespace.mjs
+          node --check tools/level-generator-v3/worker.mjs
       - name: Runtime solver equivalence
         run: node tools/test-runtime-solver.mjs
       - name: Fast Generator v2 smoke test
         run: node tools/test-level-generator-v2.mjs
+      - name: Fast Generator v3 regression test
+        run: node tools/test-level-generator-v3.mjs
       - name: Level Metadata v3
         run: node tools/verify-level-metadata-v3.mjs
       - name: Test classifier
