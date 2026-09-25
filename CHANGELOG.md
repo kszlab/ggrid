@@ -15,6 +15,13 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.41 — 2026-09-25
+
+### Theme Kit Windows UTF-8 javítás
+- A `make_slots.py` most explicit UTF-8 kódolással írja a `slots.json` fájlt Windows alatt is.
+- A `kit.py` felismeri a korábbi ANSI/CP1252 `slots.json` fájlt, automatikusan újragenerálja UTF-8 formátumban, majd folytatja a buildet.
+- Ez megszünteti a Windows alatt jelentkező `UnicodeDecodeError: byte 0x96` buildhibát.
+
 ## v0.15.40 — 2026-09-25
 
 ### Theme Studio build-előfeltétel ellenőrzés
