@@ -118,7 +118,13 @@
         "qualityScore": 0.8,
         "noveltyScore": 0.25,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -261,7 +267,13 @@
         "qualityScore": 0.8,
         "noveltyScore": 0.2,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -404,7 +416,13 @@
         "qualityScore": 0.8,
         "noveltyScore": 0.25,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -547,7 +565,13 @@
         "qualityScore": 0.79,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -690,7 +714,13 @@
         "qualityScore": 0.79,
         "noveltyScore": 0.5,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -830,7 +860,13 @@
         "qualityScore": 0.783,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -970,7 +1006,13 @@
         "qualityScore": 0.783,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1110,7 +1152,13 @@
         "qualityScore": 0.783,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1295,7 +1343,13 @@
         "qualityScore": 0.779,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1481,7 +1535,13 @@
         "qualityScore": 0.779,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1620,7 +1680,13 @@
         "qualityScore": 0.603,
         "noveltyScore": 0.2,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1758,7 +1824,13 @@
         "qualityScore": 0.603,
         "noveltyScore": 0.25,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -1896,7 +1968,13 @@
         "qualityScore": 0.603,
         "noveltyScore": 0.2,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2032,7 +2110,13 @@
         "qualityScore": 0.677,
         "noveltyScore": 0.25,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2168,7 +2252,13 @@
         "qualityScore": 0.677,
         "noveltyScore": 0.2,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2351,7 +2441,13 @@
         "qualityScore": 0.483,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2535,7 +2631,13 @@
         "qualityScore": 0.483,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2719,7 +2821,13 @@
         "qualityScore": 0.483,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -2903,7 +3011,13 @@
         "qualityScore": 0.483,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3087,7 +3201,13 @@
         "qualityScore": 0.483,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3263,7 +3383,13 @@
         "qualityScore": 0.468,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3439,7 +3565,13 @@
         "qualityScore": 0.468,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3615,7 +3747,13 @@
         "qualityScore": 0.468,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3791,7 +3929,13 @@
         "qualityScore": 0.468,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -3957,7 +4101,13 @@
         "qualityScore": 0.42,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -4132,7 +4282,13 @@
         "qualityScore": 0.207,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -4307,7 +4463,13 @@
         "qualityScore": 0.207,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -4482,7 +4644,13 @@
         "qualityScore": 0.207,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -4657,7 +4825,13 @@
         "qualityScore": 0.207,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -4832,7 +5006,13 @@
         "qualityScore": 0.207,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5017,7 +5197,13 @@
         "qualityScore": 0.203,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5171,7 +5357,13 @@
         "qualityScore": 0.203,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5358,7 +5550,13 @@
         "qualityScore": 0.175,
         "noveltyScore": 0.333,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5512,7 +5710,13 @@
         "qualityScore": 0.203,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5666,7 +5870,13 @@
         "qualityScore": 0.203,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -5852,7 +6062,13 @@
         "qualityScore": 0.197,
         "noveltyScore": 0.333,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6038,7 +6254,13 @@
         "qualityScore": 0.197,
         "noveltyScore": 0.5,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6224,7 +6446,13 @@
         "qualityScore": 0.197,
         "noveltyScore": 0.5,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6410,7 +6638,13 @@
         "qualityScore": 0.197,
         "noveltyScore": 0.5,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6596,7 +6830,13 @@
         "qualityScore": 0.197,
         "noveltyScore": 0.5,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6754,7 +6994,13 @@
         "qualityScore": 0.162,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -6927,7 +7173,13 @@
         "qualityScore": 0.168,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -7101,7 +7353,13 @@
         "qualityScore": 0.168,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -7302,7 +7560,13 @@
         "qualityScore": 0.162,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -7476,7 +7740,13 @@
         "qualityScore": 0.18,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -7673,7 +7943,13 @@
         "qualityScore": 0.158,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -7870,7 +8146,13 @@
         "qualityScore": 0.158,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -8067,7 +8349,13 @@
         "qualityScore": 0.158,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -8264,7 +8552,13 @@
         "qualityScore": 0.158,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
@@ -8461,7 +8755,13 @@
         "qualityScore": 0.158,
         "noveltyScore": 1,
         "qualityMethod": "solver-metrics-v1",
-        "noveltyMethod": "family-frequency-v1"
+        "noveltyMethod": "family-frequency-v1",
+        "solutionRequirements": {
+          "freeze": {
+            "status": "not-required",
+            "minimumUses": 0
+          }
+        }
       },
       "content": {
         "metadataVersion": 3,
