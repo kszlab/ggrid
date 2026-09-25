@@ -1,4 +1,4 @@
-/* Csillagkönyvtár Artwork Theme V2 – v0.15.17
+/* Csillagkönyvtár Artwork Theme V2 – v0.15.18
    Layout/state only. The visual identity lives in SVG artwork assets. */
 body[data-theme="celestial-library"]{
  --freeze-edge:#d6b24f;
@@ -203,7 +203,7 @@ body[data-theme="celestial-library"] .victory-actions button{
 }
 
 
-/* v0.15.17 – mobile browsers must not paint their native tap highlight over
+/* v0.15.18 – mobile browsers must not paint their native tap highlight over
    the full directional hit zone. Only the theme's arrow cue shows press state. */
 body[data-theme="celestial-library"] .scene-artwork .edge-control,
 body[data-theme="celestial-library"] .scene-artwork .edge-control *{
@@ -214,5 +214,8 @@ body[data-theme="celestial-library"] .scene-artwork .edge-control:focus-visible{
  outline:none!important;
 }
 
-/* v0.15.17 – richer stable SVG codices; preserve one-object silhouettes. */
+/* v0.15.18 – richer stable SVG codices; preserve one-object silhouettes. */
 body[data-theme="celestial-library"] .scene-artwork .sr-composite{filter:drop-shadow(0 7px 6px #000a) drop-shadow(0 0 3px #e9c36b40);}
+
+/* v0.15.18 – dimensional codex artwork pass. */
+body[data-theme="celestial-library"] .scene-artwork .sr-composite{filter:drop-shadow(0 8px 6px #000b) drop-shadow(0 0 4px #e9c36b42);}
