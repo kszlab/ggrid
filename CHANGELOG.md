@@ -15,6 +15,16 @@ A korábbi repository-történetben egy-egy verzió gyakran több, fájlonként 
 
 ---
 
+## v0.15.27 — 2026-09-25
+
+### Egységes Level Metadata Schema v3
+- Bevezetve az egységes metadata-réteg az aktív egygolyós, kétgolyós és Fast Generator pályákhoz.
+- Új determinisztikus mezők: `packId`, `library`, `familyId`, `ballCount`, strukturális shape-statisztikák, provenance, egységes `qualityScore` és `noveltyScore` módszerazonosítóval.
+- Pack- és katalógusszinten előkészítve a későbbi entitlement/access modell (`status`, `visibility`, `entitlement`).
+- A dinamikus közösségi értékelések szándékosan nem kerülnek a statikus pályafájlba; azok később backend aggregátumok lesznek.
+- Elkészült a teljes aktív könyvtár migrációs és validációs eszköze.
+- A Fast Generator v2 mostantól közvetlenül metadata v3 kompatibilis rekordokat állít elő.
+
 ## v0.15.26 — 2026-09-25
 
 ### Fast Generator invalid-state és kevert kvóta javítás
