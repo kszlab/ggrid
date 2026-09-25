@@ -11,7 +11,7 @@ const specs=[
  ['content/levels/generated-test/catalog.json','generated-test']
 ];
 const read=rel=>JSON.parse(fs.readFileSync(path.join(root,rel),'utf8'));
-let levels=0,packs=0,errors=[],largeRigid=0,oneBall=0,twoBall=0;
+let levels=0,packs=0,errors=[],largeRigid=0,oneBall=0,twoBall=0;const levelIds=new Set();
 
 for(const [catPath,library] of specs){
  const cat=read(catPath),base=path.dirname(catPath);
@@ -27,6 +27,7 @@ for(const [catPath,library] of specs){
   if(pack.metadata?.levelCount!==(pack.levels||[]).length)errors.push(packPath+': levelCount');
   for(const level of pack.levels||[]){
    levels++;
+   if(levelIds.has(level.levelId))errors.push(packPath+' '+level.levelId+': duplicate global levelId');else levelIds.add(level.levelId);
    const e=validateMetadataV3(level,{packId:entry.id});if(e.length)errors.push(packPath+' '+level.levelId+': '+e.join(', '));
    if(level.content.library!==library)errors.push(packPath+' '+level.levelId+': wrong library');
    if(level.content.familyId!==familyIdFor(level))errors.push(packPath+' '+level.levelId+': stale familyId');
