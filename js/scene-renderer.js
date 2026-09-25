@@ -102,7 +102,7 @@ const SceneRenderer=(()=>{
   clearChromeAsset(el);if(!spec)return false;const src=globalThis.ThemeAssets?.source?.(spec,{layout:wrap?.dataset?.artLayout||'',...context})||'';if(!src)return false;
   const url=globalThis.ThemeAssets?.resolveUrl?.(theme,src)||src;el.classList.add('art-chrome-asset');el.style.setProperty('--art-chrome-image',`url("${String(url).replace(/"/g,'\\\"')}")`);el.style.setProperty('--art-chrome-fit',spec?.fit||'100% 100%');return true;
  }
- function clearAsset(el){if(!el)return;el.classList.remove('sr-asset-visual','art-control-zone');el.style.removeProperty('--sr-asset-image')}
+ function clearAsset(el){if(!el)return;el.classList.remove('sr-asset-visual','art-control-zone','art-directional-cue');el.style.removeProperty('--sr-asset-image')}
  function renderArtworkChrome(mode){
   const controls=theme?.artwork?.controls||{};
   for(const dir of ['up','down','left','right']){
@@ -111,7 +111,7 @@ const SceneRenderer=(()=>{
    if(!spec)continue;
    if((spec.target||spec.renderTarget)==='zone'){
     applyAsset(zone,spec,{layout:mode,direction:dir});zone.classList.add('art-control-zone');
-    if(cue&&spec.cue)applyAsset(cue,spec.cue,{layout:mode,direction:dir});
+    if(cue&&spec.cue){applyAsset(cue,spec.cue,{layout:mode,direction:dir});cue.classList.add('art-directional-cue');}
    }else if(cue)applyAsset(cue,spec,{layout:mode,direction:dir});
   }
   const ui=theme?.artwork?.ui||{};applyChromeAsset(document.querySelector('.game-head'),ui.header,{layout:mode});applyChromeAsset(document.querySelector('.hud-row'),ui.hud,{layout:mode});applyChromeAsset(document.querySelector('.victory-card'),ui.victory,{layout:mode});
