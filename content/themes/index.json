@@ -330,6 +330,24 @@
       "src": "celestial-library/theme.json",
       "css": "celestial-library/artwork.css?v=0.15.20",
       "previewCss": "celestial-library/preview.css?v=0.13.1"
+    },
+    {
+      "id": "ivory-mahjong",
+      "version": 1,
+      "name": "ELEFÁNTCSONT // Mahjong kert",
+      "description": "Világos, letisztult mahjong-téma elefántcsont bábukkal és jáde részletekkel.",
+      "preview": {
+        "shortName": "MAHJONG",
+        "tag": "IVORY GARDEN",
+        "symbols": [
+          "◉",
+          "花",
+          "竹",
+          "山"
+        ]
+      },
+      "src": "ivory-mahjong/theme.json",
+      "css": "ivory-mahjong/theme.css?v=1"
     }
   ]
 }
