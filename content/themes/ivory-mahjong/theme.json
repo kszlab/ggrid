@@ -1,0 +1,120 @@
+{
+  "format": "ggrid-theme",
+  "formatVersion": 1,
+  "id": "ivory-mahjong",
+  "version": 1,
+  "name": "ELEFÁNTCSONT // Mahjong kert",
+  "description": "Világos, letisztult mahjong-hangulatú téma elefántcsont bábukkal, jáde részletekkel és egybefüggő merev testekkel.",
+  "semantic": {
+    "ball": "Jáde gyöngy",
+    "brick": "Mahjong lap",
+    "wall": "Zárt lap",
+    "exit": "Kijárat",
+    "freeze": "Rögzítés"
+  },
+  "colors": {
+    "background": "#f3efe6",
+    "board": "#ded8ca",
+    "cell1": "#ece8df",
+    "cell2": "#e5e0d5",
+    "accent": "#506c62",
+    "ball1": "#fffdf5",
+    "ball2": "#d9d7c7",
+    "brick1": "#fffaf0",
+    "brick2": "#e4d8bf",
+    "wall1": "#d9d4c9",
+    "wall2": "#aaa79f"
+  },
+  "scene": {
+    "type": "ivory-mahjong",
+    "markup": {
+      "back": "",
+      "front": ""
+    }
+  },
+  "ui": {
+    "tokens": {
+      "surface": "#f4f0e7",
+      "surfaceRaised": "#fffdf8",
+      "control": "#e8e2d5",
+      "controlRaised": "#fffaf0",
+      "controlPressed": "#d7d0c1",
+      "accent": "#506c62",
+      "text": "#33443e",
+      "muted": "#7a807b",
+      "border": "#b8ad98",
+      "shadow": "#7c70544d",
+      "focus": "#506c62",
+      "scrim": "#f3efe6ee"
+    }
+  },
+  "pieces": {
+    "ball": {
+      "className": "sr-piece mj-ball",
+      "markup": "<i class=\"mj-cloud\"></i>"
+    },
+    "brick": {
+      "className": "sr-piece mj-tile",
+      "markup": "<i class=\"mj-mark\"></i>",
+      "variants": [
+        {"className":"mj-blossom"},
+        {"className":"mj-bamboo"},
+        {"className":"mj-mountain"}
+      ]
+    },
+    "wall": {
+      "className": "sr-piece mj-wall",
+      "markup": "<i class=\"mj-seal\"></i>"
+    },
+    "rigidBody": {
+      "className": "sr-composite mj-rigid",
+      "markup": "<i class=\"mj-rigid-art\"></i>"
+    },
+    "rigidBodyVariants": {
+      "2H": {
+        "className": "sr-composite mj-rigid mj-rigid-2h",
+        "markup": "<i class=\"mj-landscape\"></i>"
+      },
+      "2V": {
+        "className": "sr-composite mj-rigid mj-rigid-2v",
+        "markup": "<i class=\"mj-bamboo-stalks\"></i>"
+      },
+      "3H": {
+        "className": "sr-composite mj-rigid mj-rigid-3h",
+        "markup": "<i class=\"mj-landscape mj-landscape-wide\"></i>"
+      },
+      "3V": {
+        "className": "sr-composite mj-rigid mj-rigid-3v",
+        "markup": "<i class=\"mj-bamboo-stalks mj-bamboo-tall\"></i>"
+      },
+      "L3-TL": {
+        "className": "sr-composite mj-rigid mj-rigid-l3",
+        "markup": "<i class=\"mj-pine\"></i>"
+      },
+      "L3-TR": {
+        "className": "sr-composite mj-rigid mj-rigid-l3",
+        "markup": "<i class=\"mj-pine mj-pine-flip-x\"></i>"
+      },
+      "L3-BL": {
+        "className": "sr-composite mj-rigid mj-rigid-l3",
+        "markup": "<i class=\"mj-pine mj-pine-flip-y\"></i>"
+      },
+      "L3-BR": {
+        "className": "sr-composite mj-rigid mj-rigid-l3",
+        "markup": "<i class=\"mj-pine mj-pine-flip-xy\"></i>"
+      }
+    },
+    "exit": {
+      "className": "sr-exit mj-exit",
+      "markup": "<i></i>"
+    }
+  },
+  "assets": {
+    "css": "theme.css?v=1"
+  },
+  "render": {
+    "pieceInsetPx": 2,
+    "rigidInsetPx": 1.2,
+    "moveMs": 190
+  }
+}
