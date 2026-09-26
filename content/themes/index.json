@@ -333,9 +333,9 @@
     },
     {
       "id": "ivory-mahjong",
-      "version": 3,
+      "version": 4,
       "name": "ELEFÁNTCSONT // Mahjong kert",
-      "description": "Vektorgrafikus mahjong téma elefántcsont lapokkal, jáde részletekkel és saját hangprofillal.",
+      "description": "Fájlalapú vektorgrafikus mahjong téma; a játék közvetlenül a külön megrajzolt SVG asseteket használja.",
       "preview": {
         "shortName": "MAHJONG",
         "tag": "IVORY GARDEN",
@@ -348,8 +348,8 @@
         "description": "Elefántcsont lapok, jáde gömb, bambusz, virág és tájképes merev testek."
       },
       "src": "ivory-mahjong/theme.json",
-      "css": "ivory-mahjong/artwork.css?v=3",
-      "previewCss": "ivory-mahjong/preview.css?v=3"
+      "css": "ivory-mahjong/artwork.css?v=4",
+      "previewCss": "ivory-mahjong/preview.css?v=4"
     }
   ]
 }
