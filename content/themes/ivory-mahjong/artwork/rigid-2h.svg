@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" role="img">
+<defs>
+  <linearGradient id="ivory" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FFFDF7"/>
+    <stop offset="0.55" stop-color="#F8F3E9"/>
+    <stop offset="1" stop-color="#EEE7D8"/>
+  </linearGradient>
+  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="2.5" stdDeviation="2.6" flood-color="#7A6A50" flood-opacity=".28"/>
+  </filter>
+</defs>
+<g filter="url(#soft)">
+  <rect x="3" y="3" width="194" height="94" rx="10" fill="url(#ivory)" stroke="#C8B89A" stroke-width="2"/>
+  <rect x="8" y="8" width="184" height="84" rx="6" fill="none" stroke="#FFFFFF" stroke-opacity=".75" stroke-width="1.5"/>
+  <circle cx="151" cy="29" r="9" fill="#D3AF72" opacity=".72"/>
+  <path d="M20 73 52 46l19 20 27-29 25 25 23-20 35 31" fill="#BCC5C0" opacity=".85"/>
+  <path d="M20 77 53 54l19 18 27-27 25 22 23-18 34 28" fill="none" stroke="#587166" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M20 84c29-10 54-8 78-2 24 6 50 5 82-3" fill="none" stroke="#6E897C" stroke-width="2" opacity=".65"/>
+</g>
+</svg>
