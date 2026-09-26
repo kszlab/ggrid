@@ -1,0 +1,14 @@
+body[data-scene="ivory-mahjong"]{background:linear-gradient(180deg,#fbfaf6,#eee8dd 72%,#e6dece);color:#33443e}
+body[data-scene="ivory-mahjong"] .board-wrap{background:linear-gradient(145deg,#fffdf8,#e7dfd0 58%,#d5cbb9);border:2px solid #c8b89a;border-radius:24px;box-shadow:0 18px 34px #75684c35,inset 0 0 0 5px #f7f2e8}
+body[data-scene="ivory-mahjong"] .board{background:#ddd8cc;border:2px solid #b7aa92;border-radius:10px;box-shadow:0 7px 16px #8f816333}
+body[data-scene="ivory-mahjong"] .cell{background:linear-gradient(145deg,#f3f1eb,#e3ded3);border:1px solid #9ea79f55;box-shadow:inset 0 1px 3px #fff9}
+body[data-scene="ivory-mahjong"] .im-svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 3px 3px #75684c33)}
+body[data-scene="ivory-mahjong"] .im-ball,body[data-scene="ivory-mahjong"] .im-tile,body[data-scene="ivory-mahjong"] .im-wall,body[data-scene="ivory-mahjong"] .im-rigid{background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible}
+body[data-scene="ivory-mahjong"] .edge-control{background:linear-gradient(145deg,#fffaf0,#e3dac9 66%,#cdbfa8);border:1px solid #b5aa98;box-shadow:inset 1px 1px 2px #fff,inset -2px -2px 5px #9e927b33,0 3px 7px #776b5130}
+body[data-scene="ivory-mahjong"] .emboss-arrow:before{background:#506c62!important;box-shadow:none!important}
+body[data-scene="ivory-mahjong"] .emboss-arrow:after{border-bottom-color:#506c62!important;filter:none!important}
+body[data-scene="ivory-mahjong"] .im-exit{background:transparent!important;border:0!important;box-shadow:none!important}
+.theme-preview[data-theme="ivory-mahjong"] .mini-board{background:#ddd7cb;border:5px solid #c4b79e;box-shadow:0 13px 26px #756b5638,inset 0 0 0 2px #fff}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell{background:#eeeae2;border-color:#9ea79f66}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell.block{background:linear-gradient(145deg,#fffdf6,#e2d3b8);border-color:#c7b798;color:#607d72;border-radius:5px}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell.target{background:radial-gradient(circle at 30% 26%,#fff,#eee6d6 47%,#6f8279);box-shadow:0 3px 7px #6c625040;border-radius:50%}
