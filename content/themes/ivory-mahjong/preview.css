@@ -1,0 +1,2 @@
+.theme-preview[data-theme="ivory-mahjong"] .theme-preview-art{background:radial-gradient(circle at 72% 22%,#fff 0 7%,transparent 20%),linear-gradient(145deg,#fbf9f4,#e7dfd1)}
+.theme-preview[data-theme="ivory-mahjong"] .theme-preview-art:before{content:"花  竹  山";position:absolute;inset:22% 8% auto;text-align:center;font:600 34px/1.2 Georgia,serif;letter-spacing:.45em;color:#587166;text-shadow:0 2px #fff}
