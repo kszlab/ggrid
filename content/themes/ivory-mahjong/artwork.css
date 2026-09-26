@@ -66,3 +66,23 @@ body[data-scene="ivory-mahjong"] .exit-down.im-exit .im-art{background-image:url
 
 body[data-scene="ivory-mahjong"] .sr-composite-source{opacity:0!important;pointer-events:none}
 body[data-scene="ivory-mahjong"] .sr-composite{z-index:9;pointer-events:none}
+
+
+/* v5 — direction-specific SVG controls already point in their final direction.
+   Neutralize the legacy GGrid rotations that were designed for one generic UP arrow. */
+body[data-scene="ivory-mahjong"] .edge-up .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-down .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-left .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-right .emboss-arrow{
+  transform:none!important;
+}
+body[data-scene="ivory-mahjong"] .edge-up:active .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-up.pressed .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-down:active .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-down.pressed .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-left:active .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-left.pressed .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-right:active .emboss-arrow,
+body[data-scene="ivory-mahjong"] .edge-right.pressed .emboss-arrow{
+  transform:translateY(1px)!important;
+}
