@@ -1,0 +1,186 @@
+/* ELEFÁNTCSONT // Mahjong kert — simple light GGrid2 theme */
+body[data-scene="ivory-mahjong"]{
+  background:
+    radial-gradient(circle at 18% 7%,#ffffff 0 2%,transparent 17%),
+    linear-gradient(180deg,#faf8f3,#eee8dc 72%,#e6dfd0);
+  color:#33443e;
+}
+body[data-scene="ivory-mahjong"] main{max-width:620px}
+body[data-scene="ivory-mahjong"] .board-wrap{
+  background:linear-gradient(145deg,#fffdf8,#e7dfd0 58%,#d5cbb9);
+  border:1px solid #c2b69f;
+  border-radius:24px;
+  box-shadow:0 18px 34px #75684c35,inset 0 1px #fff,inset 0 0 0 5px #f7f2e8;
+}
+body[data-scene="ivory-mahjong"] .board{
+  background:#d9d4c9;
+  border:3px solid #b7aa92;
+  border-radius:10px;
+  box-shadow:0 7px 16px #8f816333,inset 0 0 0 2px #f8f3e9;
+}
+body[data-scene="ivory-mahjong"] .cell{
+  background:linear-gradient(145deg,#f3f1eb,#e3ded3);
+  border:1px solid #9ea79f55;
+  box-shadow:inset 0 1px 3px #fff9,inset 0 -2px 4px #a79e8b18;
+}
+body[data-scene="ivory-mahjong"] .edge-control{
+  background:linear-gradient(145deg,#fffaf0,#e3dac9 66%,#cdbfa8);
+  border:1px solid #b5aa98;
+  box-shadow:inset 1px 1px 2px #fff,inset -2px -2px 5px #9e927b33,0 3px 7px #776b5130;
+}
+body[data-scene="ivory-mahjong"] .edge-control:active,
+body[data-scene="ivory-mahjong"] .edge-control.pressed{filter:brightness(.96);transform:translateY(1px)}
+body[data-scene="ivory-mahjong"] .emboss-arrow{filter:drop-shadow(0 1px #fff)}
+body[data-scene="ivory-mahjong"] .emboss-arrow::before{background:#506c62;box-shadow:none}
+body[data-scene="ivory-mahjong"] .emboss-arrow::after{border-bottom-color:#506c62;filter:none}
+
+body[data-scene="ivory-mahjong"] .mj-tile,
+body[data-scene="ivory-mahjong"] .mj-rigid,
+body[data-scene="ivory-mahjong"] .mj-wall{
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 24% 16%,#fffef9 0 8%,transparent 30%),
+    linear-gradient(145deg,#fffdf6 0,#f6eddd 55%,#ddcfb6 100%);
+  border:1px solid #c7b798;
+  border-radius:10px;
+  box-shadow:
+    inset 1px 1px 1px #fff,
+    inset -2px -3px 5px #b19e7b30,
+    0 3px 6px #766b5338;
+}
+body[data-scene="ivory-mahjong"] .mj-tile::after,
+body[data-scene="ivory-mahjong"] .mj-rigid::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid #ffffff8c;
+  border-radius:7px;
+  pointer-events:none;
+}
+.mj-mark,.mj-seal,.mj-cloud,.mj-landscape,.mj-bamboo-stalks,.mj-pine,.mj-rigid-art{position:absolute;inset:0;pointer-events:none}
+
+body[data-scene="ivory-mahjong"] .mj-blossom .mj-mark{
+  inset:15% 12%;
+  background:
+    radial-gradient(circle at 65% 35%,#fffdf5 0 6%,#cda56e 7% 8%,transparent 9%),
+    radial-gradient(circle at 75% 45%,#fffdf5 0 7%,#cda56e 8% 9%,transparent 10%),
+    radial-gradient(circle at 57% 49%,#fffdf5 0 7%,#cda56e 8% 9%,transparent 10%),
+    linear-gradient(118deg,transparent 48%,#b88b55 49% 51%,transparent 52%);
+}
+body[data-scene="ivory-mahjong"] .mj-bamboo .mj-mark{
+  inset:13% 18%;
+  background:
+    linear-gradient(90deg,transparent 27%,#557368 28% 32%,transparent 33% 57%,#6a8377 58% 62%,transparent 63%),
+    radial-gradient(ellipse at 24% 31%,#789487 0 12%,transparent 13%),
+    radial-gradient(ellipse at 64% 52%,#789487 0 12%,transparent 13%),
+    radial-gradient(ellipse at 42% 76%,#607c70 0 11%,transparent 12%);
+  transform:rotate(-7deg);
+}
+body[data-scene="ivory-mahjong"] .mj-mountain .mj-mark{
+  inset:17% 10% 14%;
+  background:
+    linear-gradient(145deg,transparent 0 47%,#71877e 48% 52%,transparent 53%) left bottom/50% 70% no-repeat,
+    linear-gradient(215deg,transparent 0 47%,#8a9b94 48% 52%,transparent 53%) right bottom/58% 80% no-repeat;
+  opacity:.9;
+}
+
+body[data-scene="ivory-mahjong"] .ball.mj-ball{
+  overflow:hidden;
+  border-radius:50%;
+  border:1px solid #b8ad96;
+  background:
+    radial-gradient(circle at 32% 24%,#fff 0 8%,#fbf8ee 19%,#e6dfcf 54%,#b8c3bc 78%,#667b72 100%);
+  box-shadow:inset -4px -5px 8px #6d746a42,inset 3px 3px 5px #fff,0 4px 8px #6b625040;
+}
+body[data-scene="ivory-mahjong"] .mj-cloud{
+  inset:42% 14% 18% 20%;
+  border:2px solid #f7f1dc;
+  border-radius:55% 45% 55% 45%;
+  opacity:.95;
+}
+body[data-scene="ivory-mahjong"] .mj-cloud::before,
+body[data-scene="ivory-mahjong"] .mj-cloud::after{
+  content:"";position:absolute;border:2px solid #f7f1dc;border-radius:50%;
+}
+body[data-scene="ivory-mahjong"] .mj-cloud::before{width:34%;height:62%;left:14%;top:-34%}
+body[data-scene="ivory-mahjong"] .mj-cloud::after{width:38%;height:70%;right:12%;top:-22%}
+
+body[data-scene="ivory-mahjong"] .mj-wall{
+  filter:saturate(.55);
+  background:linear-gradient(145deg,#e8e4db,#c9c5bc 58%,#a9aaa5);
+}
+body[data-scene="ivory-mahjong"] .mj-seal{
+  inset:24%;
+  border:2px double #7b827d;
+  border-radius:4px;
+  transform:rotate(45deg);
+  opacity:.75;
+}
+
+body[data-scene="ivory-mahjong"] .mj-rigid{border-radius:12px}
+body[data-scene="ivory-mahjong"] .mj-landscape{
+  inset:14% 8% 12%;
+  background:
+    radial-gradient(circle at 67% 22%,#d1aa6d 0 6%,transparent 7%),
+    linear-gradient(145deg,transparent 0 44%,#778c83 45% 49%,transparent 50%) left 55% bottom/42% 68% no-repeat,
+    linear-gradient(215deg,transparent 0 44%,#93a39c 45% 49%,transparent 50%) center bottom/48% 78% no-repeat,
+    linear-gradient(145deg,transparent 0 44%,#72887e 45% 49%,transparent 50%) right 32% bottom/39% 60% no-repeat;
+  opacity:.9;
+}
+body[data-scene="ivory-mahjong"] .mj-landscape-wide{inset:12% 6% 10%}
+body[data-scene="ivory-mahjong"] .mj-bamboo-stalks{
+  inset:7% 24%;
+  background:
+    linear-gradient(90deg,transparent 18%,#4e6c61 19% 23%,transparent 24% 48%,#6f887d 49% 53%,transparent 54% 73%,#58756a 74% 78%,transparent 79%),
+    radial-gradient(ellipse at 28% 22%,#738f83 0 8%,transparent 9%),
+    radial-gradient(ellipse at 70% 38%,#5f7c71 0 8%,transparent 9%),
+    radial-gradient(ellipse at 37% 66%,#789388 0 8%,transparent 9%),
+    radial-gradient(ellipse at 64% 82%,#607d72 0 8%,transparent 9%);
+  transform:rotate(-4deg);
+}
+body[data-scene="ivory-mahjong"] .mj-bamboo-tall{inset:5% 22%}
+
+body[data-scene="ivory-mahjong"] .mj-pine{
+  inset:10% 8%;
+  background:
+    linear-gradient(158deg,transparent 0 48%,#806d55 49% 52%,transparent 53%) center/100% 100% no-repeat,
+    radial-gradient(ellipse at 28% 31%,#516e63 0 12%,transparent 13%),
+    radial-gradient(ellipse at 52% 23%,#5e796f 0 15%,transparent 16%),
+    radial-gradient(ellipse at 70% 52%,#4e6c61 0 14%,transparent 15%),
+    radial-gradient(ellipse at 45% 69%,#617d72 0 13%,transparent 14%);
+}
+body[data-scene="ivory-mahjong"] .mj-pine-flip-x{transform:scaleX(-1)}
+body[data-scene="ivory-mahjong"] .mj-pine-flip-y{transform:scaleY(-1)}
+body[data-scene="ivory-mahjong"] .mj-pine-flip-xy{transform:scale(-1)}
+
+body[data-scene="ivory-mahjong"] .mj-exit{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+body[data-scene="ivory-mahjong"] .mj-exit i{
+  position:absolute;inset:16%;
+  border:2px solid #506c62;
+  border-radius:50%;
+  box-shadow:0 0 0 4px #fff8eecc,inset 0 0 0 2px #fff8ee;
+}
+body[data-scene="ivory-mahjong"] .mj-exit i::after{
+  content:"";position:absolute;left:48%;top:-22%;bottom:-22%;border-left:2px solid #506c62;
+}
+
+.theme-preview[data-theme="ivory-mahjong"] .theme-preview-art{
+  background:
+    radial-gradient(circle at 76% 18%,#ffffff 0 4%,transparent 17%),
+    linear-gradient(145deg,#fbf9f4,#e7dfd1);
+}
+.theme-preview[data-theme="ivory-mahjong"] .mini-board{
+  background:#ddd7cb;border:5px solid #c4b79e;box-shadow:0 13px 26px #756b5638,inset 0 0 0 2px #fff;
+}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell{background:#eeeae2;border-color:#9ea79f66}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell.block{background:linear-gradient(145deg,#fffdf6,#e2d3b8);border-color:#c7b798;color:#607d72;border-radius:5px}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell.target{background:radial-gradient(circle at 30% 26%,#fff,#eee6d6 47%,#6f8279);box-shadow:0 3px 7px #6c625040;border-radius:50%}
+.theme-preview[data-theme="ivory-mahjong"] .mini-cell.gate{background:#f7f0e3;border:2px double #506c62;color:#506c62}
+
+@media(max-width:430px){
+  body[data-scene="ivory-mahjong"] .board-wrap{border-radius:20px}
+}
