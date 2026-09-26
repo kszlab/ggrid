@@ -2,7 +2,7 @@
   "format": "ggrid-theme",
   "formatVersion": 1,
   "id": "ivory-mahjong",
-  "version": 4,
+  "version": 5,
   "name": "ELEFÁNTCSONT // Mahjong kert",
   "description": "Fájlalapú vektorgrafikus mahjong téma: a játék közvetlenül a külön megrajzolt SVG asseteket használja.",
   "semantic": {
@@ -87,7 +87,7 @@
     }
   },
   "assets": {
-    "css": "artwork.css?v=4",
+    "css": "artwork.css?v=5",
     "preload": [
       "artwork/ball.svg",
       "artwork/wall.svg",
